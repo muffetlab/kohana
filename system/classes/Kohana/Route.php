@@ -215,6 +215,8 @@ class Kohana_Route
      *         ]
      *     );
      *
+     * @param $uri
+     * @param array|null $regex
      * @return  string
      * @uses    Route::REGEX_ESCAPE
      * @uses    Route::REGEX_SEGMENT

@@ -266,13 +266,14 @@ class Kohana_UTF8
      *
      *     $str = UTF8::substr_replace($str, $replacement, $offset);
      *
-     * @param   string  $str            input string
+     * @param string $str Input string
      * @param string $replacement Replacement string
      * @param int $offset Offset
+     * @param int|null $length
      * @return  string
      * @author  Harry Fuecks <hfuecks@gmail.com>
      */
-    public static function substr_replace(string $str, string $replacement, int $offset, $length = null): string
+    public static function substr_replace(string $str, string $replacement, int $offset, int $length = null): string
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
             require Kohana::find_file('utf8', __FUNCTION__);

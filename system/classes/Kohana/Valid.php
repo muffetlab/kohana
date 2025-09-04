@@ -14,6 +14,7 @@ class Kohana_Valid
     /**
      * Checks if a field is not empty.
      *
+     * @param $value
      * @return bool
      */
     public static function not_empty($value): bool
