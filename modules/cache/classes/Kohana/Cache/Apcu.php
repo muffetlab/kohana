@@ -67,10 +67,10 @@ class Kohana_Cache_Apcu extends Cache implements Cache_Arithmetic
      *     $data = Cache::instance('apcu')->get('foo', 'bar');
      *
      * @param string $id ID of cache entry
-     * @param string|null $default Default value to return if cache miss
+     * @param mixed $default Default value to return if cache miss
      * @return  mixed
      */
-    public function get(string $id, string $default = null)
+    public function get(string $id, $default = null)
     {
         $data = apcu_fetch($this->_sanitize_id($id), $success);
 

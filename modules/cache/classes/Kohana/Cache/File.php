@@ -109,12 +109,12 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect
      *     $data = Cache::instance('file')->get('foo', 'bar');
      *
      * @param string $id id of cache to entry
-     * @param string|null $default Default value to return if cache miss
+     * @param mixed $default Default value to return if cache miss
      * @return  mixed
      * @throws Cache_Exception
      * @throws ErrorException
      */
-    public function get(string $id, string $default = null)
+    public function get(string $id, $default = null)
     {
         $filename = Cache_File::filename($this->_sanitize_id($id));
         $directory = $this->_resolve_directory($filename);
