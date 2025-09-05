@@ -268,7 +268,7 @@ class Kohana_Text
      */
     public static function censor(string $str, array $badwords, string $replacement = '#', bool $replace_partial_words = true): string
     {
-        foreach ((array) $badwords as $key => $badword) {
+        foreach ($badwords as $key => $badword) {
             $badwords[$key] = str_replace('\*', '\S*?', preg_quote((string) $badword));
         }
 
