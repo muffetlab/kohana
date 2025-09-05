@@ -11,7 +11,7 @@
  * @copyright   (c) 2018 Kohana Group
  * @license     https://kohana.top/license
  */
-class Kohana_Encrypt_Openssl
+class Kohana_Encrypt_Openssl extends Encrypt
 {
     /**
      * @var string  The cipher method.

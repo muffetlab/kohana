@@ -34,7 +34,7 @@ abstract class Kohana_Encrypt
      * @return  Encrypt
      * @throws Kohana_Exception
      */
-    public static function instance(string $name = null, array $config = null)
+    public static function instance(string $name = null, array $config = null): Encrypt
     {
         if ($name === null) {
             // Use the default instance name
