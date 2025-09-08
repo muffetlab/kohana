@@ -39,6 +39,8 @@ certain features may not function as expected.
 
 - The `changed()` method now has a strict boolean return type and only returns true or false.
 - A new `changes()` method was added to retrieve the actual changed fields and their values.
+- The second parameter of the `ORM::values()` method is no longer optional. This change was implemented to enhance
+  security by preventing mass assignment vulnerabilities.
 
 ### Request
 
