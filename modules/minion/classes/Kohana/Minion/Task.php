@@ -141,7 +141,7 @@ abstract class Kohana_Minion_Task
     /**
      * Sets options for this task
      *
-     * $param  array  the array of options to set
+     * $param array $options The array of options to set
      * @return Kohana_Minion_Task
      */
     public function set_options(array $options)

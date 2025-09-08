@@ -41,7 +41,7 @@ class Controller_Codebench extends Kohana_Controller_Template
 
     public function action_index()
     {
-        $class = $this->request->param('class');
+        $class = $this->request->param('class', '');
 
         // Convert submitted class name to URI segment
         if (isset($_POST['class'])) {

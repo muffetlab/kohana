@@ -33,14 +33,14 @@ class Kohana_Database_MySQLi extends Database
 
         // Extract the connection parameters, adding required variables
         extract($this->_config['connection'] + [
-            'database' => '',
-            'hostname' => '',
-            'username' => '',
-            'password' => '',
-            'socket' => '',
-            'port' => 3306,
-            'ssl' => null,
-        ]);
+                'hostname' => '',
+                'username' => '',
+                'password' => '',
+                'database' => '',
+                'port' => 3306,
+                'socket' => null,
+                'ssl' => null,
+            ]);
 
         // Prevent this information from showing up in traces
         unset($this->_config['connection']['username'], $this->_config['connection']['password']);

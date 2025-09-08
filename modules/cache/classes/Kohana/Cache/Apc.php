@@ -68,7 +68,7 @@ class Kohana_Cache_Apc extends Cache implements Cache_Arithmetic
      *     $data = Cache::instance('apc')->get('foo', 'bar');
      *
      * @param string $id ID of cache to entry
-     * @param string|null $default Default value to return if cache miss
+     * @param mixed $default Default value to return if cache miss
      * @return  mixed
      */
     public function get($id, $default = null)

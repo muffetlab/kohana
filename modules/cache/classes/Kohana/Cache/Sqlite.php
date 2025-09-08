@@ -64,7 +64,7 @@ class Kohana_Cache_Sqlite extends Cache implements Cache_Tagging, Cache_GarbageC
      * Retrieve a value based on an id
      *
      * @param string $id ID
-     * @param string|null $default Default value to return if ID not found
+     * @param mixed $default Default value to return if ID not found
      * @return  mixed
      * @throws  Cache_Exception
      */

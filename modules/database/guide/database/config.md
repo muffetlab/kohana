@@ -105,18 +105,18 @@ The connection character set should be configured using the DSN string or `optio
 
 ### MySQLi
 
-A [MySQL database](https://www.php.net/manual/en/book.mysqli.php) can accept the following options in the `connection` array:
+A [MySQLi database](https://www.php.net/manual/en/book.mysqli.php) can accept the following options in the `connection` array:
 
-| Type      | Option     | Description              | Default value |
-|-----------|------------|--------------------------|---------------|
-| `string`  | hostname   | Hostname of the database | `localhost`   |
-| `integer` | port       | Port number              | `null`        |
-| `string`  | socket     | UNIX socket              | `null`        |
-| `string`  | username   | Database username        | empty         |
-| `string`  | password   | Database password        | empty         |
-| `boolean` | persistent | Persistent connections   | `false`       |
-| `string`  | database   | Database name            | `kohana`      |
-| `array`   | ssl        | SSL parameters           | `null`        |
+| Type      | Option    | Description              | Default value |
+|-----------|-----------|--------------------------|---------------|
+| `string`  | hostname  | Hostname of the database | `localhost`   |
+| `string`  | username  | Database username        | empty         |
+| `string`  | password  | Database password        | empty         |
+| `string`  | database  | Database name            | `kohana`      |
+| `integer` | port      | Port number              | `3306`        |
+| `string`  | socket    | Unix domain socket       | `null`        |
+| `array`   | ssl       | SSL parameters           | `null`        |
+| `array`   | variables | Session variables        | `null`        |
 
 SSL parameters should be specified as `key` => `value` pairs.
 Available keys: client_key_path, client_cert_path, ca_cert_path, ca_dir_path, cipher
