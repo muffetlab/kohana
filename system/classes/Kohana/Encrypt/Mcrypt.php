@@ -27,7 +27,7 @@
  * @license     https://kohana.top/license
  * @deprecated 3.4.0
  */
-class Kohana_Encrypt_Mcrypt
+class Kohana_Encrypt_Mcrypt extends Encrypt
 {
     /**
      * @var string  RAND type to use.
