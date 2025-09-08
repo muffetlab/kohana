@@ -165,7 +165,7 @@ class Kohana_Cache_Memcached extends Cache implements Cache_Arithmetic
      *     $data = Cache::instance('memcached')->get('foo', 'bar');
      *
      * @param string $id ID of cache entry.
-     * @param string|null $default Default value to return if cache miss.
+     * @param mixed $default Default value to return if cache miss.
      * @return  mixed
      */
     public function get($id, $default = null)

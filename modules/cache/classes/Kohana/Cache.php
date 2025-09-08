@@ -216,7 +216,7 @@ abstract class Kohana_Cache
      *     $data = Cache::instance('memcached')->get('foo');
      *
      * @param string $id ID of cache to entry
-     * @param string|null $default Default value to return if cache miss
+     * @param mixed $default Default value to return if cache miss
      * @return  mixed
      * @throws  Cache_Exception
      */
