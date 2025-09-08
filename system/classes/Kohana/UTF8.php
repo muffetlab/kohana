@@ -266,9 +266,10 @@ class Kohana_UTF8
      *
      *     $str = UTF8::substr_replace($str, $replacement, $offset);
      *
-     * @param   string  $str            input string
+     * @param string $str Input string
      * @param string $replacement Replacement string
      * @param int $offset Offset
+     * @param int|null $length
      * @return  string
      * @author  Harry Fuecks <hfuecks@gmail.com>
      */

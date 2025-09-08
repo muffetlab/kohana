@@ -19,6 +19,7 @@ class Kohana_SessionTest extends Unittest_TestCase
     /**
      * Gets a mock of the session class
      *
+     * @param array $config
      * @return Session
      */
     // @codingStandardsIgnoreStart
