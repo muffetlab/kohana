@@ -26,6 +26,12 @@ certain features may not function as expected.
 - The `Kohana::CODENAME` constant has been removed.
 - The static property `Kohana::$magic_quotes` was deprecated.
 
+### Database
+
+- A new `flags` connection option was added for MySQLi driver. This option allows you to set various flags for the MySQLi
+  connection. Refer to the [MySQLi
+  documentation](https://www.php.net/manual/en/mysqli.real-connect.php) for a list of available flags.
+
 ### Encrypt
 
 - The `Mcrypt` driver has been removed. Use the `OpenSSL` driver instead.
