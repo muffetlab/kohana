@@ -17,14 +17,8 @@ return [
             'password' => '',
             'persistent' => false,
         ],
-        /**
-         * The following extra options are available for PDO:
-         *
-         * string   identifier  Set the escaping identifier
-         */
         'table_prefix' => '',
         'charset' => 'utf8',
-        'caching' => false,
     ],
     'mysqli' => [
         'type' => 'MySQLi',
@@ -36,12 +30,12 @@ return [
              * string   username    Database username
              * string   password    Database password
              * string   database    Database name
-             * string   port        Server port
-             * string   socket      Server socket
+             * string   port        Port number
+             * string   socket      Unix domain socket
              * array    flags       Connection options
-             * array    ssl         SSL parameters as "key => value" pairs.
+             * array    ssl         SSL parameters as "key => value" pairs
              *                      Available keys: client_key_path, client_cert_path, ca_cert_path, ca_dir_path, cipher
-             * array    variables   System variables as "key => value" pairs
+             * array    variables   Session variables as "key => value" pairs
              */
             'hostname' => 'localhost',
             'username' => '',
@@ -53,13 +47,7 @@ return [
             'ssl' => null,
             'variables' => null,
         ],
-        /**
-         * The following extra options are available for PDO:
-         *
-         * string   identifier  Set the escaping identifier
-         */
         'table_prefix' => '',
         'charset' => 'utf8',
-        'caching' => false,
     ],
 ];

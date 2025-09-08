@@ -114,7 +114,7 @@ A [MySQLi database](https://www.php.net/manual/en/book.mysqli.php) can accept th
 | `string`  | password   | Database password        | empty         |
 | `string`  | database   | Database name            | `kohana`      |
 | `integer` | port       | Port number              | `3306`        |
-| `string`  | socket     | UNIX socket              | `null`        |
+| `string`  | socket     | Unix domain socket       | `null`        |
 | `integer` | flags      | Connection options       | `null`        |
 | `array`   | ssl        | SSL parameters           | `null`        |
 | `array`   | variables  | Session variables        | `null`        |
