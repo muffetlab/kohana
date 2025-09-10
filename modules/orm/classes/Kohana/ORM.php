@@ -143,12 +143,6 @@ class Kohana_ORM extends Model implements serializable
     protected $_table_name;
 
     /**
-     * Table columns
-     * @var array
-     */
-    protected $_table_columns;
-
-    /**
      * Auto-update columns for updates
      * @var string
      */
@@ -366,9 +360,6 @@ class Kohana_ORM extends Model implements serializable
             $this->{$property} = $value;
         }
 
-        // Load column information
-        $this->reload_columns();
-
         // Clear initial model state
         $this->clear();
     }
@@ -386,12 +377,13 @@ class Kohana_ORM extends Model implements serializable
             ->bind(':original_values', $this->_original_values)
             ->bind(':changes', $this->_changes);
 
+        // Use column names by default for labels
+        $columns = [];
+
         foreach ($this->rules() as $field => $rules) {
+            $columns[] = $field;
             $this->_validation->rules($field, $rules);
         }
-
-        // Use column names by default for labels
-        $columns = array_keys($this->_table_columns);
 
         // Merge user-defined labels
         $labels = array_merge(array_combine($columns, $columns) ?: [], $this->labels());
@@ -399,31 +391,6 @@ class Kohana_ORM extends Model implements serializable
         foreach ($labels as $field => $label) {
             $this->_validation->label($field, $label);
         }
-    }
-
-    /**
-     * Reload column definitions.
-     *
-     * @chainable
-     * @param bool $force Force reloading
-     * @return  Kohana_ORM
-     */
-    public function reload_columns(bool $force = false): Kohana_ORM
-    {
-        if ($force === true || empty($this->_table_columns)) {
-            if (isset(ORM::$_column_cache[$this->_object_name])) {
-                // Use cached column information
-                $this->_table_columns = ORM::$_column_cache[$this->_object_name];
-            } else {
-                // Grab column information from database
-                $this->_table_columns = $this->list_columns();
-
-                // Load column cache
-                ORM::$_column_cache[$this->_object_name] = $this->_table_columns;
-            }
-        }
-
-        return $this;
     }
 
     /**
@@ -435,7 +402,7 @@ class Kohana_ORM extends Model implements serializable
     public function clear(): Kohana_ORM
     {
         // Create an array with all the columns set to null
-        $values = array_combine(array_keys($this->_table_columns), array_fill(0, count($this->_table_columns), null));
+        $values = array_combine(array_keys($this->_object), array_fill(0, count($this->_object), null));
 
         // Replace the object and reset the object status
         $this->_object = $this->_changes = $this->_related = $this->_original_values = [];
@@ -932,23 +899,6 @@ class Kohana_ORM extends Model implements serializable
     }
 
     /**
-     * Returns an array of columns to include in the select query. This method
-     * can be overridden to change the default select behavior.
-     *
-     * @return array Columns to select
-     */
-    protected function _build_select(): array
-    {
-        $columns = [];
-
-        foreach ($this->_table_columns as $column => $_) {
-            $columns[] = [$this->_object_name . '.' . $column, $column];
-        }
-
-        return $columns;
-    }
-
-    /**
      * Loads a database result, either as a new record for this model, or as
      * an iterator for multiple rows.
      *
@@ -965,9 +915,6 @@ class Kohana_ORM extends Model implements serializable
             // Only fetch 1 record
             $this->_db_builder->limit(1);
         }
-
-        // Select all columns by default
-        $this->_db_builder->select_array($this->_build_select());
 
         if (!isset($this->_db_applied['order_by']) && !empty($this->_sorting)) {
             foreach ($this->_sorting as $column => $direction) {
@@ -1350,9 +1297,9 @@ class Kohana_ORM extends Model implements serializable
         $count = $this->count_relations($alias, $far_keys);
         if ($far_keys === null) {
             return (bool) $count;
-        } else {
-            return $count === count($far_keys);
         }
+
+        return $count === (is_array($far_keys) ? count($far_keys) : 1);
     }
 
     /**
@@ -1642,11 +1589,6 @@ class Kohana_ORM extends Model implements serializable
     public function table_name(): string
     {
         return $this->_table_name;
-    }
-
-    public function table_columns(): array
-    {
-        return $this->_table_columns;
     }
 
     public function has_one(): array
