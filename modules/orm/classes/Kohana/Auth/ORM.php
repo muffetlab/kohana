@@ -100,7 +100,7 @@ class Kohana_Auth_ORM extends Auth
 
                 // Create a new autologin token
                 $token = ORM::factory('User_Token')
-                    ->values($data)
+                    ->values($data, array_keys($data))
                     ->create();
 
                 // Set the autologin cookie
@@ -264,13 +264,13 @@ class Kohana_Auth_ORM extends Auth
      * session data: user_id, username, roles.
      *
      * @param   object  $user  user ORM object
-     * @return  void
+     * @return bool
      */
     protected function complete_login($user): bool
     {
         $user->complete_login();
 
-        parent::complete_login($user);
+        return parent::complete_login($user);
     }
 
     /**
