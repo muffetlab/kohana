@@ -381,16 +381,14 @@ class Kohana_ORM extends Model implements serializable
         $columns = [];
 
         foreach ($this->rules() as $field => $rules) {
-            $columns[] = $field;
+            $columns[$field] = $field;
             $this->_validation->rules($field, $rules);
         }
 
         // Merge user-defined labels
-        $labels = array_merge(array_combine($columns, $columns) ?: [], $this->labels());
+        $labels = array_merge($columns, $this->labels());
 
-        foreach ($labels as $field => $label) {
-            $this->_validation->label($field, $label);
-        }
+        $this->_validation->labels($labels);
     }
 
     /**
