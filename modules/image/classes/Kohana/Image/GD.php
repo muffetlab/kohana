@@ -103,9 +103,6 @@ class Kohana_Image_GD extends Image
 
         // Save function for future use
         $this->_create_function = $create;
-
-        // Save filename for lazy loading
-        $this->_image = $this->file;
     }
 
     /**
