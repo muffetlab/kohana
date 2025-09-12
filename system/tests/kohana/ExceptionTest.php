@@ -86,10 +86,10 @@ class Kohana_ExceptionTest extends Unittest_TestCase
      * @test
      * @dataProvider provider_text
      * @covers Kohana_Exception::text
-     * @param object $exception exception to test
+     * @param Exception $exception Exception to test
      * @param string $expected  expected output
      */
-    public function test_text($exception, string $expected)
+    public function test_text(Exception $exception, string $expected)
     {
         $this->assertEquals($expected, Kohana_Exception::text($exception));
     }
