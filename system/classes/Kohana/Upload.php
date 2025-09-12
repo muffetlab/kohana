@@ -46,11 +46,11 @@ class Kohana_Upload
      * @param array $file uploaded file data
      * @param string|null $filename New filename
      * @param string|null $directory New directory
-     * @param int $chmod chmod mask
+     * @param int|false $chmod chmod mask
      * @return string|false Full path to new file on success, false on failure.
      * @throws Kohana_Exception
      */
-    public static function save(array $file, string $filename = null, string $directory = null, int $chmod = 0644)
+    public static function save(array $file, string $filename = null, string $directory = null, $chmod = 0644)
     {
         if (!isset($file['tmp_name']) || !is_uploaded_file($file['tmp_name'])) {
             // Ignore corrupted uploads
