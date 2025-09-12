@@ -15,7 +15,7 @@
 abstract class Kohana_Request_Client
 {
     /**
-     * @var    Cache  Caching library for request caching
+     * @var HTTP_Cache Caching library for request caching
      */
     protected $_cache;
 
@@ -153,7 +153,7 @@ abstract class Kohana_Request_Client
      * used to cache responses if available and valid.
      *
      * @param HTTP_Cache|null $cache engine to use for caching
-     * @return Cache|Kohana_Request_Client
+     * @return HTTP_Cache|Kohana_Request_Client
      */
     public function cache(HTTP_Cache $cache = null)
     {
