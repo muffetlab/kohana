@@ -398,7 +398,7 @@ class Kohana_HTTP_Header extends ArrayObject
      *     $header = $response->headers();
      *     $header->parse_header_string(null, 'content-type: application/json');
      *
-     * @param   resource    $resource       the resource (required by Curl API)
+     * @param resource|null $resource The resource (required by cURL API)
      * @param string $header_line The line from the header to parse
      * @return  int
      * @since   3.2.0
