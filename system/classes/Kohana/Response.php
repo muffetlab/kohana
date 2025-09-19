@@ -351,7 +351,7 @@ class Kohana_Response implements HTTP_Response
      *
      * [!!] No further processing can be done after this method is called!
      *
-     * @param string $filename filename with path, or true for the current response
+     * @param string|true $filename Filename with path, or true for the current response
      * @param string|null $download downloaded file name
      * @param array|null $options additional options
      * @return  void

@@ -183,7 +183,7 @@ class Kohana_Validation implements ArrayAccess
      *
      * [!!] Errors must be added manually when using closures!
      *
-     * @param string $field field name
+     * @param string|true $field Field name
      * @param mixed $rule Valid PHP callback or closure
      * @param array|null $params extra parameters for the rule
      * @return  $this
