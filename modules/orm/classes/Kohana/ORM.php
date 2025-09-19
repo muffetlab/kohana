@@ -862,7 +862,7 @@ class Kohana_ORM extends Model implements serializable
                 $this->_db_builder = DB::select();
                 break;
             case Database::UPDATE:
-                $this->_db_builder = DB::update([$this->_table_name, $this->_object_name]);
+                $this->_db_builder = DB::update($this->_table_name);
                 break;
             case Database::DELETE:
                 // Cannot use an alias for DELETE queries
