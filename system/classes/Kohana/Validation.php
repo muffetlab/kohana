@@ -183,12 +183,12 @@ class Kohana_Validation implements ArrayAccess
      *
      * [!!] Errors must be added manually when using closures!
      *
-     * @param string $field field name
+     * @param string|true $field Field name
      * @param mixed $rule Valid PHP callback or closure
      * @param array|null $params extra parameters for the rule
      * @return  $this
      */
-    public function rule(string $field, $rule, ?array $params = null): Kohana_Validation
+    public function rule($field, $rule, ?array $params = null): Kohana_Validation
     {
         if ($params === null) {
             // Default to [':value']
