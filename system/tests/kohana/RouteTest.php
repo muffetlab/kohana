@@ -64,17 +64,18 @@ class Kohana_RouteTest extends Unittest_TestCase
     }
 
     /**
-     * Route::all() should return all routes defined via Route::set()
-     * and not through new Route()
+     * Route::all() should return the same routes as stored in Route::$_routes property.
      *
      * @test
      * @covers Route::all
      */
     public function test_all_returns_all_defined_routes()
     {
-        $defined_routes = self::readAttribute('Route', '_routes');
+        $reflection = new ReflectionClass('Route');
+        $property = $reflection->getProperty('_routes');
+        $property->setAccessible(true);
 
-        $this->assertSame($defined_routes, Route::all());
+        $this->assertSame($property->getValue(), Route::all());
     }
 
     /**
@@ -174,6 +175,7 @@ class Kohana_RouteTest extends Unittest_TestCase
      *
      * @test
      * @covers Route::__construct
+     * @throws ReflectionException
      */
     public function test_constructor_returns_if_uri_is_null()
     {
@@ -187,13 +189,23 @@ class Kohana_RouteTest extends Unittest_TestCase
 
         $route->__construct();
 
-        $this->assertAttributeSame('', '_uri', $route);
-        $this->assertAttributeSame([], '_regex', $route);
-        $this->assertAttributeSame([
+        $reflection = new ReflectionClass($route);
+        $uriProperty = $reflection->getProperty('_uri');
+        $uriProperty->setAccessible(true);
+        $regexProperty = $reflection->getProperty('_regex');
+        $regexProperty->setAccessible(true);
+        $defaultsProperty = $reflection->getProperty('_defaults');
+        $defaultsProperty->setAccessible(true);
+        $routeRegexProperty = $reflection->getProperty('_route_regex');
+        $routeRegexProperty->setAccessible(true);
+
+        $this->assertSame('', $uriProperty->getValue($route));
+        $this->assertSame([], $regexProperty->getValue($route));
+        $this->assertSame([
             'action' => 'index',
             'host' => false
-            ], '_defaults', $route);
-        $this->assertAttributeSame(null, '_route_regex', $route);
+        ], $defaultsProperty->getValue($route));
+        $this->assertSame(null, $routeRegexProperty->getValue($route));
     }
 
     /**
@@ -223,11 +235,18 @@ class Kohana_RouteTest extends Unittest_TestCase
     {
         $route = new Route($uri, []);
 
-        $this->assertAttributeSame([], '_regex', $route);
+        $reflection = new ReflectionClass($route);
+        $property = $reflection->getProperty('_regex');
+        $property->setAccessible(true);
+        $this->assertSame([], $property->getValue($route));
 
         $route = new Route($uri2, null);
 
-        $this->assertAttributeSame([], '_regex', $route);
+        $reflection = new ReflectionClass($route);
+        $property = $reflection->getProperty('_regex');
+        $property->setAccessible(true);
+
+        $this->assertSame([], $property->getValue($route));
     }
 
     /**
@@ -244,10 +263,17 @@ class Kohana_RouteTest extends Unittest_TestCase
 
         $route = new Route('<controller>(/<action>(/<id>))', $regex);
 
-        $this->assertAttributeSame($regex, '_regex', $route);
-        $this->assertAttributeContains(
-            $regex['id'], '_route_regex', $route
-        );
+        $reflection = new ReflectionClass($route);
+        $property = $reflection->getProperty('_regex');
+        $property->setAccessible(true);
+
+        $this->assertSame($regex, $property->getValue($route));
+
+        $reflection = new ReflectionClass($route);
+        $property = $reflection->getProperty('_route_regex');
+        $property->setAccessible(true);
+
+        $this->assertContains($regex['id'], $property->getValue($route));
     }
 
     /**

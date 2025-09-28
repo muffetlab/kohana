@@ -66,11 +66,13 @@ class Kohana_ValidationTest extends Unittest_TestCase
         $this->assertNotSame($validation, $copy);
 
         foreach (['_rules', '_bound', '_labels', '_empty_rules', '_errors'] as $attribute) {
+            $reflection = new ReflectionClass($validation);
+            $property = $reflection->getProperty($attribute);
+            $property->setAccessible(true);
+
             // This is just an easy way to check that the attributes are identical
             // Without hardcoding the expected values
-            $this->assertAttributeSame(
-                self::readAttribute($validation, $attribute), $attribute, $copy
-            );
+            $this->assertSame($property->getValue($validation), $property->getValue($copy));
         }
 
         $this->assertSame($copy_data, $copy->data());
@@ -86,7 +88,11 @@ class Kohana_ValidationTest extends Unittest_TestCase
     {
         $validation = new Validation([]);
 
-        $this->assertAttributeSame([], '_labels', $validation);
+        $reflection = new ReflectionClass($validation);
+        $property = $reflection->getProperty('_labels');
+        $property->setAccessible(true);
+
+        $this->assertSame([], $property->getValue($validation));
     }
 
     /**
@@ -104,18 +110,17 @@ class Kohana_ValidationTest extends Unittest_TestCase
 
         $this->assertSame($validation, $validation->label('email', 'Email Address'));
 
-        $this->assertAttributeSame([
-            'email' => 'Email Address'
-            ], '_labels', $validation);
+        $reflection = new ReflectionClass($validation);
+        $property = $reflection->getProperty('_labels');
+        $property->setAccessible(true);
+
+        $this->assertSame(['email' => 'Email Address'], $property->getValue($validation));
 
         $this->assertSame($validation, $validation->label('email', 'Your Email'));
 
         $validation->label('name', 'Your Name');
 
-        $this->assertAttributeSame([
-            'email' => 'Your Email',
-            'name' => 'Your Name'
-            ], '_labels', $validation);
+        $this->assertSame(['email' => 'Your Email', 'name'  => 'Your Name'], $property->getValue($validation));
     }
 
     /**
@@ -133,16 +138,17 @@ class Kohana_ValidationTest extends Unittest_TestCase
 
         $this->assertSame($validation, $validation->labels($initial_data));
 
-        $this->assertAttributeSame($initial_data, '_labels', $validation);
+        $reflection = new ReflectionClass($validation);
+        $property = $reflection->getProperty('_labels');
+        $property->setAccessible(true);
+
+        $this->assertSame($initial_data, $property->getValue($validation));
 
         $this->assertSame($validation, $validation->labels([
                 'fast' => 'lightning'
         ]));
 
-        $this->assertAttributeSame([
-            'fast' => 'lightning',
-            'kung fu' => 'fighting'
-            ], '_labels', $validation);
+        $this->assertSame(['fast' => 'lightning', 'kung fu' => 'fighting'], $property->getValue($validation));
     }
 
     /**
@@ -160,13 +166,16 @@ class Kohana_ValidationTest extends Unittest_TestCase
 
         // Test binding an array of values
         $this->assertSame($validation, $validation->bind($bound));
-        $this->assertAttributeSame($bound, '_bound', $validation);
+
+        $reflection = new ReflectionClass($validation);
+        $property = $reflection->getProperty('_bound');
+        $property->setAccessible(true);
+
+        $this->assertSame($bound, $property->getValue($validation));
 
         // Test binding one value
         $this->assertSame($validation, $validation->bind(':foo', 'some other value'));
-        $this->assertAttributeSame([
-            ':foo' => 'some other value'
-            ], '_bound', $validation);
+        $this->assertSame([':foo' => 'some other value'], $property->getValue($validation));
     }
 
     /**
@@ -397,7 +406,10 @@ class Kohana_ValidationTest extends Unittest_TestCase
 
         $this->assertSame($expected, $validation->errors('Validation', false));
         // Should be able to get raw errors array
-        $this->assertAttributeSame($validation->errors(), '_errors', $validation);
+        $reflection = new ReflectionClass($validation);
+        $property = $reflection->getProperty('_errors');
+        $property->setAccessible(true);
+        $this->assertSame($validation->errors(), $property->getValue($validation));
     }
 
     /**
