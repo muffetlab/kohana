@@ -64,8 +64,7 @@ class Kohana_RouteTest extends Unittest_TestCase
     }
 
     /**
-     * Route::all() should return all routes defined via Route::set()
-     * and not through new Route()
+     * Route::all() should return the same routes as stored in Route::$_routes property.
      *
      * @test
      * @covers Route::all
