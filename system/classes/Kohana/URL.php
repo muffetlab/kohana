@@ -120,23 +120,13 @@ class Kohana_URL
 
         if (!UTF8::is_ascii($path)) {
             // Encode all non-ASCII characters, as per RFC 1738
-            $path = preg_replace_callback('~([^/]+)~', 'URL::_rawurlencode_callback', $path);
+            $path = preg_replace_callback('~([^/]+)~', function ($matches) {
+                return rawurlencode($matches[0]);
+            }, $path);
         }
 
         // Concat the URL
         return URL::base($protocol, $index) . $path;
-    }
-
-    /**
-     * Callback used for encoding all non-ASCII characters, as per RFC 1738
-     * Used by URL::site()
-     *
-     * @param array $matches Array of matches from preg_replace_callback()
-     * @return string          Encoded string
-     */
-    protected static function _rawurlencode_callback(array $matches): string
-    {
-        return rawurlencode($matches[0]);
     }
 
     /**
