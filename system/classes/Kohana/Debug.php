@@ -100,9 +100,9 @@ class Kohana_Debug
             // isn't too much of a hit.
             $var = UTF8::clean($var, Kohana::$charset);
 
-            if (UTF8::strlen($var) > $length) {
+            if (mb_strlen($var) > $length) {
                 // Encode the truncated string
-                $str = htmlspecialchars(UTF8::substr($var, 0, $length), ENT_NOQUOTES, Kohana::$charset) . '&nbsp;&hellip;';
+                $str = htmlspecialchars(mb_substr($var, 0, $length), ENT_NOQUOTES, Kohana::$charset) . '&nbsp;&hellip;';
             } else {
                 // Encode the string
                 $str = htmlspecialchars($var, ENT_NOQUOTES, Kohana::$charset);
