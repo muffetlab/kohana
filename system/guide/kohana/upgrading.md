@@ -54,3 +54,9 @@ certain features may not function as expected.
   instead.
 - The `Request::accept_lang()` method has been removed. Use `Request::headers()->accepts_language_at_quality()` instead.
 - The `Request::accept_type()` method has been removed. Use `Request::headers()->accepts_at_quality()` instead.
+
+### UTF8
+
+- The `UTF8::strlen()`, `UTF8::strpos()`, `UTF8::strrpos()`, `UTF8::substr()`, `UTF8::strtolower()`,
+  `UTF8::strtoupper()`, and `UTF8::stristr()` methods were deprecated. Please use their equivalent multibyte string
+  functions instead.
