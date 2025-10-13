@@ -29,11 +29,10 @@ class Kohana_Database_Query
     /**
      * Creates a new SQL query of the specified type.
      *
-     * @param int $type Query type: Database::SELECT, Database::INSERT, etc.
-     * @param string $sql Query string
-     * @return  void
+     * @param int|null $type Query type: Database::SELECT, Database::INSERT, etc.
+     * @param string|null $sql Query string
      */
-    public function __construct(int $type, string $sql)
+    public function __construct(?int $type, ?string $sql)
     {
         $this->_type = $type;
         $this->_sql = $sql;

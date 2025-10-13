@@ -19,12 +19,13 @@ error_reporting(E_ALL);
  * @link https://kohana.top/guide/using.configuration
  */
 // Set the full path to the docroot
-define('DOCROOT', __DIR__ . DIRECTORY_SEPARATOR);
+const DOCROOT = __DIR__ . DIRECTORY_SEPARATOR;
 
 // Define the absolute paths for required directories
 define('APPPATH', realpath(DOCROOT . '../application') . DIRECTORY_SEPARATOR);
 define('MODPATH', realpath(DOCROOT . '../modules') . DIRECTORY_SEPARATOR);
 define('SYSPATH', realpath(DOCROOT . '../system') . DIRECTORY_SEPARATOR);
+define('VENDOR_PATH', realpath(DOCROOT . '../vendor') . DIRECTORY_SEPARATOR);
 
 if (file_exists('install.php')) {
     // Load the installation check

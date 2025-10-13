@@ -443,19 +443,19 @@ abstract class Kohana_Image
      *     $image->watermark($mark, true, true);
      *
      * @param   Image    $watermark  watermark Image instance
-     * @param int|null $offset_x Offset from the left
-     * @param int|null $offset_y Offset from the top
+     * @param int|true|null $offset_x Offset from the left
+     * @param int|true|null $offset_y Offset from the top
      * @param int $opacity Opacity of watermark: 1-100
      * @return  $this
      * @uses    Image::_do_watermark
      */
-    public function watermark(Image $watermark, int $offset_x = null, int $offset_y = null, int $opacity = 100): Kohana_Image
+    public function watermark(Image $watermark, $offset_x = null, $offset_y = null, int $opacity = 100): Kohana_Image
     {
         if ($offset_x === null) {
             // Center the X offset
             $offset_x = round(($this->width - $watermark->width) / 2);
         } elseif ($offset_x === true) {
-            // Bottom the X offset
+            // Right the X offset
             $offset_x = $this->width - $watermark->width;
         } elseif ($offset_x < 0) {
             // Set the X offset from the right

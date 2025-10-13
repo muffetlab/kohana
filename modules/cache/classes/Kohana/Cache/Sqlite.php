@@ -64,11 +64,11 @@ class Kohana_Cache_Sqlite extends Cache implements Cache_Tagging, Cache_GarbageC
      * Retrieve a value based on an id
      *
      * @param string $id ID of cache entry.
-     * @param string|null $default Default value to return if ID not found
+     * @param mixed $default Default value to return if ID not found
      * @return  mixed
      * @throws  Cache_Exception
      */
-    public function get(string $id, string $default = null)
+    public function get(string $id, $default = null)
     {
         // Prepare statement
         $statement = $this->_db->prepare('SELECT id, expiration, cache FROM caches WHERE id = :id LIMIT 0, 1');

@@ -86,7 +86,7 @@ TESTTEXT;
                     'value' => 101010,
                     'ttl' => 0,
                     'wait' => false,
-                    'type' => 'integer',
+                    'type' => 'int',
                     'default' => null
                 ],
                 101010
@@ -125,7 +125,7 @@ TESTTEXT;
                     'value' => true,
                     'ttl' => 0,
                     'wait' => false,
-                    'type' => 'boolean',
+                    'type' => 'bool',
                     'default' => null
                 ],
                 true
@@ -261,7 +261,7 @@ TESTTEXT;
 
         $result = $cache->get($id, $default);
         $this->assertEquals($expected, $result);
-        $this->assertInternalType($type, $result);
+        $this->{($type === 'null' ? 'assert' : 'assertIs') . ucfirst($type)}($result);
 
         unset($id, $value, $ttl, $wait, $type, $default);
     }

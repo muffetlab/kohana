@@ -91,7 +91,7 @@ class Kohana_CoreTest extends Unittest_TestCase
         // ".php" is manually appended to the _file name_, not passed as the extension
         $path = Kohana::find_file('classes', $file = 'Kohana/Core.php', false);
 
-        $this->assertInternalType('string', $path);
+        $this->assertIsString($path);
 
         $this->assertStringEndsWith($file, $path);
     }
@@ -121,7 +121,7 @@ class Kohana_CoreTest extends Unittest_TestCase
     {
         $files = Kohana::list_files('config');
 
-        $this->assertInternalType('array', $files);
+        $this->assertIsArray($files);
         $this->assertGreaterThan(3, count($files));
 
         $this->assertSame([], Kohana::list_files('geshmuck'));
@@ -390,7 +390,7 @@ class Kohana_CoreTest extends Unittest_TestCase
     {
         $modules = Kohana::modules();
 
-        $this->assertInternalType('array', $modules);
+        $this->assertIsArray($modules);
 
         $this->assertArrayHasKey('unittest', $modules);
     }

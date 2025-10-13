@@ -73,10 +73,10 @@ class Kohana_Cache_Wincache extends Cache
      *     $data = Cache::instance('wincache')->get('foo', 'bar');
      *
      * @param string $id ID of cache to entry
-     * @param string|null $default Default value to return if cache miss
+     * @param mixed $default Default value to return if cache miss
      * @return  mixed
      */
-    public function get(string $id, string $default = null)
+    public function get(string $id, $default = null)
     {
         $data = wincache_ucache_get($this->_sanitize_id($id), $success);
 

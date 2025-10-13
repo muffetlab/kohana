@@ -83,6 +83,3 @@ To set multiple values at once, use [ORM::values]
     } catch (ORM_Validation_Exception $e) {
         // Handle validation errors ...
     }
-
-[!!] Although the second argument is optional, it is *highly recommended* to specify the list of columns you expect to change. Not doing so will leave your code _vulnerable_ in case the attacker adds fields you didn't expect.
-

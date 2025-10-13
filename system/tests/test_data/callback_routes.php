@@ -15,9 +15,11 @@ class Route_Holder
     /**
      * Route callback for test route_filter_modify_params
      *
+     * @param Route $route
+     * @param array $params
      * @return array
      */
-    public static function route_filter_modify_params_array(Route $route, $params): array
+    public static function route_filter_modify_params_array(Route $route, array $params): array
     {
         $params['action'] = 'modified';
 

@@ -27,7 +27,11 @@ class Kohana_LogTest extends Unittest_TestCase
     {
         $logger = new Log;
 
-        $this->assertAttributeSame([], '_messages', $logger);
+        $reflection = new ReflectionClass($logger);
+        $property = $reflection->getProperty('_messages');
+        $property->setAccessible(true);
+
+        $this->assertSame([], $property->getValue($logger));
     }
 
     /**
@@ -41,7 +45,11 @@ class Kohana_LogTest extends Unittest_TestCase
     {
         $logger = new Log;
 
-        $this->assertAttributeSame([], '_writers', $logger);
+        $reflection = new ReflectionClass($logger);
+        $property = $reflection->getProperty('_writers');
+        $property->setAccessible(true);
+
+        $this->assertSame([], $property->getValue($logger));
     }
 
     /**
@@ -59,9 +67,13 @@ class Kohana_LogTest extends Unittest_TestCase
 
         $this->assertSame($logger, $logger->attach($writer));
 
-        $this->assertAttributeSame([
+        $reflection = new ReflectionClass($logger);
+        $property = $reflection->getProperty('_writers');
+        $property->setAccessible(true);
+
+        $this->assertSame([
             spl_object_hash($writer) => ['object' => $writer, 'levels' => []]
-            ], '_writers', $logger);
+        ], $property->getValue($logger));
     }
 
     /**
@@ -80,12 +92,17 @@ class Kohana_LogTest extends Unittest_TestCase
 
         $this->assertSame($logger, $logger->attach($writer, Log::NOTICE, Log::CRITICAL));
 
-        $this->assertAttributeSame([
+
+        $reflection = new ReflectionClass($logger);
+        $property = $reflection->getProperty('_writers');
+        $property->setAccessible(true);
+
+        $this->assertSame([
             spl_object_hash($writer) => [
                 'object' => $writer,
                 'levels' => [Log::CRITICAL, Log::ERROR, Log::WARNING, Log::NOTICE]
             ]
-            ], '_writers', $logger);
+        ], $property->getValue($logger));
     }
 
     /**
@@ -103,7 +120,11 @@ class Kohana_LogTest extends Unittest_TestCase
 
         $this->assertSame($logger, $logger->detach($writer));
 
-        $this->assertAttributeSame([], '_writers', $logger);
+        $reflection = new ReflectionClass($logger);
+        $property = $reflection->getProperty('_writers');
+        $property->setAccessible(true);
+
+        $this->assertSame([], $property->getValue($logger));
     }
 
 }

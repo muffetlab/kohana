@@ -100,9 +100,9 @@ class Kohana_Debug
             // isn't too much of a hit.
             $var = UTF8::clean($var, Kohana::$charset);
 
-            if (UTF8::strlen($var) > $length) {
+            if (mb_strlen($var) > $length) {
                 // Encode the truncated string
-                $str = htmlspecialchars(UTF8::substr($var, 0, $length), ENT_NOQUOTES, Kohana::$charset) . '&nbsp;&hellip;';
+                $str = htmlspecialchars(mb_substr($var, 0, $length), ENT_NOQUOTES, Kohana::$charset) . '&nbsp;&hellip;';
             } else {
                 // Encode the string
                 $str = htmlspecialchars($var, ENT_NOQUOTES, Kohana::$charset);
@@ -202,7 +202,7 @@ class Kohana_Debug
     }
 
     /**
-     * Removes application, system, modpath, or docroot from a filename,
+     * Removes application, system, modpath, vendor, or docroot from a filename,
      * replacing them with the plain text equivalents. Useful for debugging
      * when you want to display a shorter path.
      *
@@ -220,6 +220,8 @@ class Kohana_Debug
             $file = 'SYSPATH' . DIRECTORY_SEPARATOR . substr($file, strlen(SYSPATH));
         } elseif (strpos($file, MODPATH) === 0) {
             $file = 'MODPATH' . DIRECTORY_SEPARATOR . substr($file, strlen(MODPATH));
+        } elseif (strpos($file, VENDOR_PATH) === 0) {
+            $file = 'VENDOR_PATH' . DIRECTORY_SEPARATOR . substr($file, strlen(VENDOR_PATH));
         } elseif (strpos($file, DOCROOT) === 0) {
             $file = 'DOCROOT' . DIRECTORY_SEPARATOR . substr($file, strlen(DOCROOT));
         }
@@ -339,7 +341,7 @@ class Kohana_Debug
                     $args = [$step['args'][0]];
                 }
             } elseif (isset($step['args'])) {
-                if (!function_exists($step['function']) || strpos($step['function'], '{closure}') !== false) {
+                if (!isset($step['class']) && !function_exists($step['function']) || strpos($step['function'], '{closure}') !== false) {
                     // Introspection on closures or language constructs in a stack trace is impossible
                     $params = null;
                 } else {

@@ -139,10 +139,11 @@ class Kohana_Minion_CLI
      *
      * $password = Minion_CLI::password('Enter your password');
      *
-     * @author Mathew Davies.
+     * @param string $text
      * @return string
+     * @author Mathew Davies.
      */
-    public static function password($text = ''): string
+    public static function password(string $text = ''): string
     {
         $text .= ': ';
 

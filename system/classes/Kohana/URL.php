@@ -120,23 +120,13 @@ class Kohana_URL
 
         if (!UTF8::is_ascii($path)) {
             // Encode all non-ASCII characters, as per RFC 1738
-            $path = preg_replace_callback('~([^/]+)~', 'URL::_rawurlencode_callback', $path);
+            $path = preg_replace_callback('~([^/]+)~', function ($matches) {
+                return rawurlencode($matches[0]);
+            }, $path);
         }
 
         // Concat the URL
         return URL::base($protocol, $index) . $path;
-    }
-
-    /**
-     * Callback used for encoding all non-ASCII characters, as per RFC 1738
-     * Used by URL::site()
-     *
-     * @param array $matches Array of matches from preg_replace_callback()
-     * @return string          Encoded string
-     */
-    protected static function _rawurlencode_callback(array $matches): string
-    {
-        return rawurlencode($matches[0]);
     }
 
     /**
@@ -200,7 +190,7 @@ class Kohana_URL
             $title = preg_replace('![^' . preg_quote($separator) . 'a-z0-9\s]+!', '', strtolower($title));
         } else {
             // Remove all characters that are not the separator, letters, numbers, or whitespace
-            $title = preg_replace('![^' . preg_quote($separator) . '\pL\pN\s]+!u', '', UTF8::strtolower($title));
+            $title = preg_replace('![^' . preg_quote($separator) . '\pL\pN\s]+!u', '', mb_strtolower($title));
         }
 
         // Replace all separator characters and whitespace by a single separator

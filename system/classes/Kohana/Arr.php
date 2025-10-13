@@ -137,7 +137,7 @@ class Kohana_Arr
                 $values = [];
                 foreach ($array as $arr) {
                     if (!is_array($arr)) {
-                        if (Arr::is_array($arr)) {
+                        if ($arr instanceof Traversable) {
                             $arr = iterator_to_array($arr);
                         } else {
                             continue;

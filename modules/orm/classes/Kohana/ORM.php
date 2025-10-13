@@ -143,12 +143,6 @@ class Kohana_ORM extends Model implements serializable
     protected $_table_name;
 
     /**
-     * Table columns
-     * @var array
-     */
-    protected $_table_columns;
-
-    /**
      * Auto-update columns for updates
      * @var string
      */
@@ -366,9 +360,6 @@ class Kohana_ORM extends Model implements serializable
             $this->{$property} = $value;
         }
 
-        // Load column information
-        $this->reload_columns();
-
         // Clear initial model state
         $this->clear();
     }
@@ -386,44 +377,18 @@ class Kohana_ORM extends Model implements serializable
             ->bind(':original_values', $this->_original_values)
             ->bind(':changes', $this->_changes);
 
+        // Use column names by default for labels
+        $columns = [];
+
         foreach ($this->rules() as $field => $rules) {
+            $columns[$field] = $field;
             $this->_validation->rules($field, $rules);
         }
 
-        // Use column names by default for labels
-        $columns = array_keys($this->_table_columns);
-
         // Merge user-defined labels
-        $labels = array_merge(array_combine($columns, $columns) ?: [], $this->labels());
+        $labels = array_merge($columns, $this->labels());
 
-        foreach ($labels as $field => $label) {
-            $this->_validation->label($field, $label);
-        }
-    }
-
-    /**
-     * Reload column definitions.
-     *
-     * @chainable
-     * @param bool $force Force reloading
-     * @return  Kohana_ORM
-     */
-    public function reload_columns(bool $force = false): Kohana_ORM
-    {
-        if ($force === true || empty($this->_table_columns)) {
-            if (isset(ORM::$_column_cache[$this->_object_name])) {
-                // Use cached column information
-                $this->_table_columns = ORM::$_column_cache[$this->_object_name];
-            } else {
-                // Grab column information from database
-                $this->_table_columns = $this->list_columns();
-
-                // Load column cache
-                ORM::$_column_cache[$this->_object_name] = $this->_table_columns;
-            }
-        }
-
-        return $this;
+        $this->_validation->labels($labels);
     }
 
     /**
@@ -435,7 +400,7 @@ class Kohana_ORM extends Model implements serializable
     public function clear(): Kohana_ORM
     {
         // Create an array with all the columns set to null
-        $values = array_combine(array_keys($this->_table_columns), array_fill(0, count($this->_table_columns), null));
+        $values = array_combine(array_keys($this->_object), array_fill(0, count($this->_object), null));
 
         // Replace the object and reset the object status
         $this->_object = $this->_changes = $this->_related = $this->_original_values = [];
@@ -722,24 +687,16 @@ class Kohana_ORM extends Model implements serializable
     }
 
     /**
-     * Set values from an array with support for one-one relationships.  This method should be used
-     * for loading in post data, etc.
+     * Set values from an array with support for one-one relationships.
+     * This method should be used for loading in post data, etc.
      *
-     * @param array $values Array of column => val
-     * @param array|null $expected Array of keys to take from $values
+     * @param array $values Array of column => value pairs
+     * @param array $columns Array of columns to be set
      * @return Kohana_ORM
      */
-    public function values(array $values, array $expected = null): Kohana_ORM
+    public function values(array $values, array $columns): Kohana_ORM
     {
-        // Default to expecting everything except the primary key
-        if ($expected === null) {
-            $expected = array_keys($this->_table_columns);
-
-            // Don't set the primary key by default
-            unset($values[$this->_primary_key]);
-        }
-
-        foreach ($expected as $key => $column) {
+        foreach ($columns as $key => $column) {
             if (is_string($key)) {
                 // isset() fails when the value is null (we want it to pass)
                 if (!array_key_exists($key, $values))
@@ -872,7 +829,7 @@ class Kohana_ORM extends Model implements serializable
                 $this->_db_builder = DB::select();
                 break;
             case Database::UPDATE:
-                $this->_db_builder = DB::update([$this->_table_name, $this->_object_name]);
+                $this->_db_builder = DB::update($this->_table_name);
                 break;
             case Database::DELETE:
                 // Cannot use an alias for DELETE queries
@@ -940,23 +897,6 @@ class Kohana_ORM extends Model implements serializable
     }
 
     /**
-     * Returns an array of columns to include in the select query. This method
-     * can be overridden to change the default select behavior.
-     *
-     * @return array Columns to select
-     */
-    protected function _build_select(): array
-    {
-        $columns = [];
-
-        foreach ($this->_table_columns as $column => $_) {
-            $columns[] = [$this->_object_name . '.' . $column, $column];
-        }
-
-        return $columns;
-    }
-
-    /**
      * Loads a database result, either as a new record for this model, or as
      * an iterator for multiple rows.
      *
@@ -973,9 +913,6 @@ class Kohana_ORM extends Model implements serializable
             // Only fetch 1 record
             $this->_db_builder->limit(1);
         }
-
-        // Select all columns by default
-        $this->_db_builder->select_array($this->_build_select());
 
         if (!isset($this->_db_applied['order_by']) && !empty($this->_sorting)) {
             foreach ($this->_sorting as $column => $direction) {
@@ -1340,7 +1277,7 @@ class Kohana_ORM extends Model implements serializable
      *
      *
      *     // Check if $model has the login role
-     *     $model->has('roles', ORM::factory('role', ['name' => 'login']));
+     *     $model->has('roles', ORM::factory('Role', ['name' => 'login']));
      *     // Check for the login role if you know the role id is 5
      *     $model->has('roles', 5);
      *     // Check for all the following roles
@@ -1358,9 +1295,9 @@ class Kohana_ORM extends Model implements serializable
         $count = $this->count_relations($alias, $far_keys);
         if ($far_keys === null) {
             return (bool) $count;
-        } else {
-            return $count === count($far_keys);
         }
+
+        return $count === (is_array($far_keys) ? count($far_keys) : 1);
     }
 
     /**
@@ -1369,7 +1306,7 @@ class Kohana_ORM extends Model implements serializable
      * only checks that at least one of the relationships is satisfied.
      *
      *     // Check if $model has the login role
-     *     $model->has_any('roles', ORM::factory('role', ['name' => 'login']));
+     *     $model->has_any('roles', ORM::factory('Role', ['name' => 'login']));
      *     // Check for the login role if you know the role id is 5
      *     $model->has_any('roles', 5);
      *     // Check for any of the following roles
@@ -1391,7 +1328,7 @@ class Kohana_ORM extends Model implements serializable
      * Returns the number of relationships
      *
      *     // Counts the number of times the login role is attached to current model
-     *     $model->count_relations('roles', ORM::factory('role', ['name' => 'login']));
+     *     $model->count_relations('roles', ORM::factory('Role', ['name' => 'login']));
      *     // Counts the number of times role 5 is attached to current model
      *     $model->count_relations('roles', 5);
      *     // Counts the number of times any of roles 1, 2, 3, or 4 are attached to current model
@@ -1424,17 +1361,18 @@ class Kohana_ORM extends Model implements serializable
 
         // Rows found need to match the rows searched
         return (int) DB::select([DB::expr('COUNT(*)'), 'records_found'])
-                ->from($this->_has_many[$alias]['through'])
-                ->where($this->_has_many[$alias]['foreign_key'], '=', $this->pk())
-                ->where($this->_has_many[$alias]['far_key'], 'IN', $far_keys)
-                ->execute($this->_db)->get('records_found');
+            ->from($this->_has_many[$alias]['through'])
+            ->where($this->_has_many[$alias]['foreign_key'], '=', $this->pk())
+            ->where($this->_has_many[$alias]['far_key'], 'IN', $far_keys)
+            ->group_by($this->_has_many[$alias]['far_key'])
+            ->execute($this->_db)->get('records_found');
     }
 
     /**
      * Adds a new relationship to between this model and another.
      *
      *     // Add the login role using a model instance
-     *     $model->add('roles', ORM::factory('role', ['name' => 'login']));
+     *     $model->add('roles', ORM::factory('Role', ['name' => 'login']));
      *     // Add the login role if you know the role id is 5
      *     $model->add('roles', 5);
      *     // Add multiple roles (for example, from checkboxes on a form)
@@ -1467,7 +1405,7 @@ class Kohana_ORM extends Model implements serializable
      * Removes a relationship between this model and another.
      *
      *     // Remove a role using a model instance
-     *     $model->remove('roles', ORM::factory('role', ['name' => 'login']));
+     *     $model->remove('roles', ORM::factory('Role', ['name' => 'login']));
      *     // Remove the role knowing the primary key
      *     $model->remove('roles', 5);
      *     // Remove multiple roles (for example, from checkboxes on a form)
@@ -1649,11 +1587,6 @@ class Kohana_ORM extends Model implements serializable
     public function table_name(): string
     {
         return $this->_table_name;
-    }
-
-    public function table_columns(): array
-    {
-        return $this->_table_columns;
     }
 
     public function has_one(): array

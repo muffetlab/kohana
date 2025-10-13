@@ -26,6 +26,12 @@ certain features may not function as expected.
 - The `Kohana::CODENAME` constant has been removed.
 - The static property `Kohana::$magic_quotes` was deprecated.
 
+### Database
+
+- A new `flags` connection option was added for MySQLi driver. This option allows you to set various flags for the
+  MySQLi connection. Refer to the [MySQLi documentation](https://www.php.net/manual/en/mysqli.real-connect.php) for a
+  list of available flags.
+
 ### Encrypt
 
 - The `Mcrypt` driver has been removed. Use the `OpenSSL` driver instead.
@@ -39,6 +45,8 @@ certain features may not function as expected.
 
 - The `changed()` method now has a strict boolean return type and only returns true or false.
 - A new `changes()` method was added to retrieve the actual changed fields and their values.
+- The second parameter of the `ORM::values()` method is no longer optional. This change was implemented to enhance
+  security by preventing mass assignment vulnerabilities.
 
 ### Request
 
@@ -46,3 +54,9 @@ certain features may not function as expected.
   instead.
 - The `Request::accept_lang()` method has been removed. Use `Request::headers()->accepts_language_at_quality()` instead.
 - The `Request::accept_type()` method has been removed. Use `Request::headers()->accepts_at_quality()` instead.
+
+### UTF8
+
+- The `UTF8::strlen()`, `UTF8::strpos()`, `UTF8::strrpos()`, `UTF8::substr()`, `UTF8::strtolower()`,
+  `UTF8::strtoupper()`, and `UTF8::stristr()` methods were deprecated. Please use their equivalent multibyte string
+  functions instead.
