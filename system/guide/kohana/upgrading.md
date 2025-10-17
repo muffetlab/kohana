@@ -7,7 +7,10 @@ certain features may not function as expected.
 
 ## Changes
 
-- The global EXT constant has been removed. Explicitly specify `.php` or another file extension instead.
+- The `composer install` command is now required for dependency installation. Remember to run this command during
+  upgrades.
+- A new `VENDOR_PATH` constant has been added. This constant is used to locate the vendor directory.
+- The global `EXT` constant has been removed. Explicitly specify `.php` or another file extension instead.
 
 ### Arr
 
