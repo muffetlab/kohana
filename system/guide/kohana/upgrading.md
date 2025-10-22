@@ -7,9 +7,8 @@ certain features may not function as expected.
 
 ## Changes
 
-- The `composer install` command is now required for dependency installation. Remember to run this command during
-  upgrades.
-- A new `VENDOR_PATH` constant has been added. This constant is used to locate the vendor directory.
+- The `composer install` command is required for dependency installation since Kohana 3.4.4. Remember to run this
+  command during upgrades.
 - The global `EXT` constant has been removed. Explicitly specify `.php` or another file extension instead.
 
 ### Arr
