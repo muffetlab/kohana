@@ -4,7 +4,7 @@
   "description": "The Kohana PHP framework",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kilofox/kohana.git"
+    "url": "git+https://github.com/muffetlab/kohana.git"
   },
   "keywords": [
     "framework",
@@ -13,7 +13,7 @@
   "author": "Kohana Group",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kilofox/kohana/issues"
+    "url": "https://github.com/muffetlab/kohana/issues"
   },
-  "homepage": "https://github.com/kilofox/kohana#readme"
+  "homepage": "https://github.com/muffetlab/kohana#readme"
 }

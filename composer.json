@@ -1,5 +1,5 @@
 {
-    "name": "kilofox/kohana",
+    "name": "muffetlab/kohana",
     "type": "project",
     "description": "The Kohana PHP framework",
     "keywords": ["framework", "kohana"],

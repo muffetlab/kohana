@@ -12,7 +12,7 @@ To help secure your applications, tools for [input validation](security/validati
 
 ## Contribute to the Documentation
 
-We are working very hard to provide complete documentation. To help improve the guide, please [fork the project](https://github.com/kilofox/kohana), make your changes, and send a pull request.
+We are working very hard to provide complete documentation. To help improve the guide, please [fork the project](https://github.com/muffetlab/kohana), make your changes, and send a pull request.
 
 ## Unofficial Documentation
 
