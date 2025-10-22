@@ -7,7 +7,10 @@ certain features may not function as expected.
 
 ## Changes
 
-- The global EXT constant has been deprecated. Explicitly specify `.php` or another file extension instead.
+- The `composer install` command is required for dependency installation since Kohana 3.4.4. Remember to run this
+  command after upgrading from a previous version.
+- A new `VENDOR_PATH` constant has been added since Kohana 3.4.4. This constant is used to locate the vendor directory.
+- The global `EXT` constant has been deprecated. Explicitly specify `.php` or another file extension instead.
 
 ### Auth
 
