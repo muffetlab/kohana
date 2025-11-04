@@ -562,9 +562,7 @@ class Kohana_ORM extends Model implements serializable
      */
     public function get(string $column)
     {
-        if (array_key_exists($column, $this->_object)) {
-            return in_array($column, $this->_serialize_columns) ? $this->_unserialize_value($this->_object[$column]) : $this->_object[$column];
-        } elseif (isset($this->_related[$column])) {
+        if (isset($this->_related[$column])) {
             // Return related model that has already been fetched
             return $this->_related[$column];
         } elseif (isset($this->_belongs_to[$column])) {
@@ -615,7 +613,7 @@ class Kohana_ORM extends Model implements serializable
 
             return $model->where($col, '=', $val);
         } else {
-            throw new Kohana_Exception('The :property property does not exist in the :class class', [':property' => $column, ':class' => get_class($this)]);
+            return in_array($column, $this->_serialize_columns) ? $this->_unserialize_value($this->_object[$column]) : $this->_object[$column] ?? null;
         }
     }
 
@@ -626,7 +624,6 @@ class Kohana_ORM extends Model implements serializable
      * @param string $column Column name
      * @param mixed $value Column value
      * @return void
-     * @throws Kohana_Exception
      * @throws ReflectionException
      */
     public function __set(string $column, $value)
@@ -641,7 +638,6 @@ class Kohana_ORM extends Model implements serializable
      * @param string $column Column name
      * @param mixed $value Column value
      * @return Kohana_ORM
-     * @throws Kohana_Exception
      * @throws ReflectionException
      */
     public function set(string $column, $value): Kohana_ORM
@@ -657,21 +653,7 @@ class Kohana_ORM extends Model implements serializable
             $value = $this->_serialize_value($value);
         }
 
-        if (array_key_exists($column, $this->_object)) {
-            // Filter the data
-            $value = $this->run_filter($column, $value);
-
-            // See if the data really changed
-            if ($value !== $this->_object[$column]) {
-                $this->_object[$column] = $value;
-
-                // Data has changed
-                $this->_changes[$column] = $value;
-
-                // Object is no longer saved or valid
-                $this->_saved = $this->_valid = false;
-            }
-        } elseif (isset($this->_belongs_to[$column])) {
+        if (isset($this->_belongs_to[$column])) {
             // Update related object itself
             $this->_related[$column] = $value;
 
@@ -680,7 +662,19 @@ class Kohana_ORM extends Model implements serializable
 
             $this->_changes[$column] = $value;
         } else {
-            throw new Kohana_Exception('The :property: property does not exist in the :class: class', [':property:' => $column, ':class:' => get_class($this)]);
+            // Filter the data
+            $value = $this->run_filter($column, $value);
+
+            // See if the data really changed
+            if (!isset($this->_object[$column]) || $value !== $this->_object[$column]) {
+                $this->_object[$column] = $value;
+
+                // Data has changed
+                $this->_changes[$column] = $value;
+
+                // Object is no longer saved or valid
+                $this->_saved = $this->_valid = false;
+            }
         }
 
         return $this;
