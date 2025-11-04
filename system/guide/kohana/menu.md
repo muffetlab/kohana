@@ -19,7 +19,7 @@
    - [Routing](routing)
    - [Error Handling](errors)
    - [Tips & Common Mistakes](tips)
-   - [Upgrading from 3.4](upgrading)
+   - [Upgrading](upgrading)
 - Basic Usage
    - [Debugging](debugging)
    - [Loading Classes](autoloading)
