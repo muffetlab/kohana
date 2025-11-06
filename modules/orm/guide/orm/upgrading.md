@@ -29,3 +29,18 @@ mass assignment vulnerabilities.
 ~~~
 $user->values($data, ['username', 'logins']);
 ~~~
+
+## Non-existent Property Access
+
+In Kohana 3.5, the ORM class now allows accessing and setting non-existent properties without throwing exceptions.
+Previously, attempting to access or set a property that didn't exist on the model would result in a Kohana_Exception
+being thrown. This behavior has been changed to provide more flexibility when working with dynamic properties.
+
+~~~
+$user = ORM::factory('User');
+echo $user->nonexistent_field; // Returns null
+$user->nonexistent_field = 'value'; // Sets the property without exception
+~~~
+
+This change makes the ORM class more tolerant when dealing with dynamic properties, preventing runtime exceptions while
+maintaining backward compatibility for valid operations.
