@@ -1010,11 +1010,11 @@ class Kohana_ORM extends Model implements serializable
      * Filters a value for a specific column
      *
      * @param string $field The column name
-     * @param string $value The value to filter
-     * @return string
+     * @param mixed $value The value to filter
+     * @return mixed
      * @throws ReflectionException
      */
-    protected function run_filter(string $field, string $value): string
+    protected function run_filter(string $field, $value)
     {
         $filters = $this->filters();
 
