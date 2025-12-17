@@ -872,7 +872,7 @@ class Kohana_Core
             if ($files = Kohana::find_file('messages', $file)) {
                 foreach ($files as $f) {
                     // Combine all the messages recursively
-                    $messages[$file] = Arr::merge($messages[$file], Kohana::load($f));
+                    $messages[$file] = Arr::merge($messages[$file], (array) Kohana::load($f));
                 }
             }
         }
