@@ -17,7 +17,7 @@
 class Kohana_Core
 {
     /** @var string Release version */
-    const VERSION = '3.4.3';
+    const VERSION = '3.4.4';
 
     /**
      * @var string Release codename
