@@ -1,10 +1,10 @@
 {
   "name": "kohana",
-  "version": "3.4.3",
+  "version": "3.4.4",
   "description": "The Kohana PHP framework",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kilofox/kohana.git"
+    "url": "git+https://github.com/muffetlab/kohana.git"
   },
   "keywords": [
     "framework",
@@ -13,7 +13,13 @@
   "author": "Kohana Group",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kilofox/kohana/issues"
+    "url": "https://github.com/muffetlab/kohana/issues"
   },
-  "homepage": "https://github.com/kilofox/kohana#readme"
+  "homepage": "https://github.com/muffetlab/kohana#readme",
+  "devDependencies": {
+    "commit-and-tag-version": "^12.6.1"
+  },
+  "scripts": {
+    "release": "commit-and-tag-version"
+  }
 }

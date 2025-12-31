@@ -6,17 +6,26 @@
  - [Iconv Extension](https://www.php.net/iconv)
  - [Character Type (CTYPE) Extension](https://www.php.net/ctype)
 
-# Download
+# Creating a Kohana Application
 
-You can get the latest **stable** release on the [Kohana website](https://kohana.top/). This will give you a fully functional application with an `application`, `modules`, and `system` directory.
+You can get the latest **stable** release on the [Kohana website](https://kohana.top/). This will give you a fully
+functional application with an `application`, `modules`, `public`, and `system` directory.
 
 [!!] You can find information about the file structure on the [Cascading Filesystem](files) page.
 
-Once downloaded, you should extract the Kohana application to a directory where the web server can access it. Going forward, we are going to assume you've extracted the application to a `kohana` directory such that `http://localhost/kohana/index.php` is pointing to the `index.php` file in the Kohana release.
+Once downloaded, you should extract the Kohana application to a directory where the web server can access it. Going
+forward, we are going to assume you've extracted the application to a `kohana` directory. Then change to the `kohana`
+directory and install dependencies with Composer:
+
+~~~
+composer install
+~~~
 
 # Configure
 
-Before the application can be run, you will need to make a few changes to the `application/bootstrap.php` file. This file is the first one to be included by `index.php` and sets up most of the global options for the application. Open `application/bootstrap.php` and make the following changes:
+Before the application can be run, you will need to make a few changes to the `application/bootstrap.php` file. This
+file is the first one to be included by `public/index.php` and sets up most of the global options for the application.
+Open `application/bootstrap.php` and make the following changes:
 
  - Set the default [timezone](https://www.php.net/timezones) for your application.
 ~~~
@@ -68,9 +77,3 @@ You should see the installation page. If it reports any errors, you will need to
 Once your installation page reports that your environment is set up correctly you need to either rename or delete `install.php`. Kohana is now installed, and you should see the output of the welcome controller:
 
 ![Welcome Page](welcome.png "Example of welcome page")
-
-## Installing Kohana From GitHub
-
-The [source code](https://github.com/kilofox/kohana) for Kohana is hosted with [GitHub](https://github.com). To install Kohana using the GitHub source code first you need to install [git](https://git-scm.com/). Visit [https://support.github.com/](https://support.github.com/) for details on how to install git on your platform.
-
-[!!] For more information on installing Kohana using git, see the [Working with Git](tutorials/git) tutorial.

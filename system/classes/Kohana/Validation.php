@@ -325,6 +325,11 @@ class Kohana_Validation implements ArrayAccess
                     }
                 }
 
+                // Ignore return values from rules when the field is empty
+                if (!in_array($rule, $this->_empty_rules) && !Valid::not_empty($value)) {
+                    continue;
+                }
+
                 // Default the error name to be the rule (except array and lambda rules)
                 $error_name = $rule;
 
@@ -364,10 +369,6 @@ class Kohana_Validation implements ArrayAccess
                     // Call $Class::$method($this[$field], $param, ...) with Reflection
                     $passed = $method->invokeArgs(null, $params);
                 }
-
-                // Ignore return values from rules when the field is empty
-                if (!in_array($rule, $this->_empty_rules) && !Valid::not_empty($value))
-                    continue;
 
                 if ($passed === false && $error_name !== false) {
                     // Add the rule to the errors

@@ -1,5 +1,5 @@
 {
-    "name": "kilofox/kohana",
+    "name": "muffetlab/kohana",
     "type": "project",
     "description": "The Kohana PHP framework",
     "keywords": ["framework", "kohana"],
@@ -32,9 +32,6 @@
         "ext-simplexml": "*"
     },
     "require-dev": {
-        "ext-apcu": "*",
-        "ext-imagick": "*",
-        "ext-memcached": "*",
         "phpunit/phpunit": "^5.7",
         "phpunit/phpunit-dom-assertions": "^0.1.0"
     }
