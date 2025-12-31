@@ -17,7 +17,7 @@
 class Kohana_Core
 {
     /** @var string Release version */
-    const VERSION = '3.4.3';
+    const VERSION = '3.5.0';
 
     /** @var int Production environment type constant */
     const PRODUCTION = 10;
