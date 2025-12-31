@@ -112,7 +112,7 @@ class Kohana_I18n
                 $t = [];
                 foreach ($files as $file) {
                     // Merge the language strings into the sub table
-                    $t = array_merge($t, Kohana::load($file));
+                    $t = array_merge($t, (array) Kohana::load($file));
                 }
 
                 // Append the sub table, preventing less specific language

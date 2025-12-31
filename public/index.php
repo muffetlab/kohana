@@ -60,7 +60,7 @@ if (PHP_SAPI === 'cli') {
      * Execute the main request. A source of the URI can be passed, e.g., $_SERVER['PATH_INFO'].
      * If no source is specified, the URI will be automatically detected.
      */
-    echo Request::factory('', [], false)
+    echo Request::factory(null, [], false)
         ->execute()
         ->send_headers(true)
         ->body();

@@ -46,7 +46,7 @@ class Kohana_Request implements HTTP_Request
      * If $cache parameter is set, the response for the request will attempt to
      * be retrieved from the cache.
      *
-     * @param string $uri URI of the request
+     * @param string|null $uri URI of the request
      * @param array $client_params An array of params to pass to the request client
      * @param bool $allow_external Allow external requests? (deprecated in 3.3)
      * @param array $injected_routes An array of routes to use, for testing
@@ -56,7 +56,7 @@ class Kohana_Request implements HTTP_Request
      * @uses    Route::all
      * @uses    Route::matches
      */
-    public static function factory(string $uri = '', array $client_params = [], bool $allow_external = true, array $injected_routes = []): Request
+    public static function factory(string $uri = null, array $client_params = [], bool $allow_external = true, array $injected_routes = []): Request
     {
         // If this is the initial request
         if (!Request::$initial) {
@@ -122,7 +122,7 @@ class Kohana_Request implements HTTP_Request
                 $body = file_get_contents('php://input');
             }
 
-            if ($uri === '') {
+            if ($uri === null) {
                 // Attempt to guess the proper URI
                 $uri = Request::detect_uri();
             }
@@ -500,17 +500,18 @@ class Kohana_Request implements HTTP_Request
      * If $cache parameter is set, the response for the request will attempt to
      * be retrieved from the cache.
      *
-     * @param string $uri URI of the request
+     * @param string|null $uri URI of the request
      * @param array $client_params Array of params to pass to the request client
      * @param bool $allow_external Allow external requests? (deprecated in 3.3)
      * @param array $injected_routes An array of routes to use, for testing
-     * @return  void
-     * @throws  Request_Exception
+     * @throws Request_Exception
      * @uses    Route::all
      * @uses    Route::matches
      */
-    public function __construct(string $uri, array $client_params = [], bool $allow_external = true, array $injected_routes = [])
+    public function __construct(string $uri = null, array $client_params = [], bool $allow_external = true, array $injected_routes = [])
     {
+        $uri = $uri ?? '';
+
         // Initialise the header
         $this->_header = new HTTP_Header([]);
 

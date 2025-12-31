@@ -5,3 +5,4 @@
    - [Query Builder](query/builder)
 - [Results](results)
 - [Examples](examples)
+- [Upgrading](upgrading)
