@@ -27,7 +27,7 @@ class Kohana_Response implements HTTP_Response
      * @param   array    $config Set up the response object
      * @return  Response
      */
-    public static function factory(array $config = [])
+    public static function factory(array $config = []): Response
     {
         return new Response($config);
     }
@@ -144,12 +144,12 @@ class Kohana_Response implements HTTP_Response
      *
      * @return Kohana_Response|string
      */
-    public function body($content = null)
+    public function body(string $content = null)
     {
         if ($content === null)
             return $this->_body;
 
-        $this->_body = (string) $content;
+        $this->_body = $content;
         return $this;
     }
 
@@ -160,7 +160,7 @@ class Kohana_Response implements HTTP_Response
      * @param string|null $protocol Protocol to set to the request/response
      * @return  Kohana_Response|string
      */
-    public function protocol($protocol = null)
+    public function protocol(string $protocol = null)
     {
         if ($protocol) {
             $this->_protocol = strtoupper($protocol);
@@ -188,12 +188,12 @@ class Kohana_Response implements HTTP_Response
      * @return int|Kohana_Response
      * @throws Kohana_Exception
      */
-    public function status($code = null)
+    public function status(int $code = null)
     {
         if ($code === null) {
             return $this->_status;
         } elseif (array_key_exists($code, Response::$messages)) {
-            $this->_status = (int) $code;
+            $this->_status = $code;
             return $this;
         } else {
             throw new Kohana_Exception(__METHOD__ . ' unknown status value : :value', [':value' => $code]);
@@ -221,7 +221,7 @@ class Kohana_Response implements HTTP_Response
      * @param string|null $value
      * @return mixed
      */
-    public function headers($key = null, $value = null)
+    public function headers($key = null, string $value = null)
     {
         if ($key === null) {
             return $this->_header;
@@ -242,7 +242,7 @@ class Kohana_Response implements HTTP_Response
      *
      * @return int
      */
-    public function content_length()
+    public function content_length(): int
     {
         return strlen($this->body());
     }
@@ -298,7 +298,7 @@ class Kohana_Response implements HTTP_Response
      * @param string $name
      * @return  Kohana_Response
      */
-    public function delete_cookie($name)
+    public function delete_cookie(string $name): Kohana_Response
     {
         unset($this->_cookies[$name]);
         return $this;
@@ -309,7 +309,7 @@ class Kohana_Response implements HTTP_Response
      *
      * @return Kohana_Response
      */
-    public function delete_cookies()
+    public function delete_cookies(): Kohana_Response
     {
         $this->_cookies = [];
         return $this;
@@ -323,7 +323,7 @@ class Kohana_Response implements HTTP_Response
      * @return  mixed
      * @throws Kohana_Exception
      */
-    public function send_headers($replace = false, $callback = null)
+    public function send_headers(bool $replace = false, callable $callback = null)
     {
         return $this->_header->send_headers($this, $replace, $callback);
     }
@@ -360,7 +360,7 @@ class Kohana_Response implements HTTP_Response
      * @uses    File::mime
      * @uses    Request::send_headers
      */
-    public function send_file($filename, $download = null, array $options = null)
+    public function send_file($filename, string $download = null, array $options = null)
     {
         if (!empty($options['mime_type'])) {
             // The mime-type has been manually set
@@ -529,7 +529,7 @@ class Kohana_Response implements HTTP_Response
      *
      * @return  string
      */
-    public function render()
+    public function render(): string
     {
         if (!$this->_header->offsetExists('content-type')) {
             // Add the default Content-Type header if required
@@ -578,7 +578,7 @@ class Kohana_Response implements HTTP_Response
      * @throws Request_Exception
      * @return String Generated ETag
      */
-    public function generate_etag()
+    public function generate_etag(): string
     {
         if ($this->_body === '') {
             throw new Request_Exception('No response yet associated with request - cannot auto generate resource ETag');
@@ -614,7 +614,7 @@ class Kohana_Response implements HTTP_Response
      * @param int $size
      * @return array
      */
-    protected function _calculate_byte_range($size)
+    protected function _calculate_byte_range(int $size): array
     {
         // Defaults to start with when the HTTP_RANGE header doesn't exist.
         $start = 0;

@@ -32,7 +32,7 @@ class Kohana_FeedTest extends Unittest_TestCase
      *
      * @return array
      */
-    public function provider_parse()
+    public function provider_parse(): array
     {
         return [
             // $source, $expected
@@ -64,7 +64,7 @@ class Kohana_FeedTest extends Unittest_TestCase
      * @throws Kohana_Exception
      * @throws Request_Exception
      */
-    public function test_parse($source, $expected_titles)
+    public function test_parse(string $source, $expected_titles)
     {
         $titles = [];
         foreach (Feed::parse($source) as $item) {
@@ -79,7 +79,7 @@ class Kohana_FeedTest extends Unittest_TestCase
      *
      * @return array
      */
-    public function provider_create()
+    public function provider_create(): array
     {
         $info = [
             'pubDate' => 123,
@@ -113,7 +113,7 @@ class Kohana_FeedTest extends Unittest_TestCase
      * @param string $child
      * @return array
      */
-    private function matcher_composer(array $data, $tag, $child)
+    private function matcher_composer(array $data, string $tag, string $child): array
     {
         return [
             'channel > ' . $tag . ' > ' . $child,
@@ -140,10 +140,10 @@ class Kohana_FeedTest extends Unittest_TestCase
     {
         $this->setEnvironment($enviroment);
 
-        $this->assertSelectEquals($matcher_item[0], $matcher_item[1], true, Feed::create($info, $items), null, false);
+        $this->assertSelectEquals($matcher_item[0], $matcher_item[1], true, Feed::create($info, $items), '', false);
 
         foreach ($matchers_image as $matcher_image) {
-            $this->assertSelectEquals($matcher_image[0], $matcher_image[1], true, Feed::create($info, $items), null, false);
+            $this->assertSelectEquals($matcher_image[0], $matcher_image[1], true, Feed::create($info, $items), '', false);
         }
     }
 

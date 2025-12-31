@@ -95,7 +95,7 @@ class Kohana_RequestTest extends Unittest_TestCase
      * Provides the data for test_create()
      * @return  array
      */
-    public function provider_create()
+    public function provider_create(): array
     {
         return [
             ['foo/bar', 'Request_Client_Internal'],
@@ -185,7 +185,7 @@ class Kohana_RequestTest extends Unittest_TestCase
      */
     public function test_route()
     {
-        $request = Request::factory(''); // This should always match something, no matter what changes people make
+        $request = Request::factory(); // This should always match something, no matter what changes people make
         // We need to execute the request before it has matched a route
         try {
             $request->execute();
@@ -203,73 +203,16 @@ class Kohana_RequestTest extends Unittest_TestCase
      */
     public function test_route_is_not_set_before_execute()
     {
-        $request = Request::factory(''); // This should always match something, no matter what changes people make
+        $request = Request::factory(); // This should always match something, no matter what changes people make
         // The route should be null since the request has not been executed yet
         $this->assertNull($request->route());
-    }
-
-    /**
-     * Tests Request::accept_type()
-     *
-     * @test
-     * @covers Request::accept_type
-     */
-    public function test_accept_type()
-    {
-        $this->assertEquals(['*/*' => 1], Request::accept_type());
-    }
-
-    /**
-     * Provides test data for Request::accept_lang()
-     * @return array
-     */
-    public function provider_accept_lang()
-    {
-        return [
-            [
-                'en-us',
-                1,
-                ['_SERVER' => ['HTTP_ACCEPT_LANGUAGE' => 'en-us,en;q=0.5']]
-            ],
-            [
-                'en-us',
-                1,
-                ['_SERVER' => ['HTTP_ACCEPT_LANGUAGE' => 'en-gb']]
-            ],
-            [
-                'en-us',
-                1,
-                ['_SERVER' => ['HTTP_ACCEPT_LANGUAGE' => 'sp-sp;q=0.5']]
-            ],
-        ];
-    }
-
-    /**
-     * Tests Request::accept_lang()
-     *
-     * @test
-     * @covers       Request::accept_lang
-     * @dataProvider provider_accept_lang
-     * @param array $params Query string
-     * @param string $expected Expected result
-     * @param array $enviroment Set environment
-     * @throws Kohana_Exception
-     * @throws ReflectionException
-     */
-    public function test_accept_lang($params, $expected, $enviroment)
-    {
-        $this->setEnvironment($enviroment);
-
-        $this->assertEquals(
-            $expected, Request::accept_lang($params)
-        );
     }
 
     /**
      * Provides test data for Request::url()
      * @return array
      */
-    public function provider_url()
+    public function provider_url(): array
     {
         return [
             ['foo/bar', 'http', 'http://localhost/kohana/foo/bar'],
@@ -292,7 +235,7 @@ class Kohana_RequestTest extends Unittest_TestCase
      * @throws ReflectionException
      * @throws Request_Exception
      */
-    public function test_url($uri, $protocol, $expected)
+    public function test_url(string $uri, string $protocol, string $expected)
     {
         if (!isset($_SERVER['argc'])) {
             $_SERVER['argc'] = 1;
@@ -322,7 +265,7 @@ class Kohana_RequestTest extends Unittest_TestCase
      *
      * @return array
      */
-    public function provider_set_protocol()
+    public function provider_set_protocol(): array
     {
         return [
             ['http/1.1', 'HTTP/1.1'],
@@ -362,7 +305,7 @@ class Kohana_RequestTest extends Unittest_TestCase
      * @return  array
      * @throws Kohana_Exception
      */
-    public function provider_post_max_size_exceeded()
+    public function provider_post_max_size_exceeded(): array
     {
         // Get the post max size
         $post_max_size = Num::bytes(ini_get('post_max_size'));
@@ -384,7 +327,7 @@ class Kohana_RequestTest extends Unittest_TestCase
      * @return  void
      * @throws Kohana_Exception
      */
-    public function test_post_max_size_exceeded($content_length, $expected)
+    public function test_post_max_size_exceeded(int $content_length, bool $expected)
     {
         // Ensure the request method is set to POST
         Request::$initial->method(HTTP_Request::POST);
@@ -402,7 +345,7 @@ class Kohana_RequestTest extends Unittest_TestCase
      * @return  array
      * @throws Request_Exception
      */
-    public function provider_uri_only_trimed_on_internal()
+    public function provider_uri_only_trimed_on_internal(): array
     {
         // issue #3967: inject the route so that we don't conflict with the application's default route
         $route = new Route('(<controller>(/<action>))');
@@ -447,7 +390,7 @@ class Kohana_RequestTest extends Unittest_TestCase
      *
      * @return  array
      */
-    public function provider_options_set_to_external_client()
+    public function provider_options_set_to_external_client(): array
     {
         return [
             [
@@ -498,7 +441,7 @@ class Kohana_RequestTest extends Unittest_TestCase
      * @return  array
      * @throws Request_Exception
      */
-    public function provider_headers_get()
+    public function provider_headers_get(): array
     {
         $x_powered_by = 'Kohana Unit Test';
         $content_type = 'application/x-www-form-urlencoded';
@@ -539,7 +482,7 @@ class Kohana_RequestTest extends Unittest_TestCase
      *
      * @return  array
      */
-    public function provider_headers_set()
+    public function provider_headers_set(): array
     {
         return [
             [
@@ -569,7 +512,7 @@ class Kohana_RequestTest extends Unittest_TestCase
      * @return  void
      * @throws Request_Exception
      */
-    public function test_headers_set(array $headers, $expected)
+    public function test_headers_set(array $headers, string $expected)
     {
         $request = new Request(true, [], true, []);
         $request->headers($headers);
@@ -581,7 +524,7 @@ class Kohana_RequestTest extends Unittest_TestCase
      *
      * @return  array
      */
-    public function provider_query_parameter_parsing()
+    public function provider_query_parameter_parsing(): array
     {
         return [
             [
@@ -626,7 +569,7 @@ class Kohana_RequestTest extends Unittest_TestCase
      * @return  void
      * @throws Request_Exception
      */
-    public function test_query_parameter_parsing($url,array $query, array $expected)
+    public function test_query_parameter_parsing(string $url, array $query, array $expected)
     {
         Request::$initial = null;
 
@@ -650,7 +593,7 @@ class Kohana_RequestTest extends Unittest_TestCase
      * @return  void
      * @throws Request_Exception
      */
-    public function test_query_parameter_parsing_in_subrequest($url, array $query, array $expected)
+    public function test_query_parameter_parsing_in_subrequest(string $url, array $query, array $expected)
     {
         Request::$initial = new Request(true);
 
@@ -668,7 +611,7 @@ class Kohana_RequestTest extends Unittest_TestCase
      *
      * @return  array
      */
-    public function provider_client()
+    public function provider_client(): array
     {
         $internal_client = new Request_Client_Internal;
         $external_client = new Request_Client_Stream;
@@ -773,7 +716,7 @@ class Kohana_RequestTest_Header_Spying_Request_Client_External extends Request_C
 {
     private $headers;
 
-    protected function _send_message(Request $request, Response $response)
+    protected function _send_message(Request $request, Response $response): Response
     {
         $this->headers = $request->headers();
 

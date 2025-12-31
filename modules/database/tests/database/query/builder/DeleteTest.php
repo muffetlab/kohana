@@ -29,7 +29,7 @@ class Kohana_Database_Query_Builder_DeleteTest extends Kohana_Unittest_Database_
      *
      * @return array[]
      */
-    public function provider_delete_where()
+    public function provider_delete_where(): array
     {
         return [
             ['users', ['username', 'in', ['john', 'jane']], 'DELETE FROM users WHERE username IN (\'john\', \'jane\')'],
@@ -47,7 +47,7 @@ class Kohana_Database_Query_Builder_DeleteTest extends Kohana_Unittest_Database_
      * @throws Database_Exception
      * @throws Kohana_Exception
      */
-    public function test_delete_where($table, array $whereConditions, $expected)
+    public function test_delete_where(string $table, array $whereConditions, string $expected)
     {
         $query = DB::delete($table)->where(...$whereConditions);
 

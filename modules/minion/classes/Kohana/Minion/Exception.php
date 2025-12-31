@@ -21,7 +21,7 @@ class Kohana_Minion_Exception extends Kohana_Exception
      * @return  void
      * @uses    Kohana_Exception::text
      */
-    public static function handler($e)
+    public static function handler(Throwable $e)
     {
         try {
             // Log the exception
@@ -53,7 +53,7 @@ class Kohana_Minion_Exception extends Kohana_Exception
         }
     }
 
-    public function format_for_cli()
+    public function format_for_cli(): string
     {
         return Kohana_Exception::text($this);
     }

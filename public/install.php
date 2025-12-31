@@ -38,15 +38,15 @@ clearstatcache(true);
         <table>
             <tr>
                 <th>PHP Version</th>
-                <?php if (PHP_VERSION_ID >= 50600): ?>
+                <?php if (PHP_VERSION_ID >= 70100): ?>
                     <td class="pass"><?= PHP_VERSION ?></td>
                 <?php else: $failed = true ?>
-                    <td class="fail">Kohana requires PHP 5.6.0 or newer, this version is <?= PHP_VERSION ?>.</td>
+                    <td class="fail">Kohana requires PHP 7.1.0 or newer, this version is <?= PHP_VERSION ?>.</td>
                 <?php endif ?>
             </tr>
             <tr>
                 <th>System Directory</th>
-                <?php if (is_file(SYSPATH . 'classes/Kohana' . EXT)): ?>
+                <?php if (is_file(SYSPATH . 'classes/Kohana.php')): ?>
                     <td class="pass"><?= SYSPATH ?></td>
                 <?php else: $failed = true ?>
                     <td class="fail">The configured <code>system</code> directory does not exist or does not contain required files.</td>
@@ -54,7 +54,7 @@ clearstatcache(true);
             </tr>
             <tr>
                 <th>Application Directory</th>
-                <?php if (is_file(APPPATH . 'bootstrap' . EXT)): ?>
+                <?php if (is_file(APPPATH . 'bootstrap.php')): ?>
                     <td class="pass"><?= APPPATH ?></td>
                 <?php else: $failed = true ?>
                     <td class="fail">The configured <code>application</code> directory does not exist or does not contain required files.</td>
@@ -149,7 +149,7 @@ clearstatcache(true);
             <p id="results" class="fail">✘ Kohana may not work correctly with your environment.</p>
         <?php else: ?>
             <p id="results" class="pass">✔ Your environment passed all requirements.<br />
-                Remove or rename the <code>install<?= EXT ?></code> file now.</p>
+                Remove or rename the <code>install.php</code> file now.</p>
         <?php endif ?>
         <h1>Optional Tests</h1>
         <p>
@@ -178,14 +178,6 @@ clearstatcache(true);
                     <td class="pass">Pass</td>
                 <?php else: ?>
                     <td class="fail">Kohana can use the <a href="https://www.php.net/openssl">OpenSSL</a> extension for the Encrypt class.</td>
-                <?php endif ?>
-            </tr>
-            <tr>
-                <th>Mcrypt Enabled</th>
-                <?php if (extension_loaded('mcrypt')): ?>
-                    <td class="pass">Pass</td>
-                <?php else: ?>
-                    <td class="fail">Kohana can use the <a href="https://www.php.net/mcrypt">Mcrypt</a> extension for the Encrypt class.</td>
                 <?php endif ?>
             </tr>
             <tr>

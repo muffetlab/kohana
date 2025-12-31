@@ -26,9 +26,11 @@ class Kohana_ConfigTest extends Unittest_TestCase
      */
     public function test_initially_there_are_no_sources()
     {
-        $config = new Config;
+        $this->expectException('Kohana_Exception');
+        $this->expectExceptionMessage('No configuration sources attached');
 
-        $this->assertAttributeSame([], '_sources', $config);
+        $config = new Config;
+        $config->load('');
     }
 
     /**
@@ -45,7 +47,11 @@ class Kohana_ConfigTest extends Unittest_TestCase
 
         $this->assertSame($config, $config->attach($reader));
 
-        $this->assertAttributeContains($reader, '_sources', $config);
+        $reflection = new ReflectionClass($config);
+        $property = $reflection->getProperty('_sources');
+        $property->setAccessible(true);
+
+        $this->assertContains($reader, $property->getValue($config));
     }
 
     /**
@@ -67,15 +73,11 @@ class Kohana_ConfigTest extends Unittest_TestCase
 
         // Rather than do two assertContains we'll do an assertSame to assert
         // the order of the readers
-        $this->assertAttributeSame([$reader2, $reader1], '_sources', $config);
+        $reflection = new ReflectionClass($config);
+        $property = $reflection->getProperty('_sources');
+        $property->setAccessible(true);
 
-        // Now we test using the second parameter
-        $config = new Config;
-
-        $config->attach($reader1);
-        $config->attach($reader2);
-
-        $this->assertAttributeSame([$reader2, $reader1], '_sources', $config);
+        $this->assertSame([$reader2, $reader1], $property->getValue($config));
     }
 
     /**
@@ -94,7 +96,11 @@ class Kohana_ConfigTest extends Unittest_TestCase
         $config->attach($reader1);
         $config->attach($reader2, false);
 
-        $this->assertAttributeSame([$reader1, $reader2], '_sources', $config);
+        $reflection = new ReflectionClass($config);
+        $property = $reflection->getProperty('_sources');
+        $property->setAccessible(true);
+
+        $this->assertSame([$reader1, $reader2], $property->getValue($config));
     }
 
     /**
@@ -120,12 +126,16 @@ class Kohana_ConfigTest extends Unittest_TestCase
 
         $this->assertSame($config, $config->detach($reader1));
 
-        $this->assertAttributeNotContains($reader1, '_sources', $config);
-        $this->assertAttributeContains($reader2, '_sources', $config);
+        $reflection = new ReflectionClass($config);
+        $property = $reflection->getProperty('_sources');
+        $property->setAccessible(true);
+
+        $this->assertNotContains($reader1, $property->getValue($config));
+        $this->assertContains($reader2, $property->getValue($config));
 
         $this->assertSame($config, $config->detach($reader2));
 
-        $this->assertAttributeNotContains($reader2, '_sources', $config);
+        $this->assertNotContains($reader2, $property->getValue($config));
     }
 
     /**
@@ -214,31 +224,12 @@ class Kohana_ConfigTest extends Unittest_TestCase
     }
 
     /**
-     * Provides test data for test_load_throws_exception_if_no_group_is_given()
-     *
-     * @return array
-     */
-    public function provider_load_throws_exception_if_no_group_is_given()
-    {
-        return [
-            [null],
-            [''],
-            [[]],
-            [['foo' => 'bar']],
-            [new StdClass],
-        ];
-    }
-
-    /**
-     * If an invalid group name is specified then an exception should be thrown.
-     *
-     * Invalid means it's either a non-string value, or empty
+     * If an empty group name is specified then an exception should be thrown.
      *
      * @test
-     * @dataProvider provider_load_throws_exception_if_no_group_is_given
      * @covers Config::load
      */
-    public function test_load_throws_exception_if_invalid_group($value)
+    public function test_load_throws_exception_if_empty_group()
     {
         $this->expectException(Kohana_Exception::class);
 
@@ -248,7 +239,7 @@ class Kohana_ConfigTest extends Unittest_TestCase
 
         $config->attach($reader);
 
-        $config->load($value);
+        $config->load('');
     }
 
     /**

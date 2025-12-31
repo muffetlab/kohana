@@ -4,3 +4,4 @@
     - [Upload Image](examples/upload)
     - [Crop Profile Image](examples/crop)
     - [Dynamic Image Controller](examples/dynamic)
+- [Upgrading](upgrading)

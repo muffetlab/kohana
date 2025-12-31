@@ -31,12 +31,12 @@ interface Kohana_HTTP_Request extends HTTP_Message
      * @param string|null $method Method to use for this request
      * @return  mixed
      */
-    public function method($method = null);
+    public function method(string $method = null);
 
     /**
      * Gets the URI of this request.
      *
-     * @return  string
+     * @return string|HTTP_Request
      */
     public function uri();
     /**
@@ -46,7 +46,7 @@ interface Kohana_HTTP_Request extends HTTP_Message
      * @param string|null $value Value to set to a key
      * @return  mixed
      */
-    public function query($key = null, $value = null);
+    public function query($key = null, string $value = null);
     /**
      * Gets or sets HTTP POST parameters to the request.
      *
@@ -54,5 +54,5 @@ interface Kohana_HTTP_Request extends HTTP_Message
      * @param string|null $value Value to set to a key
      * @return  mixed
      */
-    public function post($key = null, $value = null);
+    public function post($key = null, string $value = null);
 }

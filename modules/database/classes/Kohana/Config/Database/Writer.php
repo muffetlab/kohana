@@ -31,7 +31,7 @@ class Kohana_Config_Database_Writer extends Config_Database_Reader implements Ko
      * @return bool|array
      * @throws Kohana_Exception
      */
-    public function load($group)
+    public function load(string $group)
     {
         $config = parent::load($group);
 
@@ -54,7 +54,7 @@ class Kohana_Config_Database_Writer extends Config_Database_Reader implements Ko
      * @return bool
      * @throws Kohana_Exception
      */
-    public function write($group, $key, $config)
+    public function write(string $group, string $key, $config): bool
     {
         $config = serialize($config);
 
@@ -85,7 +85,7 @@ class Kohana_Config_Database_Writer extends Config_Database_Reader implements Ko
      * @return Kohana_Config_Database_Writer
      * @throws Kohana_Exception
      */
-    protected function _insert($group, $key, $config)
+    protected function _insert(string $group, string $key, string $config): Kohana_Config_Database_Writer
     {
         DB::insert($this->_table_name, ['group_name', 'config_key', 'config_value'])
             ->values([$group, $key, $config])
@@ -103,7 +103,7 @@ class Kohana_Config_Database_Writer extends Config_Database_Reader implements Ko
      * @return Kohana_Config_Database_Writer
      * @throws Kohana_Exception
      */
-    protected function _update($group, $key, $config)
+    protected function _update(string $group, string $key, string $config): Kohana_Config_Database_Writer
     {
         DB::update($this->_table_name)
             ->set(['config_value' => $config])

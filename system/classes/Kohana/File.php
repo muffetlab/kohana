@@ -22,7 +22,7 @@ class Kohana_File
      * @return string|false MIME type on success or false on failure.
      * @throws Kohana_Exception
      */
-    public static function mime($filename)
+    public static function mime(string $filename)
     {
         // Get the complete path to the file
         $filename = realpath($filename);
@@ -66,7 +66,7 @@ class Kohana_File
      * @return string|false MIME type on success or false on failure.
      * @throws Kohana_Exception
      */
-    public static function mime_by_ext($extension)
+    public static function mime_by_ext(string $extension)
     {
         // Load all the mime types
         $mimes = Kohana::$config->load('mimes');
@@ -82,7 +82,7 @@ class Kohana_File
      * @throws Kohana_Exception
      * @see Kohana_File::mime_by_ext()
      */
-    public static function mimes_by_ext($extension)
+    public static function mimes_by_ext(string $extension): array
     {
         // Load all the mime types
         $mimes = Kohana::$config->load('mimes');
@@ -97,7 +97,7 @@ class Kohana_File
      * @return  array   File extensions matching MIME type
      * @throws Kohana_Exception
      */
-    public static function exts_by_mime($type)
+    public static function exts_by_mime(string $type): array
     {
         static $types = [];
 
@@ -119,7 +119,7 @@ class Kohana_File
             }
         }
 
-        return isset($types[$type]) ? $types[$type] : [];
+        return $types[$type] ?? [];
     }
 
     /**
@@ -129,7 +129,7 @@ class Kohana_File
      * @return  mixed          First file extension matching or false
      * @throws Kohana_Exception
      */
-    public static function ext_by_mime($type)
+    public static function ext_by_mime(string $type)
     {
         return current(File::exts_by_mime($type));
     }
@@ -144,7 +144,7 @@ class Kohana_File
      * @param int $piece_size Size in MB for each piece to be
      * @return  int The number of pieces that were created
      */
-    public static function split($filename, $piece_size = 10)
+    public static function split(string $filename, int $piece_size = 10): int
     {
         // Open the input file
         $file = fopen($filename, 'rb');
@@ -195,7 +195,7 @@ class Kohana_File
      * @param string $filename Split filename, without .000 extension
      * @return  int The number of pieces that were joined.
      */
-    public static function join($filename)
+    public static function join(string $filename): int
     {
         // Open the file
         $file = fopen($filename, 'wb+');

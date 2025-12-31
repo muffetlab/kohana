@@ -32,6 +32,7 @@ return [
              * string   database    Database name
              * string   port        Port number
              * string   socket      Unix domain socket
+             * array    flags       Connection options
              * array    ssl         SSL parameters as "key => value" pairs
              *                      Available keys: client_key_path, client_cert_path, ca_cert_path, ca_dir_path, cipher
              * array    variables   Session variables as "key => value" pairs
@@ -42,6 +43,7 @@ return [
             'database' => 'kohana',
             'port' => 3306,
             'socket' => null,
+            'flags' => null,
             'ssl' => null,
             'variables' => null,
         ],

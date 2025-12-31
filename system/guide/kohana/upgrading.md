@@ -1,48 +1,46 @@
-# Upgrading from 3.3 to 3.4
+# Upgrading from 3.4 to 3.5
 
 ## Requirements
 
-Kohana 3.4 supports PHP versions 5.6, 7.0, and 7.1. Compatibility with other PHP versions has not been fully tested, and
+Kohana 3.5 supports PHP versions 7.1, 7.2, and 7.3. Compatibility with other PHP versions has not been fully tested, and
 certain features may not function as expected.
 
-## Changes
+## Dependency Management
 
-- The `composer install` command is required for dependency installation since Kohana 3.4.4. Remember to run this
-  command after upgrading from a previous version.
-- A new `VENDOR_PATH` constant has been added since Kohana 3.4.4. This constant is used to locate the vendor directory.
-- The global `EXT` constant has been deprecated. Explicitly specify `.php` or another file extension instead.
+The `composer install` command is required for dependency installation since Kohana 3.4.4. Remember to run this command
+during upgrades.
 
-### Auth
+## Constants
 
-- The `Auth::hash_password()` method has been removed. Use `Auth::hash()` instead.
+The global `EXT` constant has been removed. Explicitly specify `.php` or another file extension instead.
 
-### Cache
+## Arr
 
-- Added a new `Memcached` driver.
-- The `APC` driver was deprecated. Use `APCu` or other drivers instead.
-- The `Memcache` driver was deprecated. Use `Memcached` or other drivers instead.
-- The `MemcacheTag` driver was deprecated.
+The `Arr::callback()` method now guarantees that the second element of the returned array (`$params`) is always an
+array, even when no parameters are provided. You can safely remove null checks for `$params` in your code.
 
-### Core
+## Core
 
-- The `Kohana::CODENAME` constant was deprecated.
+- The `Kohana::CODENAME` constant has been removed.
+- The static property `Kohana::$magic_quotes` was deprecated.
 
-### Database
+## Encrypt
 
-- The `MySQL` driver has been removed. Use `PDO` or other drivers instead.
+The `Mcrypt` driver has been removed. Use the `OpenSSL` driver instead.
 
-### Encrypt
+## Request
 
-- Now `Encrypt` acts as an interface and a new `OpenSSL` driver for it was added.
-- The `Mcrypt` driver was deprecated. Use `OpenSSL` instead.
+The `Request::accept_encoding()`, `Request::accept_lang()`, and `Request::accept_type()` methods have been removed. Use
+the header helper methods instead:
 
-### Security
+- `$request->headers()->accepts_encoding_at_quality()` — returns the quality for a specific encoding. Retrieving the
+  full list of accepted encodings is not supported.
+- `$request->headers()->accepts_language_at_quality()` — returns the quality for a specific language. Retrieving the
+  full list of accepted languages is not supported.
+- `$request->headers()->accepts_at_quality()` — returns the quality for a specific MIME type. Retrieving the full list
+  of accepted content types is not supported.
 
-- The `Security::strip_image_tags()` method has been removed
-  for [security reasons](https://github.com/kohana/kohana/issues/107) as it is not reliable to parse and sanitize HTML
-  with regular expressions. You should either encode HTML tags entirely, e.g. with `HTML::chars()`, or use a more robust
-  HTML filtering solution such as [HTML Purifier](http://htmlpurifier.org).
+## UTF8
 
-### Validation
-
-- The `Validation::as_array()` method has been removed. Use `Validation::data()` instead.
+The `UTF8::strlen()`, `UTF8::strpos()`, `UTF8::strrpos()`, `UTF8::substr()`, `UTF8::strtolower()`, `UTF8::strtoupper()`,
+and `UTF8::stristr()` methods were deprecated. Please use their equivalent multibyte string functions instead.

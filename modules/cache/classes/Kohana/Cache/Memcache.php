@@ -6,7 +6,6 @@
  * ### Supported cache engines
  *
  * *  [Memcache](https://www.php.net/manual/en/book.memcache.php)
- * *  [Memcached-tags](https://code.google.com/archive/p/memcached-tags/)
  *
  * ### Configuration example
  *
@@ -75,7 +74,7 @@
  *
  * *  Kohana 3.0.x
  * *  PHP 5.2.4 or greater
- * *  Memcache (plus Memcached-tags for native tagging support)
+ * *  Memcache
  * *  Zlib
  *
  * @package    Kohana/Cache
@@ -174,11 +173,11 @@ class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic
      *     // Retrieve cache entry from memcache group and return 'bar' if missing
      *     $data = Cache::instance('memcache')->get('foo', 'bar');
      *
-     * @param string $id ID of cache to entry
+     * @param string $id ID of cache entry
      * @param mixed $default Default value to return if cache miss
      * @return  mixed
      */
-    public function get($id, $default = null)
+    public function get(string $id, $default = null)
     {
         // Get the value from Memcache
         $value = $this->_memcache->get($this->_sanitize_id($id));
@@ -209,7 +208,7 @@ class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic
      * @param int $lifetime Lifetime in seconds, maximum value 2592000
      * @return  bool
      */
-    public function set($id, $data, $lifetime = 3600)
+    public function set(string $id, $data, int $lifetime = 3600): bool
     {
         // If the lifetime is greater than the ceiling
         if ($lifetime > Cache_Memcache::CACHE_CEILING) {
@@ -243,7 +242,7 @@ class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic
      * @param int $timeout Timeout of entry, if zero item is deleted immediately, otherwise the item will delete after the specified value in seconds
      * @return  bool
      */
-    public function delete($id, $timeout = 0)
+    public function delete(string $id, int $timeout = 0): bool
     {
         // Delete the id
         return $this->_memcache->delete($this->_sanitize_id($id), $timeout);
@@ -261,7 +260,7 @@ class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic
      *
      * @return bool
      */
-    public function delete_all()
+    public function delete_all(): bool
     {
         $result = $this->_memcache->flush();
 
@@ -282,7 +281,7 @@ class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic
      * @return  void|boolean
      * @since   3.0.8
      */
-    public function _failed_request($hostname, $port)
+    public function _failed_request(string $hostname, int $port)
     {
         if (!$this->_config['instant_death'])
             return;
@@ -321,7 +320,7 @@ class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic
      * @param int $step step value to increment by
      * @return int|false
      */
-    public function increment($id, $step = 1)
+    public function increment(string $id, int $step = 1)
     {
         return $this->_memcache->increment($id, $step);
     }
@@ -335,7 +334,7 @@ class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic
      * @param int $step step value to decrement by
      * @return int|false
      */
-    public function decrement($id, $step = 1)
+    public function decrement(string $id, int $step = 1)
     {
         return $this->_memcache->decrement($id, $step);
     }

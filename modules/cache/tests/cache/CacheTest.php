@@ -9,7 +9,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_CacheTest extends PHPUnit_Framework_TestCase
+class Kohana_CacheTest extends PHPUnit\Framework\TestCase
 {
     const BAD_GROUP_DEFINITION = 1010;
     const EXPECT_SELF = 1001;
@@ -21,7 +21,7 @@ class Kohana_CacheTest extends PHPUnit_Framework_TestCase
      * @throws Cache_Exception
      * @throws Kohana_Exception
      */
-    public function provider_instance()
+    public function provider_instance(): array
     {
         $base = [];
 
@@ -96,7 +96,7 @@ class Kohana_CacheTest extends PHPUnit_Framework_TestCase
      *
      * @return  array
      */
-    public function provider_config()
+    public function provider_config(): array
     {
         return [
             [
@@ -167,7 +167,7 @@ class Kohana_CacheTest extends PHPUnit_Framework_TestCase
      *
      * @return  array
      */
-    public function provider_sanitize_id()
+    public function provider_sanitize_id(): array
     {
         return [
             [
@@ -209,7 +209,7 @@ class Kohana_CacheTest extends PHPUnit_Framework_TestCase
      * @return  void
      * @throws ReflectionException
      */
-    public function test_sanitize_id($id, $expected)
+    public function test_sanitize_id(string $id, string $expected)
     {
         $cache = $this->createMock('Cache');
 

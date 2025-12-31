@@ -29,7 +29,7 @@ class Kohana_Database_Query_Builder_SelectTest extends Kohana_Unittest_Database_
      *
      * @return array[]
      */
-    public function provider_select()
+    public function provider_select(): array
     {
         return [
             [[], null, 'SELECT *'],
@@ -51,7 +51,7 @@ class Kohana_Database_Query_Builder_SelectTest extends Kohana_Unittest_Database_
      * @throws Database_Exception
      * @throws Kohana_Exception
      */
-    public function test_select(array $columns, $modifiers, $expected)
+    public function test_select(array $columns, ?array $modifiers, string $expected)
     {
         $query = DB::select(...$columns);
 
@@ -69,7 +69,7 @@ class Kohana_Database_Query_Builder_SelectTest extends Kohana_Unittest_Database_
      *
      * @return array[]
      */
-    public function provider_select_from()
+    public function provider_select_from(): array
     {
         return [
             [
@@ -101,7 +101,7 @@ class Kohana_Database_Query_Builder_SelectTest extends Kohana_Unittest_Database_
      * @throws Database_Exception
      * @throws Kohana_Exception
      */
-    public function test_select_from(array $columns, array $tables, $expected)
+    public function test_select_from(array $columns, array $tables, string $expected)
     {
         $query = DB::select(...$columns)->from(...$tables);
 
@@ -113,7 +113,7 @@ class Kohana_Database_Query_Builder_SelectTest extends Kohana_Unittest_Database_
      *
      * @return array[]
      */
-    public function provider_select_from_where()
+    public function provider_select_from_where(): array
     {
         return [
             [
@@ -160,7 +160,7 @@ class Kohana_Database_Query_Builder_SelectTest extends Kohana_Unittest_Database_
      * @throws Database_Exception
      * @throws Kohana_Exception
      */
-    public function test_select_from_where(array $tables, array $whereConditions, array $clauses, $expected)
+    public function test_select_from_where(array $tables, array $whereConditions, array $clauses, string $expected)
     {
         $query = DB::select()->from(...$tables);
 
@@ -184,7 +184,7 @@ class Kohana_Database_Query_Builder_SelectTest extends Kohana_Unittest_Database_
      *
      * @return array[]
      */
-    public function provider_select_from_join()
+    public function provider_select_from_join(): array
     {
         return [
             [
@@ -227,7 +227,7 @@ class Kohana_Database_Query_Builder_SelectTest extends Kohana_Unittest_Database_
      * @throws Database_Exception
      * @throws Kohana_Exception
      */
-    public function test_select_from_join(array $columns, array $tables, array $joins, $expected)
+    public function test_select_from_join(array $columns, array $tables, array $joins, string $expected)
     {
         $query = DB::select(...$columns)->from(...$tables);
 

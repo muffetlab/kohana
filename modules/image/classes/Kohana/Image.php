@@ -22,11 +22,6 @@ abstract class Kohana_Image
     const HORIZONTAL = 0x11;
     const VERTICAL = 0x12;
 
-    /**
-     * @deprecated - provide an image.default_driver value in your configuration instead
-     * @var  string  default driver: GD, ImageMagick, etc.
-     */
-    public static $default_driver = 'GD';
     // Status of the driver check
     protected static $_checked = false;
 
@@ -39,14 +34,16 @@ abstract class Kohana_Image
      * @param string|null $driver Driver type: GD, ImageMagick, etc.
      * @return  Image
      * @throws Kohana_Exception
-     * @uses    Image::$default_driver
      */
-    public static function factory($file, $driver = null)
+    public static function factory(string $file, string $driver = null): Image
     {
         if ($driver === null) {
-            // Use the driver from configuration file or default one
-            $configured_driver = Kohana::$config->load('image.default_driver');
-            $driver = $configured_driver ?: Image::$default_driver;
+            // Use the driver from configuration file
+            $driver = Kohana::$config->load('image.default_driver');
+        }
+
+        if (!isset($driver)) {
+            throw new Kohana_Exception('Image driver not defined');
         }
 
         // Set the class name
@@ -88,7 +85,7 @@ abstract class Kohana_Image
      * @return  void
      * @throws  Kohana_Exception
      */
-    public function __construct($file)
+    public function __construct(string $file)
     {
         try {
             // Get the real path to the file
@@ -160,13 +157,13 @@ abstract class Kohana_Image
      *     // Resize to 200x500 pixels, ignoring aspect ratio
      *     $image->resize(200, 500, Image::NONE);
      *
-     * @param int|null $width New width
-     * @param int|null $height New height
-     * @param int|null $master Master dimension
+     * @param int|null $width   New width
+     * @param int|null $height  New height
+     * @param int|null $master  Master dimension
      * @return  $this
      * @uses    Image::_do_resize
      */
-    public function resize($width = null, $height = null, $master = null)
+    public function resize(int $width = null, int $height = null, int $master = null): Kohana_Image
     {
         if ($master === null) {
             // Choose the master dimension automatically
@@ -264,7 +261,7 @@ abstract class Kohana_Image
      * @return  $this
      * @uses    Image::_do_crop
      */
-    public function crop($width, $height, $offset_x = null, $offset_y = null)
+    public function crop(int $width, int $height, $offset_x = null, $offset_y = null): Kohana_Image
     {
         if ($width > $this->width) {
             // Use the current width
@@ -330,11 +327,8 @@ abstract class Kohana_Image
      * @return  $this
      * @uses    Image::_do_rotate
      */
-    public function rotate($degrees)
+    public function rotate(int $degrees): Kohana_Image
     {
-        // Make the degrees an integer
-        $degrees = (int) $degrees;
-
         if ($degrees > 180) {
             do {
                 // Keep subtracting full circles until the degrees have normalized
@@ -367,7 +361,7 @@ abstract class Kohana_Image
      * @return  $this
      * @uses    Image::_do_flip
      */
-    public function flip($direction)
+    public function flip(int $direction): Kohana_Image
     {
         if ($direction !== Image::HORIZONTAL) {
             // Flip vertically
@@ -389,7 +383,7 @@ abstract class Kohana_Image
      * @return  $this
      * @uses    Image::_do_sharpen
      */
-    public function sharpen($amount)
+    public function sharpen(int $amount): Kohana_Image
     {
         // The amount must be in the range of 1 to 100
         $amount = min(max($amount, 1), 100);
@@ -416,13 +410,13 @@ abstract class Kohana_Image
      * [!!] By default, the reflection will go from transparent at the top
      * to opaque at the bottom.
      *
-     * @param int $height Reflection height
+     * @param int|null $height Reflection height
      * @param int $opacity Reflection opacity: 0-100
      * @param bool $fade_in True to fade in, false to fade out
      * @return  $this
      * @uses    Image::_do_reflection
      */
-    public function reflection($height = null, $opacity = 100, $fade_in = false)
+    public function reflection(int $height = null, int $opacity = 100, bool $fade_in = false): Kohana_Image
     {
         if ($height === null || $height > $this->height) {
             // Use the current height
@@ -455,7 +449,7 @@ abstract class Kohana_Image
      * @return  $this
      * @uses    Image::_do_watermark
      */
-    public function watermark(Image $watermark, $offset_x = null, $offset_y = null, $opacity = 100)
+    public function watermark(Image $watermark, $offset_x = null, $offset_y = null, int $opacity = 100): Kohana_Image
     {
         if ($offset_x === null) {
             // Center the X offset
@@ -502,7 +496,7 @@ abstract class Kohana_Image
      * @return  $this
      * @uses    Image::_do_background
      */
-    public function background($color, $opacity = 100)
+    public function background(string $color, int $opacity = 100): Kohana_Image
     {
         if ($color[0] === '#') {
             // Remove the pound
@@ -546,7 +540,7 @@ abstract class Kohana_Image
      * @throws  Kohana_Exception
      * @uses    Image::_save
      */
-    public function save($file = null, $quality = 100)
+    public function save(string $file = null, int $quality = 100): bool
     {
         if ($file === null) {
             // Overwrite the file
@@ -586,7 +580,7 @@ abstract class Kohana_Image
      * @return  string
      * @uses    Image::_do_render
      */
-    public function render($type = null, $quality = 100)
+    public function render(string $type = null, int $quality = 100): string
     {
         if ($type === null) {
             // Use the current image type
@@ -603,7 +597,7 @@ abstract class Kohana_Image
      * @param int $height  New height
      * @return  void
      */
-    abstract protected function _do_resize($width, $height);
+    abstract protected function _do_resize(int $width, int $height);
     /**
      * Execute a crop.
      *
@@ -613,28 +607,28 @@ abstract class Kohana_Image
      * @param int $offset_y  Offset from the top
      * @return  void
      */
-    abstract protected function _do_crop($width, $height, $offset_x, $offset_y);
+    abstract protected function _do_crop(int $width, int $height, int $offset_x, int $offset_y);
     /**
      * Execute a rotation.
      *
      * @param int $degrees Degrees to rotate
      * @return  void
      */
-    abstract protected function _do_rotate($degrees);
+    abstract protected function _do_rotate(int $degrees);
     /**
      * Execute a flip.
      *
      * @param int $direction Direction to flip
      * @return  void
      */
-    abstract protected function _do_flip($direction);
+    abstract protected function _do_flip(int $direction);
     /**
      * Execute a sharpening.
      *
      * @param int $amount Amount to sharpen
      * @return  void
      */
-    abstract protected function _do_sharpen($amount);
+    abstract protected function _do_sharpen(int $amount);
     /**
      * Execute a reflection.
      *
@@ -643,17 +637,17 @@ abstract class Kohana_Image
      * @param bool $fade_in True to fade in, false to fade out
      * @return  void
      */
-    abstract protected function _do_reflection($height, $opacity, $fade_in);
+    abstract protected function _do_reflection(int $height, int $opacity, bool $fade_in);
     /**
      * Execute a watermarking.
      *
      * @param   Image    $image     watermarking Image
      * @param int $offset_x Offset from the left
-     * @param int $offset_y offset from the top
+     * @param int $offset_y Offset from the top
      * @param int $opacity Opacity of watermark
      * @return  void
      */
-    abstract protected function _do_watermark(Image $image, $offset_x, $offset_y, $opacity);
+    abstract protected function _do_watermark(Image $image, int $offset_x, int $offset_y, int $opacity);
     /**
      * Execute a background.
      *
@@ -663,7 +657,7 @@ abstract class Kohana_Image
      * @param int $opacity  Opacity
      * @return void
      */
-    abstract protected function _do_background($r, $g, $b, $opacity);
+    abstract protected function _do_background(int $r, int $g, int $b, int $opacity);
     /**
      * Execute a save.
      *
@@ -671,7 +665,7 @@ abstract class Kohana_Image
      * @param int $quality Quality
      * @return  bool
      */
-    abstract protected function _do_save($file, $quality);
+    abstract protected function _do_save(string $file, int $quality): bool;
     /**
      * Execute a render.
      *
@@ -679,5 +673,5 @@ abstract class Kohana_Image
      * @param int $quality Quality
      * @return  string
      */
-    abstract protected function _do_render($type, $quality);
+    abstract protected function _do_render(string $type, int $quality): string;
 }

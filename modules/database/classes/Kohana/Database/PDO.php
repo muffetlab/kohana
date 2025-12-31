@@ -76,7 +76,7 @@ class Kohana_Database_PDO extends Database
      * @return bool
      * @throws Database_Exception
      */
-    public function create_aggregate($name, callable $step, callable $final, $arguments = -1)
+    public function create_aggregate(string $name, callable $step, callable $final, int $arguments = -1): bool
     {
         $this->_connection or $this->connect();
 
@@ -99,7 +99,7 @@ class Kohana_Database_PDO extends Database
      * @return bool
      * @throws Database_Exception
      */
-    public function create_function($name, callable $callback, $arguments = -1)
+    public function create_function(string $name, callable $callback, int $arguments = -1): bool
     {
         $this->_connection or $this->connect();
 
@@ -108,7 +108,7 @@ class Kohana_Database_PDO extends Database
         );
     }
 
-    public function disconnect()
+    public function disconnect(): bool
     {
         // Destroy the PDO object
         $this->_connection = null;
@@ -116,7 +116,7 @@ class Kohana_Database_PDO extends Database
         return parent::disconnect();
     }
 
-    public function set_charset($charset)
+    public function set_charset(string $charset)
     {
         // Make sure the database is connected
         $this->_connection or $this->connect();
@@ -125,7 +125,7 @@ class Kohana_Database_PDO extends Database
         $this->_connection->exec('SET NAMES ' . $this->quote($charset));
     }
 
-    public function query($type, $sql, $as_object = false, array $params = null)
+    public function query(int $type, string $sql, $as_object = false, array $params = null)
     {
         // Make sure the database is connected
         $this->_connection or $this->connect();
@@ -183,7 +183,7 @@ class Kohana_Database_PDO extends Database
         }
     }
 
-    public function begin($mode = null)
+    public function begin(string $mode = null): bool
     {
         // Make sure the database is connected
         $this->_connection or $this->connect();
@@ -191,7 +191,7 @@ class Kohana_Database_PDO extends Database
         return $this->_connection->beginTransaction();
     }
 
-    public function commit()
+    public function commit(): bool
     {
         // Make sure the database is connected
         $this->_connection or $this->connect();
@@ -199,7 +199,7 @@ class Kohana_Database_PDO extends Database
         return $this->_connection->commit();
     }
 
-    public function rollback()
+    public function rollback(): bool
     {
         // Make sure the database is connected
         $this->_connection or $this->connect();
@@ -207,17 +207,17 @@ class Kohana_Database_PDO extends Database
         return $this->_connection->rollBack();
     }
 
-    public function list_tables($like = null)
+    public function list_tables(string $like = null): array
     {
         throw new Kohana_Exception('Database method :method is not supported by :class', [':method' => __FUNCTION__, ':class' => __CLASS__]);
     }
 
-    public function list_columns($table, $like = null, $add_prefix = true)
+    public function list_columns(string $table, string $like = null, bool $add_prefix = true): array
     {
         throw new Kohana_Exception('Database method :method is not supported by :class', [':method' => __FUNCTION__, ':class' => __CLASS__]);
     }
 
-    public function escape($value)
+    public function escape(string $value): string
     {
         // Make sure the database is connected
         $this->_connection or $this->connect();

@@ -17,13 +17,7 @@
 class Kohana_Core
 {
     /** @var string Release version */
-    const VERSION = '3.4.4';
-
-    /**
-     * @var string Release codename
-     * @deprecated 3.4.0
-     */
-    const CODENAME = 'korismas';
+    const VERSION = '3.5.0';
 
     /** @var int Production environment type constant */
     const PRODUCTION = 10;
@@ -58,6 +52,7 @@ class Kohana_Core
 
     /**
      * @var bool True if [magic quotes](https://wiki.php.net/rfc/magicquotes) is enabled.
+     * @deprecated 3.5.0
      */
     public static $magic_quotes = false;
 
@@ -315,7 +310,9 @@ class Kohana_Core
         }
 
         // Determine if the extremely evil magic quotes are enabled
-        Kohana::$magic_quotes = (bool) get_magic_quotes_gpc();
+        if (PHP_VERSION_ID < 70400) {
+            Kohana::$magic_quotes = (bool) get_magic_quotes_gpc();
+        }
 
         // Sanitize all request variables
         $_GET = Kohana::sanitize($_GET);
@@ -470,7 +467,7 @@ class Kohana_Core
      * @param string $directory Directory to load from
      * @return  bool
      */
-    public static function auto_load($class, $directory = 'classes')
+    public static function auto_load(string $class, string $directory = 'classes'): bool
     {
         // Transform the class name according to PSR-0
         $class = ltrim($class, '\\');
@@ -507,7 +504,7 @@ class Kohana_Core
      * @param string $directory Directory to load from
      * @return  bool
      */
-    public static function auto_load_lowercase($class, $directory = 'classes')
+    public static function auto_load_lowercase(string $class, string $directory = 'classes'): bool
     {
         // Transform the class name into a path
         $file = str_replace('_', DIRECTORY_SEPARATOR, strtolower($class));
@@ -534,7 +531,7 @@ class Kohana_Core
      * @return  array   enabled modules
      * @throws Kohana_Exception
      */
-    public static function modules(array $modules = null)
+    public static function modules(array $modules = null): array
     {
         if ($modules === null) {
             // Not changing modules, just return the current set
@@ -567,7 +564,7 @@ class Kohana_Core
         Kohana::$_modules = $modules;
 
         foreach (Kohana::$_modules as $path) {
-            $init = $path . 'init' . EXT;
+            $init = $path . 'init.php';
 
             if (is_file($init)) {
                 // Include the module initialization file once
@@ -584,7 +581,7 @@ class Kohana_Core
      *
      * @return  array
      */
-    public static function include_paths()
+    public static function include_paths(): array
     {
         return Kohana::$_paths;
     }
@@ -599,8 +596,7 @@ class Kohana_Core
      * that path in the [Cascading Filesystem](kohana/files) will be returned.
      * These files will return arrays which must be merged together.
      *
-     * If no extension is given, the default extension (`EXT` set in
-     * `index.php`) will be used.
+     * If no extension is given, `.php` will be used by default.
      *
      *     // Returns an absolute path to views/template.php
      *     Kohana::find_file('views', 'template');
@@ -617,11 +613,11 @@ class Kohana_Core
      * @param bool $array Return an array of files?
      * @return  string[]|string List of files if $array is true, single file path otherwise.
      */
-    public static function find_file($dir, $file, $ext = null, $array = false)
+    public static function find_file(string $dir, string $file, string $ext = null, bool $array = false)
     {
         if ($ext === null) {
             // Use the default extension
-            $ext = EXT;
+            $ext = '.php';
         } elseif ($ext) {
             // Prefix the extension with a period
             $ext = ".$ext";
@@ -699,7 +695,7 @@ class Kohana_Core
      * @param array|null $paths list of paths to search
      * @return  array
      */
-    public static function list_files($directory = null, array $paths = null)
+    public static function list_files(string $directory = null, array $paths = null): array
     {
         if ($directory !== null) {
             // Add the directory separator
@@ -765,7 +761,7 @@ class Kohana_Core
      * @param string $file
      * @return  mixed
      */
-    public static function load($file)
+    public static function load(string $file)
     {
         return include $file;
     }
@@ -792,7 +788,7 @@ class Kohana_Core
      * @param int|null $lifetime Number of seconds the cache is valid for
      * @return  mixed|bool The cached data when getting, or a boolean when setting.
      */
-    public static function cache($name, $data = null, $lifetime = null)
+    public static function cache(string $name, $data = null, int $lifetime = null)
     {
         // Cache file is a hash of the name
         $file = sha1($name) . '.txt';
@@ -865,7 +861,7 @@ class Kohana_Core
      * @uses    Arr::merge
      * @uses    Arr::path
      */
-    public static function message($file, $path = null, $default = null)
+    public static function message(string $file, ?string $path = null, $default = null)
     {
         static $messages;
 
@@ -897,7 +893,7 @@ class Kohana_Core
      * @throws  ErrorException
      * @return  true
      */
-    public static function error_handler($code, $error, $file = null, $line = null)
+    public static function error_handler($code, $error, $file = null, $line = null): bool
     {
         if (error_reporting() & $code) {
             // This error is not suppressed by current error reporting settings
@@ -950,7 +946,7 @@ class Kohana_Core
      *
      * @return string
      */
-    public static function version()
+    public static function version(): string
     {
         return 'Kohana Framework ' . Kohana::VERSION;
     }

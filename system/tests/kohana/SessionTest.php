@@ -21,10 +21,11 @@ class Kohana_SessionTest extends Unittest_TestCase
      *
      * @param array $config
      * @return Session
+     * @throws ReflectionException
      */
     // @codingStandardsIgnoreStart
-    public function getMockSession(array $config = [])
-    // @codingStandardsIgnoreEnd
+    public function getMockSession(array $config = []): Session
+        // @codingStandardsIgnoreEnd
     {
         return $this->getMockForAbstractClass('Session', [$config]);
     }
@@ -36,7 +37,7 @@ class Kohana_SessionTest extends Unittest_TestCase
      *
      * @return array
      */
-    public function provider_constructor_uses_settings_from_config_and_casts()
+    public function provider_constructor_uses_settings_from_config_and_casts(): array
     {
         return [
             // [expected, input]
@@ -80,7 +81,11 @@ class Kohana_SessionTest extends Unittest_TestCase
         $session = $this->getMockForAbstractClass('Session', [$config]);
 
         foreach ($expected as $var => $value) {
-            $this->assertAttributeSame($value, '_' . $var, $session);
+            $reflection = new ReflectionClass($session);
+            $property = $reflection->getProperty('_' . $var);
+            $property->setAccessible(true);
+
+            $this->assertSame($value, $property->getValue($session));
         }
     }
 
@@ -144,7 +149,7 @@ class Kohana_SessionTest extends Unittest_TestCase
     {
         $session = $this->getMockSession();
 
-        $this->assertAttributeSame([], '_data', $session);
+        $this->assertSame([], $session->as_array());
     }
 
     /**
@@ -158,7 +163,7 @@ class Kohana_SessionTest extends Unittest_TestCase
     {
         $session = $this->getMockSession();
 
-        $this->assertAttributeSame('session', '_name', $session);
+        $this->assertSame('session', $session->name());
     }
 
     /**
@@ -171,7 +176,11 @@ class Kohana_SessionTest extends Unittest_TestCase
     {
         $session = $this->getMockSession();
 
-        $this->assertAttributeSame(false, '_encrypted', $session);
+        $reflection = new ReflectionClass($session);
+        $property = $reflection->getProperty('_encrypted');
+        $property->setAccessible(true);
+
+        $this->assertSame(false, $property->getValue($session));
     }
 
     /**
@@ -184,7 +193,11 @@ class Kohana_SessionTest extends Unittest_TestCase
     {
         $session = $this->getMockSession();
 
-        $this->assertAttributeSame(false, '_destroyed', $session);
+        $reflection = new ReflectionClass($session);
+        $property = $reflection->getProperty('_destroyed');
+        $property->setAccessible(true);
+
+        $this->assertSame(false, $property->getValue($session));
     }
 
     /**
@@ -192,7 +205,7 @@ class Kohana_SessionTest extends Unittest_TestCase
      *
      * @return array
      */
-    public function provider_get_returns_default_if_var_dnx()
+    public function provider_get_returns_default_if_var_dnx(): array
     {
         return [
             ['something_crazy', false],
@@ -261,13 +274,13 @@ class Kohana_SessionTest extends Unittest_TestCase
 
         $data_ref['something'] = 'pie';
 
-        $this->assertAttributeSame($data_ref, '_data', $session);
+        $this->assertSame($data_ref, $session->as_array());
 
         $data_copy = $session->as_array();
 
         $data_copy['pie'] = 'awesome';
 
-        $this->assertAttributeNotSame($data_copy, '_data', $session);
+        $this->assertNotSame($data_copy, $session->as_array());
     }
 
     /**
@@ -284,15 +297,11 @@ class Kohana_SessionTest extends Unittest_TestCase
 
         $this->assertSame($session, $session->set('pork', 'pie'));
 
-        $this->assertAttributeSame(
-            ['pork' => 'pie'], '_data', $session
-        );
+        $this->assertSame(['pork' => 'pie'], $session->as_array());
 
         $session->set('pork', 'delicious');
 
-        $this->assertAttributeSame(
-            ['pork' => 'delicious'], '_data', $session
-        );
+        $this->assertSame(['pork' => 'delicious'], $session->as_array());
     }
 
     /**
@@ -326,14 +335,14 @@ class Kohana_SessionTest extends Unittest_TestCase
 
         // We could test against $data, but then we'd be testing
         // that as_array() is returning by ref
-        $this->assertAttributeSame($copy, '_data', $session);
+        $this->assertSame($copy, $data);
 
         // Now we make sure we can delete multiple items
         // We're checking $this is returned just in case
         $this->assertSame($session, $session->delete('b', 'c'));
         unset($copy['b'], $copy['c']);
 
-        $this->assertAttributeSame($copy, '_data', $session);
+        $this->assertSame($copy, $data);
     }
 
     /**
@@ -341,7 +350,7 @@ class Kohana_SessionTest extends Unittest_TestCase
      *
      * @return array
      */
-    public function provider_read_loads_session_data()
+    public function provider_read_loads_session_data(): array
     {
         return [
             // If driver returns array then just load it up
@@ -386,7 +395,7 @@ class Kohana_SessionTest extends Unittest_TestCase
             ->will($this->returnValue($driver_data));
 
         $session->read($session_id);
-        $this->assertAttributeSame($expected_data, '_data', $session);
+        $this->assertSame($expected_data, $session->as_array());
     }
 
     /**
@@ -432,7 +441,7 @@ class Kohana_SessionTest extends Unittest_TestCase
 
         $this->assertTrue($session->destroy());
 
-        $this->assertAttributeSame([], '_data', $session);
+        $this->assertSame([], $session->as_array());
     }
 
     /**
@@ -457,9 +466,7 @@ class Kohana_SessionTest extends Unittest_TestCase
             ->will($this->returnValue(false));
 
         $this->assertFalse($session->destroy());
-        $this->assertAttributeSame(
-            ['asd' => 'dsa', 'dog' => 'god'], '_data', $session
-        );
+        $this->assertSame(['asd' => 'dsa', 'dog' => 'god'], $session->as_array());
     }
 
     /**
@@ -481,7 +488,7 @@ class Kohana_SessionTest extends Unittest_TestCase
         // Now test that it actually removes the value
         $this->assertSame('bar', $session->get_once('foo'));
 
-        $this->assertAttributeSame([], '_data', $session);
+        $this->assertSame([], $session->as_array());
 
         $this->assertSame('maybe', $session->get_once('foo', 'maybe'));
     }

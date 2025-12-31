@@ -29,7 +29,7 @@ class Kohana_Database_Query_Builder_UpdateTest extends Kohana_Unittest_Database_
      *
      * @return array[]
      */
-    public function provider_update_set()
+    public function provider_update_set(): array
     {
         return [
             ['users', ['username' => 'jane'], 'UPDATE users SET username = \'jane\''],
@@ -47,7 +47,7 @@ class Kohana_Database_Query_Builder_UpdateTest extends Kohana_Unittest_Database_
      * @throws Database_Exception
      * @throws Kohana_Exception
      */
-    public function test_update_set($table, array $assignments, $expected)
+    public function test_update_set(string $table, array $assignments, string $expected)
     {
         $query = DB::update($table)->set($assignments);
 
@@ -59,7 +59,7 @@ class Kohana_Database_Query_Builder_UpdateTest extends Kohana_Unittest_Database_
      *
      * @return array[]
      */
-    public function provider_update_set_where()
+    public function provider_update_set_where(): array
     {
         return [
             ['users', ['username' => 'jane'], ['username', '=', 'john'], 'UPDATE users SET username = \'jane\' WHERE username = \'john\''],
@@ -78,7 +78,7 @@ class Kohana_Database_Query_Builder_UpdateTest extends Kohana_Unittest_Database_
      * @throws Database_Exception
      * @throws Kohana_Exception
      */
-    public function test_update_set_where($table, array $assignments, array $whereCondition, $expected)
+    public function test_update_set_where(string $table, array $assignments, array $whereCondition, string $expected)
     {
         $query = DB::update($table)->set($assignments)->where(...$whereCondition);
 

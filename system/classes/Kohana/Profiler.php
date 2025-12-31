@@ -34,7 +34,7 @@ class Kohana_Profiler
      * @param string $name Benchmark name
      * @return  string
      */
-    public static function start($group, $name)
+    public static function start(string $group, string $name): string
     {
         static $counter = 0;
 
@@ -43,7 +43,7 @@ class Kohana_Profiler
 
         Profiler::$_marks[$token] = [
             'group' => strtolower($group),
-            'name' => (string) $name,
+            'name' => $name,
             // Start the benchmark
             'start_time' => microtime(true),
             'start_memory' => memory_get_usage(),
@@ -63,7 +63,7 @@ class Kohana_Profiler
      * @param string $token
      * @return  void
      */
-    public static function stop($token)
+    public static function stop(string $token)
     {
         // Stop the benchmark
         Profiler::$_marks[$token]['stop_time'] = microtime(true);
@@ -80,7 +80,7 @@ class Kohana_Profiler
      * @param string $token
      * @return  void
      */
-    public static function delete($token)
+    public static function delete(string $token)
     {
         // Remove the benchmark
         unset(Profiler::$_marks[$token]);
@@ -93,7 +93,7 @@ class Kohana_Profiler
      *
      * @return  array
      */
-    public static function groups()
+    public static function groups(): array
     {
         $groups = [];
 
@@ -114,7 +114,7 @@ class Kohana_Profiler
      * @return  array   min, max, average, total
      * @uses    Profiler::total
      */
-    public static function stats(array $tokens)
+    public static function stats(array $tokens): array
     {
         // Min and max are unknown by default
         $min = $max = [
@@ -186,7 +186,7 @@ class Kohana_Profiler
      * @uses    Profiler::groups
      * @uses    Profiler::stats
      */
-    public static function group_stats($groups = null)
+    public static function group_stats($groups = null): array
     {
         // Which groups do we need to calculate stats for?
         $groups = $groups === null ? Profiler::groups() : array_intersect_key(Profiler::groups(), array_flip((array) $groups));
@@ -262,7 +262,7 @@ class Kohana_Profiler
      * @param string $token
      * @return  array   execution time, memory
      */
-    public static function total($token)
+    public static function total(string $token): array
     {
         // Import the benchmark data
         $mark = Profiler::$_marks[$token];
@@ -290,7 +290,7 @@ class Kohana_Profiler
      * @return  array  execution time, memory
      * @uses    Kohana::cache
      */
-    public static function application()
+    public static function application(): array
     {
         // Load the stats from cache, which is valid for 1 day
         $stats = Kohana::cache('profiler_application_stats', null, 3600 * 24);

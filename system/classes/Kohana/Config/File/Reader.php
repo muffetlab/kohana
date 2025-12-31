@@ -23,7 +23,7 @@ class Kohana_Config_File_Reader implements Kohana_Config_Reader
      *
      * @param string $directory Configuration directory to search
      */
-    public function __construct($directory = 'config')
+    public function __construct(string $directory = 'config')
     {
         // Set the configuration directory name
         $this->_directory = trim($directory, '/');
@@ -38,7 +38,7 @@ class Kohana_Config_File_Reader implements Kohana_Config_Reader
      * @return  array
      * @uses    Kohana::load
      */
-    public function load($group)
+    public function load(string $group): array
     {
         $config = [];
 

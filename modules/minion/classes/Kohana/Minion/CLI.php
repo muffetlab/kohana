@@ -44,7 +44,7 @@ class Kohana_Minion_CLI
      * @param string ...$options option name
      * @return  array
      */
-    public static function options(...$options)
+    public static function options(...$options): array
     {
         // Found option values
         $values = [];
@@ -106,7 +106,7 @@ class Kohana_Minion_CLI
      * @param array|null $options array of options the user is shown
      * @return string  the user input
      */
-    public static function read($text = '', array $options = null)
+    public static function read(string $text = '', array $options = null): string
     {
         // If a question has been asked with the read
         $options_output = '';
@@ -141,9 +141,9 @@ class Kohana_Minion_CLI
      *
      * @param string $text
      * @return string
-     * @author Mathew Davies
+     * @author Mathew Davies.
      */
-    public static function password($text = '')
+    public static function password(string $text = ''): string
     {
         $text .= ': ';
 
@@ -199,7 +199,7 @@ class Kohana_Minion_CLI
      * @param string $text The text to output
      * @param bool $end_line whether the line is done being replaced
      */
-    public static function write_replace($text = '', $end_line = false)
+    public static function write_replace(string $text = '', bool $end_line = false)
     {
         // Append a newline if $end_line is true
         $text = $end_line ? $text . PHP_EOL : $text;
@@ -217,7 +217,7 @@ class Kohana_Minion_CLI
      * @author     Fuel Development Team
      * @license    MIT License
      */
-    public static function wait($seconds = 0, $countdown = false)
+    public static function wait(int $seconds = 0, bool $countdown = false)
     {
         if ($countdown === true) {
             $time = $seconds;
@@ -253,7 +253,7 @@ class Kohana_Minion_CLI
      * @link       http://fuelphp.com
      * @author     Fuel Development Team
      */
-    public static function color($text, $foreground, $background = null)
+    public static function color(string $text, string $foreground, string $background = null): string
     {
 
         if (Kohana::$is_windows) {

@@ -28,7 +28,7 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
      *
      * @return  array   Array of $method, $key, $iv, $txtPlain, $txtEncoded.
      */
-    public function providerEncode()
+    public function providerEncode(): array
     {
         return [
             [
@@ -166,7 +166,7 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
      * @dataProvider providerEncode
      * @covers Encrypt_Openssl::encode
      */
-    public function testEncode($method, $key, $iv, $txtPlain, $txtEncoded)
+    public function testEncode(string $method, string $key, string $iv, string $txtPlain, string $txtEncoded)
     {
         // Initialize.
         $e = $this->getMockBuilder('Encrypt_Openssl')
@@ -192,7 +192,7 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
      *
      * @return  array   Array of $method, $key, $iv, $txtEncoded, $txtPlain.
      */
-    public function providerDecode()
+    public function providerDecode(): array
     {
         return [
             [
@@ -330,7 +330,7 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
      * @dataProvider providerDecode
      * @covers Encrypt_Openssl::decode
      */
-    public function testDecode($method, $key, $iv, $txtEncoded, $txtPlain)
+    public function testDecode(string $method, string $key, string $iv, string $txtEncoded, string $txtPlain)
     {
         // Initialize.
         $e = $this->getMockBuilder('Encrypt_Openssl')
@@ -352,7 +352,7 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
      *
      * @return  array   Array of $key, $method, $txtPlain.
      */
-    public function providerEncodeDecode()
+    public function providerEncodeDecode(): array
     {
         return [
             [
@@ -385,7 +385,7 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
      * @covers Encrypt_Openssl::encode
      * @covers Encrypt_Openssl::decode
      */
-    public function testEncodeDecode($key, $method, $txtPlain)
+    public function testEncodeDecode(string $key, string $method, string $txtPlain)
     {
         // Initialize.
         $e = $this->getMockBuilder('Encrypt_Openssl')
@@ -410,7 +410,7 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
      *
      * @return  array   Array of $key, $method, $txtInvalidEncoded.
      */
-    public function providerDecodeInvalidDate()
+    public function providerDecodeInvalidDate(): array
     {
         return [
             [
@@ -442,7 +442,7 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
      *
      * @dataProvider providerDecodeInvalidDate
      */
-    public function testDecodeInvalidData($key, $method, $txtInvalidEncoded)
+    public function testDecodeInvalidData(string $key, string $method, string $txtInvalidEncoded)
     {
         // Initialize.
         $e = $this->getMockBuilder('Encrypt_Openssl')
@@ -465,7 +465,7 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
      * @dataProvider providerEncodeDecode
      * @covers Encrypt_Openssl::encode
      */
-    public function testConsecutiveEncodeProduceDifferentResults($key, $method, $txtPlain)
+    public function testConsecutiveEncodeProduceDifferentResults(string $key, string $method, string $txtPlain)
     {
         // Initialize, encode twice.
         $e = $this->getMockBuilder('Encrypt_Openssl')
@@ -497,7 +497,7 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
      *
      * @return  array   Array of $instanceName, $configArray.
      */
-    public function providerInstanceReturnsSingleton()
+    public function providerInstanceReturnsSingleton(): array
     {
         return [
             [
@@ -537,7 +537,7 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
      * @throws ReflectionException
      * @dataProvider providerInstanceReturnsSingleton
      */
-    public function testInstanceReturnsSingleton($instanceName, array $configArray)
+    public function testInstanceReturnsSingleton(string $instanceName, array $configArray)
     {
         // Load config.
         $config = Kohana::$config->load('encrypt');
@@ -576,7 +576,7 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
      * @param string $name The name of the private/protected property.
      * @throws ReflectionException
      */
-    protected function assertSameProtectedProperty($expect, $object, $name)
+    protected function assertSameProtectedProperty($expect, $object, string $name)
     {
         $refl = new ReflectionClass($object);
         $property = $refl->getProperty($name);

@@ -21,7 +21,7 @@ class Kohana_Debug
      * @param mixed ...$variables variable to debug
      * @return  string
      */
-    public static function vars(...$variables)
+    public static function vars(...$variables): string
     {
         if (empty($variables)) {
             return '';
@@ -45,7 +45,7 @@ class Kohana_Debug
      * @param int $level_recursion Recursion limit
      * @return  string
      */
-    public static function dump($value, $length = 128, $level_recursion = 10)
+    public static function dump($value, int $length = 128, int $level_recursion = 10): string
     {
         return Debug::_dump($value, $length, $level_recursion);
     }
@@ -59,7 +59,7 @@ class Kohana_Debug
      * @param int $level Current recursion level (internal usage only!)
      * @return  string
      */
-    protected static function _dump(&$var, $length = 128, $limit = 10, $level = 0)
+    protected static function _dump(&$var, int $length = 128, int $limit = 10, int $level = 0): string
     {
         if ($var === null) {
             return '<small>NULL</small>';
@@ -100,9 +100,9 @@ class Kohana_Debug
             // isn't too much of a hit.
             $var = UTF8::clean($var, Kohana::$charset);
 
-            if (UTF8::strlen($var) > $length) {
+            if (mb_strlen($var) > $length) {
                 // Encode the truncated string
-                $str = htmlspecialchars(UTF8::substr($var, 0, $length), ENT_NOQUOTES, Kohana::$charset) . '&nbsp;&hellip;';
+                $str = htmlspecialchars(mb_substr($var, 0, $length), ENT_NOQUOTES, Kohana::$charset) . '&nbsp;&hellip;';
             } else {
                 // Encode the string
                 $str = htmlspecialchars($var, ENT_NOQUOTES, Kohana::$charset);
@@ -212,7 +212,7 @@ class Kohana_Debug
      * @param string $file Path to debug
      * @return  string
      */
-    public static function path($file)
+    public static function path(string $file): string
     {
         if (strpos($file, APPPATH) === 0) {
             $file = 'APPPATH' . DIRECTORY_SEPARATOR . substr($file, strlen(APPPATH));
@@ -241,7 +241,7 @@ class Kohana_Debug
      * @param int $padding Number of padding lines
      * @return  string|false Source of file if readable, false otherwise.
      */
-    public static function source($file, $line_number, $padding = 5)
+    public static function source(string $file, int $line_number, int $padding = 5)
     {
         if (!$file || !is_readable($file)) {
             // Continuing will cause errors
@@ -299,7 +299,7 @@ class Kohana_Debug
      * @return array
      * @throws ReflectionException
      */
-    public static function trace(array $trace = null)
+    public static function trace(array $trace = null): array
     {
         if ($trace === null) {
             // Start a new trace
@@ -379,10 +379,10 @@ class Kohana_Debug
 
             $output[] = [
                 'function' => $function,
-                'args' => isset($args) ? $args : null,
-                'file' => isset($file) ? $file : null,
-                'line' => isset($line) ? $line : null,
-                'source' => isset($source) ? $source : null,
+                'args' => $args ?? null,
+                'file' => $file ?? null,
+                'line' => $line ?? null,
+                'source' => $source ?? null,
             ];
 
             unset($function, $args, $file, $line, $source);

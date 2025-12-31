@@ -28,7 +28,7 @@ class Kohana_Arr
      * @param   array   $array  array to check
      * @return  bool
      */
-    public static function is_assoc(array $array)
+    public static function is_assoc(array $array): bool
     {
         // Keys of the array
         $keys = array_keys($array);
@@ -53,14 +53,14 @@ class Kohana_Arr
      * @param   mixed   $value  value to check
      * @return  bool
      */
-    public static function is_array($value)
+    public static function is_array($value): bool
     {
         if (is_array($value)) {
             // Definitely an array
             return true;
         } else {
             // Possibly a Traversable object, functionally the same as an array
-            return is_object($value) && $value instanceof Traversable;
+            return $value instanceof Traversable;
         }
     }
 
@@ -81,10 +81,10 @@ class Kohana_Arr
      * @param mixed $array Array to search
      * @param   mixed   $path       key path string (delimiter separated) or array of keys
      * @param   mixed   $default    default value if the path is not set
-     * @param string $delimiter Key path delimiter
+     * @param string|null $delimiter Key path delimiter
      * @return  mixed
      */
-    public static function path($array, $path, $default = null, $delimiter = null)
+    public static function path($array, $path, $default = null, string $delimiter = null)
     {
         if (is_array($path)) {
             // The path has already been separated into keys
@@ -175,7 +175,7 @@ class Kohana_Arr
      * @throws Kohana_Exception
      * @see Arr::path()
      */
-    public static function set_path(array &$array, $path, $value, $delimiter = null)
+    public static function set_path(array &$array, $path, $value, string $delimiter = null)
     {
         if (!$delimiter) {
             // Use the default delimiter
@@ -222,7 +222,7 @@ class Kohana_Arr
      * @param int $max    Ending number
      * @return  array
      */
-    public static function range($step = 10, $max = 100)
+    public static function range(int $step = 10, int $max = 100): array
     {
         if ($step < 1)
             return [];
@@ -250,9 +250,9 @@ class Kohana_Arr
      * @param   mixed   $default    default value
      * @return  mixed
      */
-    public static function get($array, $key, $default = null)
+    public static function get($array, string $key, $default = null)
     {
-        return isset($array[$key]) ? $array[$key] : $default;
+        return $array[$key] ?? $default;
     }
 
     /**
@@ -272,7 +272,7 @@ class Kohana_Arr
      * @return  array
      * @throws Kohana_Exception
      */
-    public static function extract(array $array, array $paths, $default = null)
+    public static function extract(array $array, array $paths, $default = null): array
     {
         $found = [];
         foreach ($paths as $path) {
@@ -294,7 +294,7 @@ class Kohana_Arr
      * @param string $key Key to pluck
      * @return  array
      */
-    public static function pluck(array $array, $key)
+    public static function pluck(array $array, string $key): array
     {
         $values = [];
 
@@ -319,7 +319,7 @@ class Kohana_Arr
      * @param   mixed   $val    array value
      * @return  array
      */
-    public static function unshift(array &$array, $key, $val)
+    public static function unshift(array &$array, string $key, $val): array
     {
         $array = array_reverse($array, true);
         $array[$key] = $val;
@@ -352,7 +352,7 @@ class Kohana_Arr
      * @param array|null $keys Array of keys to apply to
      * @return  array
      */
-    public static function map($callbacks, array $array, $keys = null)
+    public static function map($callbacks, array $array, array $keys = null): array
     {
         foreach ($array as $key => $val) {
             if (is_array($val)) {
@@ -391,7 +391,7 @@ class Kohana_Arr
      * @param   array  ...$arrays   array to merge
      * @return  array
      */
-    public static function merge(array $array1, ...$arrays)
+    public static function merge(array $array1, ...$arrays): array
     {
         foreach ($arrays as $array2) {
             if (Arr::is_assoc($array2)) {
@@ -431,7 +431,7 @@ class Kohana_Arr
      * @param   array   ...$arrays input arrays that will overwrite existing values
      * @return  array
      */
-    public static function overwrite(array $array1, ...$arrays)
+    public static function overwrite(array $array1, ...$arrays): array
     {
         foreach ($arrays as $array2) {
             foreach (array_intersect_key($array2, $array1) as $key => $value) {
@@ -455,23 +455,22 @@ class Kohana_Arr
      * @param string $str Callback string
      * @return  array   function, params
      */
-    public static function callback($str)
+    public static function callback(string $str): array
     {
-        // Overloaded as parts are found
-        $params = null;
+        $params = [];
 
-        // command[param,param]
-        if (preg_match('/^([^\(]*+)\((.*)\)$/', $str, $match)) {
-            // command
-            $command = $match[1];
+        // command(param,param)
+        if (strpos($str, '(') !== false && substr($str, -1) === ')') {
+            list($command, $params) = explode('(', substr($str, 0, -1), 2);
 
-            if ($match[2] !== '') {
+            if ($params !== '') {
                 // param,param
-                $params = preg_split('/(?<!\\\\),/', $match[2]);
+                $params = preg_split('/(?<!\\\\),/', $params);
                 $params = str_replace('\,', ',', $params);
+            } else {
+                $params = [];
             }
         } else {
-            // command
             $command = $str;
         }
 
@@ -500,7 +499,7 @@ class Kohana_Arr
      * @return  array
      * @since   3.0.6
      */
-    public static function flatten(array $array)
+    public static function flatten(array $array): array
     {
         $is_assoc = Arr::is_assoc($array);
 

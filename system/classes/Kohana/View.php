@@ -27,7 +27,7 @@ class Kohana_View
      * @return  View
      * @throws View_Exception
      */
-    public static function factory($file = null, array $data = null)
+    public static function factory(string $file = null, array $data = null): View
     {
         return new View($file, $data);
     }
@@ -44,7 +44,7 @@ class Kohana_View
      * @return  string
      * @throws  Exception
      */
-    protected static function capture($kohana_view_filename, array $kohana_view_data)
+    protected static function capture(string $kohana_view_filename, array $kohana_view_data): string
     {
         // Import the view variables to local namespace
         extract($kohana_view_data, EXTR_SKIP);
@@ -111,7 +111,7 @@ class Kohana_View
      * @param   mixed   $value  referenced variable
      * @return  void
      */
-    public static function bind_global($key, &$value)
+    public static function bind_global(string $key, &$value)
     {
         View::$_global_data[$key] = &$value;
     }
@@ -132,7 +132,7 @@ class Kohana_View
      * @throws View_Exception
      * @uses    View::set_filename
      */
-    public function __construct($file = null, array $data = null)
+    public function __construct(string $file = null, array $data = null)
     {
         if ($file !== null) {
             $this->set_filename($file);
@@ -156,7 +156,7 @@ class Kohana_View
      * @return  mixed
      * @throws  Kohana_Exception
      */
-    public function & __get($key)
+    public function & __get(string $key)
     {
         if (array_key_exists($key, $this->_data)) {
             return $this->_data[$key];
@@ -176,7 +176,7 @@ class Kohana_View
      * @param   mixed   $value  value
      * @return  void
      */
-    public function __set($key, $value)
+    public function __set(string $key, $value)
     {
         $this->set($key, $value);
     }
@@ -191,7 +191,7 @@ class Kohana_View
      * @param string $key Variable name
      * @return  bool
      */
-    public function __isset($key)
+    public function __isset(string $key)
     {
         return isset($this->_data[$key]) || isset(View::$_global_data[$key]);
     }
@@ -204,7 +204,7 @@ class Kohana_View
      * @param string $key Variable name
      * @return  void
      */
-    public function __unset($key)
+    public function __unset(string $key)
     {
         unset($this->_data[$key], View::$_global_data[$key]);
     }
@@ -241,7 +241,7 @@ class Kohana_View
      * @return  Kohana_View
      * @throws  View_Exception
      */
-    public function set_filename($file)
+    public function set_filename(string $file): Kohana_View
     {
         if (!$path = Kohana::find_file('views', $file)) {
             throw new View_Exception('The requested view :file could not be found', [':file' => $file]);
@@ -272,7 +272,7 @@ class Kohana_View
      * @param   mixed                     $value  value
      * @return  $this
      */
-    public function set($key, $value = null)
+    public function set($key, $value = null): Kohana_View
     {
         if (is_array($key) || $key instanceof Traversable) {
             foreach ($key as $name => $value) {
@@ -298,7 +298,7 @@ class Kohana_View
      * @param   mixed   $value  referenced variable
      * @return  $this
      */
-    public function bind($key, &$value)
+    public function bind(string $key, &$value): Kohana_View
     {
         $this->_data[$key] = &$value;
 
@@ -319,7 +319,7 @@ class Kohana_View
      * @throws  View_Exception
      * @uses    View::capture
      */
-    public function render($file = null)
+    public function render(string $file = null): string
     {
         if ($file !== null) {
             $this->set_filename($file);

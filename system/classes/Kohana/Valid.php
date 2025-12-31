@@ -17,7 +17,7 @@ class Kohana_Valid
      * @param $value
      * @return bool
      */
-    public static function not_empty($value)
+    public static function not_empty($value): bool
     {
         if ($value instanceof ArrayObject) {
             // Get the array from the ArrayObject
@@ -35,7 +35,7 @@ class Kohana_Valid
      * @param string $expression Regular expression to match (including delimiters)
      * @return  bool
      */
-    public static function regex($value, $expression)
+    public static function regex($value, string $expression): bool
     {
         return (bool) preg_match($expression, (string) $value);
     }
@@ -47,9 +47,9 @@ class Kohana_Valid
      * @param int $length Minimum length required
      * @return  bool
      */
-    public static function min_length($value, $length)
+    public static function min_length(string $value, int $length): bool
     {
-        return UTF8::strlen($value) >= $length;
+        return mb_strlen($value) >= $length;
     }
 
     /**
@@ -59,9 +59,9 @@ class Kohana_Valid
      * @param int $length Maximum length required
      * @return  bool
      */
-    public static function max_length($value, $length)
+    public static function max_length(string $value, int $length): bool
     {
-        return UTF8::strlen($value) <= $length;
+        return mb_strlen($value) <= $length;
     }
 
     /**
@@ -71,13 +71,13 @@ class Kohana_Valid
      * @param   int|array $length exact length required, or array of valid lengths
      * @return  bool
      */
-    public static function exact_length($value, $length)
+    public static function exact_length(string $value, $length): bool
     {
         if (is_array($length)) {
-            return in_array(UTF8::strlen($value), $length, true);
+            return in_array(mb_strlen($value), $length, true);
         }
 
-        return UTF8::strlen($value) === $length;
+        return mb_strlen($value) === $length;
     }
 
     /**
@@ -87,7 +87,7 @@ class Kohana_Valid
      * @param mixed $required Required value
      * @return  bool
      */
-    public static function equals($value, $required)
+    public static function equals($value, $required): bool
     {
         return $value === $required;
     }
@@ -102,9 +102,9 @@ class Kohana_Valid
      * @param bool $strict Strict RFC compatibility
      * @return  bool
      */
-    public static function email($email, $strict = false)
+    public static function email(string $email, bool $strict = false): bool
     {
-        if (UTF8::strlen($email) > 254) {
+        if (mb_strlen($email) > 254) {
             return false;
         }
 
@@ -126,7 +126,7 @@ class Kohana_Valid
             $expression = '/^[-_a-z0-9\'+*$^&%=~!?{}]++(?:\.[-_a-z0-9\'+*$^&%=~!?{}]+)*+@(?:(?![-.])[-a-z0-9.]+(?<![-.])\.[a-z]{2,6}|\d{1,3}(?:\.\d{1,3}){3})$/iD';
         }
 
-        return (bool) preg_match($expression, (string) $email);
+        return (bool) preg_match($expression, $email);
     }
 
     /**
@@ -138,7 +138,7 @@ class Kohana_Valid
      * @param string $email Email address
      * @return  bool
      */
-    public static function email_domain($email)
+    public static function email_domain(string $email): bool
     {
         if (!Valid::not_empty($email))
             return false; // Empty fields cause issues with checkdnsrr()
@@ -153,7 +153,7 @@ class Kohana_Valid
      * @param string $url URL
      * @return  bool
      */
-    public static function url($url)
+    public static function url(string $url): bool
     {
         // Based on https://datatracker.ietf.org/doc/html/rfc1738#section-5
         if (!preg_match(
@@ -213,7 +213,7 @@ class Kohana_Valid
      * @param bool $allow_private Allow private IP networks
      * @return  bool
      */
-    public static function ip($ip, $allow_private = true)
+    public static function ip(string $ip, bool $allow_private = true): bool
     {
         // Do not allow reserved addresses
         $flags = FILTER_FLAG_NO_RES_RANGE;
@@ -235,7 +235,7 @@ class Kohana_Valid
      * @throws Kohana_Exception
      * @uses    Valid::luhn
      */
-    public static function credit_card($number, $type = null)
+    public static function credit_card(string $number, $type = null): bool
     {
         // Remove all non-digit characters from the number
         if (($number = preg_replace('/\D+/', '', $number)) === '')
@@ -287,7 +287,7 @@ class Kohana_Valid
      * @param mixed $number Number to check
      * @return  bool
      */
-    public static function luhn($number)
+    public static function luhn($number): bool
     {
         // Force the value to be a string as this method uses string functions.
         // Converting to an integer may pass PHP_INT_MAX and result in an error!
@@ -328,7 +328,7 @@ class Kohana_Valid
      * @param array|null $lengths
      * @return  bool
      */
-    public static function phone($number, $lengths = null)
+    public static function phone(string $number, array $lengths = null): bool
     {
         if (!is_array($lengths)) {
             $lengths = [7, 10, 11];
@@ -347,7 +347,7 @@ class Kohana_Valid
      * @param string $str Date to check
      * @return  bool
      */
-    public static function date($str)
+    public static function date(string $str): bool
     {
         return strtotime($str) !== false;
     }
@@ -359,10 +359,8 @@ class Kohana_Valid
      * @param bool $utf8 Trigger UTF-8 compatibility
      * @return  bool
      */
-    public static function alpha($str, $utf8 = false)
+    public static function alpha(string $str, bool $utf8 = false): bool
     {
-        $str = (string) $str;
-
         if ($utf8 === true) {
             return (bool) preg_match('/^\pL++$/uD', $str);
         } else {
@@ -377,7 +375,7 @@ class Kohana_Valid
      * @param bool $utf8 Trigger UTF-8 compatibility
      * @return  bool
      */
-    public static function alpha_numeric($str, $utf8 = false)
+    public static function alpha_numeric(string $str, bool $utf8 = false): bool
     {
         if ($utf8 === true) {
             return (bool) preg_match('/^[\pL\pN]++$/uD', $str);
@@ -393,7 +391,7 @@ class Kohana_Valid
      * @param bool $utf8 Trigger UTF-8 compatibility
      * @return  bool
      */
-    public static function alpha_dash($str, $utf8 = false)
+    public static function alpha_dash(string $str, bool $utf8 = false): bool
     {
         if ($utf8 === true) {
             $regex = '/^[-\pL\pN_]++$/uD';
@@ -411,7 +409,7 @@ class Kohana_Valid
      * @param bool $utf8 Trigger UTF-8 compatibility
      * @return  bool
      */
-    public static function digit($str, $utf8 = false)
+    public static function digit($str, bool $utf8 = false): bool
     {
         if ($utf8) {
             return (bool) preg_match('/^\pN++$/uD', $str);
@@ -426,10 +424,10 @@ class Kohana_Valid
      * Uses {@link https://www.php.net/manual/en/function.localeconv.php locale conversion}
      * to allow decimal point to be locale specific.
      *
-     * @param string $str Input string
+     * @param mixed $str Input string
      * @return  bool
      */
-    public static function numeric($str)
+    public static function numeric($str): bool
     {
         // Get the decimal point for the current locale
         list($decimal) = array_values(localeconv());
@@ -447,7 +445,7 @@ class Kohana_Valid
      * @param int|null $step Increment size
      * @return  bool
      */
-    public static function range($number, $min, $max, $step = null)
+    public static function range(int $number, int $min, int $max, int $step = null): bool
     {
         if ($number < $min || $number > $max) {
             // Number is outside of range
@@ -472,7 +470,7 @@ class Kohana_Valid
      * @param int|null $digits Number of digits
      * @return  bool
      */
-    public static function decimal($str, $places = 2, $digits = null)
+    public static function decimal(string $str, int $places = 2, ?int $digits = null): bool
     {
         if ($digits > 0) {
             // Specific number of digits
@@ -485,7 +483,7 @@ class Kohana_Valid
         // Get the decimal point for the current locale
         list($decimal) = array_values(localeconv());
 
-        return (bool) preg_match('/^[+-]?[0-9]' . $digits . preg_quote($decimal) . '[0-9]{' . ((int) $places) . '}$/D', $str);
+        return (bool) preg_match('/^[+-]?[0-9]' . $digits . preg_quote($decimal) . '[0-9]{' . $places . '}$/D', $str);
     }
 
     /**
@@ -496,7 +494,7 @@ class Kohana_Valid
      * @param string $str Input string
      * @return  bool
      */
-    public static function color($str)
+    public static function color(string $str): bool
     {
         return (bool) preg_match('/^#?+[0-9a-f]{3}(?:[0-9a-f]{3})?$/iD', $str);
     }
@@ -509,7 +507,7 @@ class Kohana_Valid
      * @param string $match Field name to match
      * @return  bool
      */
-    public static function matches($array, $field, $match)
+    public static function matches($array, string $field, string $match): bool
     {
         return $array[$field] === $array[$match];
     }

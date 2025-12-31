@@ -4,10 +4,9 @@
 
 ## Supported cache engines
 
- *  APCu/APC ([Cache_Apcu])
+ *  APCu ([Cache_Apcu])
  *  File ([Cache_File])
  *  Memcached ([Cache_Memcached])
- *  Memcached-tags ([Cache_MemcacheTag])
  *  SQLite ([Cache_Sqlite])
  *  Wincache
 

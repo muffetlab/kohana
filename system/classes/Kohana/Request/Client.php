@@ -92,7 +92,7 @@ abstract class Kohana_Request_Client
      * @uses    [Kohana::$profiling]
      * @uses    [Profiler]
      */
-    public function execute(Request $request)
+    public function execute(Request $request): Response
     {
         // Prevent too much recursion of header callback requests
         if ($this->callback_depth() > $this->max_callback_depth())
@@ -146,7 +146,7 @@ abstract class Kohana_Request_Client
      * @return  Response
      * @since   3.2.0
      */
-    abstract public function execute_request(Request $request, Response $response);
+    abstract public function execute_request(Request $request, Response $response): Response;
 
     /**
      * Getter and setter for the internal caching engine,
@@ -171,7 +171,7 @@ abstract class Kohana_Request_Client
      * @param bool|null $follow Boolean indicating if redirects should be followed
      * @return bool|Kohana_Request_Client
      */
-    public function follow($follow = null)
+    public function follow(bool $follow = null)
     {
         if ($follow === null)
             return $this->_follow;
@@ -211,7 +211,7 @@ abstract class Kohana_Request_Client
      * @param bool|null $strict_redirect Boolean indicating if 302 redirects should be followed with the original method
      * @return bool|Kohana_Request_Client
      */
-    public function strict_redirect($strict_redirect = null)
+    public function strict_redirect(bool $strict_redirect = null)
     {
         if ($strict_redirect === null)
             return $this->_strict_redirect;
@@ -263,7 +263,7 @@ abstract class Kohana_Request_Client
      * @param int|null $depth Maximum number of callback requests to execute before aborting
      * @return int|Kohana_Request_Client
      */
-    public function max_callback_depth($depth = null)
+    public function max_callback_depth(int $depth = null)
     {
         if ($depth === null)
             return $this->_max_callback_depth;
@@ -280,7 +280,7 @@ abstract class Kohana_Request_Client
      * @param int|null $depth Current recursion depth
      * @return int|Kohana_Request_Client
      */
-    public function callback_depth($depth = null)
+    public function callback_depth(int $depth = null)
     {
         if ($depth === null)
             return $this->_callback_depth;

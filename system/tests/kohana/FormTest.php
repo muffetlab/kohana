@@ -33,7 +33,7 @@ class Kohana_FormTest extends Unittest_TestCase
      *
      * @return array
      */
-    public function provider_open()
+    public function provider_open(): array
     {
         return [
             [
@@ -99,7 +99,7 @@ class Kohana_FormTest extends Unittest_TestCase
      *
      * @return array
      */
-    public function provider_input()
+    public function provider_input(): array
     {
         return [
             ['input', 'foo', 'bar', null],
@@ -119,7 +119,7 @@ class Kohana_FormTest extends Unittest_TestCase
      * @param string|null $value
      * @param array|null $attributes
      */
-    public function test_input($type, $name, $value, $attributes)
+    public function test_input(string $type, string $name, ?string $value, ?array $attributes)
     {
         $matcher = ['name' => $name, 'type' => $type];
 
@@ -153,7 +153,7 @@ class Kohana_FormTest extends Unittest_TestCase
      *
      * @return array
      */
-    public function provider_file()
+    public function provider_file(): array
     {
         return [
             // $value, $result
@@ -170,7 +170,7 @@ class Kohana_FormTest extends Unittest_TestCase
      * @param array|null $attributes
      * @param string $expected Output for Form::file
      */
-    public function test_file($name, $attributes, $expected)
+    public function test_file(string $name, ?array $attributes, string $expected)
     {
         $this->assertSame($expected, Form::file($name, $attributes));
     }
@@ -180,7 +180,7 @@ class Kohana_FormTest extends Unittest_TestCase
      *
      * @return array
      */
-    public function provider_check()
+    public function provider_check(): array
     {
         return [
             // $value, $result
@@ -204,7 +204,7 @@ class Kohana_FormTest extends Unittest_TestCase
      * @param bool $checked
      * @param array|null $attributes
      */
-    public function test_check($type, $name, $value, $checked, $attributes)
+    public function test_check(string $type, string $name, ?string $value, bool $checked, ?array $attributes)
     {
         $matcher = ['name' => $name, 'type' => $type];
 
@@ -235,7 +235,7 @@ class Kohana_FormTest extends Unittest_TestCase
      *
      * @return array
      */
-    public function provider_text()
+    public function provider_text(): array
     {
         return [
             ['textarea', 'foo', 'bar', null],
@@ -256,7 +256,7 @@ class Kohana_FormTest extends Unittest_TestCase
      * @param string|null $body
      * @param array|null $attributes
      */
-    public function test_text($type, $name, $body, $attributes)
+    public function test_text(string $type, string $name, ?string $body, ?array $attributes)
     {
         $matcher = $type !== 'label' ? ['name' => $name] : ['for' => $name];
 
@@ -279,7 +279,7 @@ class Kohana_FormTest extends Unittest_TestCase
      *
      * @return array
      */
-    public function provider_select()
+    public function provider_select(): array
     {
         return [
             // $value, $result
@@ -333,7 +333,7 @@ class Kohana_FormTest extends Unittest_TestCase
      * @param mixed $selected
      * @param string $expected Output for Form::select
      */
-    public function test_select($name, $options, $selected, $expected)
+    public function test_select(string $name, ?array $options, $selected, string $expected)
     {
         // Much more efficient just to assertSame() rather than assertTag() on each element
         $this->assertSame($expected, Form::select($name, $options, $selected));
@@ -344,7 +344,7 @@ class Kohana_FormTest extends Unittest_TestCase
      *
      * @return array
      */
-    public function provider_submit()
+    public function provider_submit(): array
     {
         return [
             ['foo', 'Foobar!'],
@@ -359,7 +359,7 @@ class Kohana_FormTest extends Unittest_TestCase
      * @param string $name
      * @param string $value
      */
-    public function test_submit($name, $value)
+    public function test_submit(string $name, string $value)
     {
         $matcher = [
             'name' => $name,
@@ -380,7 +380,7 @@ class Kohana_FormTest extends Unittest_TestCase
      *
      * @return array
      */
-    public function provider_image()
+    public function provider_image(): array
     {
         return [
             // $value, $result
@@ -404,7 +404,7 @@ class Kohana_FormTest extends Unittest_TestCase
      * @param string $expected The expected output from Form::image().
      * @throws Kohana_Exception
      */
-    public function test_image($name, $value, array $attributes, $expected)
+    public function test_image(string $name, string $value, array $attributes, string $expected)
     {
         $this->assertSame($expected, Form::image($name, $value, $attributes));
     }
@@ -414,7 +414,7 @@ class Kohana_FormTest extends Unittest_TestCase
      *
      * @return array
      */
-    function provider_label()
+    function provider_label(): array
     {
         return [
             // $value, $result
@@ -470,7 +470,7 @@ class Kohana_FormTest extends Unittest_TestCase
      * @param array|null $attributes Additional HTML attributes for the label.
      * @param string $expected The expected output from Form::label().
      */
-    function test_label($for, $text, $attributes, $expected)
+    function test_label(string $for, ?string $text, ?array $attributes, string $expected)
     {
         $this->assertSame($expected, Form::label($for, $text, $attributes));
     }

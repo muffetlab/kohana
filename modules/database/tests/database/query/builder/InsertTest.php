@@ -29,7 +29,7 @@ class Kohana_Database_Query_Builder_InsertTest extends Kohana_Unittest_Database_
      *
      * @return array[]
      */
-    public function provider_insert_values()
+    public function provider_insert_values(): array
     {
         return [
             ['users', ['username', 'password'], ['fred', 'p@5sW0Rd'], 'INSERT INTO users (username, password) VALUES (\'fred\', \'p@5sW0Rd\')'],
@@ -48,7 +48,7 @@ class Kohana_Database_Query_Builder_InsertTest extends Kohana_Unittest_Database_
      * @throws Database_Exception
      * @throws Kohana_Exception
      */
-    public function test_insert_values($table, array $columns, array $values, $expected)
+    public function test_insert_values(string $table, array $columns, array $values, string $expected)
     {
         $query = DB::insert($table, $columns)->values($values);
 

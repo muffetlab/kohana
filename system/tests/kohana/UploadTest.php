@@ -21,7 +21,7 @@ class Kohana_UploadTest extends Unittest_TestCase
      *
      * @return array
      */
-    public function provider_size()
+    public function provider_size(): array
     {
         return [
             // $field, $bytes, $environment, $expected
@@ -96,7 +96,7 @@ class Kohana_UploadTest extends Unittest_TestCase
      * @throws Kohana_Exception
      * @throws ReflectionException
      */
-    public function test_size($field, $bytes, array $environment, $expected)
+    public function test_size(string $field, string $bytes, array $environment, bool $expected)
     {
         $this->setEnvironment($environment);
 
@@ -133,7 +133,7 @@ class Kohana_UploadTest extends Unittest_TestCase
      *
      * @return array
      */
-    public function provider_valid()
+    public function provider_valid(): array
     {
         return [
             [

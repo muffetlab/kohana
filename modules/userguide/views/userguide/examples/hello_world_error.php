@@ -41,12 +41,12 @@
 </script>
 <div id="kohana_error">
     <h1><span class="type">View_Exception [ 0 ]:</span> <span class="message">The requested view site could not be found</span></h1>
-    <div id="error68b912b0b816c" class="content">
+    <div id="error68b8f79f31e72" class="content">
         <p><span class="file">SYSPATH/classes/Kohana/View.php [ 247 ]</span></p>
         <pre class="source">
             <code><span class="line"><span class="number">242</span>      * @throws  View_Exception
 </span><span class="line"><span class="number">243</span>      */
-</span><span class="line"><span class="number">244</span>     public function set_filename($file)
+</span><span class="line"><span class="number">244</span>     public function set_filename(string $file): Kohana_View
 </span><span class="line"><span class="number">245</span>     {
 </span><span class="line"><span class="number">246</span>         if (!$path = Kohana::find_file('views', $file)) {
 </span><span class="line highlight"><span class="number">247</span>             throw new View_Exception('The requested view :file could not be found', [':file' =&gt; $file]);
@@ -61,12 +61,12 @@
             <li>
                 <p>
                     <span class="file">
-                        <a href="#error68b912b0b816csource0" onclick="return koggle('error68b912b0b816csource0')">SYSPATH/classes/Kohana/View.php [ 138 ]</a>
+                        <a href="#error68b8f79f31e72source0" onclick="return koggle('error68b8f79f31e72source0')">SYSPATH/classes/Kohana/View.php [ 138 ]</a>
                     </span>
                     &raquo;
-                    Kohana_View->set_filename(<a href="#error68b912b0b816cargs0" onclick="return koggle('error68b912b0b816cargs0')">arguments</a>)
+                    Kohana_View->set_filename(<a href="#error68b8f79f31e72args0" onclick="return koggle('error68b8f79f31e72args0')">arguments</a>)
                 </p>
-                <div id="error68b912b0b816cargs0" class="collapsed">
+                <div id="error68b8f79f31e72args0" class="collapsed">
                     <table>
                         <tr>
                             <td><code>file</code></td>
@@ -74,9 +74,9 @@
                         </tr>
                     </table>
                 </div>
-                <pre id="error68b912b0b816csource0" class="source collapsed"><code><span class="line"><span class="number">133</span>      * @uses    View::set_filename
+                <pre id="error68b8f79f31e72source0" class="source collapsed"><code><span class="line"><span class="number">133</span>      * @uses    View::set_filename
 </span><span class="line"><span class="number">134</span>      */
-</span><span class="line"><span class="number">135</span>     public function __construct($file = null, array $data = null)
+</span><span class="line"><span class="number">135</span>     public function __construct(string $file = null, array $data = null)
 </span><span class="line"><span class="number">136</span>     {
 </span><span class="line"><span class="number">137</span>         if ($file !== null) {
 </span><span class="line highlight"><span class="number">138</span>             $this-&gt;set_filename($file);
@@ -90,12 +90,12 @@
             <li>
                 <p>
                     <span class="file">
-                        <a href="#error68b912b0b816csource1" onclick="return koggle('error68b912b0b816csource1')">SYSPATH/classes/Kohana/View.php [ 32 ]</a>
+                        <a href="#error68b8f79f31e72source1" onclick="return koggle('error68b8f79f31e72source1')">SYSPATH/classes/Kohana/View.php [ 32 ]</a>
                     </span>
                     &raquo;
-                    Kohana_View->__construct(<a href="#error68b912b0b816cargs1" onclick="return koggle('error68b912b0b816cargs1')">arguments</a>)
+                    Kohana_View->__construct(<a href="#error68b8f79f31e72args1" onclick="return koggle('error68b8f79f31e72args1')">arguments</a>)
                 </p>
-                <div id="error68b912b0b816cargs1" class="collapsed">
+                <div id="error68b8f79f31e72args1" class="collapsed">
                     <table>
                         <tr>
                             <td><code>file</code></td>
@@ -107,10 +107,10 @@
                         </tr>
                     </table>
                 </div>
-                <pre id="error68b912b0b816csource1" class="source collapsed"><code><span class="line"><span class="number">27</span>      * @return  View
+                <pre id="error68b8f79f31e72source1" class="source collapsed"><code><span class="line"><span class="number">27</span>      * @return  View
 </span><span class="line"><span class="number">28</span>      * @throws View_Exception
 </span><span class="line"><span class="number">29</span>      */
-</span><span class="line"><span class="number">30</span>     public static function factory($file = null, array $data = null)
+</span><span class="line"><span class="number">30</span>     public static function factory(string $file = null, array $data = null): View
 </span><span class="line"><span class="number">31</span>     {
 </span><span class="line highlight"><span class="number">32</span>         return new View($file, $data);
 </span><span class="line"><span class="number">33</span>     }
@@ -123,12 +123,12 @@
             <li>
                 <p>
                     <span class="file">
-                        <a href="#error68b912b0b816csource2" onclick="return koggle('error68b912b0b816csource2')">SYSPATH/classes/Kohana/Controller/Template.php [ 33 ]</a>
+                        <a href="#error68b8f79f31e72source2" onclick="return koggle('error68b8f79f31e72source2')">SYSPATH/classes/Kohana/Controller/Template.php [ 33 ]</a>
                     </span>
                     &raquo;
-                    Kohana_View::factory(<a href="#error68b912b0b816cargs2" onclick="return koggle('error68b912b0b816cargs2')">arguments</a>)
+                    Kohana_View::factory(<a href="#error68b8f79f31e72args2" onclick="return koggle('error68b8f79f31e72args2')">arguments</a>)
                 </p>
-                <div id="error68b912b0b816cargs2" class="collapsed">
+                <div id="error68b8f79f31e72args2" class="collapsed">
                     <table>
                         <tr>
                             <td><code>file</code></td>
@@ -136,7 +136,7 @@
                         </tr>
                     </table>
                 </div>
-                <pre id="error68b912b0b816csource2" class="source collapsed"><code><span class="line"><span class="number">28</span>     {
+                <pre id="error68b8f79f31e72source2" class="source collapsed"><code><span class="line"><span class="number">28</span>     {
 </span><span class="line"><span class="number">29</span>         parent::before();
 </span><span class="line"><span class="number">30</span>
 </span><span class="line"><span class="number">31</span>         if ($this-&gt;auto_render === true) {
@@ -152,14 +152,14 @@
             <li>
                 <p>
                     <span class="file">
-                        <a href="#error68b912b0b816csource3" onclick="return koggle('error68b912b0b816csource3')">SYSPATH/classes/Kohana/Controller.php [ 70 ]</a>
+                        <a href="#error68b8f79f31e72source3" onclick="return koggle('error68b8f79f31e72source3')">SYSPATH/classes/Kohana/Controller.php [ 70 ]</a>
                     </span>
                     &raquo;
                     Kohana_Controller_Template->before()
                 </p>
-                <pre id="error68b912b0b816csource3" class="source collapsed"><code><span class="line"><span class="number">65</span>      * @throws Kohana_HTTP_Exception
+                <pre id="error68b8f79f31e72source3" class="source collapsed"><code><span class="line"><span class="number">65</span>      * @throws Kohana_HTTP_Exception
 </span><span class="line"><span class="number">66</span>      */
-</span><span class="line"><span class="number">67</span>     public function execute()
+</span><span class="line"><span class="number">67</span>     public function execute(): Response
 </span><span class="line"><span class="number">68</span>     {
 </span><span class="line"><span class="number">69</span>         // Execute the "before action" method
 </span><span class="line highlight"><span class="number">70</span>         $this-&gt;before();
@@ -182,12 +182,12 @@
             <li>
                 <p>
                     <span class="file">
-                        <a href="#error68b912b0b816csource5" onclick="return koggle('error68b912b0b816csource5')">SYSPATH/classes/Kohana/Request/Client/Internal.php [ 84 ]</a>
+                        <a href="#error68b8f79f31e72source5" onclick="return koggle('error68b8f79f31e72source5')">SYSPATH/classes/Kohana/Request/Client/Internal.php [ 84 ]</a>
                     </span>
                     &raquo;
-                    ReflectionMethod->invoke(<a href="#error68b912b0b816cargs5" onclick="return koggle('error68b912b0b816cargs5')">arguments</a>)
+                    ReflectionMethod->invoke(<a href="#error68b8f79f31e72args5" onclick="return koggle('error68b8f79f31e72args5')">arguments</a>)
                 </p>
-                <div id="error68b912b0b816cargs5" class="collapsed">
+                <div id="error68b8f79f31e72args5" class="collapsed">
                     <table>
                         <tr>
                             <td><code>object</code></td>
@@ -257,7 +257,7 @@
                         </tr>
                     </table>
                 </div>
-                <pre id="error68b912b0b816csource5" class="source collapsed"><code><span class="line"><span class="number">79</span>
+                <pre id="error68b8f79f31e72source5" class="source collapsed"><code><span class="line"><span class="number">79</span>
 </span><span class="line"><span class="number">80</span>             // Create a new instance of the controller
 </span><span class="line"><span class="number">81</span>             $controller = $class-&gt;newInstance($request, $response);
 </span><span class="line"><span class="number">82</span>
@@ -273,12 +273,12 @@
             <li>
                 <p>
                     <span class="file">
-                        <a href="#error68b912b0b816csource6" onclick="return koggle('error68b912b0b816csource6')">SYSPATH/classes/Kohana/Request/Client.php [ 110 ]</a>
+                        <a href="#error68b8f79f31e72source6" onclick="return koggle('error68b8f79f31e72source6')">SYSPATH/classes/Kohana/Request/Client.php [ 110 ]</a>
                     </span>
                     &raquo;
-                    Kohana_Request_Client_Internal->execute_request(<a href="#error68b912b0b816cargs6" onclick="return koggle('error68b912b0b816cargs6')">arguments</a>)
+                    Kohana_Request_Client_Internal->execute_request(<a href="#error68b8f79f31e72args6" onclick="return koggle('error68b8f79f31e72args6')">arguments</a>)
                 </p>
-                <div id="error68b912b0b816cargs6" class="collapsed">
+                <div id="error68b8f79f31e72args6" class="collapsed">
                     <table>
                         <tr>
                             <td><code>request</code></td>
@@ -347,7 +347,7 @@
                         </tr>
                     </table>
                 </div>
-                <pre id="error68b912b0b816csource6" class="source collapsed"><code><span class="line"><span class="number">105</span>         $orig_response = $response = Response::factory(['_protocol' =&gt; $request-&gt;protocol()]);
+                <pre id="error68b8f79f31e72source6" class="source collapsed"><code><span class="line"><span class="number">105</span>         $orig_response = $response = Response::factory(['_protocol' =&gt; $request-&gt;protocol()]);
 </span><span class="line"><span class="number">106</span>
 </span><span class="line"><span class="number">107</span>         if (($cache = $this-&gt;cache()) instanceof HTTP_Cache)
 </span><span class="line"><span class="number">108</span>             return $cache-&gt;execute($this, $request, $response);
@@ -363,12 +363,12 @@
             <li>
                 <p>
                     <span class="file">
-                        <a href="#error68b912b0b816csource7" onclick="return koggle('error68b912b0b816csource7')">SYSPATH/classes/Kohana/Request.php [ 921 ]</a>
+                        <a href="#error68b8f79f31e72source7" onclick="return koggle('error68b8f79f31e72source7')">SYSPATH/classes/Kohana/Request.php [ 822 ]</a>
                     </span>
                     &raquo;
-                    Kohana_Request_Client->execute(<a href="#error68b912b0b816cargs7" onclick="return koggle('error68b912b0b816cargs7')">arguments</a>)
+                    Kohana_Request_Client->execute(<a href="#error68b8f79f31e72args7" onclick="return koggle('error68b8f79f31e72args7')">arguments</a>)
                 </p>
-                <div id="error68b912b0b816cargs7" class="collapsed">
+                <div id="error68b8f79f31e72args7" class="collapsed">
                     <table>
                         <tr>
                             <td><code>request</code></td>
@@ -426,44 +426,44 @@
                         </tr>
                     </table>
                 </div>
-                <pre id="error68b912b0b816csource7" class="source collapsed"><code><span class="line"><span class="number">916</span>
-</span><span class="line"><span class="number">917</span>         if (!$this-&gt;_client instanceof Request_Client) {
-</span><span class="line"><span class="number">918</span>             throw new Request_Exception('Unable to execute :uri without a Kohana_Request_Client', [':uri' =&gt; $this-&gt;_uri]);
-</span><span class="line"><span class="number">919</span>         }
-</span><span class="line"><span class="number">920</span>
-</span><span class="line highlight"><span class="number">921</span>         return $this-&gt;_client-&gt;execute($this);
-</span><span class="line"><span class="number">922</span>     }
-</span><span class="line"><span class="number">923</span>
-</span><span class="line"><span class="number">924</span>     /**
-</span><span class="line"><span class="number">925</span>      * Returns whether this request is the initial request Kohana received.
-</span><span class="line"><span class="number">926</span>      * Can be used to test for sub requests.
+                <pre id="error68b8f79f31e72source7" class="source collapsed"><code><span class="line"><span class="number">817</span>
+</span><span class="line"><span class="number">818</span>         if (!$this-&gt;_client instanceof Request_Client) {
+</span><span class="line"><span class="number">819</span>             throw new Request_Exception('Unable to execute :uri without a Kohana_Request_Client', [':uri' =&gt; $this-&gt;_uri]);
+</span><span class="line"><span class="number">820</span>         }
+</span><span class="line"><span class="number">821</span>
+</span><span class="line highlight"><span class="number">822</span>         return $this-&gt;_client-&gt;execute($this);
+</span><span class="line"><span class="number">823</span>     }
+</span><span class="line"><span class="number">824</span>
+</span><span class="line"><span class="number">825</span>     /**
+</span><span class="line"><span class="number">826</span>      * Returns whether this request is the initial request Kohana received.
+</span><span class="line"><span class="number">827</span>      * Can be used to test for sub requests.
 </span></code></pre>
             </li>
             <li>
                 <p>
                     <span class="file">
-                        <a href="#error68b912b0b816csource8" onclick="return koggle('error68b912b0b816csource8')">DOCROOT/index.php [ 73 ]</a>
+                        <a href="#error68b8f79f31e72source8" onclick="return koggle('error68b8f79f31e72source8')">DOCROOT/index.php [ 64 ]</a>
                     </span>
                     &raquo;
                     Kohana_Request->execute()
                 </p>
-                <pre id="error68b912b0b816csource8" class="source collapsed"><code><span class="line"><span class="number">68</span>     /**
-</span><span class="line"><span class="number">69</span>      * Execute the main request. A source of the URI can be passed, e.g., $_SERVER['PATH_INFO'].
-</span><span class="line"><span class="number">70</span>      * If no source is specified, the URI will be automatically detected.
-</span><span class="line"><span class="number">71</span>      */
-</span><span class="line"><span class="number">72</span>     echo Request::factory(true, [], false)
-</span><span class="line highlight"><span class="number">73</span>         -&gt;execute()
-</span><span class="line"><span class="number">74</span>         -&gt;send_headers(true)
-</span><span class="line"><span class="number">75</span>         -&gt;body();
-</span><span class="line"><span class="number">76</span> }
+                <pre id="error68b8f79f31e72source8" class="source collapsed"><code><span class="line"><span class="number">59</span>     /**
+</span><span class="line"><span class="number">60</span>      * Execute the main request. A source of the URI can be passed, e.g., $_SERVER['PATH_INFO'].
+</span><span class="line"><span class="number">61</span>      * If no source is specified, the URI will be automatically detected.
+</span><span class="line"><span class="number">62</span>      */
+</span><span class="line"><span class="number">63</span>     echo Request::factory('', [], false)
+</span><span class="line highlight"><span class="number">64</span>         -&gt;execute()
+</span><span class="line"><span class="number">65</span>         -&gt;send_headers(true)
+</span><span class="line"><span class="number">66</span>         -&gt;body();
+</span><span class="line"><span class="number">67</span> }
 </span></code></pre>
             </li>
         </ol>
     </div>
-    <h2><a href="#error68b912b0b816cenvironment" onclick="return koggle('error68b912b0b816cenvironment')">Environment</a></h2>
-    <div id="error68b912b0b816cenvironment" class="content collapsed">
-        <h3><a href="#error68b912b0b816cenvironment_included" onclick="return koggle('error68b912b0b816cenvironment_included')">Included files</a> (71)</h3>
-        <div id="error68b912b0b816cenvironment_included" class="collapsed">
+    <h2><a href="#error68b8f79f31e72environment" onclick="return koggle('error68b8f79f31e72environment')">Environment</a></h2>
+    <div id="error68b8f79f31e72environment" class="content collapsed">
+        <h3><a href="#error68b8f79f31e72environment_included" onclick="return koggle('error68b8f79f31e72environment_included')">Included files</a> (72)</h3>
+        <div id="error68b8f79f31e72environment_included" class="collapsed">
             <table>
                 <tr>
                     <td><code>DOCROOT/index.php</code></td>
@@ -488,6 +488,9 @@
                 </tr>
                 <tr>
                     <td><code>VENDOR_PATH/symfony/polyfill-ctype/bootstrap.php</code></td>
+                </tr>
+                <tr>
+                    <td><code>VENDOR_PATH/symfony/polyfill-php80/bootstrap.php</code></td>
                 </tr>
                 <tr>
                     <td><code>VENDOR_PATH/myclabs/deep-copy/src/DeepCopy/deep_copy.php</code></td>
@@ -805,8 +808,8 @@
                 </tr>
             </table>
         </div>
-        <h3><a href="#error68b912b0b816cenvironment_server" onclick="return koggle('error68b912b0b816cenvironment_server')">$_SERVER</a></h3>
-        <div id="error68b912b0b816cenvironment_server" class="collapsed">
+        <h3><a href="#error68b902f432065environment_server" onclick="return koggle('error68b902f432065environment_server')">$_SERVER</a></h3>
+        <div id="error68b902f432065environment_server" class="collapsed">
             <table>
                 <tr>
                     <td><code>USER</code></td>
@@ -837,10 +840,6 @@
                     <td><pre><small>string</small><span>(1)</span> "1"</pre></td>
                 </tr>
                 <tr>
-                    <td><code>HTTP_CACHE_CONTROL</code></td>
-                    <td><pre><small>string</small><span>(9)</span> "max-age=0"</pre></td>
-                </tr>
-                <tr>
                     <td><code>HTTP_CONNECTION</code></td>
                     <td><pre><small>string</small><span>(10)</span> "keep-alive"</pre></td>
                 </tr>
@@ -866,7 +865,7 @@
                 </tr>
                 <tr>
                     <td><code>REMOTE_PORT</code></td>
-                    <td><pre><small>string</small><span>(5)</span> "49435"</pre></td>
+                    <td><pre><small>string</small><span>(5)</span> "64015"</pre></td>
                 </tr>
                 <tr>
                     <td><code>REMOTE_ADDR</code></td>
@@ -938,11 +937,11 @@
                 </tr>
                 <tr>
                     <td><code>REQUEST_TIME_FLOAT</code></td>
-                    <td><pre><small>float</small> 1756959408.6763</pre></td>
+                    <td><pre><small>float</small> 1756955380.1472</pre></td>
                 </tr>
                 <tr>
                     <td><code>REQUEST_TIME</code></td>
-                    <td><pre><small>integer</small> 1756959408</pre></td>
+                    <td><pre><small>integer</small> 1756955380</pre></td>
                 </tr>
             </table>
         </div>

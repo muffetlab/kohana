@@ -168,7 +168,7 @@ class Kohana_Cache_Memcached extends Cache implements Cache_Arithmetic
      * @param mixed $default Default value to return if cache miss.
      * @return  mixed
      */
-    public function get($id, $default = null)
+    public function get(string $id, $default = null)
     {
         // Get the value from Memcached.
         $value = $this->memcached->get($this->_sanitize_id($id));
@@ -198,7 +198,7 @@ class Kohana_Cache_Memcached extends Cache implements Cache_Arithmetic
      * @param int|null $lifetime Lifetime in seconds, maximum value 2592000.
      * @return  bool
      */
-    public function set($id, $data, $lifetime = null)
+    public function set(string $id, $data, int $lifetime = null): bool
     {
         // If lifetime is null, set to the default expiry.
         if ($lifetime === null) {
@@ -237,7 +237,7 @@ class Kohana_Cache_Memcached extends Cache implements Cache_Arithmetic
      * @param int $time The amount of time the server will wait to delete the entry.
      * @return  bool
      */
-    public function delete($id, $time = 0)
+    public function delete(string $id, int $time = 0): bool
     {
         return $this->memcached->delete($this->_sanitize_id($id), $time);
     }
@@ -253,7 +253,7 @@ class Kohana_Cache_Memcached extends Cache implements Cache_Arithmetic
      *
      * @return  bool
      */
-    public function delete_all()
+    public function delete_all(): bool
     {
         return $this->memcached->flush();
     }
@@ -266,7 +266,7 @@ class Kohana_Cache_Memcached extends Cache implements Cache_Arithmetic
      * @param int $step Step value to increment by.
      * @return int|bool
      */
-    public function increment($id, $step = 1)
+    public function increment(string $id, int $step = 1)
     {
         return $this->memcached->increment($id, $step);
     }
@@ -279,7 +279,7 @@ class Kohana_Cache_Memcached extends Cache implements Cache_Arithmetic
      * @param int $step Step value to decrement by.
      * @return int|bool
      */
-    public function decrement($id, $step = 1)
+    public function decrement(string $id, int $step = 1)
     {
         return $this->memcached->decrement($id, $step);
     }

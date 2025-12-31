@@ -1,6 +1,6 @@
 ## [ORM]()
 - [Creating ORM Models](models)
-- [Basic usage](using)
+- [Basic Usage](using)
 - [Relationships](relationships)
 - [Validation](validation)
 - [Filters](filters)

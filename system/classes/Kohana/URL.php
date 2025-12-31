@@ -37,7 +37,7 @@ class Kohana_URL
      * @uses    Request::protocol()
      * @uses    Kohana::$index_file
      */
-    public static function base($protocol = null, $index = false)
+    public static function base($protocol = null, bool $index = false): string
     {
         // Start with the configured base URL
         $base_url = Kohana::$base_url;
@@ -77,7 +77,7 @@ class Kohana_URL
                 $base_url = parse_url($base_url, PHP_URL_PATH);
             } else {
                 // Attempt to use HTTP_HOST and fallback to SERVER_NAME
-                $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+                $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'];
 
                 // make $host lowercase
                 $host = strtolower($host);
@@ -113,30 +113,20 @@ class Kohana_URL
      * @throws Kohana_Exception
      * @uses    URL::base
      */
-    public static function site($uri = '', $protocol = null, $index = true)
+    public static function site(string $uri = '', $protocol = null, bool $index = true): string
     {
         // Chop off possible scheme, host, port, user and pass parts
         $path = preg_replace('~^[-a-z0-9+.]++://[^/]++/?~', '', trim($uri, '/'));
 
         if (!UTF8::is_ascii($path)) {
             // Encode all non-ASCII characters, as per RFC 1738
-            $path = preg_replace_callback('~([^/]+)~', 'URL::_rawurlencode_callback', $path);
+            $path = preg_replace_callback('~([^/]+)~', function ($matches) {
+                return rawurlencode($matches[0]);
+            }, $path);
         }
 
         // Concat the URL
         return URL::base($protocol, $index) . $path;
-    }
-
-    /**
-     * Callback used for encoding all non-ASCII characters, as per RFC 1738
-     * Used by URL::site()
-     *
-     * @param array $matches Array of matches from preg_replace_callback()
-     * @return string          Encoded string
-     */
-    protected static function _rawurlencode_callback(array $matches)
-    {
-        return rawurlencode($matches[0]);
     }
 
     /**
@@ -155,7 +145,7 @@ class Kohana_URL
      * @param bool $use_get Include current request GET parameters
      * @return  string
      */
-    public static function query(array $params = null, $use_get = true)
+    public static function query(?array $params = null, bool $use_get = true): string
     {
         if ($use_get) {
             if ($params === null) {
@@ -190,7 +180,7 @@ class Kohana_URL
      * @return  string
      * @uses    UTF8::transliterate_to_ascii
      */
-    public static function title($title, $separator = '-', $ascii_only = false)
+    public static function title(string $title, string $separator = '-', bool $ascii_only = false): string
     {
         if ($ascii_only === true) {
             // Transliterate non-ASCII characters
@@ -200,7 +190,7 @@ class Kohana_URL
             $title = preg_replace('![^' . preg_quote($separator) . 'a-z0-9\s]+!', '', strtolower($title));
         } else {
             // Remove all characters that are not the separator, letters, numbers, or whitespace
-            $title = preg_replace('![^' . preg_quote($separator) . '\pL\pN\s]+!u', '', UTF8::strtolower($title));
+            $title = preg_replace('![^' . preg_quote($separator) . '\pL\pN\s]+!u', '', mb_strtolower($title));
         }
 
         // Replace all separator characters and whitespace by a single separator
@@ -221,7 +211,7 @@ class Kohana_URL
      * @return bool true if $host is trustworthy.
      * @throws Kohana_Exception
      */
-    public static function is_trusted_host($host, array $trusted_hosts = null)
+    public static function is_trusted_host(string $host, array $trusted_hosts = null): bool
     {
 
         // If list of trusted hosts is not directly provided read from config

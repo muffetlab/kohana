@@ -25,7 +25,7 @@ class Kohana_Log_Syslog extends Log_Writer
      * @param int $facility Facility to log to
      * @return  void
      */
-    public function __construct($ident = 'KohanaPHP', $facility = LOG_USER)
+    public function __construct(string $ident = 'KohanaPHP', int $facility = LOG_USER)
     {
         $this->_ident = $ident;
 

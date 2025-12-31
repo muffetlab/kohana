@@ -21,7 +21,7 @@ class Kohana_Request_Client_ExternalTest extends Unittest_TestCase
      *
      * @return  array
      */
-    public function provider_factory()
+    public function provider_factory(): array
     {
         Request_Client_External::$client = 'Request_Client_Stream';
 
@@ -52,7 +52,7 @@ class Kohana_Request_Client_ExternalTest extends Unittest_TestCase
      * @return  void
      * @throws Request_Exception
      */
-    public function test_factory(array $params, $client, $expected)
+    public function test_factory(array $params, ?string $client, string $expected)
     {
         $this->assertInstanceOf($expected, Request_Client_External::factory($params, $client));
     }
@@ -62,7 +62,7 @@ class Kohana_Request_Client_ExternalTest extends Unittest_TestCase
      *
      * @return  array
      */
-    public function provider_options()
+    public function provider_options(): array
     {
         return [
             [
@@ -112,7 +112,7 @@ class Kohana_Request_Client_ExternalTest extends Unittest_TestCase
      *
      * @return  array
      */
-    public function provider_execute()
+    public function provider_execute(): array
     {
         $json = '{"foo": "bar", "snafu": "stfu"}';
         $post = ['foo' => 'bar', 'snafu' => 'stfu'];
@@ -151,6 +151,7 @@ class Kohana_Request_Client_ExternalTest extends Unittest_TestCase
      * @return  void
      * @throws Kohana_Exception
      * @throws Request_Exception
+     * @throws ReflectionException
      */
     public function test_execute($content_type, $body, $post, $expected)
     {

@@ -66,7 +66,7 @@ class Kohana_Num
      * @param int $number
      * @return  string
      */
-    public static function ordinal($number)
+    public static function ordinal(int $number): string
     {
         if ($number % 100 > 10 && $number % 100 < 14) {
             return 'th';
@@ -103,7 +103,7 @@ class Kohana_Num
      * @return  string
      * @since   3.0.2
      */
-    public static function format($number, $places, $monetary = false)
+    public static function format(float $number, int $places, bool $monetary = false): string
     {
         $info = localeconv();
 
@@ -127,7 +127,7 @@ class Kohana_Num
      * @param bool $native Set to "false" to force use of the userland implementation
      * @return float Rounded number
      */
-    public static function round($value, $precision = 0, $mode = self::ROUND_HALF_UP, $native = true)
+    public static function round(float $value, int $precision = 0, int $mode = self::ROUND_HALF_UP, bool $native = true)
     {
         if ($native) {
             return round($value, $precision, $mode);
@@ -182,10 +182,10 @@ class Kohana_Num
      * @return  float
      * @throws Kohana_Exception
      */
-    public static function bytes($size)
+    public static function bytes(string $size): float
     {
         // Prepare the size
-        $size = trim((string) $size);
+        $size = trim($size);
 
         // Construct an OR list of byte units for the regex
         $accepted = implode('|', array_keys(Num::$byte_units));
