@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/muffetlab/kohana/issues"
   },
-  "homepage": "https://github.com/muffetlab/kohana#readme"
+  "homepage": "https://github.com/muffetlab/kohana#readme",
+  "devDependencies": {
+    "commit-and-tag-version": "^12.6.1"
+  },
+  "scripts": {
+    "release": "commit-and-tag-version"
+  }
 }
