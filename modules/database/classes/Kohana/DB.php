@@ -127,7 +127,7 @@ class Kohana_DB
      *
      *     $expression = DB::expr('COUNT(users.id)');
      *     $query = DB::update('users')->set(['login_count' => DB::expr('login_count + 1')])->where('id', '=', $id);
-     *     $users = ORM::factory('user')->where(DB::expr("BINARY `hash`"), '=', $hash)->find();
+     *     $users = ORM::factory('User')->where(DB::expr("BINARY `hash`"), '=', $hash)->find();
      *
      * @param string $string expression
      * @param array $parameters parameters
