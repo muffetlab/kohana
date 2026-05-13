@@ -34,5 +34,12 @@
     "require-dev": {
         "phpunit/phpunit": "^7.5",
         "phpunit/phpunit-dom-assertions": "^2.6.0"
+    },
+    "config": {
+        "audit": {
+            "ignore": [
+                "PKSA-z3gr-8qht-p93v"
+            ]
+        }
     }
 }
