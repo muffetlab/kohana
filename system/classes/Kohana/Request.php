@@ -266,10 +266,10 @@ class Kohana_Request implements HTTP_Request
      *     if (Request::initial() === Request::current())
      *          // Do something useful
      *
-     * @return  Request
+     * @return  Request|null
      * @since   3.1.0
      */
-    public static function initial(): Request
+    public static function initial(): ?Request
     {
         return Request::$initial;
     }
