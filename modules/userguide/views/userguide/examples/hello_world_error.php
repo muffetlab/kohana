@@ -801,9 +801,6 @@
                     <td><code>xmlreader</code></td>
                 </tr>
                 <tr>
-                    <td><code>apache2handler</code></td>
-                </tr>
-                <tr>
                     <td><code>curl</code></td>
                 </tr>
                 <tr>
