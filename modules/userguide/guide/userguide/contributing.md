@@ -10,11 +10,11 @@ Make sure your commit messages are clear and descriptive. Bad: "docs(userguide):
 
 ## Quick Method
 
-To quickly point out something that needs improvement, report a [bug report](https://github.com/kilofox/kohana/issues/new).
+To quickly point out something that needs improvement, report a [bug report](https://github.com/muffetlab/kohana/issues/new).
 
 If you want to contribute some changes, you can do so right from your browser without even knowing git!
 
-You will need to fork the [kilofox/kohana](https://github.com/kilofox/kohana) repository by clicking on the Fork button in the top right.
+You will need to fork the [muffetlab/kohana](https://github.com/muffetlab/kohana) repository by clicking on the Fork button in the top right.
 
 ![Fork the module](contrib-github-fork.png)
 
@@ -32,7 +32,7 @@ Once your pull request has been accepted, you can delete your repository if you 
 
 ## If you know Git
 
-1. Fork the specific repo you want to contribute to on GitHub. (For example, go to https://github.com/kilofox/kohana and click the fork button.)
+1. Fork the specific repo you want to contribute to on GitHub. (For example, go to https://github.com/muffetlab/kohana and click the fork button.)
 
 2. Now you need to add your fork as a "git remote" to your application and ensure you are on the right branch.
 
