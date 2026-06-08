@@ -28,7 +28,7 @@ class Kohana_Request implements HTTP_Request
     public static $trusted_proxies = ['127.0.0.1', 'localhost', 'localhost.localdomain'];
 
     /**
-     * @var  Request  main request instance
+     * @var Request|null Main request instance
      */
     public static $initial;
 
