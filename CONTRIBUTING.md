@@ -13,7 +13,7 @@ Kohana uses the [Gitflow workflow](https://www.atlassian.com/git/tutorials/compa
 To work on the project you'd do the following:
 
 ```
-$ git clone git://github.com/kilofox/kohana.git
+$ git clone git://github.com/muffetlab/kohana.git
 ...
 $ cd kohana
 ...
@@ -23,7 +23,7 @@ Switched to branch 'develop'
 
 # Contributing to the project
 
-All features and bugfixes must be fully tested and reference an issue in [GitHub](https://github.com/kilofox/kohana/issues), **there are absolutely no exceptions**.
+All features and bugfixes must be fully tested and reference an issue in [GitHub](https://github.com/muffetlab/kohana/issues), **there are absolutely no exceptions**.
 
 It's highly recommended that you write/run unit tests during development as it can help you pick up on issues early on. See the Unit Testing section below.
 
@@ -124,4 +124,4 @@ Kohana currently uses PHPUnit for unit testing. This is installed with composer.
  * Run `php composer.phar install` from the root of this repository.
  * Finally, run `phing test`.
 
-This will run the unit tests for core and all the modules and tell you if anything failed. If you haven't changed anything, and you get failures, please [create a new issue on GitHub](https://github.com/kilofox/kohana/issues/new) and paste the output (including the error) in the issue.
+This will run the unit tests for core and all the modules and tell you if anything failed. If you haven't changed anything, and you get failures, please [create a new issue on GitHub](https://github.com/muffetlab/kohana/issues/new) and paste the output (including the error) in the issue.
