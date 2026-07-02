@@ -26,20 +26,19 @@ $error_id = uniqid('error');
 </style>
 <script type="text/javascript">
     document.documentElement.className = document.documentElement.className + ' js';
-    function koggle(elem)
-    {
+    function toggle(elem) {
         // Only works with the "style" attr
-        let disp;
+        let display;
         elem = document.getElementById(elem);
 
         if (elem.style && elem.style['display']) {
-            disp = elem.style['display'];
+            display = elem.style['display'];
         } else if (window.getComputedStyle) {
-            disp = document.defaultView.getComputedStyle(elem, null).getPropertyValue('display');
+            display = document.defaultView.getComputedStyle(elem, null).getPropertyValue('display');
         }
 
         // Toggle the state of the "display" style
-        elem.style.display = disp === 'block' ? 'none' : 'block';
+        elem.style.display = display === 'block' ? 'none' : 'block';
         return false;
     }
 </script>
@@ -56,13 +55,13 @@ $error_id = uniqid('error');
                     <p>
                         <span class="file">
                             <?php if ($step['file']): $source_id = $error_id . 'source' . $i; ?>
-                                <a href="#<?php echo $source_id ?>" onclick="return koggle('<?php echo $source_id ?>')"><?php echo Debug::path($step['file']) ?> [ <?php echo $step['line'] ?> ]</a>
+                                <a href="#<?php echo $source_id ?>" onclick="return toggle('<?php echo $source_id ?>')"><?php echo Debug::path($step['file']) ?> [ <?php echo $step['line'] ?> ]</a>
                             <?php else: ?>
                                 {<?php echo __('PHP internal call') ?>}
                             <?php endif ?>
                         </span>
                         &raquo;
-                        <?php echo $step['function'] ?>(<?php if ($step['args']): $args_id = $error_id . 'args' . $i; ?><a href="#<?php echo $args_id ?>" onclick="return koggle('<?php echo $args_id ?>')"><?php echo __('arguments') ?></a><?php endif ?>)
+                        <?php echo $step['function'] ?>(<?php if ($step['args']): $args_id = $error_id . 'args' . $i; ?><a href="#<?php echo $args_id ?>" onclick="return toggle('<?php echo $args_id ?>')"><?php echo __('arguments') ?></a><?php endif ?>)
                     </p>
                     <?php if (isset($args_id)): ?>
                         <div id="<?php echo $args_id ?>" class="collapsed">
@@ -84,10 +83,10 @@ $error_id = uniqid('error');
             <?php endforeach ?>
         </ol>
     </div>
-    <h2><a href="#<?php echo $env_id = $error_id . 'environment' ?>" onclick="return koggle('<?php echo $env_id ?>')"><?php echo __('Environment') ?></a></h2>
+    <h2><a href="#<?php echo $env_id = $error_id . 'environment' ?>" onclick="return toggle('<?php echo $env_id ?>')"><?php echo __('Environment') ?></a></h2>
     <div id="<?php echo $env_id ?>" class="content collapsed">
         <?php $included = get_included_files() ?>
-        <h3><a href="#<?php echo $env_id = $error_id . 'environment_included' ?>" onclick="return koggle('<?php echo $env_id ?>')"><?php echo __('Included files') ?></a> (<?php echo count($included) ?>)</h3>
+        <h3><a href="#<?php echo $env_id = $error_id . 'environment_included' ?>" onclick="return toggle('<?php echo $env_id ?>')"><?php echo __('Included files') ?></a> (<?php echo count($included) ?>)</h3>
         <div id="<?php echo $env_id ?>" class="collapsed">
             <table>
                 <?php foreach ($included as $file): ?>
@@ -98,7 +97,7 @@ $error_id = uniqid('error');
             </table>
         </div>
         <?php $included = get_loaded_extensions() ?>
-        <h3><a href="#<?php echo $env_id = $error_id . 'environment_loaded' ?>" onclick="return koggle('<?php echo $env_id ?>')"><?php echo __('Loaded extensions') ?></a> (<?php echo count($included) ?>)</h3>
+        <h3><a href="#<?php echo $env_id = $error_id . 'environment_loaded' ?>" onclick="return toggle('<?php echo $env_id ?>')"><?php echo __('Loaded extensions') ?></a> (<?php echo count($included) ?>)</h3>
         <div id="<?php echo $env_id ?>" class="collapsed">
             <table>
                 <?php foreach ($included as $file): ?>
@@ -110,7 +109,7 @@ $error_id = uniqid('error');
         </div>
         <?php foreach (['_SESSION', '_GET', '_POST', '_FILES', '_COOKIE', '_SERVER'] as $var): ?>
             <?php if (empty($GLOBALS[$var]) || !is_array($GLOBALS[$var])) continue ?>
-            <h3><a href="#<?php echo $env_id = $error_id . 'environment' . strtolower($var) ?>" onclick="return koggle('<?php echo $env_id ?>')">$<?php echo $var ?></a></h3>
+            <h3><a href="#<?php echo $env_id = $error_id . 'environment' . strtolower($var) ?>" onclick="return toggle('<?php echo $env_id ?>')">$<?php echo $var ?></a></h3>
             <div id="<?php echo $env_id ?>" class="collapsed">
                 <table>
                     <?php foreach ($GLOBALS[$var] as $key => $value): ?>

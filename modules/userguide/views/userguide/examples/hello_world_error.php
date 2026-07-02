@@ -22,20 +22,19 @@
 </style>
 <script type="text/javascript">
     document.documentElement.className = document.documentElement.className + ' js';
-    function koggle(elem)
-    {
+    function toggle(elem) {
         // Only works with the "style" attr
-        let disp;
+        let display;
         elem = document.getElementById(elem);
 
         if (elem.style && elem.style['display']) {
-            disp = elem.style['display'];
+            display = elem.style['display'];
         } else if (window.getComputedStyle) {
-            disp = document.defaultView.getComputedStyle(elem, null).getPropertyValue('display');
+            display = document.defaultView.getComputedStyle(elem, null).getPropertyValue('display');
         }
 
         // Toggle the state of the "display" style
-        elem.style.display = disp === 'block' ? 'none' : 'block';
+        elem.style.display = display === 'block' ? 'none' : 'block';
         return false;
     }
 </script>
@@ -61,10 +60,10 @@
             <li>
                 <p>
                     <span class="file">
-                        <a href="#error68b8f79f31e72source0" onclick="return koggle('error68b8f79f31e72source0')">SYSPATH/classes/Kohana/View.php [ 138 ]</a>
+                        <a href="#error68b8f79f31e72source0" onclick="return toggle('error68b8f79f31e72source0')">SYSPATH/classes/Kohana/View.php [ 138 ]</a>
                     </span>
                     &raquo;
-                    Kohana_View->set_filename(<a href="#error68b8f79f31e72args0" onclick="return koggle('error68b8f79f31e72args0')">arguments</a>)
+                    Kohana_View->set_filename(<a href="#error68b8f79f31e72args0" onclick="return toggle('error68b8f79f31e72args0')">arguments</a>)
                 </p>
                 <div id="error68b8f79f31e72args0" class="collapsed">
                     <table>
@@ -90,10 +89,10 @@
             <li>
                 <p>
                     <span class="file">
-                        <a href="#error68b8f79f31e72source1" onclick="return koggle('error68b8f79f31e72source1')">SYSPATH/classes/Kohana/View.php [ 32 ]</a>
+                        <a href="#error68b8f79f31e72source1" onclick="return toggle('error68b8f79f31e72source1')">SYSPATH/classes/Kohana/View.php [ 32 ]</a>
                     </span>
                     &raquo;
-                    Kohana_View->__construct(<a href="#error68b8f79f31e72args1" onclick="return koggle('error68b8f79f31e72args1')">arguments</a>)
+                    Kohana_View->__construct(<a href="#error68b8f79f31e72args1" onclick="return toggle('error68b8f79f31e72args1')">arguments</a>)
                 </p>
                 <div id="error68b8f79f31e72args1" class="collapsed">
                     <table>
@@ -123,10 +122,10 @@
             <li>
                 <p>
                     <span class="file">
-                        <a href="#error68b8f79f31e72source2" onclick="return koggle('error68b8f79f31e72source2')">SYSPATH/classes/Kohana/Controller/Template.php [ 33 ]</a>
+                        <a href="#error68b8f79f31e72source2" onclick="return toggle('error68b8f79f31e72source2')">SYSPATH/classes/Kohana/Controller/Template.php [ 33 ]</a>
                     </span>
                     &raquo;
-                    Kohana_View::factory(<a href="#error68b8f79f31e72args2" onclick="return koggle('error68b8f79f31e72args2')">arguments</a>)
+                    Kohana_View::factory(<a href="#error68b8f79f31e72args2" onclick="return toggle('error68b8f79f31e72args2')">arguments</a>)
                 </p>
                 <div id="error68b8f79f31e72args2" class="collapsed">
                     <table>
@@ -152,7 +151,7 @@
             <li>
                 <p>
                     <span class="file">
-                        <a href="#error68b8f79f31e72source3" onclick="return koggle('error68b8f79f31e72source3')">SYSPATH/classes/Kohana/Controller.php [ 70 ]</a>
+                        <a href="#error68b8f79f31e72source3" onclick="return toggle('error68b8f79f31e72source3')">SYSPATH/classes/Kohana/Controller.php [ 70 ]</a>
                     </span>
                     &raquo;
                     Kohana_Controller_Template->before()
@@ -182,10 +181,10 @@
             <li>
                 <p>
                     <span class="file">
-                        <a href="#error68b8f79f31e72source5" onclick="return koggle('error68b8f79f31e72source5')">SYSPATH/classes/Kohana/Request/Client/Internal.php [ 84 ]</a>
+                        <a href="#error68b8f79f31e72source5" onclick="return toggle('error68b8f79f31e72source5')">SYSPATH/classes/Kohana/Request/Client/Internal.php [ 84 ]</a>
                     </span>
                     &raquo;
-                    ReflectionMethod->invoke(<a href="#error68b8f79f31e72args5" onclick="return koggle('error68b8f79f31e72args5')">arguments</a>)
+                    ReflectionMethod->invoke(<a href="#error68b8f79f31e72args5" onclick="return toggle('error68b8f79f31e72args5')">arguments</a>)
                 </p>
                 <div id="error68b8f79f31e72args5" class="collapsed">
                     <table>
@@ -273,10 +272,10 @@
             <li>
                 <p>
                     <span class="file">
-                        <a href="#error68b8f79f31e72source6" onclick="return koggle('error68b8f79f31e72source6')">SYSPATH/classes/Kohana/Request/Client.php [ 110 ]</a>
+                        <a href="#error68b8f79f31e72source6" onclick="return toggle('error68b8f79f31e72source6')">SYSPATH/classes/Kohana/Request/Client.php [ 110 ]</a>
                     </span>
                     &raquo;
-                    Kohana_Request_Client_Internal->execute_request(<a href="#error68b8f79f31e72args6" onclick="return koggle('error68b8f79f31e72args6')">arguments</a>)
+                    Kohana_Request_Client_Internal->execute_request(<a href="#error68b8f79f31e72args6" onclick="return toggle('error68b8f79f31e72args6')">arguments</a>)
                 </p>
                 <div id="error68b8f79f31e72args6" class="collapsed">
                     <table>
@@ -363,10 +362,10 @@
             <li>
                 <p>
                     <span class="file">
-                        <a href="#error68b8f79f31e72source7" onclick="return koggle('error68b8f79f31e72source7')">SYSPATH/classes/Kohana/Request.php [ 822 ]</a>
+                        <a href="#error68b8f79f31e72source7" onclick="return toggle('error68b8f79f31e72source7')">SYSPATH/classes/Kohana/Request.php [ 822 ]</a>
                     </span>
                     &raquo;
-                    Kohana_Request_Client->execute(<a href="#error68b8f79f31e72args7" onclick="return koggle('error68b8f79f31e72args7')">arguments</a>)
+                    Kohana_Request_Client->execute(<a href="#error68b8f79f31e72args7" onclick="return toggle('error68b8f79f31e72args7')">arguments</a>)
                 </p>
                 <div id="error68b8f79f31e72args7" class="collapsed">
                     <table>
@@ -442,7 +441,7 @@
             <li>
                 <p>
                     <span class="file">
-                        <a href="#error68b8f79f31e72source8" onclick="return koggle('error68b8f79f31e72source8')">DOCROOT/index.php [ 64 ]</a>
+                        <a href="#error68b8f79f31e72source8" onclick="return toggle('error68b8f79f31e72source8')">DOCROOT/index.php [ 64 ]</a>
                     </span>
                     &raquo;
                     Kohana_Request->execute()
@@ -460,9 +459,9 @@
             </li>
         </ol>
     </div>
-    <h2><a href="#error68b8f79f31e72environment" onclick="return koggle('error68b8f79f31e72environment')">Environment</a></h2>
+    <h2><a href="#error68b8f79f31e72environment" onclick="return toggle('error68b8f79f31e72environment')">Environment</a></h2>
     <div id="error68b8f79f31e72environment" class="content collapsed">
-        <h3><a href="#error68b8f79f31e72environment_included" onclick="return koggle('error68b8f79f31e72environment_included')">Included files</a> (72)</h3>
+        <h3><a href="#error68b8f79f31e72environment_included" onclick="return toggle('error68b8f79f31e72environment_included')">Included files</a> (72)</h3>
         <div id="error68b8f79f31e72environment_included" class="collapsed">
             <table>
                 <tr>
@@ -683,7 +682,7 @@
                 </tr>
             </table>
         </div>
-        <h3><a href="#error4ac2453378034environment_loaded" onclick="return koggle('error4ac2453378034environment_loaded')">Loaded extensions</a> (41)</h3>
+        <h3><a href="#error4ac2453378034environment_loaded" onclick="return toggle('error4ac2453378034environment_loaded')">Loaded extensions</a> (41)</h3>
         <div id="error4ac2453378034environment_loaded" class="collapsed">
             <table>
                 <tr>
@@ -808,7 +807,7 @@
                 </tr>
             </table>
         </div>
-        <h3><a href="#error68b902f432065environment_server" onclick="return koggle('error68b902f432065environment_server')">$_SERVER</a></h3>
+        <h3><a href="#error68b902f432065environment_server" onclick="return toggle('error68b902f432065environment_server')">$_SERVER</a></h3>
         <div id="error68b902f432065environment_server" class="collapsed">
             <table>
                 <tr>
