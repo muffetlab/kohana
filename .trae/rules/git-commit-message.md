@@ -47,7 +47,8 @@ The scope MUST be enclosed in parentheses and specify the name of the affected r
 
 - Use the imperative, present tense: "change" not "changed" nor "changes"
 - Don't capitalize the first word of the description
-- Keep proper nouns, brands, and acronyms capitalized correctly (e.g., Google, OAuth2, Windows, ORM)
+- Keep proper nouns and brands capitalized correctly (e.g., Google, OAuth2, Windows)
+- Use the correct letter case for acronyms (e.g., URL, ORM, OAuth2)
 - No dot (.) at the end
 - Write in English
 
