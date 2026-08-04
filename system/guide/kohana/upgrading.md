@@ -39,8 +39,3 @@ the header helper methods instead:
   full list of accepted languages is not supported.
 - `$request->headers()->accepts_at_quality()` — returns the quality for a specific MIME type. Retrieving the full list
   of accepted content types is not supported.
-
-## UTF8
-
-The `UTF8::strlen()`, `UTF8::strpos()`, `UTF8::strrpos()`, `UTF8::substr()`, `UTF8::strtolower()`, `UTF8::strtoupper()`,
-and `UTF8::stristr()` methods were deprecated. Please use their equivalent multibyte string functions instead.

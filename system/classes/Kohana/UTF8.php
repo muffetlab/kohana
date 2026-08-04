@@ -149,7 +149,6 @@ class Kohana_UTF8
      *
      *     $length = UTF8::strlen($str);
      *
-     * @deprecated 3.5.0
      * @param string $str String being measured for length
      * @return  int
      * @uses    Kohana::$charset
@@ -165,7 +164,6 @@ class Kohana_UTF8
      *
      *     $position = UTF8::strpos($str, $search);
      *
-     * @deprecated 3.5.0
      * @param   string  $str    haystack
      * @param string $search Needle
      * @param int $offset Offset from which character in haystack to start searching
@@ -184,7 +182,6 @@ class Kohana_UTF8
      *
      *     $position = UTF8::strrpos($str, $search);
      *
-     * @deprecated 3.5.0
      * @param   string  $str    haystack
      * @param string $search Needle
      * @param int $offset Offset from which character in haystack to start searching
@@ -202,7 +199,6 @@ class Kohana_UTF8
      *
      *     $sub = UTF8::substr($str, $offset);
      *
-     * @deprecated 3.5.0
      * @param   string  $str    input string
      * @param int $offset Offset
      * @param int|null $length Length limit
@@ -246,7 +242,6 @@ class Kohana_UTF8
      *
      *     $str = UTF8::strtolower($str);
      *
-     * @deprecated 3.5.0
      * @param   string  $str mixed case string
      * @return  string
      * @author  Andreas Gohr <andi@splitbrain.org>
@@ -261,7 +256,6 @@ class Kohana_UTF8
      * Makes a UTF-8 string uppercase. This is a UTF8-aware version
      * of [strtoupper](https://www.php.net/strtoupper).
      *
-     * @deprecated 3.5.0
      * @param   string  $str mixed case string
      * @return  string
      * @author  Andreas Gohr <andi@splitbrain.org>
@@ -373,7 +367,6 @@ class Kohana_UTF8
      *
      *     $found = UTF8::stristr($str, $search);
      *
-     * @deprecated 3.5.0
      * @param   string  $str    input string
      * @param string $search Needle
      * @return  string|false Matched substring if found, false otherwise.
