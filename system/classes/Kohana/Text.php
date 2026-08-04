@@ -85,19 +85,20 @@ class Kohana_Text
      * @param string|null $end_char End character or entity
      * @param bool $preserve_words Enable or disable the preservation of words while limiting
      * @return  string
+     * @uses    UTF8::strlen
      */
     public static function limit_chars(string $str, int $limit = 100, string $end_char = null, bool $preserve_words = false): string
     {
         $end_char = $end_char === null ? '…' : $end_char;
 
-        if (trim($str) === '' || mb_strlen($str) <= $limit)
+        if (trim($str) === '' || UTF8::strlen($str) <= $limit)
             return $str;
 
         if ($limit <= 0)
             return $end_char;
 
         if ($preserve_words === false)
-            return rtrim(mb_substr($str, 0, $limit)) . $end_char;
+            return rtrim(UTF8::substr($str, 0, $limit)) . $end_char;
 
         // Don't preserve words. The limit is considered the top limit.
         // No strings with a length longer than $limit should be returned.
@@ -263,6 +264,7 @@ class Kohana_Text
      * @param string $replacement Replacement string
      * @param bool $replace_partial_words Replace words across word boundaries (space, period, etc.)
      * @return  string
+     * @uses    UTF8::strlen
      */
     public static function censor(string $str, array $badwords, string $replacement = '#', bool $replace_partial_words = true): string
     {
@@ -280,9 +282,9 @@ class Kohana_Text
         $regex = '!' . $regex . '!ui';
 
         // if $replacement is a single character: replace each of the characters of the bad word with $replacement
-        if (mb_strlen($replacement) === 1) {
+        if (UTF8::strlen($replacement) === 1) {
             return preg_replace_callback($regex, function($matches) use ($replacement) {
-                return str_repeat($replacement, mb_strlen($matches[1]));
+                return str_repeat($replacement, UTF8::strlen($matches[1]));
             }, $str);
         }
 

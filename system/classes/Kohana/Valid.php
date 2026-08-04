@@ -49,7 +49,7 @@ class Kohana_Valid
      */
     public static function min_length(string $value, int $length): bool
     {
-        return mb_strlen($value) >= $length;
+        return UTF8::strlen($value) >= $length;
     }
 
     /**
@@ -61,7 +61,7 @@ class Kohana_Valid
      */
     public static function max_length(string $value, int $length): bool
     {
-        return mb_strlen($value) <= $length;
+        return UTF8::strlen($value) <= $length;
     }
 
     /**
@@ -74,10 +74,10 @@ class Kohana_Valid
     public static function exact_length(string $value, $length): bool
     {
         if (is_array($length)) {
-            return in_array(mb_strlen($value), $length, true);
+            return in_array(UTF8::strlen($value), $length, true);
         }
 
-        return mb_strlen($value) === $length;
+        return UTF8::strlen($value) === $length;
     }
 
     /**
@@ -104,7 +104,7 @@ class Kohana_Valid
      */
     public static function email(string $email, bool $strict = false): bool
     {
-        if (mb_strlen($email) > 254) {
+        if (UTF8::strlen($email) > 254) {
             return false;
         }
 
