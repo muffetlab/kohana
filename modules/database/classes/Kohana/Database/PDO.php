@@ -125,6 +125,16 @@ class Kohana_Database_PDO extends Database
         $this->_connection->exec('SET NAMES ' . $this->quote($charset));
     }
 
+    /**
+     * Perform an SQL query of the given type.
+     *
+     * @param int $type Database::SELECT, Database::INSERT, etc.
+     * @param string $sql SQL query
+     * @param mixed $as_object result object class string, true for stdClass, false for assoc array
+     * @param array|null $params object construct parameters for result class
+     * @return Database_Result|array|int Database_Result for SELECT queries, list (insert ID, row count) for INSERT queries, or number of affected rows for all other queries
+     * @throws Database_Exception
+     */
     public function query(int $type, string $sql, $as_object = false, array $params = null)
     {
         // Make sure the database is connected
