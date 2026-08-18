@@ -17,10 +17,10 @@ interface Kohana_Cache_Tagging
      * Note : Some caching engines do not support
      * tagging
      *
-     * @param string $id id
-     * @param mixed $data data
-     * @param int|null $lifetime lifetime [Optional]
-     * @param array|null $tags tags [Optional]
+     * @param string $id ID of cache entry
+     * @param mixed $data Data to set to cache
+     * @param int|null $lifetime Lifetime in seconds
+     * @param array|null $tags Tags to associate with the cache entry
      * @return  bool
      */
     public function set_with_tags(string $id, $data, int $lifetime = null, array $tags = null): bool;
