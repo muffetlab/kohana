@@ -29,7 +29,8 @@
         "ext-mysqli": "*",
         "ext-openssl": "*",
         "ext-pdo": "*",
-        "ext-simplexml": "*"
+        "ext-simplexml": "*",
+        "michelf/php-markdown": "^1.9"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.5",

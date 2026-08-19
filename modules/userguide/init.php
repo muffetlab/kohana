@@ -25,18 +25,3 @@ Route::set('docs/guide', 'guide(/<module>(/<page>))', ['page' => '.+'])
         'action' => 'docs',
         'module' => '',
     ]);
-
-// Simple autoloader used to encourage PHPUnit to behave itself.
-class Markdown_Autoloader
-{
-    public static function autoload($class)
-    {
-        if ($class === 'Markdown_Parser' || $class === 'MarkdownExtra_Parser') {
-            include_once Kohana::find_file('vendor', 'markdown/markdown');
-        }
-    }
-
-}
-
-// Register the autoloader
-spl_autoload_register(['Markdown_Autoloader', 'autoload']);

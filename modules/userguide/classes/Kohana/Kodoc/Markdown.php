@@ -1,5 +1,7 @@
 <?php
 
+use Michelf\MarkdownExtra;
+
 /**
  * Custom Markdown parser for Kohana documentation.
  *
@@ -9,7 +11,7 @@
  * @copyright  (c) 2008-2013 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Kodoc_Markdown extends MarkdownExtra_Parser
+class Kohana_Kodoc_Markdown extends MarkdownExtra
 {
     /**
      * @var  string  base URL for links
@@ -95,16 +97,12 @@ class Kohana_Kodoc_Markdown extends MarkdownExtra_Parser
     {
         if ($matches[3] === '-' && preg_match('{^- }', $matches[1]))
             return $matches[0];
-        $level = $matches[3]{0} === '=' ? 1 : 2;
-        $attr = $this->_doHeaders_attr($matches[2]);
-
-        // Only auto-generate id if one doesn't exist
-        if (empty($attr)) {
-            $attr = ' id="' . $this->make_heading_id($matches[1]) . '"';
-        }
+        $level = $matches[3][0] === '=' ? 1 : 2;
+        $defaultId = $this->make_heading_id($matches[1]);
+        $attr = $this->doExtraAttributes("h$level", $matches[2] ?? '', $defaultId);
 
         // Add this header to the page toc
-        $this->_add_to_toc($level, $matches[1], $this->make_heading_id($matches[1]));
+        $this->_add_to_toc($level, $matches[1], $defaultId);
 
         $block = "<h$level$attr>" . $this->runSpanGamut($matches[1]) . "</h$level>";
         return "\n" . $this->hashBlock($block) . "\n\n";
@@ -121,15 +119,11 @@ class Kohana_Kodoc_Markdown extends MarkdownExtra_Parser
     function _doHeaders_callback_atx($matches): string
     {
         $level = strlen($matches[1]);
-        $attr = $this->_doHeaders_attr($matches[3] ?? '');
-
-        // Only auto-generate id if one doesn't exist
-        if (empty($attr)) {
-            $attr = ' id="' . $this->make_heading_id($matches[2]) . '"';
-        }
+        $defaultId = $this->make_heading_id($matches[2]);
+        $attr = $this->doExtraAttributes("h$level", $matches[3] ?? '', $defaultId);
 
         // Add this header to the page toc
-        $this->_add_to_toc($level, $matches[2], $this->make_heading_id(empty($matches[3]) ? $matches[2] : $matches[3]));
+        $this->_add_to_toc($level, $matches[2], $defaultId);
 
         $block = "<h$level$attr>" . $this->runSpanGamut($matches[2]) . "</h$level>";
         return "\n" . $this->hashBlock($block) . "\n\n";
