@@ -82,11 +82,13 @@ h4 { margin: 1.23em 0 .615em; }
 h5 { margin: 1.33em 0 .67em; }
 h6 { margin: 1.6em 0 .8em; }
 th, td { padding: .8em; }
-caption { padding-bottom: .8em; } /* padding instead of margin for IE */
+
+caption {
+    margin-bottom: .8em;
+}
+
 blockquote { padding: 0 1em; margin: 1.6em 0; }
-fieldset { padding: 0 1em 1em 1em; margin: 1.6em 0; } /* padding-top is margin-top for fieldsets in Opera */
 legend { padding-left: .8em; padding-right: .8em; }
-legend+* { margin-top: 1em; } /* compensates for the opera margin bug */
 textarea, input { padding: .3em .4em .15em .4em; }
 select { padding: .1em .2em 0 .2em; }
 option { padding: 0 .4em; }
@@ -239,7 +241,6 @@ hr {background:#ddd;color:#ddd;clear:both;float:none;width:100%;height:.1em;marg
 hr.space {background:#fff;color:#fff;}
 .clearfix:after {content:".";display:block;height:0;clear:both;visibility:hidden;max-height:0;}
 .clearfix, .container {display:inline-block;}
-* html .clearfix, * html .container {height:1%;}
 .clearfix, .container {display:block;}
 .clear {clear:both;}
 
