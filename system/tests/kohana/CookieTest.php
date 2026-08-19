@@ -211,7 +211,6 @@ class Kohana_CookieTest extends Unittest_TestCase
                     'name' => 'foo',
                     'value' => 'bar',
                     'salt' => 'our-salt',
-                    'user-agent' => 'Chrome'
                 ],
                 ['name' => 'changed']
             ],
@@ -220,7 +219,6 @@ class Kohana_CookieTest extends Unittest_TestCase
                     'name' => 'foo',
                     'value' => 'bar',
                     'salt' => 'our-salt',
-                    'user-agent' => 'Chrome'
                 ],
                 ['value' => 'changed']
             ],
@@ -229,27 +227,8 @@ class Kohana_CookieTest extends Unittest_TestCase
                     'name' => 'foo',
                     'value' => 'bar',
                     'salt' => 'our-salt',
-                    'user-agent' => 'Chrome'
                 ],
                 ['salt' => 'changed-salt']
-            ],
-            [
-                [
-                    'name' => 'foo',
-                    'value' => 'bar',
-                    'salt' => 'our-salt',
-                    'user-agent' => 'Chrome'
-                ],
-                ['user-agent' => 'Firefox']
-            ],
-            [
-                [
-                    'name' => 'foo',
-                    'value' => 'bar',
-                    'salt' => 'our-salt',
-                    'user-agent' => 'Chrome'
-                ],
-                ['user-agent' => null]
             ],
         ];
     }
@@ -268,7 +247,6 @@ class Kohana_CookieTest extends Unittest_TestCase
         $hashes = [];
         foreach ([$first_args, $second_args] as $args) {
             Cookie::$salt = $args['salt'];
-            $this->set_or_remove_http_user_agent($args['user-agent']);
 
             $hashes[] = Cookie::salt($args['name'], $args['value']);
         }
@@ -312,21 +290,6 @@ class Kohana_CookieTest extends Unittest_TestCase
         $relevant_values = array_intersect_key(Kohana_CookieTest_TestableCookie::$_mock_cookies_set[0], $expected);
         $this->assertEquals($expected, $relevant_values);
     }
-
-    /**
-     * Configure the $_SERVER[HTTP_USER_AGENT] environment variable for the test
-     *
-     * @param string|null $user_agent
-     */
-    protected function set_or_remove_http_user_agent(?string $user_agent)
-    {
-        if ($user_agent === null) {
-            unset($_SERVER['HTTP_USER_AGENT']);
-        } else {
-            $_SERVER['HTTP_USER_AGENT'] = $user_agent;
-        }
-    }
-
 }
 
 /**

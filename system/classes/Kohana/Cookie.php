@@ -155,10 +155,7 @@ class Kohana_Cookie
             throw new Kohana_Exception('A valid cookie salt is required. Please set Cookie::$salt in your bootstrap.php. For more information check the documentation');
         }
 
-        // Determine the user agent
-        $agent = isset($_SERVER['HTTP_USER_AGENT']) ? strtolower($_SERVER['HTTP_USER_AGENT']) : 'unknown';
-
-        return hash_hmac('sha1', $agent . $name . $value . Cookie::$salt, Cookie::$salt);
+        return hash_hmac('sha1', $name . $value . Cookie::$salt, Cookie::$salt);
     }
 
     /**
