@@ -6,11 +6,14 @@
 Released under an [MIT license](https://kohana.top/license), Kohana can be used legally for any open source, commercial, or personal project.
 
 ## Supported Versions
-| Version    | PHP Compatibility                  | Initial Release     |
-|------------|------------------------------------|---------------------|
-| Kohana 3.3 | PHP 5.3, PHP 5.4, PHP 5.5, PHP 5.6 | October 23th, 2012  |
-| Kohana 3.4 | PHP 5.6, PHP 7.0, PHP 7.1          | December 25th, 2018 |
-| Kohana 3.5 | PHP 7.1, PHP 7.2, PHP 7.3          | December 31th, 2025 |
+| Release | Supported PHP versions | Released    | Active Support | Security Support | Latest                                                            |
+|---------|------------------------|-------------|----------------|------------------|-------------------------------------------------------------------|
+| 3.5     | 7.1 – 7.3              | 31 Dec 2025 | Yes            | Yes              | [3.5.1](https://github.com/muffetlab/kohana/releases/tag/v3.5.1)  |
+| 3.4     | 5.6 – 7.1              | 25 Dec 2018 | No             | Yes              | [3.4.4](https://github.com/muffetlab/kohana/releases/tag/v3.4.4)  |
+| 3.3     | 5.3 – 5.6              | 23 Oct 2012 | End of life    | End of life      | [3.3.6](https://github.com/muffetlab/kohana/releases/tag/v3.3.6)  |
+| 3.2     | 5.2 – 5.3              | 25 Jul 2011 | End of life    | End of life      | [3.2.3.1](https://github.com/kohana/kohana/releases/tag/v3.2.3.1) |
+| 3.1     | 5.2 – 5.3              | 08 Feb 2011 | End of life    | End of life      | [3.1.5](https://github.com/kohana/kohana/releases/tag/v3.1.5)     |
+| 3.0     | 5.2 – 5.3              | 17 Sep 2009 | End of life    | End of life      | [3.0.12](https://github.com/kohana/kohana/releases/tag/v3.0.12)   |
 
 ## Documentation
 Kohana's documentation can be found at <https://kohana.top/documentation> which also contains an API browser.
