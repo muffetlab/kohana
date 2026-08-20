@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.5.1](https://github.com/muffetlab/kohana/compare/v3.5.0...v3.5.1) (2026-08-20)
+
+### ⚠ BREAKING CHANGES
+
+* **system:** existing cookies will no longer be valid as the cookie salt calculation no longer includes the user agent
+
+### Bug Fixes
+
+* **orm:** add default select all columns for model queries ([843e3e4](https://github.com/muffetlab/kohana/commit/843e3e46695b089513f2d25817f1639e7823785c))
+* **system:** correct return type for Request::initial ([e88fcaf](https://github.com/muffetlab/kohana/commit/e88fcafd491c9f8533c2a54a327e1f12806ab457))
+* **system:** correct return type for Request::initial ([0fa9ff7](https://github.com/muffetlab/kohana/commit/0fa9ff796963806463556c15befc24653f1ac8d6))
+* **system:** remove user agent from cookie salt calculation ([c46f20a](https://github.com/muffetlab/kohana/commit/c46f20aa16599290d2d207f380d0982678c6181a))
+* **system:** send X-Content-Type-Options nosniff to all browsers ([907d175](https://github.com/muffetlab/kohana/commit/907d1751c5f8f1f5eec91c323b69e9eb2e443902))
+
+## [3.4.4](https://github.com/muffetlab/kohana/compare/v3.4.3...v3.4.4) (2025-12-31)
+
+### Features
+
+* add VENDOR_PATH constant for vendor directory ([b9c9048](https://github.com/muffetlab/kohana/commit/b9c90487ba5c30019bcc78b5527c6c607c534d6b))
+* **system:** add VENDOR_PATH constant support to Debug::path() method ([eab0a68](https://github.com/muffetlab/kohana/commit/eab0a68eae49acdd207947e89d33ab8f36f3d916))
+* **system:** remove the Mcrypt driver of Encrypt ([c079a78](https://github.com/muffetlab/kohana/commit/c079a78307dbe96b1318fef8f655c0e4ae539c66))
+
+### Bug Fixes
+
+* **Minion:** fix include path for index.php ([8c57e92](https://github.com/muffetlab/kohana/commit/8c57e92170e1156ea44b5014116b7ff1a7fa0b1c))
+* **ORM:** correct count for has_many through relationship ([7b20a66](https://github.com/muffetlab/kohana/commit/7b20a667b7a1d7cc29ea86bff9da3279a404c7e7))
+* **ORM:** correct the update query builder to use only table name ([f1f7eb8](https://github.com/muffetlab/kohana/commit/f1f7eb8e588367ac0912c3244ea7a91d5ca20a6f))
+* **ORM:** update user login count by simply incrementing it ([a1cd35b](https://github.com/muffetlab/kohana/commit/a1cd35b8311db4c747c40fe01dc1a74b631661a6))
+* **system:** enhance logic to skip introspection for non-existent function in debug backtraces ([85a5b26](https://github.com/muffetlab/kohana/commit/85a5b264d0219cb4ab2f2f5a8110f4434340d3bf))
+* **system:** ensure loaded files are treated as arrays in merge operations ([b41e5de](https://github.com/muffetlab/kohana/commit/b41e5de37b1e3f04c87ce5239660113bad8dba1f))
+* **system:** skip rule processing for empty fields earlier ([310f65a](https://github.com/muffetlab/kohana/commit/310f65a160db1e2b08f6d71c23c9c35fa4ca92e3))
 ## [3.5.0](https://github.com/muffetlab/kohana/compare/v3.4.3...v3.5.0) (2025-12-31)
 
 
@@ -42,32 +73,6 @@ All notable changes to this project will be documented in this file. See [commit
 * **system:** return empty array for undefined types instead of false in File::exts_by_mime() ([6a62704](https://github.com/muffetlab/kohana/commit/6a627042bd863b812acf3bb400346b8deafec349))
 * **system:** skip rule processing for empty fields earlier ([19403b1](https://github.com/muffetlab/kohana/commit/19403b1c64fa5677543688926b2c4f33afdf4bcc))
 * **UnitTest:** correct path constant definitions in bootstrap file ([90d96d3](https://github.com/muffetlab/kohana/commit/90d96d352cb8cc82ae777702f03618087aa33637))
-
-## [3.4.4](https://github.com/muffetlab/kohana/compare/v3.4.3...v3.4.4) (2025-12-31)
-
-
-### Bug Fixes
-
-* **Core:** correct PHP version comparison for openssl_encrypt and openssl_decrypt ([5f8318d](https://github.com/muffetlab/kohana/commit/5f8318de54abef0ef7e8897897cd5a5562162303))
-* **Core:** fix OpenSSL encryption and decryption to conditionally use AEAD parameters only when a tag is provided ([619b60c](https://github.com/muffetlab/kohana/commit/619b60c991301fdc6ab67e226c8fe6673c5a2996))
-* **Minion:** fix include path for index.php ([8c57e92](https://github.com/muffetlab/kohana/commit/8c57e92170e1156ea44b5014116b7ff1a7fa0b1c))
-* **ORM:** correct count for has_many through relationship ([7b20a66](https://github.com/muffetlab/kohana/commit/7b20a667b7a1d7cc29ea86bff9da3279a404c7e7))
-* **ORM:** correct the update query builder to use only table name ([f1f7eb8](https://github.com/muffetlab/kohana/commit/f1f7eb8e588367ac0912c3244ea7a91d5ca20a6f))
-* **ORM:** update user login count by simply incrementing it ([a1cd35b](https://github.com/muffetlab/kohana/commit/a1cd35b8311db4c747c40fe01dc1a74b631661a6))
-* **system:** enhance logic to skip introspection for non-existent function in debug backtraces ([85a5b26](https://github.com/muffetlab/kohana/commit/85a5b264d0219cb4ab2f2f5a8110f4434340d3bf))
-* **system:** ensure loaded files are treated as arrays in merge operations ([b41e5de](https://github.com/muffetlab/kohana/commit/b41e5de37b1e3f04c87ce5239660113bad8dba1f))
-* **system:** return empty array for undefined types instead of false in File::exts_by_mime() ([6a62704](https://github.com/muffetlab/kohana/commit/6a627042bd863b812acf3bb400346b8deafec349))
-* **system:** skip rule processing for empty fields earlier ([310f65a](https://github.com/muffetlab/kohana/commit/310f65a160db1e2b08f6d71c23c9c35fa4ca92e3))
-* **UnitTest:** correct path constant definitions in bootstrap file ([90d96d3](https://github.com/muffetlab/kohana/commit/90d96d352cb8cc82ae777702f03618087aa33637))
-
-
-### Features
-
-* add VENDOR_PATH constant for vendor directory ([b9c9048](https://github.com/muffetlab/kohana/commit/b9c90487ba5c30019bcc78b5527c6c607c534d6b))
-* **Image:** enforce minimum imagick version 3.6.0 via version check ([08436f3](https://github.com/muffetlab/kohana/commit/08436f38e99da99b51ebec25efacb4adc9994c20))
-* replace TestCase::assertTag() and TestCase::assertNotTag() with PHPUnit DOM Assertions ([403f6f5](https://github.com/muffetlab/kohana/commit/403f6f54ac53d99162f69aadad90e53368e89ebb))
-* **system:** add VENDOR_PATH constant support to Debug::path() method ([eab0a68](https://github.com/muffetlab/kohana/commit/eab0a68eae49acdd207947e89d33ab8f36f3d916))
-* **system:** deprecate legacy Kohana constants and properties ([33afbae](https://github.com/muffetlab/kohana/commit/33afbae4e8111030d5658b65cb64a96e7e68d25d))
 
 
 
