@@ -1,7 +1,7 @@
 
 Usage
 =======
-php minion.php --task=<?php echo $task; ?> [--option1=value1] [--option2=value2]
+php public/index.php --task=<?php echo $task; ?> [--option1=value1] [--option2=value2]
 
 Details
 =======

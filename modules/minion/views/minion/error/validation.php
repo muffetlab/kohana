@@ -5,6 +5,6 @@ Parameter Errors:
 
 Run
 
-php index.php --task=<?php echo $task ?> --help
+php public/index.php --task=<?php echo $task ?> --help
 
 for more help

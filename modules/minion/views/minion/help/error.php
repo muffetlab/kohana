@@ -1,7 +1,7 @@
 <?php echo $error; ?>
 
-Run 
+Run
 
-index.php --uri=minion
+php public/index.php --task=help
 
 for more help
