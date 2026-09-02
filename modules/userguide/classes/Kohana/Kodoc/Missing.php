@@ -6,7 +6,7 @@
  * extend this class, and get a warning in the API browser.
  *
  * @package    Kohana/Userguide
- * @category   Undocumented
+ * @category   Base
  * @author     Kohana Team
  * @copyright  (c) 2008-2013 Kohana Team
  * @license    https://kohana.top/license
