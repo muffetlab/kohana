@@ -1,3 +1,12 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+
+## [3.4.5](https://github.com/muffetlab/kohana/compare/v3.4.4...v3.4.5) (2026-09-02)
+
+### Bug Fixes
+
+* **system:** send X-Content-Type-Options nosniff to all browsers ([097476f](https://github.com/muffetlab/kohana/commit/097476f3f3b0431d79cc78ea570cfb1046b1ed7a))
 ## [3.4.4](https://github.com/muffetlab/kohana/compare/v3.4.3...v3.4.4) (2025-12-31)
 
 
@@ -102,6 +111,3 @@
 * Revert "Remove auth module" ([0d7cb4c](https://github.com/kilofox/kohana/commit/0d7cb4cdab10552d0c191e2374105e73c28f7ab9))
 * Revert "try php 5.4 again for travis" ([6659f64](https://github.com/kilofox/kohana/commit/6659f643dbee8a2eef9e3424803efec6d65e7d62))
 * Revert "Updated system tracking to latest kohana/core3.2/develop" ([b045d16](https://github.com/kilofox/kohana/commit/b045d16354375d7b7472734439aefc9ae05e4eb7))
-
-
-
