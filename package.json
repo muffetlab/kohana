@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/muffetlab/kohana#readme",
   "devDependencies": {
-    "commit-and-tag-version": "^12.6.1"
+    "commit-and-tag-version": "^13.1.2"
   },
   "scripts": {
     "release": "commit-and-tag-version"
