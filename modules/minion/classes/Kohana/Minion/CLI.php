@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Minion CLI helper class for command-line interaction utilities.
+ *
+ * Provides methods for parsing command-line options, reading user input (including hidden passwords), writing output
+ * with replaceable lines, waiting with countdown, and applying ANSI color codes.
+ *
+ * @package    Kohana
+ * @category   Minion
+ * @author     Kohana Team
+ * @copyright  (c) 2009-2011 Kohana Team
+ * @license    https://kohana.top/license
+ */
 class Kohana_Minion_CLI
 {
     public static $wait_msg = 'Press any key to continue...';
