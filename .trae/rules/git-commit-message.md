@@ -47,8 +47,8 @@ The scope MUST be enclosed in parentheses and specify the name of the affected r
 
 - Use the imperative, present tense: "change" not "changed" nor "changes"
 - Don't capitalize the first word of the description
-- Keep proper nouns and brands capitalized correctly (e.g., Google, OAuth2, Windows)
-- Use the correct letter case for acronyms (e.g., URL, ORM, OAuth2)
+- Keep proper nouns and brands capitalized correctly (e.g., Google, DocBlock, Windows)
+- Use the correct letter case for acronyms (e.g., URL, ORM, OAuth2, PHPDoc)
 - No dot (.) at the end
 - Write in English
 
@@ -74,6 +74,7 @@ To mark a BREAKING CHANGE:
 - `chore: update dependencies and bump npm package version`
 - `refactor(application)!: rename parse_attrs to parseAttrs`
 - `refactor(application): rename $xmlrpc to $xmlRpc` (NOT a breaking change, internal variable only)
+- `docs(system): update DocBlock @package annotations for ORM classes`
 
 Breaking change using footer:
 
