@@ -211,8 +211,8 @@ class Debug
      * replacing them with the plain text equivalents. Useful for debugging
      * when you want to display a shorter path.
      *
-     *     // Displays SYSPATH/classes/kohana.php
-     *     echo Debug::path(Kohana::find_file('classes', 'kohana'));
+     *     // Displays SYSPATH/classes/Kohana.php
+     *     echo Debug::path(Kohana::find_file('classes', 'Kohana'));
      *
      * @param string $file Path to debug
      * @return  string

@@ -39,16 +39,16 @@
     "autoload": {
         "psr-4": {
             "Kohana\\": [
-                "system/classes/Kohana",
-                "modules/auth/classes/Kohana",
-                "modules/cache/classes/Kohana",
+                "system/classes",
+                "modules/auth/classes",
+                "modules/cache/classes",
                 "modules/codebench/classes",
-                "modules/database/classes/Kohana",
-                "modules/image/classes/Kohana",
-                "modules/minion/classes/Kohana",
-                "modules/orm/classes/Kohana",
-                "modules/unittest/classes/Kohana",
-                "modules/userguide/classes/Kohana"
+                "modules/database/classes",
+                "modules/image/classes",
+                "modules/minion/classes",
+                "modules/orm/classes",
+                "modules/unittest/classes",
+                "modules/userguide/classes"
             ],
             "App\\": "application/classes"
         },

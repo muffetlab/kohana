@@ -62,8 +62,8 @@ class Kohana_DebugTest extends TestCase
                 'SYSPATH' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Kohana.php'
             ],
             [
-                MODPATH . $this->dirSeparator('unittest/classes/kohana/unittest/runner.php'),
-                $this->dirSeparator('MODPATH/unittest/classes/kohana/unittest/runner.php')
+                MODPATH . $this->dirSeparator('unittest/classes/Unittest/runner.php'),
+                $this->dirSeparator('MODPATH/unittest/classes/Unittest/runner.php')
             ],
         ];
     }

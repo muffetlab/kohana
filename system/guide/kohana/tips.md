@@ -34,7 +34,7 @@ Set your [Kohana::init] 'base_url' to the correct setting. The base URL should b
 There is a bug in php which can corrupt your session after a fatal error. A production server shouldn't have uncaught fatal errors, so this bug should only happen during development, when you do something stupid and cause a fatal error. On the next page load you will get a database connection error, then all subsequent page loads will display the following error:
 
     ErrorException [ Notice ]: Undefined index: id
-    MODPATH/orm/classes/kohana/orm.php [ 1308 ]
+    MODPATH/orm/classes/orm.php [ 1308 ]
 
 ### Solution   {#orm-session-sleep-solution}
 

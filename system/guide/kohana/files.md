@@ -21,7 +21,7 @@ This image is only shows certain files, but we can use it to illustrate some exa
 
 * If we used `View::factory('welcome')` it would call `Kohana::find_file('views','welcome')` which would return `application/views/welcome.php` because it takes precedence over `modules/common/views/welcome.php`. By doing this, you can overwrite things in a module without editing the modules files.
 
-* Classes are the exception to the cascade: they are not located with `Kohana::find_file`, but are autoloaded by Composer using the [PSR-4](autoloading) mappings in `composer.json`. The `Kohana\Cookie` class is always loaded from `system/classes/Kohana/Cookie.php` and `App\Controller\Welcome` from `application/classes/Controller/Welcome.php`. When a class may exist in both the application and the framework, [Kohana::find_class] resolves it in favor of the `App\` namespace.
+* Classes are the exception to the cascade: they are not located with `Kohana::find_file`, but are autoloaded by Composer using the [PSR-4](autoloading) mappings in `composer.json`. The `Kohana\Cookie` class is always loaded from `system/classes/Cookie.php` and `App\Controller\Welcome` from `application/classes/Controller/Welcome.php`. When a class may exist in both the application and the framework, [Kohana::find_class] resolves it in favor of the `App\` namespace.
 
 * If you used `View::factory('user')` it would call `Kohana::find_file('views','user')` which would return `modules/common/views/user.php`.
 
@@ -32,7 +32,7 @@ This image is only shows certain files, but we can use it to illustrate some exa
 The top level directories of the application, module, and system paths have the following default directories:
 
 classes/
-:  All classes that you want to [autoload](autoloading) should be stored here. This includes [controllers](mvc/controllers), [models](mvc/models), and all other classes. All classes must follow the [class naming conventions](conventions#class-names-and-file-location) and be mapped in the `psr-4` section of `composer.json`, i.e. the file name must match the case of the class, so `Kohana\Cookie` is stored in classes/Kohana/Cookie.php and `App\Controller\Welcome` in classes/Controller/Welcome.php.
+:  All classes that you want to [autoload](autoloading) should be stored here. This includes [controllers](mvc/controllers), [models](mvc/models), and all other classes. All classes must follow the [class naming conventions](conventions#class-names-and-file-location) and be mapped in the `psr-4` section of `composer.json`, i.e. the file name must match the case of the class, so `Kohana\Cookie` is stored in classes/Cookie.php and `App\Controller\Welcome` in classes/Controller/Welcome.php.
 
 config/
 :  Configuration files return an associative array of options that can be loaded using [Kohana::$config]. Config files are merged rather than overwritten by the cascade. See [config files](files/config) for more information.

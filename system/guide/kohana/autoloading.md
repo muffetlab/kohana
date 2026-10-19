@@ -25,15 +25,15 @@ The mappings for the framework and the application look like this (abbreviated):
     "autoload": {
         "psr-4": {
             "Kohana\\": [
-                "system/classes/Kohana",
-                "modules/auth/classes/Kohana",
-                "modules/cache/classes/Kohana"
+                "system/classes",
+                "modules/auth/classes",
+                "modules/cache/classes"
             ],
             "App\\": "application/classes"
         }
     }
 
-When the `Kohana\Cookie` class is first used, the `Kohana\` prefix is replaced with `system/classes/Kohana`, so the autoloader includes `system/classes/Kohana/Cookie.php`. In the same way, `App\Controller\Welcome` is loaded from `application/classes/Controller/Welcome.php`.
+When the `Kohana\Cookie` class is first used, the `Kohana\` prefix is replaced with `system/classes`, so the autoloader includes `system/classes/Cookie.php`. In the same way, `App\Controller\Welcome` is loaded from `application/classes/Controller/Welcome.php`.
 
 If you add classes in a new directory or namespace, map them in `composer.json` and run `composer dump-autoload`.
 

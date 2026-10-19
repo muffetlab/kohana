@@ -92,7 +92,7 @@ class Kohana_CoreTest extends TestCase
     public function test_find_file_no_extension()
     {
         // ".php" is manually appended to the _file name_, not passed as the extension
-        $path = Kohana::find_file('classes', $file = 'Kohana/Kohana.php', false);
+        $path = Kohana::find_file('classes', $file = 'Kohana.php', false);
 
         $this->assertIsString($path);
 
