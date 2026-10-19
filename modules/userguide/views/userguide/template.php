@@ -1,3 +1,11 @@
+<?php
+
+use Kohana\Kohana;
+use Kohana\HTML;
+use Kohana\Request;
+use Kohana\Route;
+
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>

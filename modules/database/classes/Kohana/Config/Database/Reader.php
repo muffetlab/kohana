@@ -1,5 +1,11 @@
 <?php
 
+namespace Kohana\Config\Database;
+
+use Kohana\Config\Reader as Kohana_Config_Reader;
+use Kohana\Database;
+use Kohana\DB;
+
 /**
  * Database reader for the kohana config system
  *
@@ -9,7 +15,7 @@
  * @copyright  (c) 2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Config_Database_Reader implements Kohana_Config_Reader
+class Reader implements Kohana_Config_Reader
 {
     protected $_db_instance;
     protected $_table_name = 'config';

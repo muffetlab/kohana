@@ -1,5 +1,13 @@
 <?php
 
+namespace Kohana\Cache;
+
+use Kohana\Cache;
+use Kohana\Cache\Arithmetic as Cache_Arithmetic;
+use Kohana\Cache\Exception as Cache_Exception;
+use Kohana\Arr;
+use Kohana\Cache\Memcached as Cache_Memcached;
+
 /**
  * [Kohana Cache](api/Kohana_Cache) Memcached driver. Provides a memcached based
  * driver for the Kohana Cache library.
@@ -74,7 +82,7 @@
  * @copyright  (c) 2018 Kohana Group
  * @license    https://kohana.top/license
  */
-class Kohana_Cache_Memcached extends Cache implements Cache_Arithmetic
+class Memcached extends Cache implements Cache_Arithmetic
 {
     // Memcached has a maximum cache lifetime of 30 days.
     const CACHE_CEILING = 2592000;
@@ -118,7 +126,7 @@ class Kohana_Cache_Memcached extends Cache implements Cache_Arithmetic
         parent::__construct($config);
 
         // Setup Memcached.
-        $this->memcached = new Memcached;
+        $this->memcached = new \Memcached;
 
         // Load servers from configuration.
         $servers = Arr::get($this->_config, 'servers');

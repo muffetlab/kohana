@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Cache;
+use Kohana\Kohana;
+
 /**
  * @package    Kohana/Cache/Memcached
  * @group      kohana

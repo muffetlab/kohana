@@ -10,6 +10,11 @@
  * In a production environment, it is safe to ignore notices and warnings.
  * Disable them by using: E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED
  */
+
+use Kohana\Minion\CLI;
+use Kohana\Minion\Task;
+use Kohana\Request;
+
 error_reporting(E_ALL);
 
 /**
@@ -51,10 +56,10 @@ require APPPATH . 'bootstrap.php';
 
 if (PHP_SAPI === 'cli') {
     // Try and load minion
-    class_exists('Minion_Task') or die('Please enable the Minion module for CLI support.');
-    set_exception_handler(['Minion_Exception', 'handler']);
+    class_exists('\Kohana\Minion\Task') or die('Please enable the Minion module for CLI support.');
+    set_exception_handler(['\Kohana\Minion\Exception', 'handler']);
 
-    Minion_Task::factory(Minion_CLI::options())->execute();
+    Task::factory(CLI::options())->execute();
 } else {
     /**
      * Execute the main request. A source of the URI can be passed, e.g., $_SERVER['PATH_INFO'].

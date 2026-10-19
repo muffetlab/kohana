@@ -1,5 +1,7 @@
 <?php
 
+namespace Kohana;
+
 /**
  * A port of [phputf8](http://phputf8.sourceforge.net/) to a unified set
  * of files. Provides multibyte aware replacement string functions.
@@ -22,7 +24,7 @@
  * @copyright  (c) 2005 Harry Fuecks
  * @license    https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
  */
-class Kohana_UTF8
+class UTF8
 {
     /**
      * @var  array  List of called methods that have had their required file included.

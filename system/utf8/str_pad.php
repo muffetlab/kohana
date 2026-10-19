@@ -1,5 +1,7 @@
 <?php
 
+use Kohana\UTF8;
+
 /**
  * UTF8::str_pad
  *
@@ -44,7 +46,7 @@ function _str_pad($str, $final_str_length, $pad_str = ' ', $pad_type = STR_PAD_R
         return $pad_left . $str . $pad_right;
     }
 
-    throw new UTF8_Exception("UTF8::str_pad: Unknown padding type (:pad_type)", [
+    throw new \Kohana\UTF8\Exception("UTF8::str_pad: Unknown padding type (:pad_type)", [
     ':pad_type' => $pad_type,
     ]);
 }

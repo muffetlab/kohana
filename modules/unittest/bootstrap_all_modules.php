@@ -1,5 +1,7 @@
 <?php
 
+use Kohana\Kohana;
+
 include_once('bootstrap.php');
 
 // Enable all modules we can find

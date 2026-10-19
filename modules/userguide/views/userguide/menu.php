@@ -1,3 +1,9 @@
+<?php
+
+use Kohana\HTML;
+use Kohana\Route;
+
+?>
 <h2>Modules</h2>
 
 <?php if (!empty($modules)): ?>
@@ -5,7 +11,7 @@
     <ul>
         <?php foreach ($modules as $url => $options): ?>
 
-            <li><?php echo html::anchor(Route::get('docs/guide')->uri(['module' => $url]), $options['name']) ?></li>
+            <li><?php echo HTML::anchor(Route::get('docs/guide')->uri(['module' => $url]), $options['name']) ?></li>
 
         <?php endforeach; ?>
     </ul>

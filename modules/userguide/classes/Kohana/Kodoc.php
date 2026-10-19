@@ -1,5 +1,11 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\Kodoc\ClassDoc as Kodoc_Class;
+use ReflectionClass;
+use Kohana\Kodoc\Markdown as Kodoc_Markdown;
+
 /**
  * Documentation generator.
  *
@@ -9,7 +15,7 @@
  * @copyright  (c) 2008-2013 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Kodoc
+class Kodoc
 {
     /**
      * @var string  PCRE fragment for matching 'Class', 'Class::method', 'Class::method()' or 'Class::$property'

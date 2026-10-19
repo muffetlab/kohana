@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Config;
+use Kohana\Config\Group;
+use Kohana\Unittest\TestCase;
+
 /**
  * Tests the Config group lib
  *
@@ -13,16 +17,16 @@
  * @copyright  (c) 2008-2014 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Config_GroupTest extends Kohana_Unittest_TestCase
+class Kohana_Config_GroupTest extends TestCase
 {
     /**
      * Create a mock Kohana_Config instance
      *
      * @return Kohana_Config
      */
-    public function get_mock_config(): Kohana_Config
+    public function get_mock_config(): Config
     {
-        return new Kohana_Config;
+        return new Config;
     }
 
     /**
@@ -33,13 +37,13 @@ class Kohana_Config_GroupTest extends Kohana_Unittest_TestCase
      * @param Kohana_Config|null $instance Instance of Kohana_Config
      * @return Kohana_Config_Group
      */
-    public function get_mock_group(string $group, array $config = [], Kohana_Config $instance = null): Kohana_Config_Group
+    public function get_mock_group(string $group, array $config = [], Config $instance = null): Group
     {
         if ($instance === null) {
             $instance = $this->get_mock_config();
         }
 
-        return new Kohana_Config_Group($instance, $group, $config);
+        return new Group($instance, $group, $config);
     }
 
     /**
@@ -132,7 +136,7 @@ class Kohana_Config_GroupTest extends Kohana_Unittest_TestCase
      */
     public function test_writes_changes_to_config()
     {
-        $mock = $this->getMockBuilder('Kohana_Config')
+        $mock = $this->getMockBuilder('\Kohana\Config')
             ->setMethods(['_write_config'])
             ->getMock();
 

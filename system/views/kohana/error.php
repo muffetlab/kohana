@@ -1,4 +1,8 @@
 <?php
+
+use Kohana\Kohana;
+use Kohana\Debug;
+
 // Unique error identifier
 $error_id = uniqid('error');
 ?>

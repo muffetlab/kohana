@@ -1,6 +1,8 @@
 <?php
 
 // Static file serving
+use Kohana\Route;
+
 Route::set('code-bench/media', 'code-bench-media(/<file>)', ['file' => '.+'])
     ->defaults([
         'controller' => 'Codebench',

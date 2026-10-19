@@ -1,11 +1,15 @@
 <?php
 
+namespace Kohana\Bench;
+
+use Kohana\Codebench;
+
 /**
  * @package    Kohana/Codebench
  * @category   Tests
  * @author     Geert De Deckere <geert@idoe.be>
  */
-class Bench_LtrimDigits extends Codebench
+class LtrimDigits extends Codebench
 {
     public $description = 'Chopping off leading digits: regex vs ltrim.';
     public $loops = 100000;

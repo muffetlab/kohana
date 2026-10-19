@@ -1,5 +1,16 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\HTTP\Request as HTTP_Request;
+use Kohana\Exception as Kohana_Exception;
+use Kohana\HTTP\Header as HTTP_Header;
+use Kohana\Request\Client\Internal as Request_Client_Internal;
+use Kohana\Request\Client\External as Request_Client_External;
+use Kohana\Request\Client as Request_Client;
+use Kohana\HTTP\Exception as HTTP_Exception;
+use Kohana\Request\Exception as Request_Exception;
+
 /**
  * Request. Uses the [Route] class to determine what
  * [Controller] to send the request to.
@@ -10,7 +21,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Request implements HTTP_Request
+class Request implements HTTP_Request
 {
     /**
      * @var  string  client user agent
@@ -817,7 +828,7 @@ class Kohana_Request implements HTTP_Request
         }
 
         if (!$this->_client instanceof Request_Client) {
-            throw new Request_Exception('Unable to execute :uri without a Kohana_Request_Client', [':uri' => $this->_uri]);
+            throw new Request_Exception('Unable to execute :uri without a Kohana\Request\Client', [':uri' => $this->_uri]);
         }
 
         return $this->_client->execute($this);

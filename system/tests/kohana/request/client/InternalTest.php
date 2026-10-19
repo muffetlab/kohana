@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Kohana;
+use Kohana\Request\Client\Internal;
+use Kohana\Unittest\TestCase;
+
 /**
  * Unit tests for internal request client
  *
@@ -15,7 +19,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Request_Client_InternalTest extends Unittest_TestCase
+class Kohana_Request_Client_InternalTest extends TestCase
 {
     protected $_log_object;
 
@@ -79,7 +83,7 @@ class Kohana_Request_Client_InternalTest extends Unittest_TestCase
     public function test_response_failure_status($directory, $controller, $action, $uri, $expected)
     {
         // Mock for request object
-        $request = $this->getMockBuilder('Request')
+        $request = $this->getMockBuilder('\Kohana\Request')
             ->setMethods(['directory', 'controller', 'action', 'uri', 'execute', 'method'])
             ->setConstructorArgs([$uri])
             ->getMock();
@@ -102,14 +106,14 @@ class Kohana_Request_Client_InternalTest extends Unittest_TestCase
 
         $request->expects($this->any())
             ->method('execute')
-            ->will($this->returnValue($this->createMock('Response')));
+            ->will($this->returnValue($this->createMock('\Kohana\Response')));
 
         // mock `method` method to avoid fatal errors in newer versions of PHPUnit
         $request->expects($this->any())
             ->method('method')
             ->withAnyParameters();
 
-        $internal_client = new Request_Client_Internal;
+        $internal_client = new Internal;
 
         $response = $internal_client->execute($request);
 

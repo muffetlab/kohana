@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\I18n;
+use Kohana\Unittest\TestCase;
+
 /**
  * Tests Kohana i18n class
  *
@@ -14,7 +17,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_I18nTest extends Unittest_TestCase
+class Kohana_I18nTest extends TestCase
 {
     /**
      * Default values for the environment, see setEnvironment
@@ -22,7 +25,7 @@ class Kohana_I18nTest extends Unittest_TestCase
      */
     // @codingStandardsIgnoreStart
     protected $environmentDefault = [
-        'I18n::$lang' => 'en-us',
+        '\Kohana\I18n::$lang' => 'en-us',
     ];
 
     // @codingStandardsIgnoreEnd

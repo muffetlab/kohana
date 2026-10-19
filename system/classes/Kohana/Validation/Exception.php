@@ -1,5 +1,10 @@
 <?php
 
+namespace Kohana\Validation;
+
+use Kohana\Exception as Kohana_Exception;
+use Kohana\Validation;
+
 /**
  * @package    Kohana
  * @category   Exceptions
@@ -7,7 +12,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Validation_Exception extends Kohana_Exception
+class Exception extends Kohana_Exception
 {
     /**
      * @var  object  Validation instance
@@ -21,7 +26,7 @@ class Kohana_Validation_Exception extends Kohana_Exception
      * @param int $code the exception code
      * @param Exception|null $previous
      */
-    public function __construct(Validation $array, $message = 'Failed to validate array', array $values = null, $code = 0, Exception $previous = null)
+    public function __construct(Validation $array, $message = 'Failed to validate array', array $values = null, $code = 0, \Exception $previous = null)
     {
         $this->array = $array;
 

@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Model;
+use Kohana\Unittest\TestCase;
+
 /**
  * This test only really exists for code coverage.
  *
@@ -14,7 +17,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_ModelTest extends Unittest_TestCase
+class Kohana_ModelTest extends TestCase
 {
     /**
      * Test the model's factory.
@@ -35,3 +38,6 @@ class Model_Foobar extends Model
 {
 
 }
+
+// PSR-4 bridge so \Kohana\Model::factory('Foobar') can resolve this test class.
+class_alias('Model_Foobar', 'Kohana\Model\Foobar');

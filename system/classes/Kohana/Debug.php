@@ -1,5 +1,10 @@
 <?php
 
+namespace Kohana;
+
+use ReflectionMethod;
+use ReflectionFunction;
+
 /**
  * Contains debugging and dumping tools.
  *
@@ -9,7 +14,7 @@
  * @copyright  (c) 2008-2014 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Debug
+class Debug
 {
     /**
      * Returns an HTML string of debugging information about any number of

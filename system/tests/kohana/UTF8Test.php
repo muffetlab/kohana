@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Unittest\TestCase;
+use Kohana\UTF8;
+
 /**
  * Tests Kohana_UTF8 class
  *
@@ -13,7 +16,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_UTF8Test extends Unittest_TestCase
+class Kohana_UTF8Test extends TestCase
 {
     /**
      * Provides test data for test_clean()
@@ -487,7 +490,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_str_pad_error()
     {
-        $this->expectException(UTF8_Exception::class);
+        $this->expectException(\Kohana\UTF8\Exception::class);
 
         UTF8::str_pad('Cocoñùт', 10, 'š', 15);
     }

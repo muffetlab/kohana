@@ -1,5 +1,10 @@
 <?php
 
+namespace Kohana\Database\Query\Builder;
+
+use Kohana\Database\Query\Builder as Database_Query_Builder;
+use Kohana\Database\Query\Builder\Where as Kohana_Database_Query_Builder_Where;
+
 /**
  * Database query builder for WHERE statements. See [Query Builder](/database/query/builder) for usage and examples.
  *
@@ -9,7 +14,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    https://kohana.top/license
  */
-abstract class Kohana_Database_Query_Builder_Where extends Database_Query_Builder
+abstract class Where extends Database_Query_Builder
 {
     // WHERE ...
     protected $_where = [];

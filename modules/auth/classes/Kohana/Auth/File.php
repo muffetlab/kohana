@@ -1,5 +1,10 @@
 <?php
 
+namespace Kohana\Auth;
+
+use Kohana\Auth;
+use Kohana\Arr;
+
 /**
  * File Auth driver.
  * [!!] this Auth driver does not support roles nor autologin.
@@ -9,7 +14,7 @@
  * @copyright  (c) 2007-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Auth_File extends Auth
+class File extends Auth
 {
     // User list
     protected $_users;

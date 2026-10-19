@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Cache;
+use Kohana\Kohana;
+
 if (isset($_ENV['TRAVIS'])) {
     // This is really hacky, but without it the result is permanently full of noise that makes it impossible to see
     // any unexpected skipped tests.

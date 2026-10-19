@@ -46,7 +46,7 @@ clearstatcache(true);
             </tr>
             <tr>
                 <th>System Directory</th>
-                <?php if (is_file(SYSPATH . 'classes/Kohana.php')): ?>
+                <?php if (is_file(SYSPATH . 'classes/Kohana/Kohana.php')): ?>
                     <td class="pass"><?= SYSPATH ?></td>
                 <?php else: $failed = true ?>
                     <td class="fail">The configured <code>system</code> directory does not exist or does not contain required files.</td>

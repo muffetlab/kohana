@@ -1,3 +1,10 @@
+<?php
+
+use Kohana\Debug;
+use Kohana\HTML;
+use Kohana\View;
+
+?>
 <h1>
     <?php echo $doc->modifiers, $doc->class->name ?>
     <?php foreach ($doc->parents as $parent): ?>
@@ -40,7 +47,7 @@
     <?php if ($path = $doc->class->getFilename()): ?>
         Class declared in <samp><?php echo Debug::path($path) ?></samp> on line <?php echo $doc->class->getStartLine() ?>.
 <?php else: ?>
-    Class is not declared in a file, it is probably an internal <?php echo html::anchor('https://www.php.net/manual/en/class.' . strtolower($doc->class->name) . '.php', 'PHP class') ?>.
+    Class is not declared in a file, it is probably an internal <?php echo HTML::anchor('https://www.php.net/manual/en/class.' . strtolower($doc->class->name) . '.php', 'PHP class') ?>.
 <?php endif ?>
 </p>
 

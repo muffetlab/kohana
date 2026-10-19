@@ -1,5 +1,10 @@
 <?php
 
+namespace Kohana\Model;
+
+use Kohana\Kohana;
+use Kohana\Model;
+
 /**
  * Database Model base class.
  *
@@ -9,7 +14,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-abstract class Kohana_Model_Database extends Model
+abstract class Database extends Model
 {
     /**
      * Create a new model instance. A [Database] instance or configuration
@@ -25,7 +30,7 @@ abstract class Kohana_Model_Database extends Model
     public static function factory(string $name, $db = null): Model
     {
         // Add the model prefix
-        $class = 'Model_' . $name;
+        $class = Kohana::find_class('Model\\' . str_replace('_', '\\', $name));
 
         return new $class($db);
     }
@@ -49,12 +54,12 @@ abstract class Kohana_Model_Database extends Model
             $this->_db = $db;
         } elseif (!$this->_db) {
             // Use the default name
-            $this->_db = Database::$default;
+            $this->_db = \Kohana\Database::$default;
         }
 
         if (is_string($this->_db)) {
             // Load the database
-            $this->_db = Database::instance($this->_db);
+            $this->_db = \Kohana\Database::instance($this->_db);
         }
     }
 

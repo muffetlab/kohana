@@ -1,11 +1,16 @@
 <?php
 
+namespace Kohana\Bench;
+
+use Kohana\Codebench;
+use Kohana\HTML;
+
 /**
  * @package    Kohana/Codebench
  * @category   Tests
  * @author     Geert De Deckere <geert@idoe.be>
  */
-class Bench_AutoLinkEmails extends Codebench
+class AutoLinkEmails extends Codebench
 {
     public $description = 'Fixing <a href="http://dev.kohanaphp.com/issues/2772">#2772</a>, and comparing some possibilities.';
     public $loops = 1000;

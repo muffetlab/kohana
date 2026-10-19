@@ -113,7 +113,7 @@ function _to_unicode($str)
             } else {
                 // (0xC0 & (*in)) != 0x80 && m_state != 0
                 // Incomplete multi-octet sequence
-                throw new UTF8_Exception("UTF8::to_unicode: Incomplete multi-octet sequence in UTF-8 at byte ':byte'", [
+                throw new \Kohana\UTF8\Exception("UTF8::to_unicode: Incomplete multi-octet sequence in UTF-8 at byte ':byte'", [
                 ':byte' => $i,
                 ]);
             }

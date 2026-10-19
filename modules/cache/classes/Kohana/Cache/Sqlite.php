@@ -1,5 +1,15 @@
 <?php
 
+namespace Kohana\Cache;
+
+use Kohana\Cache;
+use Kohana\Cache\Tagging as Cache_Tagging;
+use Kohana\Cache\GarbageCollect as Cache_GarbageCollect;
+use Kohana\Arr;
+use Kohana\Cache\Exception as Cache_Exception;
+use PDO;
+use PDOException;
+
 /**
  * Kohana Cache Sqlite Driver
  *
@@ -11,7 +21,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Cache_Sqlite extends Cache implements Cache_Tagging, Cache_GarbageCollect
+class Sqlite extends Cache implements Cache_Tagging, Cache_GarbageCollect
 {
     /**
      * Database resource

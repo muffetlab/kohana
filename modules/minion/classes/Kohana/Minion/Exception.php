@@ -1,5 +1,11 @@
 <?php
 
+namespace Kohana\Minion;
+
+use Kohana\Exception as Kohana_Exception;
+use Throwable;
+use Kohana\Minion\Exception as Minion_Exception;
+
 /**
  * Minion exception
  *
@@ -9,7 +15,7 @@
  * @copyright  (c) 2009-2011 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Minion_Exception extends Kohana_Exception
+class Exception extends Kohana_Exception
 {
     /**
      * Inline exception handler, displays the error message, source of the
@@ -41,7 +47,7 @@ class Kohana_Minion_Exception extends Kohana_Exception
             }
 
             exit($exit_code);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Clean the output buffer if one exists
             ob_get_level() and ob_clean();
 

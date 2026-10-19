@@ -1,5 +1,13 @@
 <?php
 
+namespace Kohana\Kodoc;
+
+use Kohana\Kodoc;
+use ReflectionProperty;
+use Reflection;
+use Kohana\Kodoc\Markdown as Kodoc_Markdown;
+use Kohana\Debug;
+
 /**
  * Class property documentation generator.
  *
@@ -9,7 +17,7 @@
  * @copyright  (c) 2008-2013 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Kodoc_Property extends Kodoc
+class Property extends Kodoc
 {
     /**
      * @var  object  ReflectionProperty

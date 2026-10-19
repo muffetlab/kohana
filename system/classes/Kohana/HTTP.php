@@ -1,5 +1,12 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\HTTP\Exception as HTTP_Exception;
+use Kohana\HTTP\Exception\Redirect as HTTP_Exception_Redirect;
+use Kohana\Exception as Kohana_Exception;
+use Kohana\HTTP\Header as HTTP_Header;
+
 use http\Env;
 use http\Header;
 
@@ -18,7 +25,7 @@ use http\Header;
  * @copyright  (c) 2008-2014 Kohana Team
  * @license    https://kohana.top/license
  */
-abstract class Kohana_HTTP
+abstract class HTTP
 {
     /**
      * @var string The default protocol to use if it cannot be detected

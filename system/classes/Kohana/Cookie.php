@@ -1,5 +1,9 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\Exception as Kohana_Exception;
+
 /**
  * Cookie helper.
  *
@@ -9,7 +13,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Cookie
+class Cookie
 {
     /**
      * @var  string  Magic salt to add to the cookie

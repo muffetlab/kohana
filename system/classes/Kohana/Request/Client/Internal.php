@@ -1,5 +1,17 @@
 <?php
 
+namespace Kohana\Request\Client;
+
+use Kohana\Request\Client as Request_Client;
+use Kohana\Request;
+use Kohana\Response;
+use Kohana\Kohana as Kohana;
+use Kohana\Profiler;
+use Kohana\HTTP\Exception as HTTP_Exception;
+use ReflectionClass;
+use Kohana\Exception as Kohana_Exception;
+use Exception;
+
 /**
  * Request Client for internal execution
  *
@@ -10,7 +22,7 @@
  * @license    https://kohana.top/license
  * @since      3.1.0
  */
-class Kohana_Request_Client_Internal extends Request_Client
+class Internal extends Request_Client
 {
     /**
      * @var    array
@@ -32,19 +44,23 @@ class Kohana_Request_Client_Internal extends Request_Client
      */
     public function execute_request(Request $request, Response $response): Response
     {
-        // Create the class prefix
-        $prefix = 'Controller_';
-
         // Directory
         $directory = $request->directory();
 
         // Controller
         $controller = $request->controller();
 
+        // Build the namespaced controller class name
+        $path = '';
+
         if ($directory) {
-            // Add the directory name to the class prefix
-            $prefix .= str_replace(['\\', '/'], '_', trim($directory, '/')) . '_';
+            // Convert the directory name to a namespace segment
+            $path = implode('\\', array_map('ucfirst', explode('_', str_replace(['\\', '/'], '_', trim($directory, '\\/'))))) . '\\';
         }
+
+        $name = implode('\\', array_map('ucfirst', explode('_', $controller)));
+
+        $controller_class = Kohana::find_class('Controller\\' . $path . $name);
 
         if (Kohana::$profiling) {
             // Set the benchmark name
@@ -66,15 +82,15 @@ class Kohana_Request_Client_Internal extends Request_Client
         Request::$current = $request;
 
         try {
-            if (!class_exists($prefix . $controller)) {
+            if (!class_exists($controller_class)) {
                 throw HTTP_Exception::factory(404, 'The requested URL :uri was not found on this server.', [':uri' => $request->uri()])->request($request);
             }
 
             // Load the controller using reflection
-            $class = new ReflectionClass($prefix . $controller);
+            $class = new ReflectionClass($controller_class);
 
             if ($class->isAbstract()) {
-                throw new Kohana_Exception('Cannot create instances of abstract :controller', [':controller' => $prefix . $controller]);
+                throw new Kohana_Exception('Cannot create instances of abstract :controller', [':controller' => $controller_class]);
             }
 
             // Create a new instance of the controller

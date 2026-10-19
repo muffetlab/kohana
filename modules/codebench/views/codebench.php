@@ -1,13 +1,10 @@
 <?php
 
-/**
- * Codebench — A benchmarking module.
- *
- * @package    Kohana/Codebench
- * @author     Kohana Team
- * @copyright  (c) 2009 Kohana Team
- * @license    https://kohana.top/license.html
- */
+use Kohana\Kohana;
+use Kohana\HTML;
+use Kohana\Text;
+use Kohana\URL;
+
 ?>
 <!DOCTYPE html>
 
@@ -152,7 +149,7 @@
 
         <form id="runner" method="post" action="<?php echo URL::site('codebench') ?>">
             <h1>
-                <input name="class" type="text" value="<?php echo $class !== '' ? $class : 'Bench_' ?>" size="25" title="Name of the Codebench library to run" />
+                <input name="class" type="text" value="<?php echo $class !== '' ? $class : "Kohana\\Bench\\" ?>" size="25" title="Name of the Codebench library to run" />
                 <input type="submit" value="Run" />
                 <?php if (!empty($class)) { ?>
                     <?php if (empty($codebench)) { ?>

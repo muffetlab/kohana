@@ -1,5 +1,13 @@
 <?php
 
+namespace Kohana;
+
+use Exception;
+use Traversable;
+use Kohana\Exception as Kohana_Exception;
+use Kohana\View as Kohana_View;
+use Kohana\View\Exception as View_Exception;
+
 /**
  * Acts as an object wrapper for HTML pages with embedded PHP, called "views".
  * Variables can be assigned with the view object and referenced locally within
@@ -11,7 +19,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_View
+class View
 {
     // Array of global variables
     protected static $_global_data = [];

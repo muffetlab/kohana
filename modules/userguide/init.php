@@ -1,6 +1,9 @@
 <?php
 
 // Static file serving (CSS, JS, images)
+use Kohana\Kohana;
+use Kohana\Route;
+
 Route::set('docs/media', 'guide-media(/<file>)', ['file' => '.+'])
     ->defaults([
         'controller' => 'Userguide',

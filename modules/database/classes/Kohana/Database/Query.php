@@ -1,5 +1,14 @@
 <?php
 
+namespace Kohana\Database;
+
+use Kohana\Database;
+use Exception;
+use Kohana\Exception as Kohana_Exception;
+use Kohana\Database\Query as Kohana_Database_Query;
+use Kohana\Kohana as Kohana;
+use Kohana\Database\Result\Cached as Database_Result_Cached;
+
 /**
  * Database query wrapper.  See [Parameterized Statements](database/query/parameterized) for usage and examples.
  *
@@ -9,7 +18,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Database_Query
+class Query
 {
     // Query type
     protected $_type;

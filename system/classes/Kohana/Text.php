@@ -1,5 +1,7 @@
 <?php
 
+namespace Kohana;
+
 /**
  * Text helper class. Provides simple methods for working with text.
  *
@@ -9,7 +11,7 @@
  * @copyright  (c) 2007-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Text
+class Text
 {
     /**
      * @var  array   number units and text equivalents
@@ -235,7 +237,7 @@ class Kohana_Text
     public static function ucfirst(string $string, string $delimiter = '-'): string
     {
         // Put the keys back the Case-Convention expected
-        return implode($delimiter, array_map('UTF8::ucfirst', explode($delimiter, $string)));
+        return implode($delimiter, array_map('\Kohana\UTF8::ucfirst', explode($delimiter, $string)));
     }
 
     /**
@@ -350,10 +352,10 @@ class Kohana_Text
     public static function auto_link_urls(string $text): string
     {
         // Find and replace all http/https/ftp/ftps links that are not part of an existing HTML anchor
-        $text = preg_replace_callback('~\b(?<!href="|">)(?:ht|f)tps?://[^<\s]+(?:/|\b)~i', 'Text::_auto_link_urls_callback1', $text);
+        $text = preg_replace_callback('~\b(?<!href="|">)(?:ht|f)tps?://[^<\s]+(?:/|\b)~i', '\Kohana\Text::_auto_link_urls_callback1', $text);
 
         // Find and replace all naked www.links.com (without http://)
-        return preg_replace_callback('~\b(?<!://|">)www(?:\.[a-z0-9][-a-z0-9]*+)+\.[a-z]{2,6}[^<\s]*\b~i', 'Text::_auto_link_urls_callback2', $text);
+        return preg_replace_callback('~\b(?<!://|">)www(?:\.[a-z0-9][-a-z0-9]*+)+\.[a-z]{2,6}[^<\s]*\b~i', '\Kohana\Text::_auto_link_urls_callback2', $text);
     }
 
     protected static function _auto_link_urls_callback1($matches): string
@@ -383,7 +385,7 @@ class Kohana_Text
         // Find and replace all email addresses that are not part of an existing HTML mailto anchor
         // Note: The "58;" negative lookbehind prevents matching of existing encoded HTML mailto anchors
         //       The HTML entity for a colon (:) is &#58; or &#058; or &#0058; etc.
-        return preg_replace_callback('~\b(?<!href="mailto:|58;)(?!\.)[-+_a-z0-9.]++(?<!\.)@(?![-.])[-a-z0-9.]+(?<!\.)\.[a-z]{2,6}\b(?!</a>)~i', 'Text::_auto_link_emails_callback', $text);
+        return preg_replace_callback('~\b(?<!href="mailto:|58;)(?!\.)[-+_a-z0-9.]++(?<!\.)@(?![-.])[-a-z0-9.]+(?<!\.)\.[a-z]{2,6}\b(?!</a>)~i', '\Kohana\Text::_auto_link_emails_callback', $text);
     }
 
     protected static function _auto_link_emails_callback($matches): string

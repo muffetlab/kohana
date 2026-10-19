@@ -1,5 +1,9 @@
 <?php
 
+namespace Kohana\Config;
+
+use Kohana\Config\Database\Writer as Config_Database_Writer;
+
 /**
  * Backwards compatibility extension for the database writer.
  *
@@ -9,7 +13,7 @@
  * @copyright  (c) 2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Config_Database extends Config_Database_Writer
+class Database extends Config_Database_Writer
 {
     
 }

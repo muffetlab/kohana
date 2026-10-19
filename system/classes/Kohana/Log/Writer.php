@@ -1,5 +1,10 @@
 <?php
 
+namespace Kohana\Log;
+
+use Kohana\Date;
+use Kohana\Log\Writer as Log_Writer;
+
 /**
  * Log writer abstract class. All [Log] writers must extend this class.
  *
@@ -9,7 +14,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-abstract class Kohana_Log_Writer
+abstract class Writer
 {
     /**
      * @var  string  timestamp format for log entries.

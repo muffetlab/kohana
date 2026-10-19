@@ -1,5 +1,11 @@
 <?php
 
+use Kohana\Kohana;
+use Kohana\Request;
+use Kohana\Request\Client\External;
+use Kohana\Request\Client\Stream;
+use Kohana\Unittest\TestCase;
+
 /**
  * Unit tests for external request client
  *
@@ -14,7 +20,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Request_Client_ExternalTest extends Unittest_TestCase
+class Kohana_Request_Client_ExternalTest extends TestCase
 {
     /**
      * Provider for test_factory()
@@ -23,19 +29,19 @@ class Kohana_Request_Client_ExternalTest extends Unittest_TestCase
      */
     public function provider_factory(): array
     {
-        Request_Client_External::$client = 'Request_Client_Stream';
+        External::$client = '\Kohana\Request\Client\Stream';
 
         $return = [
-            [[], null, 'Request_Client_Stream'],
-            [[], 'Request_Client_Stream', 'Request_Client_Stream'],
+            [[], null, '\Kohana\Request\Client\Stream'],
+            [[], '\Kohana\Request\Client\Stream', '\Kohana\Request\Client\Stream'],
         ];
 
         if (extension_loaded('curl')) {
-            $return[] = [[], 'Request_Client_Curl', 'Request_Client_Curl'];
+            $return[] = [[], '\Kohana\Request\Client\Curl', '\Kohana\Request\Client\Curl'];
         }
 
         if (extension_loaded('http')) {
-            $return[] = [[], 'Request_Client_HTTP', 'Request_Client_HTTP'];
+            $return[] = [[], '\Kohana\Request\Client\HTTP', '\Kohana\Request\Client\HTTP'];
         }
 
         return $return;
@@ -54,7 +60,7 @@ class Kohana_Request_Client_ExternalTest extends Unittest_TestCase
      */
     public function test_factory(array $params, ?string $client, string $expected)
     {
-        $this->assertInstanceOf($expected, Request_Client_External::factory($params, $client));
+        $this->assertInstanceOf($expected, External::factory($params, $client));
     }
 
     /**
@@ -101,7 +107,7 @@ class Kohana_Request_Client_ExternalTest extends Unittest_TestCase
     public function test_options($key, $value, array $expected)
     {
         // Create a mock external client
-        $client = new Request_Client_Stream;
+        $client = new Stream;
 
         $client->options($key, $value);
         $this->assertSame($expected, $client->options());
@@ -160,20 +166,20 @@ class Kohana_Request_Client_ExternalTest extends Unittest_TestCase
 
         // Create a mock Request
         $request = new Request('https://kohana.top/');
-        $request->method(HTTP_Request::POST)
+        $request->method(\Kohana\HTTP\Request::POST)
             ->headers('content-type', $content_type)
             ->body($body)
             ->post($post);
 
-        $client = $this->getMockForAbstractClass('Request_Client_External', [], '', true, true, true, ['_send_message']);
+        $client = $this->getMockForAbstractClass('\Kohana\Request\Client\External', [], '', true, true, true, ['_send_message']);
         $client->expects($this->once())
             ->method('_send_message')
             ->with($request)
-            ->will($this->returnValue($this->createMock('Response')));
+            ->will($this->returnValue($this->createMock('\Kohana\Response')));
 
         $request->client($client);
 
-        $this->assertInstanceOf('Response', $request->execute());
+        $this->assertInstanceOf('\Kohana\Response', $request->execute());
         $this->assertSame($expected['body'], $request->body());
         $this->assertSame($expected['content-type'], (string) $request->headers('content-type'));
 

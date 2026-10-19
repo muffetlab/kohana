@@ -1,15 +1,15 @@
 <?php
 
-if (!class_exists('Kohana')) {
+use Kohana\Unittest\Tests;
+
+if (!class_exists('\Kohana\Kohana')) {
     die('Please include the kohana bootstrap file (see README.markdown)');
 }
 
-if ($file = Kohana::find_file('classes', 'Unittest/Tests')) {
-    require_once $file;
-
+if (class_exists('\Kohana\Unittest\Tests')) {
     // PHPUnit requires a test suite class to be in this file,
     // so we create a faux one that uses the kohana base
-    class TestSuite extends Unittest_Tests
+    class TestSuite extends Tests
     {
         
     }

@@ -1,5 +1,14 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\Database\Query as Database_Query;
+use Kohana\Database\Query\Builder\Select as Database_Query_Builder_Select;
+use Kohana\Database\Query\Builder\Insert as Database_Query_Builder_Insert;
+use Kohana\Database\Query\Builder\Update as Database_Query_Builder_Update;
+use Kohana\Database\Query\Builder\Delete as Database_Query_Builder_Delete;
+use Kohana\Database\Expression as Database_Expression;
+
 /**
  * Provides a shortcut to get Database related objects for [making queries](../database/query).
  *
@@ -20,7 +29,7 @@
  * @copyright  (c) 2009 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_DB
+class DB
 {
     /**
      * Create a new [Database_Query] of the given type.

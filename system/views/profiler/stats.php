@@ -1,3 +1,10 @@
+<?php
+
+use Kohana\Kohana;
+use Kohana\HTML;
+use Kohana\Profiler;
+
+?>
 <style>
 <?php include Kohana::find_file('views', 'profiler/style', 'css') ?>
 </style>

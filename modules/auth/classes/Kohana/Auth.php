@@ -1,5 +1,9 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\Exception as Kohana_Exception;
+
 /**
  * User authorization library. Handles user login and logout, as well as secure
  * password hashing.
@@ -9,7 +13,7 @@
  * @copyright  (c) 2007-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-abstract class Kohana_Auth
+abstract class Auth
 {
     // Auth instances
     protected static $_instance;
@@ -31,7 +35,7 @@ abstract class Kohana_Auth
             }
 
             // Set the authentication class name
-            $class = 'Auth_' . ucfirst($type);
+            $class = Kohana::find_class('Auth\\' . ucfirst($type));
 
             // Create a new authentication instance
             Auth::$_instance = new $class($config->as_array());

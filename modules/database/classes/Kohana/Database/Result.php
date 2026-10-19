@@ -1,5 +1,16 @@
 <?php
 
+namespace Kohana\Database;
+
+use Countable;
+use Iterator;
+use SeekableIterator;
+use ArrayAccess;
+use Kohana\Database\Result as Database_Result;
+use Kohana\Database\Result\Cached as Database_Result_Cached;
+use Kohana\Exception as Kohana_Exception;
+use Kohana\Database\Result as Kohana_Database_Result;
+
 /**
  * Database result wrapper.  See [Results](/database/results) for usage and examples.
  *
@@ -9,7 +20,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    https://kohana.top/license
  */
-abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIterator, ArrayAccess
+abstract class Result implements Countable, Iterator, SeekableIterator, ArrayAccess
 {
     // Executed SQL for this result
     protected $_query;

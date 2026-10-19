@@ -1,5 +1,9 @@
 <?php
 
+namespace Kohana\Session;
+
+use Kohana\Session;
+
 /**
  * Cookie-based session class.
  *
@@ -9,7 +13,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Session_Cookie extends Session
+class Cookie extends Session
 {
     /**
      * @param string|null $id Session ID
@@ -18,7 +22,7 @@ class Kohana_Session_Cookie extends Session
      */
     protected function _read(string $id = null): ?string
     {
-        return Cookie::get($this->_name);
+        return \Kohana\Cookie::get($this->_name);
     }
 
     /**
@@ -36,7 +40,7 @@ class Kohana_Session_Cookie extends Session
      */
     protected function _write(): bool
     {
-        return Cookie::set($this->_name, $this->__toString(), $this->_lifetime);
+        return \Kohana\Cookie::set($this->_name, $this->__toString(), $this->_lifetime);
     }
 
     /**
@@ -52,7 +56,7 @@ class Kohana_Session_Cookie extends Session
      */
     protected function _destroy(): bool
     {
-        return Cookie::delete($this->_name);
+        return \Kohana\Cookie::delete($this->_name);
     }
 
 }

@@ -1,5 +1,14 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\Config\Source as Kohana_Config_Source;
+use Kohana\Config as Kohana_Config;
+use Kohana\Exception as Kohana_Exception;
+use Kohana\Config\Reader as Kohana_Config_Reader;
+use Kohana\Config\Group as Config_Group;
+use Kohana\Config\Writer as Kohana_Config_Writer;
+
 /**
  * Wrapper for configuration arrays. Multiple configuration readers can be
  * attached to allow loading configuration from files, database, etc.
@@ -16,7 +25,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Config
+class Config
 {
     // Configuration readers
     protected $_sources = [];

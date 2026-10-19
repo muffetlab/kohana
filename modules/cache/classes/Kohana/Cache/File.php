@@ -1,5 +1,20 @@
 <?php
 
+namespace Kohana\Cache;
+
+use Kohana\Cache;
+use Kohana\Cache\GarbageCollect as Cache_GarbageCollect;
+use Kohana\Arr;
+use Kohana\Kohana as Kohana;
+use SplFileInfo;
+use UnexpectedValueException;
+use Kohana\Cache\Exception as Cache_Exception;
+use Kohana\Cache\File as Cache_File;
+use ErrorException;
+use RuntimeException;
+use DirectoryIterator;
+use Exception;
+
 /**
  * [Kohana Cache](api/Kohana_Cache) File driver. Provides a file based
  * driver for the Kohana Cache library. This is one of the slowest
@@ -42,7 +57,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Cache_File extends Cache implements Cache_GarbageCollect
+class File extends Cache implements Cache_GarbageCollect
 {
     /**
      * Creates a hashed filename based on the string. This is used

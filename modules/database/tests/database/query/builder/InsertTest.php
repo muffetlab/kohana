@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\DB;
+use Kohana\Unittest\Database\TestCase;
+
 /**
  * @package    Kohana/Database
  * @group      kohana
@@ -11,7 +14,7 @@
  * @copyright  (c) 2025 Kohana Group
  * @license    https://kohana.top/license
  */
-class Kohana_Database_Query_Builder_InsertTest extends Kohana_Unittest_Database_TestCase
+class Kohana_Database_Query_Builder_InsertTest extends TestCase
 {
     public function setUp()
     {

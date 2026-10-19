@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Form;
+use Kohana\Unittest\TestCase;
+
 /**
  * Tests Kohana Form helper
  *
@@ -14,7 +17,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_FormTest extends Unittest_TestCase
+class Kohana_FormTest extends TestCase
 {
     /**
      * Defaults for this test
@@ -22,9 +25,9 @@ class Kohana_FormTest extends Unittest_TestCase
      */
     // @codingStandardsIgnoreStart
     protected $environmentDefault = [
-        'Kohana::$base_url' => '/',
+        '\Kohana\Kohana::$base_url' => '/',
         'HTTP_HOST' => 'kohanaframework.org',
-        'Kohana::$index_file' => '',
+        '\Kohana\Kohana::$index_file' => '',
     ];
 
     // @codingStandardsIgnoreEnd

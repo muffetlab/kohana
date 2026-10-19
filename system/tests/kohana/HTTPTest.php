@@ -1,5 +1,11 @@
 <?php
 
+use Kohana\Kohana;
+use Kohana\HTTP;
+use Kohana\HTTP\Exception\Redirect;
+use Kohana\Request;
+use Kohana\Unittest\TestCase;
+
 /**
  * Tests HTTP
  *
@@ -13,7 +19,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_HTTPTest extends Unittest_TestCase
+class Kohana_HTTPTest extends TestCase
 {
     protected $_inital_request;
 
@@ -50,8 +56,8 @@ class Kohana_HTTPTest extends Unittest_TestCase
      */
     // @codingStandardsIgnoreStart
     protected $environmentDefault = [
-        'Kohana::$base_url' => '/kohana/',
-        'Kohana::$index_file' => 'index.php',
+        '\Kohana\Kohana::$base_url' => '/kohana/',
+        '\Kohana\Kohana::$index_file' => 'index.php',
         'HTTP_HOST' => 'www.example.com',
     ];
 
@@ -67,19 +73,19 @@ class Kohana_HTTPTest extends Unittest_TestCase
             [
                 'http://www.example.org/',
                 301,
-                'HTTP_Exception_301',
+                '\Kohana\HTTP\Exception\E301',
                 'http://www.example.org/'
             ],
             [
                 '/page_one',
                 302,
-                'HTTP_Exception_302',
+                '\Kohana\HTTP\Exception\E302',
                 'http://www.example.com/kohana/index.php/page_one'
             ],
             [
                 'page_two',
                 303,
-                'HTTP_Exception_303',
+                '\Kohana\HTTP\Exception\E303',
                 'http://www.example.com/kohana/index.php/page_two'
             ],
         ];
@@ -100,7 +106,7 @@ class Kohana_HTTPTest extends Unittest_TestCase
     {
         try {
             HTTP::redirect($location, $code);
-        } catch (HTTP_Exception_Redirect $e) {
+        } catch (Redirect $e) {
             $response = $e->get_response();
 
             $this->assertInstanceOf($expected_exception, $e);

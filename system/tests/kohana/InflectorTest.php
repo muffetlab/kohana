@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Inflector;
+use Kohana\Unittest\TestCase;
+
 /**
  * Tests Kohana inflector class
  *
@@ -14,7 +17,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_InflectorTest extends Unittest_TestCase
+class Kohana_InflectorTest extends TestCase
 {
     /**
      * Provides test data for test_lang()

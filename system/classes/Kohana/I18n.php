@@ -1,5 +1,7 @@
 <?php
 
+namespace Kohana;
+
 /**
  * Internationalization (i18n) class. Provides language loading and translation
  * methods without dependencies on [gettext](https://www.php.net/gettext).
@@ -19,7 +21,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_I18n
+class I18n
 {
     /**
      * @var  string   target language: en-us, es-es, zh-cn, etc.
@@ -126,34 +128,6 @@ class Kohana_I18n
 
         // Cache the translation table locally
         return I18n::$_cache[$lang] = $table;
-    }
-
-}
-
-if (!function_exists('__')) {
-    /**
-     * Kohana translation/internationalization function. The PHP function
-     * [strtr](https://www.php.net/strtr) is used for replacing parameters.
-     *
-     *    __('Welcome back, :user', [':user' => $username]);
-     *
-     * [!!] The target language is defined by [I18n::$lang].
-     *
-     * @param string $string text to translate
-     * @param array|null $values values to replace in the translated text
-     * @param string $lang source language
-     * @return  string
-     * @uses    I18n::get
-     */
-    function __(string $string, array $values = null, string $lang = 'en-us'): string
-    {
-        if ($lang !== I18n::$lang) {
-            // The message and target languages are different
-            // Get the translation for this message
-            $string = I18n::get($string);
-        }
-
-        return empty($values) ? $string : strtr($string, $values);
     }
 
 }

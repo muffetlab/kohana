@@ -1,5 +1,13 @@
 <?php
 
+use Kohana\Arr;
+use Kohana\Controller;
+use Kohana\Request;
+use Kohana\Request\Client;
+use Kohana\Response;
+use Kohana\Route;
+use Kohana\Unittest\TestCase;
+
 /**
  * Unit tests for generic Request_Client class
  *
@@ -14,7 +22,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Request_ClientTest extends Unittest_TestCase
+class Kohana_Request_ClientTest extends TestCase
 {
     protected $_inital_request;
     protected static $_original_routes;
@@ -36,11 +44,11 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
 
         // Set a new Route to the ClientTest controller as the first route
         // This requires reflection as the API for editing defined routes is limited
-        $route_class = new ReflectionClass('Route');
+        $route_class = new ReflectionClass('\Kohana\Route');
         $routes_prop = $route_class->getProperty('_routes');
         $routes_prop->setAccessible(true);
 
-        self::$_original_routes = $routes_prop->getValue('Route');
+        self::$_original_routes = $routes_prop->getValue('\Kohana\Route');
 
         $routes = [
             'ko_request_clienttest' => new Route('<controller>/<action>/<data>', [
@@ -48,7 +56,7 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
                 ])
             ] + self::$_original_routes;
 
-        $routes_prop->setValue('Route', $routes);
+        $routes_prop->setValue('\Kohana\Route', $routes);
     }
 
     // @codingStandardsIgnoreStart - PHPUnit does not follow standards
@@ -59,10 +67,10 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
     {
         // @codingStandardsIgnoreEnd
         // Reset routes
-        $route_class = new ReflectionClass('Route');
+        $route_class = new ReflectionClass('\Kohana\Route');
         $routes_prop = $route_class->getProperty('_routes');
         $routes_prop->setAccessible(true);
-        $routes_prop->setValue('Route', self::$_original_routes);
+        $routes_prop->setValue('\Kohana\Route', self::$_original_routes);
 
         parent::tearDownAfterClass();
     }
@@ -427,7 +435,7 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
                     ]
                 ])
                 ->execute();
-        } catch (Request_Client_Recursion_Exception $e) {
+        } catch (\Kohana\Request\Client\Recursion\Exception $e) {
             // Verify that two requests were executed
             $this->assertEquals(2, $this->requests_executed);
             return;
@@ -444,7 +452,7 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
      * @param Response $response
      * @param Request_Client $client
      */
-    public function callback_assert_params(Request $request, Response $response, Request_Client $client)
+    public function callback_assert_params(Request $request, Response $response, Client $client)
     {
         $this->assertEquals('foo', $client->callback_params('constructor_param'));
         $this->assertEquals('bar', $client->callback_params('setter_param'));
@@ -466,7 +474,7 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
                 'follow' => true,
                 'header_callbacks' => [
                     'x-cb' => [$this, 'callback_assert_params'],
-                    'location' => 'Request_Client::on_header_location',
+                    'location' => '\Kohana\Request\Client::on_header_location',
                 ],
                 'callback_params' => [
                     'constructor_param' => 'foo'
@@ -512,3 +520,6 @@ class Controller_RequestClientDummy extends Controller
 }
 
 // End Controller_RequestClientDummy
+
+// PSR-4 bridge so the /requestclientdummy route can resolve this test controller.
+class_alias('Controller_RequestClientDummy', 'Kohana\Controller\Requestclientdummy');

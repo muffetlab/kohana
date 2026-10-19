@@ -1,5 +1,12 @@
 <?php
 
+namespace Kohana\Cache;
+
+use Kohana\Cache;
+use Kohana\Cache\Arithmetic as Cache_Arithmetic;
+use Kohana\Cache\Exception as Cache_Exception;
+use Kohana\Arr;
+
 /**
  * [Kohana Cache](api/Kohana_Cache) APCu data store driver for Kohana Cache
  * library.
@@ -39,7 +46,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Cache_Apcu extends Cache implements Cache_Arithmetic
+class Apcu extends Cache implements Cache_Arithmetic
 {
     /**
      * Check for existence of the APCu extension This method cannot be invoked externally. The driver must

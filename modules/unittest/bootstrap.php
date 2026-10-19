@@ -7,6 +7,9 @@
  * this bootstrap file somewhere else then you'll need to modify this value to
  * compensate.
  */
+
+use Kohana\Kohana;
+
 define('DOCROOT', realpath(__DIR__ . '/../../public') . DIRECTORY_SEPARATOR);
 
 /**

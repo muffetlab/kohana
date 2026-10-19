@@ -1,5 +1,10 @@
 <?php
 
+use Kohana\Kohana;
+use Kohana\HTTP\Header;
+use Kohana\Response;
+use Kohana\Unittest\TestCase;
+
 /**
  * Unit Tests for Kohana_HTTP_Header
  *
@@ -14,7 +19,7 @@
  * @copyright  (c) 2008-2014 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_HTTP_HeaderTest extends Unittest_TestCase
+class Kohana_HTTP_HeaderTest extends TestCase
 {
     /**
      * Provides data for test_accept_quality
@@ -65,7 +70,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
      */
     public function test_accept_quality(array $parts, array $expected)
     {
-        $out = HTTP_Header::accept_quality($parts);
+        $out = Header::accept_quality($parts);
 
         foreach ($out as $value) {
             $this->assertIsFloat($value);
@@ -126,7 +131,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
      */
     public function test_parse_accept_header(string $accept, array $expected)
     {
-        $this->assertSame($expected, HTTP_Header::parse_accept_header($accept));
+        $this->assertSame($expected, Header::parse_accept_header($accept));
     }
 
     /**
@@ -176,7 +181,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
      */
     public function test_parse_charset_header(?string $accept, array $expected)
     {
-        $this->assertSame($expected, HTTP_Header::parse_charset_header($accept));
+        $this->assertSame($expected, Header::parse_charset_header($accept));
     }
 
     /**
@@ -230,7 +235,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
      */
     public function test_parse_encoding_header(?string $accept, array $expected)
     {
-        $this->assertSame($expected, HTTP_Header::parse_encoding_header($accept));
+        $this->assertSame($expected, Header::parse_encoding_header($accept));
     }
 
     /**
@@ -299,7 +304,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
      */
     public function test_parse_language_header(?string $accept, array $expected)
     {
-        $this->assertSame($expected, HTTP_Header::parse_language_header($accept));
+        $this->assertSame($expected, Header::parse_language_header($accept));
     }
 
     /**
@@ -352,7 +357,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
      */
     public function test_create_cache_control(array $input, string $expected)
     {
-        $this->assertSame($expected, HTTP_Header::create_cache_control($input));
+        $this->assertSame($expected, Header::create_cache_control($input));
     }
 
     /**
@@ -405,7 +410,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
      */
     public function test_parse_cache_control(string $input, array $expected)
     {
-        $parsed = HTTP_Header::parse_cache_control($input);
+        $parsed = Header::parse_cache_control($input);
 
         $this->assertIsArray($parsed);
 
@@ -498,7 +503,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
     public function test_offsetSet(array $constructor, array $to_set, array $expected)
     // @codingStandardsIgnoreEnd
     {
-        $http_header = new HTTP_Header($constructor);
+        $http_header = new Header($constructor);
 
         $reflection = new ReflectionClass($http_header);
         $method = $reflection->getMethod('offsetSet');
@@ -582,7 +587,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
     public function test_offsetGet(array $state, string $key, $expected)
     // @codingStandardsIgnoreEnd
     {
-        $header = new HTTP_Header($state);
+        $header = new Header($state);
 
         $this->assertSame($expected, $header->offsetGet($key));
     }
@@ -650,7 +655,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
     public function test_offsetExists(array $state, string $key, bool $expected)
     // @codingStandardsIgnoreEnd
     {
-        $header = new HTTP_Header($state);
+        $header = new Header($state);
 
         $this->assertSame($expected, $header->offsetExists($key));
     }
@@ -718,7 +723,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
     public function test_offsetUnset(array $state, string $remove, array $expected)
     // @codingStandardsIgnoreEnd
     {
-        $header = new HTTP_Header($state);
+        $header = new Header($state);
         $header->offsetUnset($remove);
 
         $this->assertSame($expected, $header->getArrayCopy());
@@ -774,7 +779,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
      */
     public function test_parse_header_string(array $headers, array $expected)
     {
-        $http_header = new HTTP_Header([]);
+        $http_header = new Header([]);
 
         foreach ($headers as $header) {
 
@@ -869,7 +874,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
      */
     public function test_accepts_at_quality(array $state, string $accept, bool $explicit, $expected)
     {
-        $header = new HTTP_Header($state);
+        $header = new Header($state);
 
         $this->assertSame($expected, $header->accepts_at_quality($accept, $explicit));
     }
@@ -931,7 +936,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
      */
     public function test_preferred_accept(array $state, array $accepts, bool $explicit, $expected)
     {
-        $header = new HTTP_Header($state);
+        $header = new Header($state);
 
         $this->assertSame($expected, $header->preferred_accept($accepts, $explicit));
     }
@@ -988,7 +993,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
      */
     public function test_accepts_charset_at_quality(array $state, string $charset, float $expected)
     {
-        $header = new HTTP_Header($state);
+        $header = new Header($state);
 
         $this->assertSame($expected, $header->accepts_charset_at_quality($charset));
     }
@@ -1027,7 +1032,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
      */
     public function test_preferred_charset(array $state, array $charsets, string $expected)
     {
-        $header = new HTTP_Header($state);
+        $header = new Header($state);
 
         $this->assertSame($expected, $header->preferred_charset($charsets));
     }
@@ -1097,7 +1102,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
      */
     public function test_accepts_encoding_at_quality(array $state, string $encoding, bool $explicit, float $expected)
     {
-        $header = new HTTP_Header($state);
+        $header = new Header($state);
         $this->assertSame($expected, $header->accepts_encoding_at_quality($encoding, $explicit));
     }
 
@@ -1158,7 +1163,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
      */
     public function test_preferred_encoding(array $state, array $encodings, bool $explicit, $expected)
     {
-        $header = new HTTP_Header($state);
+        $header = new Header($state);
         $this->assertSame($expected, $header->preferred_encoding($encodings, $explicit));
     }
 
@@ -1235,7 +1240,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
      */
     public function test_accepts_language_at_quality(array $state, string $language, bool $explicit, float $expected)
     {
-        $header = new HTTP_Header($state);
+        $header = new Header($state);
         $this->assertSame($expected, $header->accepts_language_at_quality($language, $explicit));
     }
 
@@ -1304,7 +1309,7 @@ class Kohana_HTTP_HeaderTest extends Unittest_TestCase
      */
     public function test_preferred_language(array $state, array $languages, bool $explicit, string $expected)
     {
-        $header = new HTTP_Header($state);
+        $header = new Header($state);
         $this->assertSame($expected, $header->preferred_language($languages, $explicit));
     }
 

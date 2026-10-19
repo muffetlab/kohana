@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Kohana;
+use Kohana\Unittest\TestCase;
+use Kohana\Upload;
+
 /**
  * Tests Kohana upload class
  *
@@ -14,7 +18,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_UploadTest extends Unittest_TestCase
+class Kohana_UploadTest extends TestCase
 {
     /**
      * Provides test data for test_size()
@@ -111,7 +115,7 @@ class Kohana_UploadTest extends Unittest_TestCase
      */
     public function test_size_throws_exception_for_invalid_size()
     {
-        $this->expectException(Kohana_Exception::class);
+        $this->expectException(\Kohana\Exception::class);
 
         $this->setEnvironment([
             '_FILES' => [

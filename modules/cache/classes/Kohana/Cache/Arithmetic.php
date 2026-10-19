@@ -1,5 +1,7 @@
 <?php
 
+namespace Kohana\Cache;
+
 /**
  * Kohana Cache Arithmetic Interface, for basic cache integer based
  * arithmetic, addition and subtraction
@@ -11,7 +13,7 @@
  * @license    https://kohana.top/license
  * @since      3.2.0
  */
-interface Kohana_Cache_Arithmetic
+interface Arithmetic
 {
     /**
      * Increments a given value by the step value supplied.

@@ -6,10 +6,13 @@ The bootstrap is located at `application/bootstrap.php`. It is responsible for s
 
 ## Environment setup
 
-The bootstrap first sets the timezone and locale, and then adds Kohana's autoloader so the [cascading filesystem](files) works. You could add any other settings that all your application needed here.
+The bootstrap first registers the Composer autoloader so classes can be loaded on demand (see [Loading Classes](autoloading)), and then sets the timezone and locale. You could add any other settings that all your application needed here.
 
 ~~~
 // Sample excerpt from bootstrap.php with comments trimmed down
+
+// Register the Composer autoloader.
+require DOCROOT . '../vendor/autoload.php';
 
 // Set the default time zone.
 date_default_timezone_set('America/Chicago');
@@ -17,10 +20,7 @@ date_default_timezone_set('America/Chicago');
 // Set the default locale.
 setlocale(LC_ALL, 'en_US.utf-8');
 
-// Enable the Kohana autoloader.
-spl_autoload_register(['Kohana', 'auto_load']);
-
-// Enable the Kohana autoloader for unserialization.
+// Route class names found in serialized data through the autoloader.
 ini_set('unserialize_callback_func', 'spl_autoload_call');
 ~~~
 
@@ -36,11 +36,13 @@ Kohana::init([
 ]);
 
 // Attach the file writer to logging. Multiple writers are supported.
-Kohana::$log->attach(new Log_File(APPPATH . 'logs'));
+Kohana::$log->attach(new LogFile(APPPATH . 'logs'));
 
 // Attach a file reader to config. Multiple readers are supported.
-Kohana::$config->attach(new Config_File);
+Kohana::$config->attach(new ConfigFile);
 ~~~
+
+`LogFile` and `ConfigFile` are aliases for `Kohana\Log\File` and `Kohana\Config\File`, which are imported at the top of `application/bootstrap.php`.
 
 You can add conditional statements to make the bootstrap have different values based on certain settings. For example, detect whether we are live by checking `$_SERVER['HTTP_HOST']` and set caching, profiling, etc. accordingly. This is just an example, there are many different ways to accomplish the same thing.
 

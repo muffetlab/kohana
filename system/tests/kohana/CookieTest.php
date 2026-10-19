@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Cookie;
+use Kohana\Unittest\TestCase;
+
 /**
  * Tests the cookie class
  *
@@ -15,7 +18,7 @@
  * @copyright  (c) 2008-2014 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_CookieTest extends Unittest_TestCase
+class Kohana_CookieTest extends TestCase
 {
     const UNIX_TIMESTAMP = 1411040141;
     const COOKIE_EXPIRATION = 60;
@@ -31,7 +34,7 @@ class Kohana_CookieTest extends Unittest_TestCase
         Kohana_CookieTest_TestableCookie::$_mock_cookies_set = [];
 
         $this->setEnvironment([
-            'Cookie::$salt' => 'some-random-salt',
+            '\Kohana\Cookie::$salt' => 'some-random-salt',
             'HTTP_USER_AGENT' => 'cli'
         ]);
     }
@@ -44,10 +47,10 @@ class Kohana_CookieTest extends Unittest_TestCase
     public function test_set_creates_cookie_with_configured_cookie_options()
     {
         $this->setEnvironment([
-            'Cookie::$path' => '/path',
-            'Cookie::$domain' => 'my.domain',
-            'Cookie::$secure' => true,
-            'Cookie::$httponly' => false,
+            '\Kohana\Cookie::$path' => '/path',
+            '\Kohana\Cookie::$domain' => 'my.domain',
+            '\Kohana\Cookie::$secure' => true,
+            '\Kohana\Cookie::$httponly' => false,
         ]);
 
         Kohana_CookieTest_TestableCookie::set('cookie', 'value');
@@ -86,7 +89,7 @@ class Kohana_CookieTest extends Unittest_TestCase
     public function test_set_calculates_expiry_from_lifetime(?int $expiration, int $expect_expiry)
     {
         $this->setEnvironment([
-            'Cookie::$expiration' => self::COOKIE_EXPIRATION
+            '\Kohana\Cookie::$expiration' => self::COOKIE_EXPIRATION
         ]);
         Kohana_CookieTest_TestableCookie::set('foo', 'bar', $expiration);
         $this->assertSetCookieWith(['expire' => $expect_expiry]);
@@ -182,7 +185,7 @@ class Kohana_CookieTest extends Unittest_TestCase
      */
     public function test_salt_throws_with_no_configured_salt()
     {
-        $this->expectException(Kohana_Exception::class);
+        $this->expectException(\Kohana\Exception::class);
 
         Cookie::$salt = null;
         Cookie::salt('key', 'value');

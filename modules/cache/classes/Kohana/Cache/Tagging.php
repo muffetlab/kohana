@@ -1,5 +1,7 @@
 <?php
 
+namespace Kohana\Cache;
+
 /**
  * Kohana Cache Tagging Interface
  *
@@ -9,7 +11,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-interface Kohana_Cache_Tagging
+interface Tagging
 {
     /**
      * Set a value based on an id. Optionally add tags.

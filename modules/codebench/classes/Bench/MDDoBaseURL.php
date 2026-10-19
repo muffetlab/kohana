@@ -1,13 +1,17 @@
 <?php
 
+namespace Kohana\Bench;
+
+use Kohana\Codebench;
+
 /**
  * @package    Kohana/Codebench
  * @category   Tests
  * @author     Geert De Deckere <geert@idoe.be>
  */
-class Bench_MDDoBaseURL extends Codebench
+class MDDoBaseURL extends Codebench
 {
-    public $description = 'Optimization for the <code>doBaseURL()</code> method of <code>Kohana_Kodoc_Markdown</code>
+    public $description = 'Optimization for the <code>doBaseURL()</code> method of <code>Kohana\Kodoc\Markdown</code>
 		 for the Kohana Userguide.';
     public $loops = 10000;
     public $subjects = [

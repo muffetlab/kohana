@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Kodoc;
+use Kohana\Route;
+use Kohana\URL;
+
 /**
  * @group kohana
  * @group kohana.userguide

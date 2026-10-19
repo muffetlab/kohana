@@ -1,5 +1,12 @@
 <?php
 
+namespace Kohana\ORM\Validation;
+
+use Kohana\Exception as Kohana_Exception;
+use Kohana\Validation;
+use Kohana\ORM\Validation\Exception as Kohana_ORM_Validation_Exception;
+use Kohana\ORM\Validation\Exception as ORM_Validation_Exception;
+
 /**
  * ORM Validation exceptions.
  *
@@ -8,7 +15,7 @@
  * @copyright  (c) 2007-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_ORM_Validation_Exception extends Kohana_Exception
+class Exception extends Kohana_Exception
 {
     /**
      * Array of validation objects
@@ -32,7 +39,7 @@ class Kohana_ORM_Validation_Exception extends Kohana_Exception
      * @param int $code The error code for the exception
      * @param Exception|null $previous
      */
-    public function __construct($alias, Validation $object, $message = 'Failed to validate array', array $values = null, int $code = 0, Exception $previous = null)
+    public function __construct($alias, Validation $object, $message = 'Failed to validate array', array $values = null, int $code = 0, \Exception $previous = null)
     {
         $this->_alias = $alias;
         $this->_objects['_object'] = $object;

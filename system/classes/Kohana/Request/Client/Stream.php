@@ -1,5 +1,12 @@
 <?php
 
+namespace Kohana\Request\Client;
+
+use Kohana\Request\Client\External as Request_Client_External;
+use Kohana\Request;
+use Kohana\Response;
+use Kohana\HTTP\Request as HTTP_Request;
+
 /**
  * [Request_Client_External] Stream driver performs external requests using php
  * sockets. To use this driver, ensure the following is completed
@@ -17,7 +24,7 @@
  * @license    https://kohana.top/license
  * @uses       [PHP Streams](https://www.php.net/manual/en/book.stream.php)
  */
-class Kohana_Request_Client_Stream extends Request_Client_External
+class Stream extends Request_Client_External
 {
     /**
      * Sends the HTTP message [Request] to a remote server and processes

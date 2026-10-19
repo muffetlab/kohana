@@ -1,5 +1,14 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\HTTP\Response as HTTP_Response;
+use Kohana\HTTP\Header as HTTP_Header;
+use Kohana\Exception as Kohana_Exception;
+use Kohana\Response as Kohana_Response;
+use Exception;
+use Kohana\Request\Exception as Request_Exception;
+
 /**
  * Response wrapper. Created as the result of any [Request] execution
  * or utility method (i.e. Redirect). Implements standard HTTP
@@ -12,7 +21,7 @@
  * @license    https://kohana.top/license
  * @since      3.1.0
  */
-class Kohana_Response implements HTTP_Response
+class Response implements HTTP_Response
 {
     /**
      * Factory method to create a new [Response]. Pass properties

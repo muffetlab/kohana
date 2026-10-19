@@ -1,5 +1,13 @@
 <?php
 
+namespace Kohana\Unittest\Database;
+
+use Kohana\Unittest\Helpers as Kohana_Unittest_Helpers;
+use PDO;
+use Kohana\Kohana as Kohana;
+use Kohana\Database as Kohana_Database;
+use Kohana\Database;
+
 /**
  * TestCase for testing a database
  *
@@ -9,7 +17,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    https://kohana.top/license
  */
-abstract class Kohana_Unittest_Database_TestCase extends PHPUnit\Framework\TestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * Make sure PHPUnit backs up globals

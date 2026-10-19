@@ -1,5 +1,9 @@
 <?php
 
+namespace Kohana\Log;
+
+use Kohana\Log\Writer as Log_Writer;
+
 /**
  * STDERR log writer. Writes out messages to STDERR.
  *
@@ -9,7 +13,7 @@
  * @copyright  (c) 2008-2014 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Log_StdErr extends Log_Writer
+class StdErr extends Log_Writer
 {
     /**
      * Writes each of the messages to STDERR.

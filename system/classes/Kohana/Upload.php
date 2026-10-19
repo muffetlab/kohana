@@ -1,5 +1,10 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\Exception as Kohana_Exception;
+use ErrorException;
+
 /**
  * Upload helper class for working with uploaded files and [Validation].
  *
@@ -19,7 +24,7 @@
  * @copyright  (c) 2007-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Upload
+class Upload
 {
     /**
      * @var bool remove spaces in uploaded files

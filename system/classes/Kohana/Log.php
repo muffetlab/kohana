@@ -1,5 +1,10 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\Log\Writer as Log_Writer;
+use Kohana\Log as Kohana_Log;
+
 /**
  * Message logging with observer-based log writing.
  *
@@ -11,7 +16,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Log
+class Log
 {
     // Log message levels - Windows users see PHP Bug #18090
     const EMERGENCY = LOG_EMERG;    // 0

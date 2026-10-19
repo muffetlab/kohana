@@ -1,5 +1,17 @@
 <?php
 
+namespace Kohana\Kohana;
+
+use Kohana\Exception as Kohana_Exception;
+use Throwable;
+use Kohana\Response;
+use Kohana\Kohana as Kohana;
+use Kohana\Log;
+use Kohana\Debug;
+use Kohana\HTTP\Exception as HTTP_Exception;
+use ErrorException;
+use Kohana\View;
+
 /**
  * Kohana exception class. Translates exceptions using the [I18n] class.
  *
@@ -9,7 +21,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Kohana_Exception extends Exception
+class Exception extends \Exception
 {
     /**
      * @var  array  PHP error code => human-readable name
@@ -46,7 +58,7 @@ class Kohana_Kohana_Exception extends Exception
      * @param int|string $code the exception code
      * @param Exception|null $previous Previous exception
      */
-    public function __construct(string $message = '', array $variables = null, $code = 0, Exception $previous = null)
+    public function __construct(string $message = '', array $variables = null, $code = 0, \Exception $previous = null)
     {
         // Set the message
         $message = __($message, $variables);
@@ -107,7 +119,7 @@ class Kohana_Kohana_Exception extends Exception
 
             // Generate the response
             return Kohana_Exception::response($e);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             /**
              * Things are going *really* badly for us, We now have no choice
              * but to bail. Hard.
@@ -253,7 +265,7 @@ class Kohana_Kohana_Exception extends Exception
 
             // Set the response body
             $response->body($view->render());
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             /**
              * Things are going badly for us, Lets try to keep things under control by
              * generating a simpler response object.

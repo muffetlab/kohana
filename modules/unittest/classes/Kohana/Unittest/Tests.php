@@ -1,5 +1,12 @@
 <?php
 
+namespace Kohana\Unittest;
+
+use Kohana\Kohana as Kohana;
+use Kohana\Unittest\Tests as Unittest_tests;
+use Kohana\Unittest\TestSuite as Unittest_TestSuite;
+use PHPUnit_Util_Filter;
+
 /**
  * PHPUnit testsuite for kohana application
  *
@@ -10,7 +17,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Unittest_Tests
+class Tests
 {
     static protected $cache = [];
 
@@ -41,7 +48,7 @@ class Kohana_Unittest_Tests
         restore_exception_handler();
         restore_error_handler();
 
-        spl_autoload_register(['Unittest_tests', 'autoload']);
+        spl_autoload_register([self::class, 'autoload']);
 
         Unittest_tests::$cache = ($cache = Kohana::cache('unittest_whitelist_cache')) === null ? [] : $cache;
     }
@@ -56,7 +63,7 @@ class Kohana_Unittest_Tests
     {
         static $suite = null;
 
-        if ($suite instanceof PHPUnit\Framework\TestSuite) {
+        if ($suite instanceof \PHPUnit\Framework\TestSuite) {
             return $suite;
         }
 

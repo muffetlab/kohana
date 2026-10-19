@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Log;
+use Kohana\Unittest\TestCase;
+
 /**
  * Tests Kohana Logging API
  *
@@ -14,7 +17,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_LogTest extends Unittest_TestCase
+class Kohana_LogTest extends TestCase
 {
     /**
      * Tests that when a new logger is created the list of messages is initially
@@ -63,7 +66,7 @@ class Kohana_LogTest extends Unittest_TestCase
     public function test_attach_attaches_log_writer_and_returns_this()
     {
         $logger = new Log;
-        $writer = $this->getMockForAbstractClass('Log_Writer');
+        $writer = $this->getMockForAbstractClass('\Kohana\Log\Writer');
 
         $this->assertSame($logger, $logger->attach($writer));
 
@@ -88,7 +91,7 @@ class Kohana_LogTest extends Unittest_TestCase
     public function test_attach_attaches_log_writer_min_max_and_returns_this()
     {
         $logger = new Log;
-        $writer = $this->getMockForAbstractClass('Log_Writer');
+        $writer = $this->getMockForAbstractClass('\Kohana\Log\Writer');
 
         $this->assertSame($logger, $logger->attach($writer, Log::NOTICE, Log::CRITICAL));
 
@@ -114,7 +117,7 @@ class Kohana_LogTest extends Unittest_TestCase
     public function test_detach_removes_log_writer_and_returns_this()
     {
         $logger = new Log;
-        $writer = $this->getMockForAbstractClass('Log_Writer');
+        $writer = $this->getMockForAbstractClass('\Kohana\Log\Writer');
 
         $logger->attach($writer);
 

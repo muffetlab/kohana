@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Minion\Task;
+use Kohana\Unittest\TestCase;
+
 /**
  * Test case for Minion_Util
  *
@@ -11,7 +14,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Minion_TaskTest extends Kohana_Unittest_TestCase
+class Minion_TaskTest extends TestCase
 {
     /**
      * Provides test data for test_convert_task_to_class_name()
@@ -21,8 +24,8 @@ class Minion_TaskTest extends Kohana_Unittest_TestCase
     public function provider_convert_task_to_class_name(): array
     {
         return [
-            ['Task_Db_Migrate', 'db:migrate'],
-            ['Task_Db_Status', 'db:status'],
+            ['Task\Db\Migrate', 'db:migrate'],
+            ['Task\Db\Status', 'db:status'],
             ['', ''],
         ];
     }
@@ -38,7 +41,7 @@ class Minion_TaskTest extends Kohana_Unittest_TestCase
      */
     public function test_convert_task_to_class_name(string $expected, string $task_name)
     {
-        $this->assertSame($expected, Minion_Task::convert_task_to_class_name($task_name));
+        $this->assertSame($expected, Task::convert_task_to_class_name($task_name));
     }
 
     /**
@@ -49,7 +52,7 @@ class Minion_TaskTest extends Kohana_Unittest_TestCase
     public function provider_convert_class_to_task(): array
     {
         return [
-            ['db:migrate', 'Task_Db_Migrate'],
+            ['db:migrate', '\Kohana\Task\Db\Migrate'],
         ];
     }
 
@@ -64,7 +67,7 @@ class Minion_TaskTest extends Kohana_Unittest_TestCase
      */
     public function test_convert_class_to_task(string $expected, $class)
     {
-        $this->assertSame($expected, Minion_Task::convert_class_to_task($class));
+        $this->assertSame($expected, Task::convert_class_to_task($class));
     }
 
 }

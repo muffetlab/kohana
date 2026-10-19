@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Arr;
+use Kohana\Unittest\TestCase;
+
 /**
  * Tests the Arr lib that's shipped with kohana
  *
@@ -14,7 +17,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_ArrTest extends Unittest_TestCase
+class Kohana_ArrTest extends TestCase
 {
     /**
      * Provides test data for test_callback()

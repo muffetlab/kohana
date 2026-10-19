@@ -1,11 +1,15 @@
 <?php
 
+namespace Kohana\Bench;
+
+use Kohana\Codebench;
+
 /**
  * @package    Kohana/Codebench
  * @category   Tests
  * @author     Geert De Deckere <geert@idoe.be>
  */
-class Bench_ValidURL extends Codebench
+class ValidURL extends Codebench
 {
     public $description = 'filter_var vs regex:
 		 http://dev.kohanaframework.org/issues/2847';

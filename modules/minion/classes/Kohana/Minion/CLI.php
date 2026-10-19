@@ -1,5 +1,11 @@
 <?php
 
+namespace Kohana\Minion;
+
+use Kohana\Minion\CLI as Minion_CLI;
+use Kohana\Kohana as Kohana;
+use Kohana\Exception as Kohana_Exception;
+
 /**
  * Minion CLI helper class for command-line interaction utilities.
  *
@@ -12,7 +18,7 @@
  * @copyright  (c) 2009-2011 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Minion_CLI
+class CLI
 {
     public static $wait_msg = 'Press any key to continue...';
     protected static $foreground_colors = [

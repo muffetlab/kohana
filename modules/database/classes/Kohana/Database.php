@@ -1,5 +1,11 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\Exception as Kohana_Exception;
+use Kohana\Database\Query as Database_Query;
+use Kohana\Database\Expression as Database_Expression;
+
 /**
  * Database connection wrapper/helper.
  *
@@ -17,7 +23,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-abstract class Kohana_Database
+abstract class Database
 {
     // Query types
     const SELECT = 1;
@@ -69,7 +75,7 @@ abstract class Kohana_Database
             }
 
             // Set the driver class name
-            $driver = 'Database_' . ucfirst($config['type']);
+            $driver = Kohana::find_class('Database\\' . ucfirst($config['type']));
 
             // Create the database connection instance
             $driver = new $driver($name, $config);

@@ -1,5 +1,12 @@
 <?php
 
+namespace Kohana\Kodoc;
+
+use Kohana\Kodoc;
+use ReflectionMethod;
+use Reflection;
+use Kohana\Kodoc\Method\Param as Kodoc_Method_Param;
+
 /**
  * Class method documentation generator.
  *
@@ -9,7 +16,7 @@
  * @copyright  (c) 2008-2013 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Kodoc_Method extends Kodoc
+class Method extends Kodoc
 {
     /**
      * @var  ReflectionMethod  The ReflectionMethod for this class

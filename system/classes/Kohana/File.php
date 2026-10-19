@@ -1,5 +1,9 @@
 <?php
 
+namespace Kohana;
+
+use finfo;
+
 /**
  * File helper class.
  *
@@ -9,7 +13,7 @@
  * @copyright  (c) 2007-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_File
+class File
 {
     /**
      * Attempt to get the mime type from a file. This method is horribly

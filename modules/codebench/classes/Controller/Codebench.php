@@ -1,5 +1,13 @@
 <?php
 
+namespace Kohana\Controller;
+
+use Kohana\Controller\Template as Kohana_Controller_Template;
+use Kohana\Route;
+use Kohana\HTTP\Exception as HTTP_Exception;
+use Kohana\Kohana as Kohana;
+use Kohana\File;
+
 /**
  * Codebench — A benchmarking module.
  *
@@ -9,7 +17,7 @@
  * @copyright  (c) 2009 Kohana Team
  * @license    https://kohana.top/license.html
  */
-class Controller_Codebench extends Kohana_Controller_Template
+class Codebench extends Kohana_Controller_Template
 {
     // The codebench view
     public $template = 'codebench';
@@ -52,7 +60,7 @@ class Controller_Codebench extends Kohana_Controller_Template
         $this->template->class = (string) $class;
 
         // Try to load the class, then run it
-        if (Kohana::auto_load($class) === true) {
+        if (class_exists($class) && is_subclass_of($class, \Kohana\Codebench::class)) {
             $codebench = new $class;
             $this->template->codebench = $codebench->run();
         }

@@ -1,3 +1,9 @@
+<?php
+
+use Kohana\HTML;
+use Kohana\Text;
+
+?>
 <h1><?php echo 'Available Classes' ?></h1>
 
 <label for="kodoc-api-filter-box">Filter:</label>

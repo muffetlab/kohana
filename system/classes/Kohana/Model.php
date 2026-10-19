@@ -1,5 +1,7 @@
 <?php
 
+namespace Kohana;
+
 /**
  * Model base class. All models should extend this class.
  *
@@ -9,7 +11,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-abstract class Kohana_Model
+abstract class Model
 {
     /**
      * Create a new model instance.
@@ -22,7 +24,7 @@ abstract class Kohana_Model
     public static function factory(string $name): Model
     {
         // Add the model prefix
-        $class = 'Model_' . $name;
+        $class = Kohana::find_class('Model\\' . str_replace('_', '\\', $name));
 
         return new $class;
     }

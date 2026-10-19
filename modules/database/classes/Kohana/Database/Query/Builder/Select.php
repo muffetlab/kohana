@@ -1,5 +1,15 @@
 <?php
 
+namespace Kohana\Database\Query\Builder;
+
+use Kohana\Database\Query\Builder\Where as Database_Query_Builder_Where;
+use Kohana\Database;
+use Kohana\Database\Query\Builder\Select as Kohana_Database_Query_Builder_Select;
+use Kohana\Database\Query\Builder\Join as Database_Query_Builder_Join;
+use Kohana\DB;
+use Kohana\Database\Query\Builder\Select as Database_Query_Builder_Select;
+use Kohana\Exception as Kohana_Exception;
+
 /**
  * Database query builder for SELECT statements. See [Query Builder](/database/query/builder) for usage and examples.
  *
@@ -9,7 +19,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where
+class Select extends Database_Query_Builder_Where
 {
     // SELECT ...
     protected $_select = [];

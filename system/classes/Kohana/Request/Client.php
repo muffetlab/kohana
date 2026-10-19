@@ -1,5 +1,14 @@
 <?php
 
+namespace Kohana\Request;
+
+use Kohana\Request;
+use Kohana\Response;
+use Kohana\Request\Client\Recursion\Exception as Request_Client_Recursion_Exception;
+use Kohana\HTTP\Cache as HTTP_Cache;
+use Kohana\Arr;
+use Kohana\Request\Client as Request_Client;
+
 /**
  * Request Client. Processes a [Request] and handles [HTTP_Caching] if
  * available. Will usually return a [Response] object as a result of the
@@ -12,7 +21,7 @@
  * @license    https://kohana.top/license
  * @since      3.1.0
  */
-abstract class Kohana_Request_Client
+abstract class Client
 {
     /**
      * @var HTTP_Cache Caching library for request caching
@@ -38,7 +47,7 @@ abstract class Kohana_Request_Client
      * @var array  Callbacks to use when response contains given headers
      */
     protected $_header_callbacks = [
-        'Location' => 'Request_Client::on_header_location'
+        'Location' => '\Kohana\Request\Client::on_header_location'
     ];
 
     /**

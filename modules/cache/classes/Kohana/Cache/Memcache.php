@@ -1,5 +1,13 @@
 <?php
 
+namespace Kohana\Cache;
+
+use Kohana\Cache;
+use Kohana\Cache\Arithmetic as Cache_Arithmetic;
+use Kohana\Cache\Exception as Cache_Exception;
+use Kohana\Arr;
+use Kohana\Cache\Memcache as Cache_Memcache;
+
 /**
  * [Kohana Cache](api/Kohana_Cache) Memcache driver,
  *
@@ -85,7 +93,7 @@
  * @license    https://kohana.top/license
  * @deprecated 3.4.0
  */
-class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic
+class Memcache extends Cache implements Cache_Arithmetic
 {
     // Memcache has a maximum cache lifetime of 30 days
     const CACHE_CEILING = 2592000;
@@ -127,7 +135,7 @@ class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic
         parent::__construct($config);
 
         // Setup Memcache
-        $this->_memcache = new Memcache;
+        $this->_memcache = new \Memcache;
 
         // Load servers from configuration
         $servers = Arr::get($this->_config, 'servers');

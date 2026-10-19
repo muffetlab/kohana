@@ -1,5 +1,9 @@
 <?php
 
+namespace Kohana\Database\MySQLi;
+
+use Kohana\Database\Result as Database_Result;
+
 /**
  * MySQLi database result.   See [Results](/database/results) for usage and examples.
  *
@@ -9,7 +13,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Database_MySQLi_Result extends Database_Result
+class Result extends Database_Result
 {
     protected $_internal_row = 0;
 

@@ -1,5 +1,11 @@
 <?php
 
+namespace Kohana\HTTP\Exception;
+
+use Kohana\HTTP\Exception as HTTP_Exception;
+use Exception;
+use Kohana\Response;
+
 /**
  * "Expected" HTTP exception class. Used for all [HTTP_Exception]'s where a standard
  * Kohana error page should never be shown.
@@ -12,7 +18,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-abstract class Kohana_HTTP_Exception_Expected extends HTTP_Exception
+abstract class Expected extends HTTP_Exception
 {
     /**
      * @var  Response   Response Object

@@ -1,5 +1,11 @@
 <?php
 
+namespace Kohana\Database\Query\Builder;
+
+use Kohana\Database\Query\Builder\Where as Database_Query_Builder_Where;
+use Kohana\Database;
+use Kohana\Database\Query\Builder\Delete as Kohana_Database_Query_Builder_Delete;
+
 /**
  * Database query builder for DELETE statements. See [Query Builder](/database/query/builder) for usage and examples.
  *
@@ -9,7 +15,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Database_Query_Builder_Delete extends Database_Query_Builder_Where
+class Delete extends Database_Query_Builder_Where
 {
     // DELETE FROM ...
     protected $_table;

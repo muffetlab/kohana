@@ -1,5 +1,9 @@
 <?php
 
+namespace Kohana\Log;
+
+use Kohana\Log\Writer as Log_Writer;
+
 /**
  * Syslog log writer.
  *
@@ -9,7 +13,7 @@
  * @copyright  (c) 2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Log_Syslog extends Log_Writer
+class Syslog extends Log_Writer
 {
     /**
      * @var  string  The syslog identifier

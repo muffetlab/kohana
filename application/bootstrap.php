@@ -1,19 +1,16 @@
 <?php
 
+use Kohana\Kohana;
+use Kohana\HTTP;
+use Kohana\I18n;
+use Kohana\Config\File as ConfigFile;
+use Kohana\Log\File as LogFile;
+use Kohana\Route;
+
 // Register the Composer autoloader
 require DOCROOT . '../vendor/autoload.php';
 
 // -- Environment setup --------------------------------------------------------
-// Load the core Kohana class
-require SYSPATH . 'classes/Kohana/Core.php';
-
-if (is_file(APPPATH . 'classes/Kohana.php')) {
-    // Application extends the core
-    require APPPATH . 'classes/Kohana.php';
-} else {
-    // Load empty core extension
-    require SYSPATH . 'classes/Kohana.php';
-}
 
 /**
  * Set the default time zone.
@@ -32,23 +29,8 @@ date_default_timezone_set('America/Chicago');
 setlocale(LC_ALL, 'en_US.utf-8');
 
 /**
- * Enable the Kohana autoloader.
- *
- * @link https://kohana.top/guide/using.autoloading
- * @link https://www.php.net/function.spl-autoload-register
- */
-spl_autoload_register(['Kohana', 'auto_load']);
-
-/**
- * Optionally, you can enable a compatibility autoloader for use with
- * older modules that have not been updated for PSR-0.
- *
- * It is recommended to not enable this unless absolutely necessary.
- */
-//spl_autoload_register(['Kohana', 'auto_load_lowercase']);
-
-/**
- * Enable the Kohana autoloader for unserialization.
+ * Ensure that classes referenced but not yet loaded (e.g. in serialized
+ * data) are routed through the Composer autoloader.
  *
  * @link https://www.php.net/function.spl-autoload-call
  * @link https://www.php.net/var.configuration#unserialize-callback-func
@@ -81,7 +63,7 @@ if (isset($_SERVER['SERVER_PROTOCOL'])) {
  * saying "Couldn't find constant Kohana::<INVALID_ENV_NAME>"
  */
 if (isset($_SERVER['KOHANA_ENV'])) {
-    Kohana::$environment = constant('Kohana::' . strtoupper($_SERVER['KOHANA_ENV']));
+    Kohana::$environment = constant('Kohana\Kohana::' . strtoupper($_SERVER['KOHANA_ENV']));
 }
 
 /**
@@ -106,12 +88,12 @@ Kohana::init([
 /**
  * Attach the file writer to logging. Multiple writers are supported.
  */
-Kohana::$log->attach(new Log_File(APPPATH . 'logs'));
+Kohana::$log->attach(new LogFile(APPPATH . 'logs'));
 
 /**
  * Attach a file reader to config. Multiple readers are supported.
  */
-Kohana::$config->attach(new Config_File);
+Kohana::$config->attach(new ConfigFile);
 
 /**
  * Enable modules. Modules are referenced by a relative or absolute path.

@@ -1,5 +1,11 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\Exception as Kohana_Exception;
+use Exception;
+use Kohana\Route as Kohana_Route;
+
 /**
  * Routes are used to determine the controller and action for a requested URI.
  * Every route generates a regular expression which is used to match a URI
@@ -34,7 +40,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Route
+class Route
 {
     // Matches a URI group and captures the contents
     const REGEX_GROUP = '\(((?:(?>[^()]+)|(?R))*)\)';

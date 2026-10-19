@@ -1,5 +1,11 @@
 <?php
 
+namespace Kohana\Cache;
+
+use Kohana\Cache;
+use Kohana\Cache\Exception as Cache_Exception;
+use Kohana\Arr;
+
 /**
  * [Kohana Cache](api/Kohana_Cache) Wincache driver. Provides an opcode based
  * driver for the Kohana Cache library.
@@ -45,7 +51,7 @@
  * @license    https://kohana.top/license
  * @deprecated 3.5.0
  */
-class Kohana_Cache_Wincache extends Cache
+class Wincache extends Cache
 {
     /**
      * Check for existence of the wincache extension This method cannot be invoked externally. The driver must

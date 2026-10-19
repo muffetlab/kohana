@@ -1,5 +1,16 @@
 <?php
 
+namespace Kohana\Minion;
+
+use Kohana\Minion\Task as Minion_Task;
+use Kohana\Arr;
+use Kohana\Minion\Exception\InvalidTask as Minion_Exception_InvalidTask;
+use Kohana\Minion\Task as Kohana_Minion_Task;
+use Kohana\Validation;
+use Kohana\View;
+use Kohana\Kohana as Kohana;
+use ReflectionClass;
+
 /**
  * Interface that all minion tasks must implement
  *
@@ -9,7 +20,7 @@
  * @copyright  (c) 2009-2011 Kohana Team
  * @license    https://kohana.top/license
  */
-abstract class Kohana_Minion_Task
+abstract class Task
 {
     /**
      * The separator used to separate different levels of tasks
@@ -30,7 +41,7 @@ abstract class Kohana_Minion_Task
         if (empty($task))
             return '';
 
-        return 'Task_' . implode('_', array_map('ucfirst', explode(Minion_Task::$task_separator, $task)));
+        return 'Task\\' . implode('\\', array_map('ucfirst', explode(Minion_Task::$task_separator, $task)));
     }
 
     /**
@@ -45,7 +56,16 @@ abstract class Kohana_Minion_Task
             $class = get_class($class);
         }
 
-        return strtolower(str_replace('_', Minion_Task::$task_separator, substr($class, 5)));
+        $class = ltrim($class, '\\');
+
+        // Strip the "Task\" segment (and any leading namespace)
+        if (($position = strpos($class, '\\Task\\')) !== false) {
+            $class = substr($class, $position + 6);
+        } elseif (($position = strrpos($class, '\\')) !== false) {
+            $class = substr($class, $position + 1);
+        }
+
+        return strtolower(str_replace('\\', Minion_Task::$task_separator, $class));
     }
 
     /**
@@ -67,7 +87,7 @@ abstract class Kohana_Minion_Task
             $task = 'help';
         }
 
-        $class = Minion_Task::convert_task_to_class_name($task);
+        $class = Kohana::find_class(Minion_Task::convert_task_to_class_name($task));
 
         if (!class_exists($class)) {
             throw new Minion_Exception_InvalidTask("Task ':task' is not a valid minion task", [':task' => $class]);

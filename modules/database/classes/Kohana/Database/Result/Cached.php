@@ -1,5 +1,9 @@
 <?php
 
+namespace Kohana\Database\Result;
+
+use Kohana\Database\Result as Database_Result;
+
 /**
  * Object used for caching the results of select queries.  See [Results](/database/results#select-cached) for usage and examples.
  *
@@ -9,7 +13,7 @@
  * @copyright  (c) 2009 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Database_Result_Cached extends Database_Result
+class Cached extends Database_Result
 {
     public function __construct(array $result, $sql, $as_object = null)
     {

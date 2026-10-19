@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Kohana;
+use Kohana\Encrypt;
+use Kohana\Unittest\TestCase;
+
 /**
  * Tests the Encrypt_Openssl class.
  *
@@ -17,7 +21,7 @@
  * @copyright   (c) 2018 Kohana Group
  * @license     https://kohana.top/license
  */
-class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
+class Kohana_Encrypt_OpensslTest extends TestCase
 {
     /**
      * Provider for test_encode.
@@ -169,7 +173,7 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
     public function testEncode(string $method, string $key, string $iv, string $txtPlain, string $txtEncoded)
     {
         // Initialize.
-        $e = $this->getMockBuilder('Encrypt_Openssl')
+        $e = $this->getMockBuilder('\Kohana\Encrypt\Openssl')
             ->enableOriginalConstructor()
             ->setConstructorArgs(['name' => 'openssl', 'config' => ['driver' => 'openssl', 'method' => $method, 'key' => $key, 'iv' => $iv]])
             ->setMethods()
@@ -333,7 +337,7 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
     public function testDecode(string $method, string $key, string $iv, string $txtEncoded, string $txtPlain)
     {
         // Initialize.
-        $e = $this->getMockBuilder('Encrypt_Openssl')
+        $e = $this->getMockBuilder('\Kohana\Encrypt\Openssl')
             ->enableOriginalConstructor()
             ->setConstructorArgs(['name' => 'openssl', 'config' => ['driver' => 'openssl', 'method' => $method, 'key' => $key]])
             ->setMethods()
@@ -388,7 +392,7 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
     public function testEncodeDecode(string $key, string $method, string $txtPlain)
     {
         // Initialize.
-        $e = $this->getMockBuilder('Encrypt_Openssl')
+        $e = $this->getMockBuilder('\Kohana\Encrypt\Openssl')
             ->enableOriginalConstructor()
             ->setConstructorArgs(['name' => 'openssl', 'config' => ['driver' => 'openssl', 'method' => $method, 'key' => $key]])
             ->setMethods()
@@ -445,7 +449,7 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
     public function testDecodeInvalidData(string $key, string $method, string $txtInvalidEncoded)
     {
         // Initialize.
-        $e = $this->getMockBuilder('Encrypt_Openssl')
+        $e = $this->getMockBuilder('\Kohana\Encrypt\Openssl')
             ->enableOriginalConstructor()
             ->setConstructorArgs(['name' => 'openssl', 'config' => ['driver' => 'openssl', 'cipher' => $method, 'key' => $key]])
             ->setMethods()
@@ -468,7 +472,7 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
     public function testConsecutiveEncodeProduceDifferentResults(string $key, string $method, string $txtPlain)
     {
         // Initialize, encode twice.
-        $e = $this->getMockBuilder('Encrypt_Openssl')
+        $e = $this->getMockBuilder('\Kohana\Encrypt\Openssl')
             ->enableOriginalConstructor()
             ->setConstructorArgs(['name' => 'openssl', 'config' => ['driver' => 'openssl', 'cipher' => $method, 'key' => $key]])
             ->setMethods()
@@ -486,7 +490,7 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
      */
     public function testInstanceThrowExceptionWhenNoKeyProvided()
     {
-        $this->expectException(Kohana_Exception::class);
+        $this->expectException(\Kohana\Exception::class);
         $this->expectExceptionMessage('No encryption key is defined in the encryption configuration group: default');
 
         Encrypt::instance('default', ['driver' => 'openssl']);
@@ -555,8 +559,8 @@ class Kohana_Encrypt_OpensslTest extends Unittest_TestCase
         $e2 = Encrypt::instance($instanceName);
 
         // Assert instances.
-        $this->assertInstanceOf('Encrypt_Openssl', $e);
-        $this->assertInstanceOf('Encrypt_Openssl', $e2);
+        $this->assertInstanceOf('\Kohana\Encrypt\Openssl', $e);
+        $this->assertInstanceOf('\Kohana\Encrypt\Openssl', $e2);
         $this->assertSame($e, $e2);
 
         // Test if instances are well configured.

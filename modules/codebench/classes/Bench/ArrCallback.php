@@ -1,11 +1,15 @@
 <?php
 
+namespace Kohana\Bench;
+
+use Kohana\Codebench;
+
 /**
  * @package    Kohana/Codebench
  * @category   Tests
  * @author     Geert De Deckere <geert@idoe.be>
  */
-class Bench_ArrCallback extends Codebench
+class ArrCallback extends Codebench
 {
     public $description = 'Parsing <em>command(param,param)</em> strings in <code>Arr::callback()</code>.';
     public $loops = 10000;

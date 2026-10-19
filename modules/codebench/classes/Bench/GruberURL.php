@@ -1,11 +1,15 @@
 <?php
 
+namespace Kohana\Bench;
+
+use Kohana\Codebench;
+
 /**
  * @package    Kohana/Codebench
  * @category   Tests
  * @author     Geert De Deckere <geert@idoe.be>
  */
-class Bench_GruberURL extends Codebench
+class GruberURL extends Codebench
 {
     public $description = 'Optimization for https://daringfireball.net/2009/11/liberal_regex_for_matching_urls';
     public $loops = 10000;

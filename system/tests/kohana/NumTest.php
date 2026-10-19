@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Num;
+use Kohana\Unittest\TestCase;
+
 /**
  * Tests Num
  *
@@ -13,7 +16,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_NumTest extends Unittest_TestCase
+class Kohana_NumTest extends TestCase
 {
     protected $default_locale;
 

@@ -1,5 +1,9 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\Cache\Exception as Cache_Exception;
+
 /**
  * Kohana Cache provides a common interface to a variety of caching engines. Tags are
  * supported where available natively to the cache system. Kohana Cache supports multiple
@@ -80,7 +84,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-abstract class Kohana_Cache
+abstract class Cache
 {
     const DEFAULT_EXPIRE = 3600;
 
@@ -134,7 +138,7 @@ abstract class Kohana_Cache
         $config = $config->get($group);
 
         // Create a new cache type instance
-        $cache_class = 'Cache_' . ucfirst($config['driver']);
+        $cache_class = Kohana::find_class('Cache\\' . ucfirst($config['driver']));
         Cache::$instances[$group] = new $cache_class($config);
 
         // Return the instance
@@ -199,7 +203,7 @@ abstract class Kohana_Cache
      */
     final public function __clone()
     {
-        throw new Cache_Exception('Cloning of Kohana_Cache objects is forbidden');
+        throw new Cache_Exception('Cloning of Kohana\Cache objects is forbidden');
     }
 
     /**

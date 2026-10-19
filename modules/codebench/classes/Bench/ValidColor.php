@@ -1,11 +1,15 @@
 <?php
 
+namespace Kohana\Bench;
+
+use Kohana\Codebench;
+
 /**
  * @package    Kohana/Codebench
  * @category   Tests
  * @author     Geert De Deckere <geert@idoe.be>
  */
-class Bench_ValidColor extends Codebench
+class ValidColor extends Codebench
 {
     public $description = 'Optimization for <code>Validate::color()</code>.
 		 See: http://forum.kohanaphp.com/comments.php?DiscussionID=2192.

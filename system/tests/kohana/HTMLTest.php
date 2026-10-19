@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Kohana;
+use Kohana\HTML;
+use Kohana\Unittest\TestCase;
+
 /**
  * Tests HTML
  *
@@ -14,7 +18,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_HTMLTest extends Unittest_TestCase
+class Kohana_HTMLTest extends TestCase
 {
     /**
      * Sets up the environment
@@ -35,9 +39,9 @@ class Kohana_HTMLTest extends Unittest_TestCase
      */
     // @codingStandardsIgnoreStart
     protected $environmentDefault = [
-        'Kohana::$base_url' => '/kohana/',
-        'Kohana::$index_file' => 'index.php',
-        'HTML::$strict' => true,
+        '\Kohana\Kohana::$base_url' => '/kohana/',
+        '\Kohana\Kohana::$index_file' => 'index.php',
+        '\Kohana\HTML::$strict' => true,
         'HTTP_HOST' => 'www.kohanaframework.org',
     ];
 
@@ -72,7 +76,7 @@ class Kohana_HTMLTest extends Unittest_TestCase
             ],
             [
                 ['id' => 'disabled_field', 'disabled'],
-                ['HTML::$strict' => false],
+                ['\Kohana\HTML::$strict' => false],
                 ' id="disabled_field" disabled',
             ],
         ];

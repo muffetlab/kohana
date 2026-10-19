@@ -1,3 +1,9 @@
+<?php
+
+use Kohana\HTML;
+use Kohana\Route;
+
+?>
 <h1>User Guide</h1>
 
 <p>The following modules have userguide pages:</p>
@@ -7,7 +13,7 @@
     <?php foreach ($modules as $url => $options): ?>
 
         <p>
-            <strong><?php echo html::anchor(Route::get('docs/guide')->uri(['module' => $url]), $options['name']) ?></strong> -
+            <strong><?php echo HTML::anchor(Route::get('docs/guide')->uri(['module' => $url]), $options['name']) ?></strong> -
             <?php echo $options['description'] ?>
         </p>
 

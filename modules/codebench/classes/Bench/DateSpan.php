@@ -1,11 +1,16 @@
 <?php
 
+namespace Kohana\Bench;
+
+use Kohana\Codebench;
+use Kohana\Date;
+
 /**
  * @package    Kohana/Codebench
  * @category   Tests
  * @author     Woody Gilk <woody.gilk@kohanaphp.com>
  */
-class Bench_DateSpan extends Codebench
+class DateSpan extends Codebench
 {
     public $description = 'Optimization for <code>Date::span()</code>.';
     public $loops = 1000;

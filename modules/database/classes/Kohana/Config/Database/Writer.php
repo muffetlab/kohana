@@ -1,5 +1,13 @@
 <?php
 
+namespace Kohana\Config\Database;
+
+use Kohana\Config\Database\Reader as Config_Database_Reader;
+use Kohana\Config\Writer as Kohana_Config_Writer;
+use Kohana\Database\Exception as Database_Exception;
+use Kohana\Config\Database\Writer as Kohana_Config_Database_Writer;
+use Kohana\DB;
+
 /**
  * Database writer for the config system
  *
@@ -18,7 +26,7 @@
  * @copyright  (c) 2007-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Config_Database_Writer extends Config_Database_Reader implements Kohana_Config_Writer
+class Writer extends Config_Database_Reader implements Kohana_Config_Writer
 {
     protected $_loaded_keys = [];
 

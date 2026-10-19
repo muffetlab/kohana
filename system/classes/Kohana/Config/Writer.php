@@ -1,5 +1,9 @@
 <?php
 
+namespace Kohana\Config;
+
+use Kohana\Config\Source as Kohana_Config_Source;
+
 /**
  * Interface for config writers
  *
@@ -10,7 +14,7 @@
  * @copyright  (c) 2008-2014 Kohana Team
  * @license    https://kohana.top/license
  */
-interface Kohana_Config_Writer extends Kohana_Config_Source
+interface Writer extends Kohana_Config_Source
 {
     /**
      * Writes the passed config for $group

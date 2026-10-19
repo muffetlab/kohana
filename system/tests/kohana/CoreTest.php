@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Kohana;
+use Kohana\Unittest\TestCase;
+
 /**
  * Tests Kohana Core
  *
@@ -14,7 +17,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_CoreTest extends Unittest_TestCase
+class Kohana_CoreTest extends TestCase
 {
     protected $old_modules = [];
 
@@ -74,7 +77,7 @@ class Kohana_CoreTest extends Unittest_TestCase
      */
     public function test_sanitize(string $value, string $result)
     {
-        $this->setEnvironment(['Kohana::$magic_quotes' => true]);
+        $this->setEnvironment(['\Kohana\Kohana::$magic_quotes' => true]);
 
         $this->assertSame($result, Kohana::sanitize($value));
     }
@@ -89,7 +92,7 @@ class Kohana_CoreTest extends Unittest_TestCase
     public function test_find_file_no_extension()
     {
         // ".php" is manually appended to the _file name_, not passed as the extension
-        $path = Kohana::find_file('classes', $file = 'Kohana/Core.php', false);
+        $path = Kohana::find_file('classes', $file = 'Kohana/Kohana.php', false);
 
         $this->assertIsString($path);
 
@@ -325,7 +328,7 @@ class Kohana_CoreTest extends Unittest_TestCase
      */
     public function test_modules_detects_invalid_modules(array $source)
     {
-        $this->expectException(Kohana_Exception::class);
+        $this->expectException(\Kohana\Exception::class);
 
         $modules = Kohana::modules();
 

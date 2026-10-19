@@ -1,5 +1,12 @@
 <?php
 
+namespace Kohana\Request\Client;
+
+use Kohana\Request\Client\External as Request_Client_External;
+use Kohana\Request;
+use Kohana\Response;
+use Kohana\Request\Exception as Request_Exception;
+
 /**
  * [Request_Client_External] Curl driver performs external requests using the
  * php-curl extension. This is the default driver for all external requests.
@@ -11,7 +18,7 @@
  * @license    https://kohana.top/license
  * @uses       [PHP cURL](https://www.php.net/manual/en/book.curl.php)
  */
-class Kohana_Request_Client_Curl extends Request_Client_External
+class Curl extends Request_Client_External
 {
     /**
      * Sends the HTTP message [Request] to a remote server and processes

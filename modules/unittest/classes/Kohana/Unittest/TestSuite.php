@@ -1,12 +1,14 @@
 <?php
 
+namespace Kohana\Unittest;
+
 use PHPUnit\Framework\TestResult;
 
 /**
  * A version of the stock PHPUnit testsuite that supports whitelisting and
  * blacklisting for code coverage filter
  */
-abstract class Kohana_Unittest_TestSuite extends PHPUnit\Framework\TestSuite
+class TestSuite extends \PHPUnit\Framework\TestSuite
 {
     /**
      * Holds the details of files that should be white and blacklisted for

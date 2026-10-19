@@ -1,5 +1,17 @@
 <?php
 
+namespace Kohana\Request\Client;
+
+use Kohana\Request\Client as Request_Client;
+use Kohana\Request\Client\External as Request_Client_External;
+use Kohana\Request\Exception as Request_Exception;
+use Kohana\Request;
+use Kohana\Response;
+use Kohana\Kohana as Kohana;
+use Kohana\Profiler;
+use Exception;
+use Kohana\Arr;
+
 /**
  * [Request_Client_External] provides a wrapper for all external request
  * processing. This class should be extended by all drivers handling external
@@ -30,7 +42,7 @@
  * @license    https://kohana.top/license
  * @uses       [PECL HTTP](https://wiki.php.net/rfc/pecl_http)
  */
-abstract class Kohana_Request_Client_External extends Request_Client
+abstract class External extends Request_Client
 {
     /**
      * Use:
@@ -40,7 +52,7 @@ abstract class Kohana_Request_Client_External extends Request_Client
      *
      * @var     string    defines the external client to use by default
      */
-    public static $client = 'Request_Client_Curl';
+    public static $client = '\Kohana\Request\Client\Curl';
 
     /**
      * Factory method to create a new Request_Client_External object based on

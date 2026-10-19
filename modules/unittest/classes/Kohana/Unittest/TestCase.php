@@ -1,10 +1,15 @@
 <?php
 
+namespace Kohana\Unittest;
+
+use Kohana\Unittest\Helpers as Unittest_Helpers;
+use PHPUnit\Framework\DOMTestCase;
+
 /**
  * A version of the stock PHPUnit testcase that includes some extra helpers
  * and default settings
  */
-abstract class Kohana_Unittest_TestCase extends PHPUnit\Framework\DOMTestCase
+abstract class TestCase extends DOMTestCase
 {
     /**
      * Make sure PHPUnit backs up globals

@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Text;
+use Kohana\Unittest\TestCase;
+use Kohana\Valid;
+
 /**
  * Tests the Valid class
  *
@@ -14,7 +18,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_ValidTest extends Unittest_TestCase
+class Kohana_ValidTest extends TestCase
 {
     /**
      * Provides test data for test_alpha()

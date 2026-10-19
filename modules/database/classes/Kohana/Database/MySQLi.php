@@ -1,5 +1,16 @@
 <?php
 
+namespace Kohana\Database;
+
+use Kohana\Database;
+use Kohana\Database\MySQLi as Database_MySQLi;
+use Kohana\Arr;
+use Exception;
+use Kohana\Database\Exception as Database_Exception;
+use Kohana\Kohana as Kohana;
+use Kohana\Profiler;
+use Kohana\Database\MySQLi\Result as Database_MySQLi_Result;
+
 /**
  * MySQLi database connection.
  *
@@ -9,7 +20,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Database_MySQLi extends Database
+class MySQLi extends Database
 {
     // Database in use by each connection
     protected static $_current_databases = [];
@@ -54,7 +65,7 @@ class Kohana_Database_MySQLi extends Database
                 );
                 $this->_connection->real_connect($hostname, $username, $password, $database, $port, $socket, MYSQLI_CLIENT_SSL | $flags);
             } else {
-                $this->_connection = new mysqli($hostname, $username, $password, $database, $port, $socket);
+                $this->_connection = new \mysqli($hostname, $username, $password, $database, $port, $socket);
             }
         } catch (Exception $e) {
             // No connection exists

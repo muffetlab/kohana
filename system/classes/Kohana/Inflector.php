@@ -1,5 +1,7 @@
 <?php
 
+namespace Kohana;
+
 /**
  * Inflector helper class. Inflection is changing the form of a word based on
  * the context it is used in. For example, changing a word into a plural form.
@@ -12,7 +14,7 @@
  * @copyright  (c) 2007-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Inflector
+class Inflector
 {
     /**
      * @var  array  cached inflections

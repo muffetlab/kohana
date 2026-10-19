@@ -1,5 +1,13 @@
 <?php
 
+namespace Kohana;
+
+use ArrayAccess;
+use Kohana\Exception as Kohana_Exception;
+use Kohana\Validation as Kohana_Validation;
+use ReflectionMethod;
+use ReflectionFunction;
+
 /**
  * Array and variable validation.
  *
@@ -9,7 +17,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Validation implements ArrayAccess
+class Validation implements ArrayAccess
 {
     /**
      * Creates a new Validation instance.
@@ -347,9 +355,9 @@ class Kohana_Validation implements ArrayAccess
                     // This is a lambda function, there is no error name (errors must be added manually)
                     $error_name = false;
                     $passed = call_user_func_array($rule, $params);
-                } elseif (method_exists('Valid', $rule)) {
+                } elseif (method_exists('\Kohana\Valid', $rule)) {
                     // Use a method in this object
-                    $method = new ReflectionMethod('Valid', $rule);
+                    $method = new ReflectionMethod('\Kohana\Valid', $rule);
 
                     // Call static::$rule($this[$field], $param, ...) with Reflection
                     $passed = $method->invokeArgs(null, $params);

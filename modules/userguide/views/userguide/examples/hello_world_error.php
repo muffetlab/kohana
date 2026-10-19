@@ -498,7 +498,7 @@
                     <td><code>VENDOR_PATH/symfony/polyfill-mbstring/bootstrap.php</code></td>
                 </tr>
                 <tr>
-                    <td><code>SYSPATH/classes/Kohana/Core.php</code></td>
+                    <td><code>SYSPATH/classes/Kohana/Kohana.php</code></td>
                 </tr>
                 <tr>
                     <td><code>SYSPATH/classes/Kohana.php</code></td>

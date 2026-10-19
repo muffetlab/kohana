@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Text;
+use Kohana\Unittest\TestCase;
+
 /**
  * Tests the kohana text class (Kohana_Text)
  *
@@ -10,7 +13,7 @@
  * @package    Kohana
  * @category   Tests
  */
-class Kohana_TextTest extends Unittest_TestCase
+class Kohana_TextTest extends TestCase
 {
     /**
      * Sets up the test environment

@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Cache;
+use Kohana\Kohana;
+
 /**
  * @package    Kohana/Cache
  * @group      kohana
@@ -60,12 +63,12 @@ class Kohana_CacheTest extends PHPUnit\Framework\TestCase
     public function test_instance($group, $expected)
     {
         if ($group === Kohana_CacheTest::BAD_GROUP_DEFINITION) {
-            $this->expectException('Cache_Exception');
+            $this->expectException('\Kohana\Cache\Exception');
         }
 
         try {
             $cache = Cache::instance($group);
-        } catch (Cache_Exception $e) {
+        } catch (\Kohana\Cache\Exception $e) {
             $this->assertSame($expected, $e->getMessage());
             throw $e;
         }
@@ -81,10 +84,10 @@ class Kohana_CacheTest extends PHPUnit\Framework\TestCase
      */
     public function test_cloning_fails()
     {
-        $this->expectException(Cache_Exception::class);
-        $this->expectExceptionMessage('Cloning of Kohana_Cache objects is forbidden');
+        $this->expectException(\Kohana\Cache\Exception::class);
+        $this->expectExceptionMessage('Cloning of Kohana\Cache objects is forbidden');
 
-        $cache = $this->getMockBuilder('Cache')
+        $cache = $this->getMockBuilder('\Kohana\Cache')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -149,7 +152,7 @@ class Kohana_CacheTest extends PHPUnit\Framework\TestCase
      */
     public function test_config($key, $value, $expected_result, array $expected_config)
     {
-        $cache = $this->getMockBuilder('Cache_File')
+        $cache = $this->getMockBuilder('\Kohana\Cache\File')
             ->setMethods(['__construct'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -211,7 +214,7 @@ class Kohana_CacheTest extends PHPUnit\Framework\TestCase
      */
     public function test_sanitize_id(string $id, string $expected)
     {
-        $cache = $this->createMock('Cache');
+        $cache = $this->createMock('\Kohana\Cache');
 
         $cache_reflection = new ReflectionClass($cache);
         $sanitize_id = $cache_reflection->getMethod('_sanitize_id');

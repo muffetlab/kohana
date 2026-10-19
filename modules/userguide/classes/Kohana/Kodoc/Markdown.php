@@ -1,5 +1,17 @@
 <?php
 
+namespace Kohana\Kodoc;
+
+use Kohana\Kodoc\Markdown as Kodoc_Markdown;
+use Kohana\Kohana as Kohana;
+use Kohana\URL;
+use Kohana\View;
+use Exception;
+use Kohana\Exception as Kohana_exception;
+use Kohana\Kodoc;
+use Kohana\Route;
+use Kohana\Request;
+
 use Michelf\MarkdownExtra;
 
 /**
@@ -11,7 +23,7 @@ use Michelf\MarkdownExtra;
  * @copyright  (c) 2008-2013 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Kodoc_Markdown extends MarkdownExtra
+class Markdown extends MarkdownExtra
 {
     /**
      * @var  string  base URL for links
@@ -138,7 +150,7 @@ class Kohana_Kodoc_Markdown extends MarkdownExtra
      */
     function make_heading_id(string $heading): string
     {
-        $id = url::title($heading, '-', true);
+        $id = URL::title($heading, '-', true);
 
         if (isset($this->_heading_ids[$id])) {
             $id .= '-';
@@ -221,7 +233,7 @@ class Kohana_Kodoc_Markdown extends MarkdownExtra
      */
     public function doAPI(string $text): string
     {
-        return preg_replace_callback('/\[' . Kodoc::$regex_class_member . '\]/i', 'Kodoc::link_class_member', $text);
+        return preg_replace_callback('/\[' . Kodoc::$regex_class_member . '\]/i', '\Kohana\Kodoc::link_class_member', $text);
     }
 
     /**

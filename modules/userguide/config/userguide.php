@@ -1,5 +1,7 @@
 <?php
 
+use Kohana\Kohana;
+
 return [
     // Enable the API browser.  true or false
     'api_browser' => true,

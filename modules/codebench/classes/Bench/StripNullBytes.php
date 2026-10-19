@@ -1,11 +1,15 @@
 <?php
 
+namespace Kohana\Bench;
+
+use Kohana\Codebench;
+
 /**
  * @package    Kohana/Codebench
  * @category   Tests
  * @author     Geert De Deckere <geert@idoe.be>
  */
-class Bench_StripNullBytes extends Codebench
+class StripNullBytes extends Codebench
 {
     public $description = 'String replacement comparisons related to <a href="http://dev.kohanaphp.com/issues/2676">#2676</a>.';
     public $loops = 1000;

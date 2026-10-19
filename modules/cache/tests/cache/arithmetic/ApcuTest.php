@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Cache;
+use Kohana\Kohana;
+
 include_once(Kohana::find_file('tests/cache/arithmetic', 'CacheArithmeticMethods'));
 
 /**

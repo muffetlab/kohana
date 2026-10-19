@@ -1,5 +1,12 @@
 <?php
 
+namespace Kohana\HTTP\Exception;
+
+use Kohana\HTTP\Exception\Expected as HTTP_Exception_Expected;
+use Kohana\URL;
+use Kohana\Kohana as Kohana;
+use Kohana\Exception as Kohana_Exception;
+
 /**
  * Redirect HTTP exception class. Used for all [HTTP_Exception]'s where the status
  * code indicates a redirect.
@@ -12,7 +19,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-abstract class Kohana_HTTP_Exception_Redirect extends HTTP_Exception_Expected
+abstract class Redirect extends HTTP_Exception_Expected
 {
     /**
      * Specifies the URI to redirect to.

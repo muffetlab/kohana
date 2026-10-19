@@ -1,11 +1,16 @@
 <?php
 
+namespace Kohana\Bench;
+
+use Kohana\Codebench;
+use Kohana\Arr;
+
 /**
  * @package    Kohana/Codebench
  * @category   Tests
  * @author     Geert De Deckere <geert@idoe.be>
  */
-class Bench_URLSite extends Codebench
+class URLSite extends Codebench
 {
     public $description = 'http://dev.kohanaframework.org/issues/3110';
     public $loops = 1000;

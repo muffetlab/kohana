@@ -1,11 +1,15 @@
 <?php
 
+namespace Kohana\Bench;
+
+use Kohana\Codebench;
+
 /**
  * @package    Kohana/Codebench
  * @category   Tests
  * @author     Woody Gilk <woody.gilk@kohanaphp.com>
  */
-class Bench_UserFuncArray extends Codebench
+class UserFuncArray extends Codebench
 {
     public $description = 'Testing the speed difference of using <code>call_user_func_array</code>
 		 compared to counting args and doing manual calls.';

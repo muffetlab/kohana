@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Security;
+use Kohana\Session;
+use Kohana\Unittest\TestCase;
+
 /**
  * Tests Kohana_Security
  *
@@ -10,7 +14,7 @@
  * @package    Kohana
  * @category   Tests
  */
-class Kohana_SecurityTest extends Unittest_TestCase
+class Kohana_SecurityTest extends TestCase
 {
     /**
      * Provides test data for test_encode_php_tags()

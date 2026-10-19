@@ -1,5 +1,9 @@
 <?php
 
+namespace Kohana\Config;
+
+use Kohana\Config\Source as Kohana_Config_Source;
+
 /**
  * Interface for config readers
  *
@@ -9,7 +13,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-interface Kohana_Config_Reader extends Kohana_Config_Source
+interface Reader extends Kohana_Config_Source
 {
     /**
      * Tries to load the specified configuration group

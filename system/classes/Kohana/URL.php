@@ -1,5 +1,9 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\Exception as Kohana_Exception;
+
 /**
  * URL helper class.
  *
@@ -11,7 +15,7 @@
  * @copyright  (c) 2007-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_URL
+class URL
 {
     /**
      * Gets the base URL to the application.

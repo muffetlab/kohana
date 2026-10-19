@@ -1,5 +1,10 @@
 <?php
 
+namespace Kohana\Database;
+
+use Kohana\Database\Expression as Kohana_Database_Expression;
+use Kohana\Database;
+
 /**
  * Database expressions can be used to add unescaped SQL fragments to a
  * [Database_Query_Builder] object.
@@ -17,7 +22,7 @@
  * @copyright  (c) 2009 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Database_Expression
+class Expression
 {
     // Unquoted parameters
     protected $_parameters;

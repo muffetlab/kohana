@@ -1,5 +1,12 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\Session as Kohana_Session;
+use Exception;
+use Kohana\Session\Exception as Session_Exception;
+use Kohana\Exception as Kohana_Exception;
+
 /**
  * Base session class.
  *
@@ -9,7 +16,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-abstract class Kohana_Session
+abstract class Session
 {
     /**
      * @var  string  default session adapter
@@ -48,7 +55,7 @@ abstract class Kohana_Session
             $config = Kohana::$config->load('session')->get($type);
 
             // Set the session class name
-            $class = 'Session_' . ucfirst($type);
+            $class = Kohana::find_class('Session\\' . ucfirst($type));
 
             // Create a new session instance
             Session::$instances[$type] = $session = new $class($config, $id);

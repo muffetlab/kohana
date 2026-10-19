@@ -1,5 +1,7 @@
 <?php
 
+use Kohana\Unittest\TestCase;
+
 /**
  * Unit tests for internal methods of userguide controller
  *
@@ -13,7 +15,7 @@
  * @copyright  (c) 2008-2013 Kohana Team
  * @license    https://kohana.top/license
  */
-class Userguide_ControllerTest extends Unittest_TestCase
+class Userguide_ControllerTest extends TestCase
 {
     public function provider_file_finds_markdown_files(): array
     {
@@ -32,7 +34,7 @@ class Userguide_ControllerTest extends Unittest_TestCase
      */
     public function test_file_finds_markdown_files(string $page, string $expected_file)
     {
-        $controller = $this->getMockBuilder('Controller_Userguide')
+        $controller = $this->getMockBuilder('\Kohana\Controller\Userguide')
             ->setMethods(['__construct'])
             ->disableOriginalConstructor()
             ->getMock();

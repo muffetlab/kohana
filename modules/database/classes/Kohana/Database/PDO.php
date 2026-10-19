@@ -1,5 +1,16 @@
 <?php
 
+namespace Kohana\Database;
+
+use Kohana\Database;
+use PDOException;
+use Kohana\Database\Exception as Database_Exception;
+use Kohana\Kohana as Kohana;
+use Kohana\Profiler;
+use Exception;
+use Kohana\Database\Result\Cached as Database_Result_Cached;
+use Kohana\Exception as Kohana_Exception;
+
 /**
  * PDO database connection.
  *
@@ -9,7 +20,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Database_PDO extends Database
+class PDO extends Database
 {
     // PDO uses no quoting for identifiers
     protected $_identifier = '';
@@ -41,16 +52,16 @@ class Kohana_Database_PDO extends Database
         unset($this->_config['connection']);
 
         // Force PDO to use exceptions for all errors
-        $options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
+        $options[\PDO::ATTR_ERRMODE] = \PDO::ERRMODE_EXCEPTION;
 
         if (!empty($persistent)) {
             // Make the connection persistent
-            $options[PDO::ATTR_PERSISTENT] = true;
+            $options[\PDO::ATTR_PERSISTENT] = true;
         }
 
         try {
             // Create a new PDO connection
-            $this->_connection = new PDO($dsn, $username, $password, $options);
+            $this->_connection = new \PDO($dsn, $username, $password, $options);
         } catch (PDOException $e) {
             throw new Database_Exception(':error', [':error' => $e->getMessage()], $e->getCode());
         }
@@ -170,11 +181,11 @@ class Kohana_Database_PDO extends Database
         if ($type === Database::SELECT) {
             // Convert the result into an array, as PDOStatement::rowCount is not reliable
             if ($as_object === false) {
-                $result->setFetchMode(PDO::FETCH_ASSOC);
+                $result->setFetchMode(\PDO::FETCH_ASSOC);
             } elseif (is_string($as_object)) {
-                $result->setFetchMode(PDO::FETCH_CLASS, $as_object, $params);
+                $result->setFetchMode(\PDO::FETCH_CLASS, $as_object, $params);
             } else {
-                $result->setFetchMode(PDO::FETCH_CLASS, 'stdClass');
+                $result->setFetchMode(\PDO::FETCH_CLASS, 'stdClass');
             }
 
             $result = $result->fetchAll();

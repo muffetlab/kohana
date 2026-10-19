@@ -1,5 +1,11 @@
 <?php
 
+namespace Kohana\Database\Query\Builder;
+
+use Kohana\Database\Query\Builder\Where as Database_Query_Builder_Where;
+use Kohana\Database;
+use Kohana\Database\Query\Builder\Update as Kohana_Database_Query_Builder_Update;
+
 /**
  * Database query builder for UPDATE statements. See [Query Builder](/database/query/builder) for usage and examples.
  *
@@ -9,7 +15,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Database_Query_Builder_Update extends Database_Query_Builder_Where
+class Update extends Database_Query_Builder_Where
 {
     // UPDATE ...
     protected $_table;

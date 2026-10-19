@@ -1,5 +1,11 @@
 <?php
 
+namespace Kohana\Database\Query;
+
+use Kohana\Database\Query as Database_Query;
+use Kohana\Database;
+use Kohana\Database\Exception as Database_Exception;
+
 /**
  * Database query builder. See [Query Builder](/database/query/builder) for usage and examples.
  *
@@ -9,7 +15,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    https://kohana.top/license
  */
-abstract class Kohana_Database_Query_Builder extends Database_Query
+abstract class Builder extends Database_Query
 {
     /**
      * Compiles an array of JOIN statements into an SQL partial.

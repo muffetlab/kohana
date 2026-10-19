@@ -1,5 +1,7 @@
 <?php
 
+use Kohana\UTF8;
+
 /**
  * UTF8::trim
  *

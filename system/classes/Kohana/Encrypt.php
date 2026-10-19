@@ -1,5 +1,9 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\Exception as Kohana_Exception;
+
 /**
  * Kohana Encrypt provides a common interface to a variety of cryptography
  * engines, supports multiple instances of cryptography engines through a
@@ -11,7 +15,7 @@
  * @copyright  (c) 2018 Kohana Group
  * @license    https://kohana.top/license
  */
-abstract class Kohana_Encrypt
+abstract class Encrypt
 {
     /**
      * @var  string  Default instance name.
@@ -52,7 +56,7 @@ abstract class Kohana_Encrypt
             }
 
             // Set the driver class name
-            $driver = 'Encrypt_' . ucfirst($config['driver']);
+            $driver = Kohana::find_class('Encrypt\\' . ucfirst($config['driver']));
 
             // Create a new instance
             Encrypt::$instances[$name] = new $driver($name, $config);

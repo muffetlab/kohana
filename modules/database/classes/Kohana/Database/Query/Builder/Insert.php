@@ -1,5 +1,13 @@
 <?php
 
+namespace Kohana\Database\Query\Builder;
+
+use Kohana\Database\Query\Builder as Database_Query_Builder;
+use Kohana\Database;
+use Kohana\Database\Query\Builder\Insert as Kohana_Database_Query_Builder_Insert;
+use Kohana\Exception as Kohana_Exception;
+use Kohana\Database\Query as Database_Query;
+
 /**
  * Database query builder for INSERT statements. See [Query Builder](/database/query/builder) for usage and examples.
  *
@@ -9,7 +17,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Database_Query_Builder_Insert extends Database_Query_Builder
+class Insert extends Database_Query_Builder
 {
     // INSERT INTO ...
     protected $_table;

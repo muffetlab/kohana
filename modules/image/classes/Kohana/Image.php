@@ -1,5 +1,11 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\Exception as Kohana_Exception;
+use Exception;
+use Kohana\Image as Kohana_Image;
+
 /**
  * Image manipulation support. Allows images to be resized, cropped, etc.
  *
@@ -9,7 +15,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    https://kohana.top/license.html
  */
-abstract class Kohana_Image
+abstract class Image
 {
     // Resizing constraints
     const NONE = 0x01;
@@ -47,7 +53,7 @@ abstract class Kohana_Image
         }
 
         // Set the class name
-        $class = 'Image_' . $driver;
+        $class = Kohana::find_class('Image\\' . $driver);
 
         return new $class($file);
     }

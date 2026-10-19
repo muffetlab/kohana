@@ -1,3 +1,8 @@
+<?php
+
+use Kohana\HTML;
+
+?>
 <?php if (is_array($array)): ?>
     <div class="page-toc">
         <?php foreach ($array as $item): ?>

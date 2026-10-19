@@ -1,11 +1,16 @@
 <?php
 
+namespace Kohana\Bench;
+
+use Kohana\Codebench;
+use Kohana\UTF8;
+
 /**
  * @package    Kohana/Codebench
  * @category   Tests
  * @author     Geert De Deckere <geert@idoe.be>
  */
-class Bench_Transliterate extends Codebench
+class Transliterate extends Codebench
 {
     public $description = 'Inspired by:
 		 http://forum.kohanaframework.org/comments.php?DiscussionID=6113';

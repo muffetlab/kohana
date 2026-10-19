@@ -21,7 +21,7 @@ This image is only shows certain files, but we can use it to illustrate some exa
 
 * If we used `View::factory('welcome')` it would call `Kohana::find_file('views','welcome')` which would return `application/views/welcome.php` because it takes precedence over `modules/common/views/welcome.php`. By doing this, you can overwrite things in a module without editing the modules files.
 
-* If the Cookie class is used, [Kohana::auto_load] will call `Kohana::find_file('classes', 'Cookie')` which will return `application/classes/Cookie.php`. Assuming Cookie extends Kohana_Cookie, the autoloader would then call `Kohana::find_file('classes','Kohana/Cookie')` which will return `system/classes/Kohana/Cookie.php` because that file does not exist anywhere higher in the cascade. This is an example of [transparent extension](extension).
+* Classes are the exception to the cascade: they are not located with `Kohana::find_file`, but are autoloaded by Composer using the [PSR-4](autoloading) mappings in `composer.json`. The `Kohana\Cookie` class is always loaded from `system/classes/Kohana/Cookie.php` and `App\Controller\Welcome` from `application/classes/Controller/Welcome.php`. When a class may exist in both the application and the framework, [Kohana::find_class] resolves it in favor of the `App\` namespace.
 
 * If you used `View::factory('user')` it would call `Kohana::find_file('views','user')` which would return `modules/common/views/user.php`.
 
@@ -32,7 +32,7 @@ This image is only shows certain files, but we can use it to illustrate some exa
 The top level directories of the application, module, and system paths have the following default directories:
 
 classes/
-:  All classes that you want to [autoload](autoloading) should be stored here. This includes [controllers](mvc/controllers), [models](mvc/models), and all other classes. All classes must follow the [class naming conventions](conventions#class-names-and-file-location) including matching the case of the class i.e. Kohana_Cookie should be stored in classes/Kohana/Cookie.php and not classes/kohana/cookie.php.
+:  All classes that you want to [autoload](autoloading) should be stored here. This includes [controllers](mvc/controllers), [models](mvc/models), and all other classes. All classes must follow the [class naming conventions](conventions#class-names-and-file-location) and be mapped in the `psr-4` section of `composer.json`, i.e. the file name must match the case of the class, so `Kohana\Cookie` is stored in classes/Kohana/Cookie.php and `App\Controller\Welcome` in classes/Controller/Welcome.php.
 
 config/
 :  Configuration files return an associative array of options that can be loaded using [Kohana::$config]. Config files are merged rather than overwritten by the cascade. See [config files](files/config) for more information.
@@ -70,7 +70,9 @@ If the file doesn't have a `.php` extension, pass the extension as the third par
 
 ## Vendor Extensions
 
-We call extensions or external libraries that are not specific to Kohana "vendor" extensions, and they go in the vendor folder, either in application or in a module. Because these libraries do not follow Kohana's file naming conventions, they cannot be autoloaded by Kohana, so you will have to manually included them. Some examples of vendor libraries are [Markdown](https://daringfireball.net/projects/markdown/), [DOMPDF](http://code.google.com/p/dompdf), [Mustache](https://github.com/bobthecow/mustache.php) and [Swiftmailer](http://swiftmailer.org/).
+We call extensions or external libraries that are not specific to Kohana "vendor" extensions. Libraries installed with [Composer](https://getcomposer.org) are placed in the `vendor` directory at the root of your application and are autoloaded together with your own classes (see [Loading Classes](autoloading)).
+
+Libraries copied into `application/vendor` by hand do not follow this, so they cannot be autoloaded and you will have to manually include them. Some examples of vendor libraries are [Markdown](https://daringfireball.net/projects/markdown/), [DOMPDF](http://code.google.com/p/dompdf), [Mustache](https://github.com/bobthecow/mustache.php) and [Swiftmailer](http://swiftmailer.org/).
 
 For example, if you wanted to use [DOMPDF](http://code.google.com/p/dompdf), you would copy it to `application/vendor/dompdf` and include the DOMPDF autoloading class. It can be useful to do this in a controller's before method, as part of a module's init.php, or the constructor of a singleton class.
 

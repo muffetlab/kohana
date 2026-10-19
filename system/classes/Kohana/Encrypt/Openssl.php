@@ -1,5 +1,10 @@
 <?php
 
+namespace Kohana\Encrypt;
+
+use Kohana\Encrypt;
+use Kohana\Exception as Kohana_Exception;
+
 /**
  * [Kohana Encrypt](api/Kohana_Encrypt) OpenSSL driver. Provides two-way
  * encryption of text and binary strings using the [OpenSSL](https://www.php.net/openssl)
@@ -11,7 +16,7 @@
  * @copyright   (c) 2018 Kohana Group
  * @license     https://kohana.top/license
  */
-class Kohana_Encrypt_Openssl extends Encrypt
+class Openssl extends Encrypt
 {
     /**
      * @var string  The cipher method.

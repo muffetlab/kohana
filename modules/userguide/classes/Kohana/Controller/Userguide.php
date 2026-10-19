@@ -1,5 +1,17 @@
 <?php
 
+namespace Kohana\Controller;
+
+use Kohana\Controller\Template as Controller_Template;
+use Kohana\Route;
+use Kohana\Kodoc\Markdown as Kodoc_Markdown;
+use Kohana\URL;
+use Kohana\Kohana as Kohana;
+use Kohana\View;
+use Kohana\Kodoc;
+use Kohana\Kodoc\ClassDoc as Kodoc_Class;
+use Kohana\File;
+
 /**
  * Kohana user guide and api browser.
  *
@@ -9,7 +21,7 @@
  * @copyright  (c) 2008-2013 Kohana Team
  * @license    https://kohana.top/license
  */
-abstract class Kohana_Controller_Userguide extends Controller_Template
+class Userguide extends Controller_Template
 {
     public $template = 'userguide/template';
     // Routes
@@ -168,7 +180,7 @@ abstract class Kohana_Controller_Userguide extends Controller_Template
     {
         // Enable the missing class autoloader.  If a class cannot be found a
         // fake class will be created that extends Kodoc_Missing
-        spl_autoload_register(['Kodoc_Missing', 'create_class']);
+        spl_autoload_register(['\Kohana\Kodoc\Missing', 'create_class']);
 
         // Get the class from the request
         $class = $this->request->param('class');
@@ -191,7 +203,7 @@ abstract class Kohana_Controller_Userguide extends Controller_Template
             }
 
             // If this classes immediate parent is Kodoc_Missing, then it should 404
-            if ($_class->class->getParentClass() && $_class->class->getParentClass()->name === 'Kodoc_Missing') {
+            if ($_class->class->getParentClass() && $_class->class->getParentClass()->name === 'Kohana\Kodoc\Missing') {
                 $this->error('That class was not found. Check your URL and make sure that the module with that class is enabled.');
                 return;
             }

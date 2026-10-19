@@ -17,7 +17,7 @@ function _ord($chr)
         return $ord0;
 
     if (!isset($chr[1])) {
-        throw new UTF8_Exception('Short sequence - at least 2 bytes expected, only 1 seen');
+        throw new \Kohana\UTF8\Exception('Short sequence - at least 2 bytes expected, only 1 seen');
     }
 
     $ord1 = ord($chr[1]);
@@ -26,7 +26,7 @@ function _ord($chr)
         return ($ord0 - 192) * 64 + ($ord1 - 128);
 
     if (!isset($chr[2])) {
-        throw new UTF8_Exception('Short sequence - at least 3 bytes expected, only 2 seen');
+        throw new \Kohana\UTF8\Exception('Short sequence - at least 3 bytes expected, only 2 seen');
     }
 
     $ord2 = ord($chr[2]);
@@ -35,7 +35,7 @@ function _ord($chr)
         return ($ord0 - 224) * 4096 + ($ord1 - 128) * 64 + ($ord2 - 128);
 
     if (!isset($chr[3])) {
-        throw new UTF8_Exception('Short sequence - at least 4 bytes expected, only 3 seen');
+        throw new \Kohana\UTF8\Exception('Short sequence - at least 4 bytes expected, only 3 seen');
     }
 
     $ord3 = ord($chr[3]);
@@ -44,7 +44,7 @@ function _ord($chr)
         return ($ord0 - 240) * 262144 + ($ord1 - 128) * 4096 + ($ord2 - 128) * 64 + ($ord3 - 128);
 
     if (!isset($chr[4])) {
-        throw new UTF8_Exception('Short sequence - at least 5 bytes expected, only 4 seen');
+        throw new \Kohana\UTF8\Exception('Short sequence - at least 5 bytes expected, only 4 seen');
     }
 
     $ord4 = ord($chr[4]);
@@ -53,14 +53,14 @@ function _ord($chr)
         return ($ord0 - 248) * 16777216 + ($ord1 - 128) * 262144 + ($ord2 - 128) * 4096 + ($ord3 - 128) * 64 + ($ord4 - 128);
 
     if (!isset($chr[5])) {
-        throw new UTF8_Exception('Short sequence - at least 6 bytes expected, only 5 seen');
+        throw new \Kohana\UTF8\Exception('Short sequence - at least 6 bytes expected, only 5 seen');
     }
 
     if ($ord0 >= 252 && $ord0 <= 253)
         return ($ord0 - 252) * 1073741824 + ($ord1 - 128) * 16777216 + ($ord2 - 128) * 262144 + ($ord3 - 128) * 4096 + ($ord4 - 128) * 64 + (ord($chr[5]) - 128);
 
     if ($ord0 >= 254) {
-        throw new UTF8_Exception("Invalid UTF-8 with surrogate ordinal ':ordinal'", [
+        throw new \Kohana\UTF8\Exception("Invalid UTF-8 with surrogate ordinal ':ordinal'", [
         ':ordinal' => $ord0,
         ]);
     }

@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Kohana;
+use Kohana\File;
+use Kohana\Unittest\TestCase;
+
 /**
  * Tests Kohana File helper
  *
@@ -14,7 +18,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_FileTest extends Unittest_TestCase
+class Kohana_FileTest extends TestCase
 {
     /**
      * Provides test data for test_sanitize()

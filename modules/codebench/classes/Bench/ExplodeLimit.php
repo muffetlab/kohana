@@ -1,11 +1,15 @@
 <?php
 
+namespace Kohana\Bench;
+
+use Kohana\Codebench;
+
 /**
  * @package    Kohana/Codebench
  * @category   Tests
  * @author     Geert De Deckere <geert@idoe.be>
  */
-class Bench_ExplodeLimit extends Codebench
+class ExplodeLimit extends Codebench
 {
     public $description = 'Having a look at the effect of adding a limit to the <a href="https://www.php.net/explode">explode</a> function.<br />
 		 https://stackoverflow.com/questions/1308149/how-to-get-a-part-of-url-between-4th-and-5th-slashes';

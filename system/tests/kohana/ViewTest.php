@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Kohana;
+use Kohana\Unittest\TestCase;
+use Kohana\View;
+
 /**
  * Tests the View class
  *
@@ -13,7 +17,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_ViewTest extends Unittest_TestCase
+class Kohana_ViewTest extends TestCase
 {
     protected static $old_modules = [];
 
@@ -88,7 +92,7 @@ class Kohana_ViewTest extends Unittest_TestCase
         try {
             new View($path);
             $this->assertSame(false, $expects_exception);
-        } catch (View_Exception $e) {
+        } catch (\Kohana\View\Exception $e) {
             $this->assertSame(true, $expects_exception);
         }
     }

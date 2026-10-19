@@ -15,11 +15,14 @@
  * @license    https://kohana.top/license
  */
 
+use Kohana\Kohana;
+use Kohana\Route;
+use Kohana\Unittest\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
 include Kohana::find_file('tests', 'test_data/callback_routes');
 
-class Kohana_RouteTest extends Unittest_TestCase
+class Kohana_RouteTest extends TestCase
 {
     /**
      * Remove all caches
@@ -58,7 +61,7 @@ class Kohana_RouteTest extends Unittest_TestCase
      */
     public function test_get_throws_exception_if_route_dnx()
     {
-        $this->expectException(Kohana_Exception::class);
+        $this->expectException(\Kohana\Exception::class);
 
         Route::get('HAHAHAHAHAHAHAHAHA');
     }
@@ -71,7 +74,7 @@ class Kohana_RouteTest extends Unittest_TestCase
      */
     public function test_all_returns_all_defined_routes()
     {
-        $reflection = new ReflectionClass('Route');
+        $reflection = new ReflectionClass('\Kohana\Route');
         $property = $reflection->getProperty('_routes');
         $property->setAccessible(true);
 
@@ -180,7 +183,7 @@ class Kohana_RouteTest extends Unittest_TestCase
     public function test_constructor_returns_if_uri_is_null()
     {
         // We use a mock object to make sure that the route wasn't recompiled
-        $route = $this->getMockBuilder('Route')
+        $route = $this->getMockBuilder('\Kohana\Route')
             ->setMethods(['_compile'])
             ->getMock();
 
@@ -663,7 +666,7 @@ class Kohana_RouteTest extends Unittest_TestCase
     {
         $route = new Route($uri, $regex);
 
-        $this->expectException('Kohana_Exception');
+        $this->expectException('\Kohana\Exception');
         $this->expectExceptionMessage('controller');
         $route->uri($uri_array);
     }
@@ -754,8 +757,8 @@ class Kohana_RouteTest extends Unittest_TestCase
 
         $this->setEnvironment([
             '_SERVER' => ['HTTP_HOST' => 'kohana.top'],
-            'Kohana::$base_url' => '/',
-            'Kohana::$index_file' => '',
+            '\Kohana\Kohana::$base_url' => '/',
+            '\Kohana\Kohana::$index_file' => '',
         ]);
 
         $this->assertSame($expected, Route::url('foobar', $params, $protocol));
@@ -948,7 +951,7 @@ class Kohana_RouteTest extends Unittest_TestCase
     public function get_request_mock(string $uri)
     {
         // Mock a request class with the $uri URI
-        $request = $this->getMockBuilder('Request')
+        $request = $this->getMockBuilder('\Kohana\Request')
             ->setMethods(['uri', 'method'])
             ->setConstructorArgs([$uri])
             ->getMock();

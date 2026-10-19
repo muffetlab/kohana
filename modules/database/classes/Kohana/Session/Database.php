@@ -1,5 +1,13 @@
 <?php
 
+namespace Kohana\Session;
+
+use Kohana\Session;
+use Kohana\Cookie;
+use Kohana\DB;
+use Exception;
+use Kohana\Date;
+
 /**
  * Database-based session class.
  *
@@ -19,7 +27,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Session_Database extends Session
+class Database extends Session
 {
     // Database instance
     protected $_db;
@@ -42,11 +50,11 @@ class Kohana_Session_Database extends Session
     {
         if (!isset($config['group'])) {
             // Use the default group
-            $config['group'] = Database::$default;
+            $config['group'] = \Kohana\Database::$default;
         }
 
         // Load the database
-        $this->_db = Database::instance($config['group']);
+        $this->_db = \Kohana\Database::instance($config['group']);
 
         if (isset($config['table'])) {
             // Set the table name

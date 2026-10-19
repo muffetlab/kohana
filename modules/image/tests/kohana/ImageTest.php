@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Kohana;
+use Kohana\Image;
+
 /**
  * @package    Kohana/Image
  * @group      kohana

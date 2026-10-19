@@ -1,5 +1,13 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\ORM as Kohana_ORM;
+use Kohana\Exception as Kohana_Exception;
+use ReflectionFunction;
+use Kohana\ORM\Validation\Exception as ORM_Validation_Exception;
+use Serializable;
+
 /**
  * [Object Relational Mapping][ref-orm] (ORM) is a method of abstracting database
  * access to standard PHP calls. All table rows are represented as model objects,
@@ -14,7 +22,7 @@
  * @copyright  (c) 2007-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_ORM extends Model implements serializable
+class ORM extends Model implements Serializable
 {
     /**
      * Stores column information for ORM models
@@ -42,7 +50,7 @@ class Kohana_ORM extends Model implements serializable
     public static function factory(string $name, $id = null): Model
     {
         // Set class name
-        $model = 'Model_' . $name;
+        $model = Kohana::find_class('Model\\' . str_replace('_', '\\', $name));
 
         return new $model($id);
     }

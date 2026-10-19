@@ -1,5 +1,7 @@
 <?php
 
+use Kohana\Session;
+
 return [
     'driver' => 'File',
     'hash_method' => 'sha256',

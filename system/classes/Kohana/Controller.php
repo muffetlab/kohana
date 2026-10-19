@@ -1,5 +1,9 @@
 <?php
 
+namespace Kohana;
+
+use Kohana\HTTP\Exception as HTTP_Exception;
+
 /**
  * Abstract controller class. Controllers should only be created using a [Request].
  *
@@ -21,7 +25,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-abstract class Kohana_Controller
+abstract class Controller
 {
     /**
      * @var  Request  Request that created the controller

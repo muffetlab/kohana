@@ -1,5 +1,7 @@
 <?php
 
+namespace Kohana\Kodoc;
+
 /**
  * Set Kodoc_Missing::create_class as an autoloading to prevent missing classes
  * from crashing the api browser.  Classes that are missing a parent will
@@ -12,7 +14,7 @@
  * @license    https://kohana.top/license
  * @since      3.0.7
  */
-abstract class Kohana_Kodoc_Missing
+abstract class Missing
 {
     /**
      * Creates classes when they are otherwise not found.
@@ -29,7 +31,7 @@ abstract class Kohana_Kodoc_Missing
     {
         if (!class_exists($class)) {
             // Create a new missing class
-            eval("class $class extends Kodoc_Missing {}");
+            eval("class $class extends \Kohana\Kodoc\Missing {}");
         }
 
         return true;

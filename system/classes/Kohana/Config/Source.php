@@ -1,5 +1,7 @@
 <?php
 
+namespace Kohana\Config;
+
 /**
  * Base Config source Interface
  *
@@ -11,7 +13,7 @@
  * @copyright  (c) 2012-2014 Kohana Team
  * @license    https://kohana.top/license
  */
-interface Kohana_Config_Source
+interface Source
 {
     
 }

@@ -36,6 +36,26 @@
         "phpunit/phpunit": "^7.5",
         "phpunit/phpunit-dom-assertions": "^2.6.0"
     },
+    "autoload": {
+        "psr-4": {
+            "Kohana\\": [
+                "system/classes/Kohana",
+                "modules/auth/classes/Kohana",
+                "modules/cache/classes/Kohana",
+                "modules/codebench/classes",
+                "modules/database/classes/Kohana",
+                "modules/image/classes/Kohana",
+                "modules/minion/classes/Kohana",
+                "modules/orm/classes/Kohana",
+                "modules/unittest/classes/Kohana",
+                "modules/userguide/classes/Kohana"
+            ],
+            "App\\": "application/classes"
+        },
+        "files": [
+            "system/functions.php"
+        ]
+    },
     "config": {
         "policy": {
             "advisories": {

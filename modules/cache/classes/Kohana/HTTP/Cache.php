@@ -1,5 +1,17 @@
 <?php
 
+namespace Kohana\HTTP;
+
+use Kohana\HTTP\Cache as HTTP_Cache;
+use Kohana\Request;
+use Kohana\Request\Client as Request_Client;
+use Kohana\Response;
+use Kohana\HTTP\Request as HTTP_Request;
+use Kohana\HTTP\Header as HTTP_Header;
+use Kohana\Exception as Kohana_Exception;
+use Kohana\Arr;
+use Kohana\Cache\Arithmetic as Cache_Arithmetic;
+
 /**
  * HTTP Caching adaptor class that provides caching services to the
  * [Request_Client] class, using HTTP cache control logic as defined in
@@ -12,7 +24,7 @@
  * @license    https://kohana.top/license
  * @since      3.2.0
  */
-class Kohana_HTTP_Cache
+class Cache
 {
     const CACHE_STATUS_KEY = 'x-cache-status';
     const CACHE_STATUS_SAVED = 'SAVED';
@@ -39,8 +51,8 @@ class Kohana_HTTP_Cache
      */
     public static function factory($cache, array $options = []): HTTP_Cache
     {
-        if (!$cache instanceof Cache) {
-            $cache = Cache::instance($cache);
+        if (!$cache instanceof \Kohana\Cache) {
+            $cache = \Kohana\Cache::instance($cache);
         }
 
         $options['cache'] = $cache;
@@ -111,7 +123,7 @@ class Kohana_HTTP_Cache
         }
 
         if ($this->_cache_key_callback === null) {
-            $this->cache_key_callback('HTTP_Cache::basic_cache_key_generator');
+            $this->cache_key_callback('\Kohana\HTTP\Cache::basic_cache_key_generator');
         }
     }
 
@@ -130,7 +142,7 @@ class Kohana_HTTP_Cache
      */
     public function execute(Request_Client $client, Request $request, Response $response)
     {
-        if (!$this->_cache instanceof Cache)
+        if (!$this->_cache instanceof \Kohana\Cache)
             return $client->execute_request($request, $response);
 
         // If this is a destructive request, by-pass cache completely
@@ -187,7 +199,7 @@ class Kohana_HTTP_Cache
      */
     public function invalidate_cache(Request $request)
     {
-        if (($cache = $this->cache()) instanceof Cache) {
+        if (($cache = $this->cache()) instanceof \Kohana\Cache) {
             $cache->delete($this->create_cache_key($request, $this->_cache_key_callback));
         }
     }
@@ -199,7 +211,7 @@ class Kohana_HTTP_Cache
      * @param Cache|null $cache engine to use for caching
      * @return Kohana_Cache|Kohana_HTTP_Cache
      */
-    public function cache(Cache $cache = null)
+    public function cache(\Kohana\Cache $cache = null)
     {
         if ($cache === null)
             return $this->_cache;
@@ -341,7 +353,7 @@ class Kohana_HTTP_Cache
      */
     public function cache_response(string $key, Request $request, Response $response = null)
     {
-        if (!$this->_cache instanceof Cache)
+        if (!$this->_cache instanceof \Kohana\Cache)
             return false;
 
         // Check for Pragma: no-cache

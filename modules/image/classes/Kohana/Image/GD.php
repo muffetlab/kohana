@@ -1,5 +1,11 @@
 <?php
 
+namespace Kohana\Image;
+
+use Kohana\Image;
+use Kohana\Exception as Kohana_Exception;
+use Kohana\Image\GD as Image_GD;
+
 /**
  * Support for image manipulation using [GD](https://www.php.net/manual/en/book.image.php).
  *
@@ -9,7 +15,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    https://kohana.top/license.html
  */
-class Kohana_Image_GD extends Image
+class GD extends Image
 {
     // Which GD functions are available?
     const IMAGEROTATE = 'imagerotate';

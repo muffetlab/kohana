@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Kohana;
+use Kohana\Feed;
+use Kohana\Unittest\TestCase;
+
 /**
  * Test for feed helper
  *
@@ -14,7 +18,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_FeedTest extends Unittest_TestCase
+class Kohana_FeedTest extends TestCase
 {
     /**
      * Sets up the environment

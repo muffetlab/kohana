@@ -1,5 +1,10 @@
 <?php
 
+use Kohana\Kohana;
+use Kohana\Request;
+use Kohana\Unittest\TestCase;
+use Kohana\URL;
+
 /**
  * Tests URL
  *
@@ -14,7 +19,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_URLTest extends Unittest_TestCase
+class Kohana_URLTest extends TestCase
 {
     /**
      * Sets up the environment
@@ -36,8 +41,8 @@ class Kohana_URLTest extends Unittest_TestCase
      */
     // @codingStandardsIgnoreStart
     protected $environmentDefault = [
-        'Kohana::$base_url' => '/kohana/',
-        'Kohana::$index_file' => 'index.php',
+        '\Kohana\Kohana::$base_url' => '/kohana/',
+        '\Kohana\Kohana::$index_file' => 'index.php',
         'HTTP_HOST' => 'example.com',
         '_GET' => [],
     ];
@@ -98,7 +103,7 @@ class Kohana_URLTest extends Unittest_TestCase
                 'cli://example.com/kohana/index.php/',
                 [
                     'HTTPS' => false,
-                    'Request::$initial' => Request::factory('/')->protocol('cli')
+                    '\Kohana\Request::$initial' => Request::factory('/')->protocol('cli')
                 ]
             ],
             // Change base URL
@@ -107,7 +112,7 @@ class Kohana_URLTest extends Unittest_TestCase
                 false,
                 'https://example.com/kohana/',
                 [
-                    'Kohana::$base_url' => 'omglol://example.com/kohana/'
+                    '\Kohana\Kohana::$base_url' => 'omglol://example.com/kohana/'
                 ]
             ],
             // Use port in base URL, issue #3307
@@ -116,7 +121,7 @@ class Kohana_URLTest extends Unittest_TestCase
                 false,
                 'http://example.com:8080/',
                 [
-                    'Kohana::$base_url' => 'example.com:8080/'
+                    '\Kohana\Kohana::$base_url' => 'example.com:8080/'
                 ]
             ],
             // Use protocol from base URL if none specified
@@ -125,7 +130,7 @@ class Kohana_URLTest extends Unittest_TestCase
                 false,
                 'http://www.example.com/',
                 [
-                    'Kohana::$base_url' => 'http://www.example.com/'
+                    '\Kohana\Kohana::$base_url' => 'http://www.example.com/'
                 ]
             ],
             // Use HTTP_HOST before SERVER_NAME
@@ -572,7 +577,7 @@ class Kohana_URLTest extends Unittest_TestCase
      */
     public function test_if_invalid_host_throws_exception()
     {
-        $this->expectException(Kohana_Exception::class);
+        $this->expectException(\Kohana\Exception::class);
         $this->expectExceptionMessage('Invalid host <invalid>');
 
         // set the global HTTP_HOST to <invalid>
@@ -588,7 +593,7 @@ class Kohana_URLTest extends Unittest_TestCase
      */
     public function test_if_untrusted_host_throws_exception()
     {
-        $this->expectException(Kohana_Exception::class);
+        $this->expectException(\Kohana\Exception::class);
         $this->expectExceptionMessage('Untrusted host untrusted.com');
 
         // set the global HTTP_HOST to a valid but untrusted host
