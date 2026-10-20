@@ -1,105 +1,140 @@
-# Transparent Class Extension
+# Extending Classes
 
-The [cascading filesystem](files) allows transparent class extension. For instance, the class [Cookie] is defined in `SYSPATH/classes/Cookie.php` as:
+Kohana's classes are distributed with the framework and its [modules](modules) and must never be edited directly: any change you make to them is lost as soon as you upgrade. Everything you need to change can be done without touching those files, either by extending a class in your application, or by overriding a class that the framework looks up at runtime.
 
-    class Cookie extends Kohana_Cookie {}
+[!!] You should **never** modify any of the files that are distributed with Kohana. Always extend or override the class instead, to prevent upgrade issues.
 
-The default Kohana classes, and many extensions, use this definition so that almost all classes can be extended. You extend any class transparently, by defining your own class in `APPPATH/classes/Cookie.php` to add your own methods.
+Class files are not part of the [cascading filesystem](files) in the way [config](files/config), [translation](files/i18n) and [message](files/messages) files are. A [class](autoloading) is loaded from the file that matches its namespace, so each class file is loaded from exactly one location.
 
-[!!] You should **never** modify any of the files that are distributed with Kohana. Always make modifications to classes using transparent extension to prevent upgrade issues.
+## Extending a class
 
-For instance, if you wanted to create method that sets encrypted cookies using the [Encrypt] class, you would create a file at `APPPATH/classes/Cookie.php` that extends Kohana_Cookie, and adds your functions:
+To add functionality to a class, extend it with your own class. For example, a [Cookie] subclass that can store its values encrypted with the [Encrypt] class:
 
     <?php
 
-    class Cookie extends Kohana_Cookie
-    {
+    // application/classes/Cookie.php
 
+    namespace App;
+
+    use Kohana\Cookie as BaseCookie;
+    use Kohana\Encrypt;
+
+    class Cookie extends BaseCookie
+    {
         /**
-         * @var  mixed  default encryption instance
+         * @var  string  encryption instance to use
          */
         public static $encryption = 'default';
 
         /**
          * Sets an encrypted cookie.
          *
-         * @uses  Cookie::set
          * @uses  Encrypt::encode
          */
-        public static function encrypt($name, $value, $expiration = null)
+        public static function setEncrypted($name, $value, $lifetime = null)
         {
-            $value = Encrypt::instance(Cookie::$encrpytion)->encode((string) $value);
+            $value = Encrypt::instance(static::$encryption)->encode((string) $value);
 
-            parent::set($name, $value, $expiration);
+            return parent::set($name, $value, $lifetime);
         }
 
         /**
          * Gets an encrypted cookie.
          *
-         * @uses  Cookie::get
          * @uses  Encrypt::decode
          */
-        public static function decrypt($name, $default = null)
+        public static function getEncrypted($name, $default = null)
         {
             if ($value = parent::get($name, null)) {
-                $value = Encrypt::instance(Cookie::$encryption)->decode($value);
+                $value = Encrypt::instance(static::$encryption)->decode($value);
             }
 
             return isset($value) ? $value : $default;
         }
-
     }
 
-Now calling `Cookie::encrypt('secret', $data)` will create an encrypted cookie which we can decrypt with `$data = Cookie::decrypt('secret')`.
+Calling `App\Cookie::setEncrypted('secret', $data)` stores an encrypted cookie, and `$data = App\Cookie::getEncrypted('secret')` returns it again.
 
-## How it works
+Note that `App\Cookie` does **not** replace `Kohana\Cookie`. The framework refers to its own classes by their full name, so [Cookie::set] keeps using the original class. Use your own class wherever the extra functionality is needed.
 
-To understand how this works, let's look at what happens normally. When you use the Cookie class, [Kohana::autoload] looks for `classes/Cookie.php` in the [cascading filesystem](files). It looks in `application`, then each module, then `system`. The file is found in `system` and is included. Of course, `system/classes/Cookie.php` is just an empty class which extends `Kohana_Cookie`. Again, [Kohana::autoload] is called this time looking for `classes/Kohana/Cookie.php` which it finds in `system`.
+## Overriding framework classes
 
-When you add your transparently extended cookie class at `application/classes/Cookie.php` this file essentially "replaces" the file at `system/classes/Cookie.php` without actually touching it. This happens because this time when we use the Cookie class [Kohana::autoload] looks for `classes/Cookie.php` and finds the file in `application` and includes that one, instead of the one in system.
+Some classes are not referred to by a fixed name: the framework looks them up when it needs them, using [Kohana::find_class], which prefers the application namespace over the framework:
 
-## Example: changing [Cookie] settings
+    // Resolves to App\Model\User if it exists, otherwise Kohana\Model\User
+    $class = Kohana::find_class('Model\User');
 
-If you are using the [Cookie](cookies) class, and want to change a setting, you should do so using transparent extension, rather than editing the file in the system folder. If you edit it directly, and in the future you upgrade your Kohana version by replacing the system folder, your changes will be reverted and your cookies will probably be invalid. Instead, create a Cookie.php file either in `application/classes/Cookie.php` or a module (`MODPATH/<modulename>/classes/Cookie.php`).
+Defining a class with the same name in the `App\` namespace therefore replaces the framework class everywhere it is used this way. For example, `application/classes/Model/User.php` replaces `Kohana\Model\User`:
 
-    class Cookie extends Kohana_Cookie
+    <?php
+
+    // application/classes/Model/User.php
+
+    namespace App\Model;
+
+    use Kohana\Model\User as BaseUser;
+
+    class User extends BaseUser
     {
-
-        // Set a new salt
-        public $salt = "some new better random salt phrase";
-
-        // Don't allow javascript access to cookies
-        public $httponly = true;
-
+        // Your application specific model
     }
 
-## Example: TODO: an example
+These classes are resolved this way and can be overridden from your application:
 
-Just post the code and brief description of what function it adds, you don't have to do the "How it works" like above.
+ - [Controllers](mvc/controllers), e.g. `App\Controller\Welcome`
+ - [Models](mvc/models), e.g. `App\Model\User`
+ - Drivers of the [Auth], [Cache], [Database], [Encrypt], [Image] and [Session] classes, e.g. `App\Cache\File`
+ - [Minion tasks](minion/tasks), e.g. `App\Task\Db\Migrate`
 
-## Example: TODO: something else
+## Changing settings
 
-Just post the code and brief description of what function it adds, you don't have to do the "How it works" like above.
+Many classes are configured with static properties. Set them before the class is used, usually in your [bootstrap](bootstrap) file, using the full class name (or an import at the top of the file):
 
-## More examples
+    // application/bootstrap.php
+    Kohana\Cookie::$salt = 'your secret is safe with me';
+    Kohana\Cookie::$httponly = true;
 
-TODO: Provide some links to modules on GitHub, etc. that have examples of transparent extension in use.
+[!!] Changing the [Cookie::$salt] invalidates every cookie that was set before the change.
+
+## Making your own classes overridable
+
+If you are writing a module and want other developers to be able to replace one of your classes without editing your files, resolve it with [Kohana::find_class] instead of referring to it directly:
+
+    // Use App\Widget when the application provides it, otherwise Kohana\Widget
+    $class = Kohana::find_class('Widget');
+
+    $widget = new $class;
+
+An application can then override the class by defining `App\Widget` in `application/classes/Widget.php`, in the same way the framework's own controllers, models and drivers are overridden.
 
 ## Multiple Levels of Extension
 
-If you are extending a Kohana class in a module, you should maintain transparent extensions. In other words, do not include any variables or function in the "base" class (e.g. Cookie). Instead, make your own namespaced class, and have the "base" class extend that one. With our Encrypted cookie example we can create `MODPATH/mymod/Encrypted/Cookie.php`:
+Every class can be extended again, so functionality can be layered. For example, this application defines a template controller for all of its pages:
 
-    class Encrypted_Cookie extends Kohana_Cookie
+    <?php
+
+    // application/classes/Controller/Template.php
+
+    namespace App\Controller;
+
+    use Kohana\Controller\Template as BaseTemplate;
+
+    abstract class Template extends BaseTemplate
     {
-
-        // Use the same encrypt() and decrypt() methods as above
-
+        // Shared by every page in the application
     }
 
-And create `MODPATH/mymod/Cookie.php`:
+Pages then extend that class instead of the framework's:
 
-    class Cookie extends Encrypted_Cookie
+    <?php
+
+    // application/classes/Controller/Welcome.php
+
+    namespace App\Controller;
+
+    class Welcome extends Template
     {
+        // ...
     }
 
-This will still allow users to add their own extension to [Cookie] while leaving your extensions intact. To do that they would make a cookie class that extends `Encrypted_Cookie` (rather than `Kohana_Cookie`) in their application folder.
+Keep base classes free of application specific behaviour, so that the classes extending them stay reusable.

@@ -15,7 +15,7 @@ use http\Header;
  *
  * - Environment initialization
  * - Locating files within the cascading filesystem
- * - Auto-loading and transparent extension of classes
+ * - Auto-loading of namespaced classes
  * - Variable and path debugging
  *
  * @package    Kohana

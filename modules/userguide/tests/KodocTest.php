@@ -244,6 +244,22 @@ COMMENT
             [
                 <<<'COMMENT'
 /**
+ * @see Kohana\Feed::parse()
+ */
+COMMENT
+                ,
+                [
+                    '',
+                    [
+                        'see' => [
+                            '<a href="' . URL::site($route_api->uri(['class' => 'Kohana\Feed']) . '#parse') . '">Kohana\Feed::parse()</a>',
+                        ],
+                    ],
+                ],
+            ],
+            [
+                <<<'COMMENT'
+/**
  * @throws Exception
  */
 COMMENT
@@ -269,6 +285,22 @@ COMMENT
                     [
                         'throws' => [
                             '<a href="' . URL::site($route_api->uri(['class' => 'Exception'])) . '">Exception</a> During failure',
+                        ],
+                    ],
+                ],
+            ],
+            [
+                <<<'COMMENT'
+/**
+ * @throws Kohana\Exception During failure
+ */
+COMMENT
+                ,
+                [
+                    '',
+                    [
+                        'throws' => [
+                            '<a href="' . URL::site($route_api->uri(['class' => 'Kohana\Exception'])) . '">Kohana\Exception</a> During failure',
                         ],
                     ],
                 ],
@@ -324,62 +356,51 @@ COMMENT
     }
 
     /**
-     * Provides test data for test_transparent_classes
-     * @return array
+     * Tests that classes listed for the API browser are namespaced
+     *
+     * @covers Kohana_Kodoc::classes
      */
-    public function provider_transparent_classes(): array
+    public function test_classes_are_namespaced()
     {
-        return [
-            // Kohana_Core is a special case
-            [
-                'Kohana',
-                'Kohana_Core',
-                null
+        // The list that Kohana::list_files('classes') would return
+        $list = [
+            'classes/Feed.php' => SYSPATH . 'classes/Feed.php',
+            'classes/Kohana' => [
+                'classes/Kohana/Exception.php' => SYSPATH . 'classes/Kohana/Exception.php',
             ],
-            [
-                'Controller_Template',
-                'Kohana_Controller_Template',
-                null
-            ],
-            [
-                'Controller_Template',
-                'Kohana_Controller_Template',
-                [
-                    'Kohana_Controller_Template' => 'Kohana_Controller_Template',
-                    'Controller_Template' => 'Controller_Template'
-                ]
-            ],
-            [
-                false,
-                'Kohana_Controller_Template',
-                [
-                    'Kohana_Controller_Template' => 'Kohana_Controller_Template'
-                ]
-            ],
-            [
-                false,
-                'Controller_Template',
-                null
+            'classes/Controller' => [
+                'classes/Controller/Welcome.php' => APPPATH . 'classes/Controller/Welcome.php',
             ],
         ];
+
+        // Framework classes are in the Kohana namespace, application classes in App
+        $this->assertSame([
+            'Kohana\Feed' => 'Kohana\Feed',
+            'Kohana\Kohana\Exception' => 'Kohana\Kohana\Exception',
+            'App\Controller\Welcome' => 'App\Controller\Welcome',
+        ], Kodoc::classes($list));
     }
 
     /**
-     * Tests Kodoc::is_transparent
+     * Tests that short class names in tags are resolved to their class
      *
-     * Checks that a selection of transparent and non-transparent classes give expected results
-     *
-     * @group kohana.userguide.3529-configurable-transparent-classes
-     * @dataProvider provider_transparent_classes
-     * @param mixed $expected
-     * @param string $class
-     * @param array|null $classes
-     * @throws Kohana_Exception
+     * @covers Kohana_Kodoc::link_class_member
      */
-    public function test_transparent_classes($expected, string $class, ?array $classes)
+    public function test_short_class_names_are_resolved()
     {
-        $result = Kodoc::is_transparent($class, $classes);
-        $this->assertSame($expected, $result);
+        $route_api = Route::get('docs/api');
+
+        // A short name that exists in the framework is resolved
+        $this->assertSame(
+            '<a href="' . URL::site($route_api->uri(['class' => 'Kohana\Cookie']) . '#set') . '">Cookie::set</a>',
+            Kodoc::format_tag('uses', 'Cookie::set')
+        );
+
+        // A short name that does not exist is left alone
+        $this->assertSame(
+            '<a href="' . URL::site($route_api->uri(['class' => 'MissingClass']) . '#method') . '">MissingClass::method()</a>',
+            Kodoc::format_tag('uses', 'MissingClass::method()')
+        );
     }
 
 }

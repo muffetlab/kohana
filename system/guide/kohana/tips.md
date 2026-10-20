@@ -4,7 +4,7 @@ This is a collection of tips and common mistakes or errors you may encounter.
 
 ## Never edit the `system` folder!
 
-You should (almost) never edit the system folder. Any change you want to make to files in system and modules can be made via the [cascading filesystem](files) and [transparent extension](extension) and won't break when you try to update your Kohana version.
+You should (almost) never edit the system folder. Any change you want to make to files in system and modules can be made via the [cascading filesystem](files) and by [extending classes](extension) and won't break when you try to update your Kohana version.
 
 ## Don't try and use one route for everything
 
@@ -12,7 +12,7 @@ Kohana 3 [routes](routing) are very powerful and flexible, don't be afraid to us
 
 ## Files not found on some systems
 
-As of Kohana 3.3, classes are autoloaded using the case-sensitive PSR-0 autoloader. This means that using the class Foo {} with a file in classes/foo.php will work on case-insensitive file systems (such as the default HFS+ FS used in Mac OS X) but will fail when used on a case-sensitive FS (typical on many production Linux servers).
+As of Kohana 4.0, classes are autoloaded using the case-sensitive PSR-4 autoloader. This means that using `App\Foo` with a file in `classes/foo.php` will work on a case-insensitive file system (the default on macOS and Windows) but will fail on a case-sensitive file system (the default on Linux, and typical on many production servers). The correct file name matches the class name exactly, `classes/Foo.php`.
 
 ## Handling lots of routes
 

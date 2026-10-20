@@ -13,7 +13,7 @@ Route::set('docs/media', 'guide-media(/<file>)', ['file' => '.+'])
 
 // API Browser, if enabled
 if (Kohana::$config->load('userguide.api_browser') === true) {
-    Route::set('docs/api', 'guide-api(/<class>)', ['class' => '[a-zA-Z0-9_]+'])
+    Route::set('docs/api', 'guide-api(/<class>)', ['class' => '[a-zA-Z0-9_\\\\]+'])
         ->defaults([
             'controller' => 'Userguide',
             'action' => 'api',

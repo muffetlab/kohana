@@ -18,9 +18,9 @@ use Kohana\Kodoc\Markdown as Kodoc_Markdown;
 class Kodoc
 {
     /**
-     * @var string  PCRE fragment for matching 'Class', 'Class::method', 'Class::method()' or 'Class::$property'
+     * @var string  PCRE fragment for matching 'Class', 'Namespace\Class', 'Class::method', 'Class::method()' or 'Class::$property'
      */
-    public static $regex_class_member = '((\w++)(?:::(\$?\w++))?(?:\(\))?)';
+    public static $regex_class_member = '(((?:[A-Za-z_\x7f-\xff][\w\x7f-\xff]*\\\\)*[A-Za-z_\x7f-\xff][\w\x7f-\xff]*)(?:::(\$?\w++))?(?:\(\))?)';
 
     /**
      * Make a class#member API link using an array of matches from [Kodoc::$regex_class_member]
@@ -43,6 +43,17 @@ class Kodoc
                 $member = '#constant:' . substr($matches[3], 0);
             } else {
                 $member = '#' . $matches[3];
+            }
+        }
+
+        // Documents refer to classes by their short name ("Cookie") while the
+        // API browser works with full class names, resolve the short name to
+        // the class that it actually points to, e.g. Kohana\Cookie
+        if (strpos($class, '\\') === false) {
+            $resolved = Kohana::find_class($class);
+
+            if (class_exists($resolved)) {
+                $class = $resolved;
             }
         }
 
@@ -71,9 +82,6 @@ class Kodoc
         $route = Route::get('docs/api');
 
         foreach ($classes as $class) {
-            if (Kodoc::is_transparent($class, $classes))
-                continue;
-
             $class = Kodoc_Class::factory($class);
 
             // Test if we should show this class
@@ -125,8 +133,15 @@ class Kodoc
                 // Remove "classes/" and the extension
                 $class = substr($name, 8, -4);
 
-                // Convert slashes to underscores
-                $class = str_replace(DIRECTORY_SEPARATOR, '_', $class);
+                // Convert directory separators to namespace separators
+                $class = str_replace(DIRECTORY_SEPARATOR, '\\', $class);
+
+                // Application classes live in the App namespace, the framework
+                // and its modules live in the Kohana namespace, see the psr-4
+                // section of composer.json
+                $namespace = strpos($path, APPPATH) === 0 ? 'App' : 'Kohana';
+
+                $class = $namespace . '\\' . $class;
 
                 $classes[$class] = $class;
             }
@@ -150,23 +165,14 @@ class Kodoc
         $classes = [];
 
         foreach ($list as $class) {
-            // Skip transparent extension classes
-            if (Kodoc::is_transparent($class))
-                continue;
-
             $_class = new ReflectionClass($class);
 
             $methods = [];
 
             foreach ($_class->getMethods() as $_method) {
-                $declares = $_method->getDeclaringClass()->name;
-
-                // Remove the transparent prefix from declaring classes
-                if ($child = Kodoc::is_transparent($declares)) {
-                    $declares = $child;
-                }
-
-                if ($declares === $_class->name || $declares === "Core") {
+                // Only include the methods declared by this class itself,
+                // methods inherited from a parent class are documented there
+                if ($_method->getDeclaringClass()->name === $_class->name) {
                     $methods[] = $_method->name;
                 }
             }
@@ -205,10 +211,11 @@ class Kodoc
         } elseif ($tag === 'throws') {
             $route = Route::get('docs/api');
 
-            if (preg_match('/^(\w+)\W(.*)$/D', $text, $matches)) {
+            // Split the class name, which may be namespaced, from the description
+            if (preg_match('/^([\w\\\\]+)(.*)$/D', $text, $matches) && $matches[2] !== '') {
                 return HTML::anchor(
                         $route->uri(['class' => $matches[1]]), $matches[1]
-                    ) . ' ' . $matches[2];
+                    ) . $matches[2];
             }
 
             return HTML::anchor(
@@ -359,62 +366,6 @@ class Kodoc
         }
 
         return $show_this;
-    }
-
-    /**
-     * Checks whether a class is a transparent extension class or not.
-     *
-     * This method takes an optional $classes parameter, a list of all defined
-     * class names. If provided, the method will return false unless the extension
-     * class exists. If not, the method will only check known transparent class
-     * prefixes.
-     *
-     * Transparent prefixes are defined in the userguide.php config file:
-     *
-     *     'transparent_prefixes' => [
-     *         'Kohana' => true,
-     *     ];
-     *
-     * Module developers can therefore add their own transparent extension
-     * namespaces and exclude them from the userguide.
-     *
-     * @param string $class The name of the class to check for transparency
-     * @param array|null $classes An optional list of all defined classes
-     * @return string|bool If this is a transparent extension class, returns the child class name; otherwise false.
-     * @throws Kohana_Exception
-     */
-    public static function is_transparent(string $class, array $classes = null)
-    {
-
-        static $transparent_prefixes = null;
-
-        if (!$transparent_prefixes) {
-            $transparent_prefixes = Kohana::$config->load('userguide.transparent_prefixes');
-        }
-
-        // Split the class name at the first underscore
-        $segments = explode('_', $class, 2);
-
-        if (count($segments) === 2 && isset($transparent_prefixes[$segments[0]])) {
-            if ($segments[1] === 'Core') {
-                // Cater for Module extends Module_Core naming
-                $child_class = $segments[0];
-            } else {
-                // Cater for Foo extends Module_Foo naming
-                $child_class = $segments[1];
-            }
-
-            // It is only a transparent class if the unprefixed class also exists
-            if ($classes && !isset($classes[$child_class]))
-                return false;
-
-            // Return the name of the child class
-            return $child_class;
-        }
-        else {
-            // Not a transparent class
-            return false;
-        }
     }
 
 }

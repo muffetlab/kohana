@@ -25,19 +25,6 @@ First, copy this config and place in it `<module>/config/userguide.php`, replaci
                 // Copyright message, shown in the footer for this module
                 'copyright' => '&copy; 2018 <Your Name>',
             ]
-        ],
-        /*
-         * If you use transparent extensions outside the Kohana_ namespace,
-         * add your class prefix here. Both common Kohana naming conventions are
-         * excluded:
-         *   - Modulename extends Modulename_Core
-         *   - Foo extends Modulename_Foo
-         *
-         * For example, if you use Modulename_<class_name> for your base classes
-         * then you would define:
-         */
-        'transparent_prefixes' => [
-            'Modulename' => true,
         ]
     ];
 

@@ -108,7 +108,7 @@ class Config
 
         if (isset($this->_groups[$group])) {
             if (isset($path)) {
-                return Arr::path($this->_groups[$group], $path, null, '.');
+                return Arr::path($this->_groups[$group]->as_array(), $path, null, '.');
             }
             return $this->_groups[$group];
         }

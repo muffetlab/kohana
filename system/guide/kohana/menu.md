@@ -23,7 +23,7 @@
 - Basic Usage
    - [Debugging](debugging)
    - [Loading Classes](autoloading)
-   - [Transparent Extension](extension)
+   - [Extending Classes](extension)
    - [Helpers](helpers)
    - [Requests](requests)
    - [Sessions](sessions)

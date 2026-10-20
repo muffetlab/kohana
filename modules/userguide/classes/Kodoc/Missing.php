@@ -29,9 +29,19 @@ abstract class Missing
      */
     public static function create_class(string $class): bool
     {
+        // Autoloaders are given the class name without a leading backslash
+        $class = ltrim($class, '\\');
+
         if (!class_exists($class)) {
-            // Create a new missing class
-            eval("class $class extends \Kohana\Kodoc\Missing {}");
+            if (strpos($class, '\\') !== false) {
+                // Create the missing class in its namespace
+                $pos = strrpos($class, '\\');
+
+                eval('namespace ' . substr($class, 0, $pos) . '; class ' . substr($class, $pos + 1) . ' extends \Kohana\Kodoc\Missing {}');
+            } else {
+                // Create a new missing class
+                eval("class $class extends \Kohana\Kodoc\Missing {}");
+            }
         }
 
         return true;

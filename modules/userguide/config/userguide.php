@@ -24,8 +24,4 @@ return [
             'copyright' => '&copy; 2008–2014 Kohana Team',
         ]
     ],
-    // Set transparent class name segments
-    'transparent_prefixes' => [
-        'Kohana' => true,
-    ]
 ];
