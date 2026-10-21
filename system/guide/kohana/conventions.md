@@ -4,26 +4,39 @@ It is encouraged that you follow Kohana's coding style. This makes code more rea
 
 ## Class Names and File Location
 
-Class names in Kohana follow a strict convention to facilitate [autoloading](autoloading). Class names should have uppercase first letters with underscores to separate words. Underscores are significant as they directly reflect the file location in the filesystem.
+Classes are autoloaded with [PSR-4](autoloading), so a class name maps directly onto its file path: the namespace prefix selects the base directory, and the rest of the name, including any sub-namespaces, is the path within it. The file name and its case must match the class name exactly.
 
 The following conventions apply:
 
-1. CamelCased class names should be used when it is undesirable to create a new directory level.
-2. All class file names and directory names must match the case of the class as per [PSR-0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md).
-3. All classes should be in the `classes` directory. This may be at any level in the [cascading filesystem](files).
+1. Framework classes live in the `Kohana\` namespace, which maps to `system/classes` and the `classes` directory of each module.
+2. Your own classes live in the `App\` namespace, which maps to `application/classes`.
+3. Controllers are placed in the `Controller` sub-namespace: `Kohana\Controller\Welcome` is stored in `system/classes/Controller/Welcome.php`.
+4. Models are placed in the `Model` sub-namespace: `Kohana\Model\User` is stored in `modules/orm/classes/Model/User.php`.
+5. A group of related classes can use a deeper sub-namespace, e.g. `Kohana\Model\Auth\User` is stored in `modules/orm/classes/Model/Auth/User.php`.
 
 ### Examples  {#class-name-examples}
 
-Remember that in a class, an underscore means a new directory. Consider the following examples:
+Consider the following examples:
 
-| Class Name          | File Path                       |
-|---------------------|---------------------------------|
-| Controller_Template | classes/Controller/Template.php |
-| Model_User          | classes/Model/User.php          |
-| Model_BlogPost      | classes/Model/BlogPost.php      |
-| Database            | classes/Database.php            |
-| Database_Query      | classes/Database/Query.php      |
-| Form                | classes/Form.php                |
+| Class Name                  | File Path                                      |
+|-----------------------------|------------------------------------------------|
+| `Kohana\Controller\Template`| `system/classes/Controller/Template.php`       |
+| `Kohana\Model\User`         | `modules/orm/classes/Model/User.php`           |
+| `Kohana\Model\Auth\User`    | `modules/orm/classes/Model/Auth/User.php`      |
+| `Kohana\Database`           | `modules/database/classes/Database.php`        |
+| `Kohana\Database\Query`     | `modules/database/classes/Database/Query.php`  |
+| `Kohana\Form`               | `system/classes/Form.php`                      |
+| `App\Controller\Welcome`    | `application/classes/Controller/Welcome.php`   |
+| `App\Model\BlogPost`        | `application/classes/Model/BlogPost.php`       |
+
+The base classes are namespaced as well. A controller extends [Controller], a model extends [Model], and both are found in the `Kohana\` namespace.
+
+[!!] Underscores in class names are no longer converted into directories. The file name simply matches the class name, so `App\My_Class_Name` is stored in `application/classes/My_Class_Name.php`.
+
+When the framework must find a class that either the application or the framework may provide, such as a controller or a model, it uses [Kohana::find_class], which tries the `App\` namespace before `Kohana\`:
+
+    // Resolves to App\Model\User when it exists, otherwise Kohana\Model\User
+    $class = Kohana::find_class('Model\\User');
 
 ## Coding Style
 
@@ -31,22 +44,42 @@ In order to produce highly consistent source code, we ask that everyone follow t
 
 ### Naming Conventions
 
-Kohana uses under_score naming, not camelCase naming.
+Methods and variables use under_score naming, not camelCase naming.
 
 #### Classes
 
-    // Controller class, uses Controller_ prefix
-    class Controller_Apple extends Controller
+Class names are namespaced, and each segment starts with an uppercase letter:
+
+    namespace App\Controller;
+
+    // Controller class, extends the base Controller
+    class Apple extends Controller
     {
     }
 
-    // Model class, uses Model_ prefix
-    class Model_Cheese extends Model
+    namespace App\Model;
+
+    // Model class, extends the base Model
+    class Cheese extends Model
     {
     }
+
+    namespace App;
 
     // Regular class
     class Peanut
+    {
+    }
+
+#### Methods
+
+Method names use under_score naming:
+
+    public function my_method()
+    {
+    }
+
+    public static function my_static_method()
     {
     }
 

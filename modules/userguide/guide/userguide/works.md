@@ -20,6 +20,10 @@ Any images used in the userguide pages must be in `media/guide/<module>/`. For e
 
 ### API browser
 
-The API browser is generated from the actual source code. The descriptions for classes, constants, properties, and methods is extracted from the comments and parsed in Markdown. For example if you look in the comment for [Kohana_Core::init](https://github.com/kohana/core/blob/c443c44922ef13421f4a/classes/kohana/core.php#L5) you can see a Markdown list and table. These are parsed and show correctly in the API browser. `@param`, `@uses`, `@throws`, `@returns` and other tags are parsed as well.
+The API browser is generated from the actual source code. The descriptions for classes, constants, properties, and methods is extracted from the comments and parsed in Markdown. For example if you look in the comment for [Kohana::init] you can see a Markdown list and table. These are parsed and show correctly in the API browser. `@param`, `@uses`, `@throws`, `@returns` and other tags are parsed as well.
+
+The API browser lists every class under the `classes/` directory of the application, the modules and the system path. Framework and module classes are shown under `Kohana\` and application classes under `App\`, e.g. [Kohana\Cookie] and [App\Controller\Welcome]. Classes are addressed by their full name, with the namespace separators encoded in the URL.
+
+Which classes appear can be narrowed with the `api_packages` config option, which filters on the `@package` tag of each class.
 
 TODO: give more specific details on how to comment your classes, constants, methods, etc. including package and how it relates to the api module.
