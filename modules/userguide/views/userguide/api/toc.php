@@ -1,6 +1,7 @@
 <?php
 
 use Kohana\HTML;
+use Kohana\Kodoc;
 use Kohana\Text;
 
 ?>
@@ -63,12 +64,14 @@ use Kohana\Text;
 
 <div class="class-list">
 
-    <?php foreach ($classes as $class => $methods): $link = $route->uri(['class' => $class]) ?>
+    <?php foreach ($classes as $class => $methods): ?>
+        <?php $link = $route->uri(['class' => $class]) ?>
+        <?php $name = Kodoc::shortName($class) ?>
         <div class="class <?php echo Text::alternate('left', 'right') ?>">
-            <h2><?php echo HTML::anchor($link, $class) ?></h2>
+            <h2><?php echo HTML::anchor($link, $name) ?></h2>
             <ul class="methods">
                 <?php foreach ($methods as $method): ?>
-                    <li><?php echo HTML::anchor("$link#$method", "$class::$method") ?></li>
+                    <li><?php echo HTML::anchor("$link#$method", "$name::$method") ?></li>
                 <?php endforeach ?>
             </ul>
         </div>

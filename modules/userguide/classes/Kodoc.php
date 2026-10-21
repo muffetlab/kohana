@@ -23,6 +23,26 @@ class Kodoc
     public static $regex_class_member = '(((?:[A-Za-z_\x7f-\xff][\w\x7f-\xff]*\\\\)*[A-Za-z_\x7f-\xff][\w\x7f-\xff]*)(?:::(\$?\w++))?(?:\(\))?)';
 
     /**
+     * Make a display name for a class, without its namespace.
+     *
+     * Class names are namespaced since classes are autoloaded with PSR-4, but
+     * the namespace is noise when listing classes (or their members) in the
+     * API browser, so the listing shows `Cookie` instead of `Kohana\Cookie`.
+     *
+     * [!!] This is for display only. Never use it to look up a class, the
+     * full name is required to find, load and link a class.
+     *
+     * @param string $class Full name of the class, e.g. `Kohana\Cookie`
+     * @return  string  Name of the class without its namespace, e.g. `Cookie`
+     */
+    public static function shortName(string $class): string
+    {
+        $pos = strrpos($class, '\\');
+
+        return $pos === false ? $class : substr($class, $pos + 1);
+    }
+
+    /**
      * Make a class#member API link using an array of matches from [Kodoc::$regex_class_member]
      *
      * @param array $matches [1 => 'link text', 2 => 'class name', [3 => 'member name']]
@@ -88,7 +108,8 @@ class Kodoc
             if (!Kodoc::show_class($class))
                 continue;
 
-            $link = HTML::anchor($route->uri(['class' => $class->class->name]), $class->class->name);
+            // Link using the full class name, but display it without the namespace
+            $link = HTML::anchor($route->uri(['class' => $class->class->name]), Kodoc::shortName($class->class->name));
 
             if (isset($class->tags['package'])) {
                 foreach ($class->tags['package'] as $package) {
