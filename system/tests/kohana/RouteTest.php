@@ -917,17 +917,18 @@ class Kohana_RouteTest extends TestCase
                 ['controller' => 'home', 'action' => 'index'],
                 'article_name',
                 'Article name with special chars \\ ##',
-                'blog/article/Article%20name%20with%20special%20chars%20\\%20%23%23'
+                'blog/article/Article%20name%20with%20special%20chars%20%5C%20%23%23'
             ],
         ];
     }
 
     /**
-     * http://dev.kohanaframework.org/issues/4079
+     * Parameters passed to Route::uri() are rawurlencoded, and encoded slashes
+     * are decoded back into path separators (see the Apache docs about
+     * AllowEncodedSlashes and AcceptPathInfo). Backslashes remain encoded.
      *
      * @test
      * @covers Route::get
-     * @ticket 4079
      * @dataProvider provider_route_uri_encode_parameters
      */
     public function test_route_uri_encode_parameters($name, $uri_callback, $defaults, $uri_key, $uri_value, $expected)

@@ -475,10 +475,13 @@ class Route
     public function uri(array $params = null): string
     {
         if ($params) {
-            // @issue #4079 rawurlencode parameters
+            // Encode the parameters, then decode slashes back so that they can
+            // appear in a path segment; see the Apache docs about
+            // AllowEncodedSlashes and AcceptPathInfo. Backslashes stay encoded
+            // (%5C): they are not valid in a URL, and browsers rewrite them to
+            // slashes, so an encoded backslash is the only form that round-trips.
             $params = array_map('rawurlencode', $params);
-            // decode slashes back, see Apache docs about AllowEncodedSlashes and AcceptPathInfo
-            $params = str_replace(['%2F', '%5C'], ['/', '\\'], $params);
+            $params = str_replace('%2F', '/', $params);
         }
 
         $defaults = $this->_defaults;
