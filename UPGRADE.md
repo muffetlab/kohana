@@ -394,3 +394,22 @@ Related fixes in the database module:
 - `Application::VERSION` is `4.0.0-dev`. `php kohana -V` (or `--version`, `version`) prints it; `-h` and `--help` list the commands. Other arguments starting with `-` before the command name are rejected instead of being taken as a command name.
 - Console errors end with a newline and exit with status 1 when the exception code is not a valid exit status. Before, a PDO error such as `42P07` was printed after the message instead of being used as the exit status.
 - `php kohana auth:migration` copies a migration for the ORM auth tables (`users`, `roles`, `roles_users`, `user_tokens`, plus the `login` and `admin` roles) into `database/migrations`. It is not run automatically, so enabling the ORM module never creates tables you did not ask for. Applications that already created these tables from `auth-schema-*.sql` should not run it.
+
+## 26. All settings live in `config/`
+
+Kohana 3 spread its settings over `system/config`, each module's `config/` directory and the application's. Kohana 4 keeps every setting in the project's `config/` directory, reading environment-specific values with `env()`. Modules and the system no longer ship copies; the framework keeps only reference data (`mimes`, `inflector`, `user_agents`, `credit_cards`) in `system/config`. See [`docs/kohana/environment.md`](docs/kohana/environment.md).
+
+New and changed files:
+
+- `config/app.php` (new) holds what `bootstrap/app.php` used to hard-code: environment, base URL, index file, time zone, locale, error handling, caching, profiling and the list of enabled modules. The bootstrap reads it.
+- `config/cookie.php` (new) sets `Cookie::$salt`, `$expiration`, `$path`, `$domain`, `$secure` and `$httponly`. `httponly` now defaults to `true`.
+- `config/session.php` merges the system's and the database module's session files and adds `driver`, the default session driver. `Session::$default` is `null` by default and falls back to it.
+- `config/cache.php` lists all stores and adds `default`, the default store. `Cache::$default` is `null` by default and falls back to it.
+- `config/database.php`, `encrypt.php`, `auth.php`, `image.php`, `url.php` and `curl.php` read their environment-specific values from `env()`.
+- `modules/unittest/config/unittest.php` is removed; its code coverage settings no longer did anything.
+- The `config('file.path', $default)` helper reads configuration values.
+
+**Action:**
+1. Copy the framework's `config/` files into your project and move your values into them (or into `.env`). Delete your copies of the old module and system files.
+2. Move the settings at the top of your `bootstrap/app.php` (time zone, locale, `Application::init()` options, `Application::modules()` list, `Cookie::$salt`) into `config/app.php`, `config/cookie.php` and `.env`, and take the new `bootstrap/app.php` from the framework.
+3. If you set `Session::$default` or `Cache::$default` in code, you can move the value to `SESSION_DRIVER` and `CACHE_STORE`.
