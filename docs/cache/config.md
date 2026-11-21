@@ -2,7 +2,7 @@
 
 Kohana Cache uses configuration groups to create cache instances. A configuration group can use any supported driver, with successive groups using multiple instances of the same driver type.
 
-The default cache group is loaded based on the `Cache::$default` setting. It is set to the `file` driver as standard, however this can be changed within the `/application/boostrap.php` file.
+The default cache group is loaded based on the `Cache::$default` setting. It is set to the `file` driver as standard, however this can be changed within the `/app/boostrap.php` file.
 
     // Change the default cache driver to memcached
     Cache::$default = 'memcached';
@@ -12,7 +12,7 @@ The default cache group is loaded based on the `Cache::$default` setting. It is 
 
 ## Group settings
 
-Below are the default cache configuration groups for each supported driver. Add to or override these settings within the `application/config/cache.php` file.
+Below are the default cache configuration groups for each supported driver. Add to or override these settings within the `app/config/cache.php` file.
 
 | Name           | Required | Description                              |
 |----------------|----------|------------------------------------------|
@@ -108,7 +108,7 @@ A lifetime of `0` stores an item without expiry. The store supports `increment()
 
 ## Override existing configuration group
 
-The following example demonstrates how to override an existing configuration setting, using the config file in `/application/config/cache.php`.
+The following example demonstrates how to override an existing configuration setting, using the config file in `/app/config/cache.php`.
 
     <?php
 
@@ -131,7 +131,7 @@ The following example demonstrates how to override an existing configuration set
 
 ## Add new configuration group
 
-The following example demonstrates how to add a new configuration setting, using the config file in `/application/config/cache.php`.
+The following example demonstrates how to add a new configuration setting, using the config file in `/app/config/cache.php`.
 
     <?php
 

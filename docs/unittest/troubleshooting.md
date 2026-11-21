@@ -11,7 +11,7 @@ The directories that count towards coverage are listed in the `<source>` section
 
 ## Database tests are skipped
 
-The database tests connect with the `default` (and `mysqli`) groups of `config/database.php` and skip themselves when the connection fails. Put local credentials in `application/config/database.php` and keep that file out of version control.
+The database tests connect with the `default` (and `mysqli`) groups of `config/database.php` and skip themselves when the connection fails. Put local credentials in `app/config/database.php` and keep that file out of version control.
 
 ## "Class ... not found" for a test fixture
 

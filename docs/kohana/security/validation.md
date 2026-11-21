@@ -168,7 +168,7 @@ The method `User_Model::unique_username()` would be defined similar to:
 
 # A Complete Example
 
-First, we need a `View` that contains the HTML form, which will be placed in `application/views/user/register.php`:
+First, we need a `View` that contains the HTML form, which will be placed in `app/views/user/register.php`:
 
     <?php echo Form::open() ?>
     <?php if ($errors): ?>
@@ -200,7 +200,7 @@ First, we need a `View` that contains the HTML form, which will be placed in `ap
 
 [!!] This example uses the `Form` helper extensively. Using `Form` instead of writing HTML ensures that all the form inputs will properly handle input that includes HTML characters. If you prefer to write the HTML yourself, be sure to use `Html::chars()` to escape user input.
 
-Next, we need a controller and action to process the registration, which will be placed in `application/classes/Http/Controllers/UserController.php`:
+Next, we need a controller and action to process the registration, which will be placed in `app/classes/Http/Controllers/UserController.php`:
 
     class UserController extends Controller
     {
@@ -238,7 +238,7 @@ Next, we need a controller and action to process the registration, which will be
 
     }
 
-We will also need a user model, which will be placed in `application/classes/Models/User.php`:
+We will also need a user model, which will be placed in `app/classes/Models/User.php`:
 
     class User extends Model
     {

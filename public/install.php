@@ -57,7 +57,7 @@ clearstatcache(true);
                 <?php if (is_file(APPPATH . 'bootstrap.php')): ?>
                     <td class="pass"><?= APPPATH ?></td>
                 <?php else: $failed = true ?>
-                    <td class="fail">The configured <code>application</code> directory does not exist or does not contain required files.</td>
+                    <td class="fail">The configured <code>app</code> directory does not exist or does not contain required files.</td>
                 <?php endif ?>
             </tr>
             <tr>

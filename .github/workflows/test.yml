@@ -83,7 +83,7 @@ jobs:
 
       - name: Configure test database
         run: |
-          cat > application/config/database.php <<'EOF'
+          cat > app/config/database.php <<'EOF'
           <?php
           return [
               'default' => [

@@ -2,7 +2,7 @@
 
 // Constants defined by public/index.php at runtime
 define('DOCROOT', __DIR__ . '/public/');
-define('APPPATH', __DIR__ . '/application/');
+define('APPPATH', __DIR__ . '/app/');
 define('MODPATH', __DIR__ . '/modules/');
 define('SYSPATH', __DIR__ . '/system/');
 define('VENDOR_PATH', __DIR__ . '/vendor/');

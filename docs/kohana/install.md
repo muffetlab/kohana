@@ -23,9 +23,9 @@ composer install
 
 # Configure
 
-Before the application can be run, you will need to make a few changes to the `application/bootstrap.php` file. This
+Before the application can be run, you will need to make a few changes to the `app/bootstrap.php` file. This
 file is the first one to be included by `public/index.php` and sets up most of the global options for the application.
-Open `application/bootstrap.php` and make the following changes:
+Open `app/bootstrap.php` and make the following changes:
 
  - Set the default [timezone](https://www.php.net/timezones) for your application.
 ~~~
@@ -43,7 +43,7 @@ Application::init([
 ]);
 ~~~
 
- - List your trusted hosts. Open `application/config/url.php` and add regex patterns of the hosts you expect your application to be accessible from.
+ - List your trusted hosts. Open `app/config/url.php` and add regex patterns of the hosts you expect your application to be accessible from.
 
    [!!] Do not forget to escape your dots (.) as these are regex patterns. These patterns should always fully match, as they are prepended with `^` and appended with `$`.
 ~~~
@@ -60,10 +60,10 @@ return [
 Cookie::$salt = 'some-really-long-cookie-salt-here';
 ~~~
 
- - Make sure the `application/cache` and `application/logs` directories are writable by the web server.
+ - Make sure the `app/cache` and `app/logs` directories are writable by the web server.
 ~~~
-sudo chmod -R a+rwx application/cache
-sudo chmod -R a+rwx application/logs
+sudo chmod -R a+rwx app/cache
+sudo chmod -R a+rwx app/logs
 ~~~
 
 [!!] Make sure to use a unique salt for your application and never to share it. Take a look at the [Cookies](cookies) page for more information on how cookies work in Kohana. If you do not define a `Cookie::$salt` value, Kohana will throw an exception when it encounters any cookie on your domain.

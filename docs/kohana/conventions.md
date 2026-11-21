@@ -14,10 +14,10 @@ Kohana follows [PSR-4](https://www.php-fig.org/psr/psr-4/), like Laravel and mos
 
 | Class | File |
 |---|---|
-| `App\Http\Controllers\WelcomeController` | `application/classes/Http/Controllers/WelcomeController.php` |
-| `App\Http\Controllers\Admin\UserController` | `application/classes/Http/Controllers/Admin/UserController.php` |
-| `App\Models\BlogPost` | `application/classes/Models/BlogPost.php` |
-| `App\Console\Commands\Db\MigrateCommand` | `application/classes/Console/Commands/Db/MigrateCommand.php` |
+| `App\Http\Controllers\WelcomeController` | `app/classes/Http/Controllers/WelcomeController.php` |
+| `App\Http\Controllers\Admin\UserController` | `app/classes/Http/Controllers/Admin/UserController.php` |
+| `App\Models\BlogPost` | `app/classes/Models/BlogPost.php` |
+| `App\Console\Commands\Db\MigrateCommand` | `app/classes/Console/Commands/Db/MigrateCommand.php` |
 | `Kohana\Database\Query\SelectBuilder` | `modules/database/src/Database/Query/SelectBuilder.php` |
 | `Kohana\Html\Form` | `system/src/Html/Form.php` |
 

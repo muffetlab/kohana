@@ -1,6 +1,6 @@
 # Creating your Model
 
-To create a model for the table `members` in your database, create the file `application/classes/model/member.php` with the following syntax:
+To create a model for the table `members` in your database, create the file `app/classes/model/member.php` with the following syntax:
 
     class Member extends Model
     {

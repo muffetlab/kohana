@@ -19,7 +19,7 @@ Create a `phpunit.xml` in your project root that boots Kohana and lists your tes
         </testsuites>
     </phpunit>
 
-`modules/unittest/bootstrap.php` defines the Kohana paths and runs `application/bootstrap.php`, so your modules, config and routes are loaded as in a real request.
+`modules/unittest/bootstrap.php` defines the Kohana paths and runs `app/bootstrap.php`, so your modules, config and routes are loaded as in a real request.
 
 Run the suite:
 

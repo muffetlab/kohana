@@ -30,7 +30,7 @@ error_reporting(E_ALL);
  * @link https://kohana.top/guide/using.configuration
  */
 // Define the absolute paths for configured directories
-define('APPPATH', realpath(DOCROOT . '../application') . DIRECTORY_SEPARATOR);
+define('APPPATH', realpath(DOCROOT . '../app') . DIRECTORY_SEPARATOR);
 define('MODPATH', realpath(DOCROOT . '../modules') . DIRECTORY_SEPARATOR);
 define('SYSPATH', realpath(DOCROOT . '../system') . DIRECTORY_SEPARATOR);
 define('VENDOR_PATH', realpath(DOCROOT . '../vendor') . DIRECTORY_SEPARATOR);

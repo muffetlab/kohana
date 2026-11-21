@@ -129,7 +129,7 @@ Rector does not touch class names inside strings. Search your code for strings s
 
 ### Application classes use the `App\` namespace
 
-`composer.json` maps `App\` to `application/classes/`.
+`composer.json` maps `App\` to `app/classes/`.
 
 | Kohana 3.5 | Kohana 4 | File |
 |---|---|---|
@@ -230,7 +230,7 @@ Run this after `upgrade/rector.php`:
 
 ```bash
 composer require --dev nikic/php-parser:^5
-php vendor/kohana/kohana/upgrade/rename-members.php application modules/my-module
+php vendor/kohana/kohana/upgrade/rename-members.php app modules/my-module
 ```
 
 It renames declarations, calls, `[$object, 'method']` callables, `'Class::method'` strings and `action_*` methods. Public properties are only renamed on `$this`, because `$model->content_type` may be an ORM column; check other accesses by hand. Strings built at runtime (for example `'_' . $name`) are not found by any tool.

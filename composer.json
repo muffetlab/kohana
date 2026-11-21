@@ -60,7 +60,7 @@
                 "modules/orm/src",
                 "modules/unittest/src"
             ],
-            "App\\": "application/classes/"
+            "App\\": "app/classes/"
         },
         "files": [
             "system/helpers.php"

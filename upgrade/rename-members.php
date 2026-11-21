@@ -7,7 +7,7 @@
  * Run it after upgrade/rector.php, on a clean git working tree.
  *
  *     composer require --dev nikic/php-parser:^5
- *     php vendor/kohana/kohana/upgrade/rename-members.php application
+ *     php vendor/kohana/kohana/upgrade/rename-members.php app
  *
  * Public property names are only renamed on $this, because on other objects
  * they may be ORM columns. Review the diff before committing.

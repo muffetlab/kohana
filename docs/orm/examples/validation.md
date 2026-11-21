@@ -114,7 +114,7 @@ Please forgive my slightly ugly form. I am trying not to use any modules or unre
 
 ## Messages
 
-**application/messages/models/member.php**
+**app/messages/models/member.php**
 
     return [
         'username' => [
@@ -128,7 +128,7 @@ Please forgive my slightly ugly form. I am trying not to use any modules or unre
         ],
     ];
 
-**application/messages/models/member/_external.php**
+**app/messages/models/member/_external.php**
 
     return [
         'password_confirm' => [

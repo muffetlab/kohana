@@ -17,20 +17,20 @@ Files that are in directories higher up the include path order take precedence o
 
 This image is only shows certain files, but we can use it to illustrate some examples of the cascading filesystem:
 
-* If Kohana catches an error, it would display the `kohana/error.php` view, So it would call `Application::findFile('views', 'kohana/error')`. This would return `application/views/kohana/error.php` because it takes precedence over `system/views/kohana/error.php`. By doing this we can change the error view without editing the system folder.
+* If Kohana catches an error, it would display the `kohana/error.php` view, So it would call `Application::findFile('views', 'kohana/error')`. This would return `app/views/kohana/error.php` because it takes precedence over `system/views/kohana/error.php`. By doing this we can change the error view without editing the system folder.
 
-* If we used `View::factory('welcome')` it would call `Application::findFile('views','welcome')` which would return `application/views/welcome.php` because it takes precedence over `modules/common/views/welcome.php`. By doing this, you can overwrite things in a module without editing the modules files.
+* If we used `View::factory('welcome')` it would call `Application::findFile('views','welcome')` which would return `app/views/welcome.php` because it takes precedence over `modules/common/views/welcome.php`. By doing this, you can overwrite things in a module without editing the modules files.
 
 * If you used `View::factory('user')` it would call `Application::findFile('views','user')` which would return `modules/common/views/user.php`.
 
-* If we wanted to change something in `config/database.php` we could copy the file to `application/config/database.php` and make the changes there. Keep in mind that [config files are merged](files/config#merge) rather than overwritten by the cascade.
+* If we wanted to change something in `config/database.php` we could copy the file to `app/config/database.php` and make the changes there. Keep in mind that [config files are merged](files/config#merge) rather than overwritten by the cascade.
 
 ## Types of Files
 
 The top level directories of the application, module, and system paths have the following default directories:
 
 classes/
-:  Application classes (`App\` namespace) live in `application/classes/`, framework and module classes in each `src/` directory. Composer [autoloads](autoloading) them by namespace; classes are not part of the cascade. File names must match the class name's case, see the [naming conventions](conventions#class-names-and-file-location).
+:  Application classes (`App\` namespace) live in `app/classes/`, framework and module classes in each `src/` directory. Composer [autoloads](autoloading) them by namespace; classes are not part of the cascade. File names must match the class name's case, see the [naming conventions](conventions#class-names-and-file-location).
 
 config/
 :  Configuration files return an associative array of options that can be loaded using `Application::$config`. Config files are merged rather than overwritten by the cascade. See [config files](files/config) for more information.
@@ -70,7 +70,7 @@ If the file doesn't have a `.php` extension, pass the extension as the third par
 
 We call extensions or external libraries that are not specific to Kohana "vendor" extensions, and they go in the vendor folder, either in application or in a module. Because these libraries do not follow Kohana's file naming conventions, they cannot be autoloaded by Kohana, so you will have to manually included them. Some examples of vendor libraries are [Markdown](https://daringfireball.net/projects/markdown/), [DOMPDF](http://code.google.com/p/dompdf), [Mustache](https://github.com/bobthecow/mustache.php) and [Swiftmailer](http://swiftmailer.org/).
 
-For example, if you wanted to use [DOMPDF](http://code.google.com/p/dompdf), you would copy it to `application/vendor/dompdf` and include the DOMPDF autoloading class. It can be useful to do this in a controller's before method, as part of a module's init.php, or the constructor of a singleton class.
+For example, if you wanted to use [DOMPDF](http://code.google.com/p/dompdf), you would copy it to `app/vendor/dompdf` and include the DOMPDF autoloading class. It can be useful to do this in a controller's before method, as part of a module's init.php, or the constructor of a singleton class.
 
     require Application::findFile('vendor', 'dompdf/dompdf/dompdf_config','inc');
 

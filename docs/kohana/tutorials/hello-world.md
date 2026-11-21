@@ -8,7 +8,7 @@ We'll start out by creating a very, very basic hello world, and then we'll expan
 
 First off we have to make a controller that Kohana can use to handle a request.
 
-Create the file `application/classes/Http/Controllers/HelloController.php` in your application folder and fill it out like so:
+Create the file `app/classes/Http/Controllers/HelloController.php` in your application folder and fill it out like so:
 
     <?php
 
@@ -78,7 +78,7 @@ For some reason Kohana's thrown a wobbly and isn't showing our amazing message.
 
 If we look at the error message we can see that the View library wasn't able to find our site template, probably because we haven't made it yet – *doh*!
 
-Let's go and make the view file `application/views/site.php` for our message:
+Let's go and make the view file `app/views/site.php` for our message:
 
     <html>
         <head>
