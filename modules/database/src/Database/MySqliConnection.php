@@ -334,7 +334,7 @@ class MySqliConnection extends Connection
         foreach ($result as $row) {
             list($type, $length) = $this->parseType($row['Type']);
 
-            $column = $this->datatype($type);
+            $column = $this->datatype($type) + ['type' => 'string'];
 
             $column['column_name'] = $row['Field'];
             $column['column_default'] = $row['Default'];
