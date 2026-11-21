@@ -11,7 +11,7 @@
  */
 function _ord($chr)
 {
-    $ord0 = ord($chr);
+    $ord0 = ord($chr[0]);
 
     if ($ord0 <= 127)
         return $ord0;

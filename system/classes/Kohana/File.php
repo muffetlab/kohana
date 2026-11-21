@@ -141,10 +141,10 @@ class Kohana_File
      *     $count = File::split($file);
      *
      * @param string $filename File to be split
-     * @param int $piece_size Size in MB for each piece to be
+     * @param float $piece_size Size in MB for each piece to be
      * @return  int The number of pieces that were created
      */
-    public static function split(string $filename, int $piece_size = 10): int
+    public static function split(string $filename, float $piece_size = 10): int
     {
         // Open the input file
         $file = fopen($filename, 'rb');

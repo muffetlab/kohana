@@ -288,7 +288,7 @@ class Kohana_Kodoc
             }
         }
 
-        $comment = trim($comment, "\n");
+        $comment = trim((string) $comment, "\n");
 
         if ($comment && $html) {
             // Parse the comment with Markdown

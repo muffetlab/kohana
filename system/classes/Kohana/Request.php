@@ -1038,7 +1038,7 @@ class Kohana_Request implements HTTP_Request
         if (!$post = $this->post()) {
             $body = $this->body();
         } else {
-            $body = http_build_query($post, null, '&');
+            $body = http_build_query($post, '', '&');
             $this->body($body)
                 ->headers('content-type', 'application/x-www-form-urlencoded; charset=' . Kohana::$charset);
         }

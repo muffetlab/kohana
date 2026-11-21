@@ -411,11 +411,15 @@ class Kohana_Valid
      */
     public static function digit($str, bool $utf8 = false): bool
     {
-        if ($utf8) {
-            return (bool) preg_match('/^\pN++$/uD', $str);
-        } else {
-            return is_int($str) && $str >= 0 || ctype_digit($str);
+        if (is_int($str)) {
+            return $str >= 0;
         }
+
+        if (!is_string($str)) {
+            return false;
+        }
+
+        return $utf8 ? (bool) preg_match('/^\pN++$/uD', $str) : ctype_digit($str);
     }
 
     /**

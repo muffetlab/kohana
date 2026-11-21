@@ -68,7 +68,6 @@ class Kohana_Kodoc_Property extends Kodoc
         // Show the value of static properties
         if ($property->isStatic()) {
             // Force the property to be accessible
-            $property->setAccessible(true);
 
             // Don't debug the entire object, just say what kind of object it is
             if (is_object($property->getValue($class))) {
