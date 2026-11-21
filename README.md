@@ -18,7 +18,7 @@ Released under an [MIT license](https://kohana.top/license), Kohana can be used 
 ## Documentation
 Kohana's documentation can be found at <https://kohana.top/documentation> which also contains an API browser.
 
-The `userguide` module included in all Kohana releases also allows you to view the documentation locally. Once the `userguide` module is enabled in the bootstrap, it is accessible from your site via `/index.php/guide` (or just `/guide` if you are rewriting your URLs).
+The guides are also available as Markdown files in the [`docs/`](docs) directory.
 
 ## Contributing
 Kohana is an Open Source, community-driven project with plenty of contributors. Join them [contributing code or contributing documentation](https://github.com/muffetlab/kohana/blob/master/CONTRIBUTING.md).
