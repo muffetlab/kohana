@@ -253,7 +253,22 @@ class PdoConnection extends Connection
 
     public function listTables(?string $like = null): array
     {
-        throw new KohanaException('Database method :method is not supported by :class', [':method' => __FUNCTION__, ':class' => __CLASS__]);
+        $like = is_string($like) ? $this->quote($like) : null;
+
+        $sql = match ($this->driver()) {
+            'mysql' => 'SHOW TABLES' . ($like ? ' LIKE ' . $like : ''),
+            'pgsql' => 'SELECT table_name FROM information_schema.tables WHERE table_schema = current_schema()'
+                . " AND table_type = 'BASE TABLE'" . ($like ? ' AND table_name LIKE ' . $like : ''),
+            'sqlite' => "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'" . ($like ? ' AND name LIKE ' . $like : ''),
+            default => throw new KohanaException('Database method :method is not supported by :class for the :driver driver', [':method' => __FUNCTION__, ':class' => __CLASS__, ':driver' => $this->driver()]),
+        };
+
+        $tables = [];
+        foreach ($this->query(Connection::SELECT, $sql) as $row) {
+            $tables[] = reset($row);
+        }
+
+        return $tables;
     }
 
     public function listColumns(string $table, ?string $like = null, bool $add_prefix = true): array
