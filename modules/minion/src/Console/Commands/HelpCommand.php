@@ -24,7 +24,7 @@ class HelpCommand extends Command
     protected function handle(array $params)
     {
         $tasks = [];
-        foreach ($this->compileTaskList($this->listTaskFiles()) as $task) {
+        foreach (array_merge($this->compileTaskList($this->listTaskFiles()), array_keys(static::packageCommands())) as $task) {
             $class = static::convertTaskToClassName($task);
 
             if (!class_exists($class) || (new \ReflectionClass($class))->isAbstract()) {

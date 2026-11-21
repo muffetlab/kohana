@@ -25,6 +25,14 @@ abstract class Command
     public static $taskSeparator = ':';
 
     /**
+     * @return array Command name => class, from Kohana modules installed with Composer
+     */
+    public static function packageCommands(): array
+    {
+        return Application::$packages?->commands() ?? [];
+    }
+
+    /**
      * Converts a task (e.g. db:migrate to a class name)
      *
      * @param string $task Task name
@@ -41,10 +49,17 @@ abstract class Command
         // db:migrate => App\Console\Commands\Db\MigrateCommand, falling back to Kohana\Console\Commands
         $class = implode('\\', array_map('ucfirst', explode(static::$taskSeparator, $task))) . 'Command';
 
-        foreach (['App\\Console\\Commands\\', 'Kohana\\Console\\Commands\\'] as $namespace) {
-            if (class_exists($namespace . $class)) {
-                return $namespace . $class;
-            }
+        if (class_exists('App\\Console\\Commands\\' . $class)) {
+            return 'App\\Console\\Commands\\' . $class;
+        }
+
+        // Commands registered by Composer packages (extra.kohana.commands)
+        if ($registered = static::packageCommands()[$task] ?? null) {
+            return $registered;
+        }
+
+        if (class_exists('Kohana\\Console\\Commands\\' . $class)) {
+            return 'Kohana\\Console\\Commands\\' . $class;
         }
 
         return 'App\\Console\\Commands\\' . $class;
@@ -60,6 +75,10 @@ abstract class Command
     {
         if (is_object($class)) {
             $class = get_class($class);
+        }
+
+        if ($task = array_search($class, static::packageCommands(), true)) {
+            return $task;
         }
 
         $class = preg_replace('/^(App|Kohana)\\\\Console\\\\Commands\\\\|Command$/', '', $class);
