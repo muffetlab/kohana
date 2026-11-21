@@ -166,8 +166,8 @@ trait HasAttributes
      */
     public function set(string $column, $value): self
     {
-        if (!isset($this->objectName)) {
-            // Object not yet constructed, so we're loading data from a database call cast
+        if ($this->db === null) {
+            // Object not yet constructed (initialize() sets the connection), so we're loading data from a database call cast
             $this->castData[$column] = $value;
 
             return $this;
