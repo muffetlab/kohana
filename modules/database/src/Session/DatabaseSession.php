@@ -120,7 +120,7 @@ class DatabaseSession extends Session
 
         do {
             // Create a new session id
-            $id = str_replace('.', '-', uniqid('', true));
+            $id = bin2hex(random_bytes(20));
 
             // Get the id from the database
             $result = $query->execute($this->db);
@@ -161,7 +161,7 @@ class DatabaseSession extends Session
         $this->updateId = $this->sessionId;
 
         // Update the cookie with the new session id
-        Cookie::set($this->name, $this->sessionId, $this->lifetime);
+        $this->sendCookie($this->sessionId);
 
         return true;
     }
@@ -196,7 +196,7 @@ class DatabaseSession extends Session
             $this->updateId = null;
 
             // Delete the cookie
-            Cookie::delete($this->name);
+            $this->deleteCookie();
         } catch (\Exception $e) {
             // An error occurred, the session has not been deleted
             return false;
