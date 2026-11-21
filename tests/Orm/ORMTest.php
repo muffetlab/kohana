@@ -33,6 +33,9 @@ class Kohana_ORMTest extends TestCase
         }
 
         // Models without a $dbGroup use the default connection
+        // ORM caches each model's connection and columns; start clean for this connection
+        (new ReflectionProperty(\Kohana\Orm\Model::class, 'initCache'))->setValue(null, []);
+        (new ReflectionProperty(\Kohana\Orm\Model::class, 'columnCache'))->setValue(null, []);
         $this->previousDefault = Connection::$default;
         Connection::$default = static::$connection;
 
@@ -61,6 +64,7 @@ class Kohana_ORMTest extends TestCase
         $this->assertTrue($author->loaded());
 
         $found = Model::factory('OrmAuthor', $author->pk());
+        $this->assertSame(get_class(Connection::instance(static::$connection)), get_class((fn () => $this->db)->call($found)));
         $this->assertSame('Ayşe', $found->name);
 
         $found->name = 'Fatma';
