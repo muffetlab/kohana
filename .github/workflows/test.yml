@@ -103,5 +103,9 @@ jobs:
           ];
           EOF
 
+      - name: Check code style
+        if: matrix.php-versions == '8.5'
+        run: vendor/bin/pint --test
+
       - name: Run test suite
         run: vendor/bin/pest
