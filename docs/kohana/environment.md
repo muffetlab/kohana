@@ -31,7 +31,7 @@ Every setting lives in the project's `config/` directory, and the ones that diff
 | `config/encrypt.php` | encryption key and cipher | `APP_KEY` (`base64:` values are decoded), `APP_CIPHER` |
 | `config/url.php` | trusted host names | `APP_TRUSTED_HOSTS` (comma separated patterns) |
 | `config/database.php` | the `default` connection | `DB_CONNECTION` (`mysql`, `pgsql`, `PDO` or a class), `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`, `DB_DSN`, `DB_PREFIX`, `DB_CHARSET` |
-| `config/session.php` | default driver and per-driver settings | `SESSION_DRIVER` (`native`, `cookie`, `database`), `SESSION_NAME`, `SESSION_LIFETIME`, `SESSION_CONNECTION` |
+| `config/session.php` | default driver and per-driver settings | `SESSION_DRIVER` (`native`, `cookie`, `database`, `redis`), `SESSION_NAME`, `SESSION_LIFETIME`, `SESSION_TTL`, `SESSION_STORE`, `SESSION_CONNECTION` |
 | `config/cache.php` | default store and stores | `CACHE_STORE`, `CACHE_PREFIX`, `REDIS_HOST`, `REDIS_PORT`, `REDIS_PASSWORD`, `REDIS_CACHE_DB`, `MEMCACHED_HOST`, `MEMCACHED_PORT` |
 | `config/auth.php` | auth driver and password hashing | `AUTH_DRIVER`, `AUTH_LIFETIME`, `AUTH_HASH_KEY` (Kohana 3 hashes only) |
 | `config/image.php` | default image driver | `IMAGE_DRIVER` (`GD` or `Imagick`) |

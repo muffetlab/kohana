@@ -413,3 +413,20 @@ New and changed files:
 1. Copy the framework's `config/` files into your project and move your values into them (or into `.env`). Delete your copies of the old module and system files.
 2. Move the settings at the top of your `bootstrap/app.php` (time zone, locale, `Application::init()` options, `Application::modules()` list, `Cookie::$salt`) into `config/app.php`, `config/cookie.php` and `.env`, and take the new `bootstrap/app.php` from the framework.
 3. If you set `Session::$default` or `Cache::$default` in code, you can move the value to `SESSION_DRIVER` and `CACHE_STORE`.
+
+## 27. Sessions
+
+- **Redis driver.** `SESSION_DRIVER=redis` stores sessions in Redis or Valkey through a Redis store of the cache module (`config/session.php` → `redis`).
+- **Native sessions are stored in `storage/framework/sessions`** (the new `save_path` setting) instead of PHP's temp directory. On the command line, where output has already started, the native driver no longer tries to change headers and warns.
+- **The database driver creates random session ids** (`random_bytes()`, 40 characters) instead of `uniqid()`, which was predictable. Its table has a migration: `php kohana session:migration`.
+- **`session()` helper**: `session('key')`, `session(['key' => $value])`, `session()->regenerate()`.
+- Drivers send and delete their cookie through `Session::sendCookie()` and `deleteCookie()`, and check `headersSent()`; override them in custom drivers or tests.
+
+**Action:**
+1. If you use the database driver, widen `session_id`; the old schema made it `VARCHAR(24)`:
+
+        ALTER TABLE sessions MODIFY session_id VARCHAR(64) NOT NULL;         -- MySQL
+        ALTER TABLE sessions ALTER COLUMN session_id TYPE VARCHAR(64);       -- PostgreSQL
+
+2. Make `storage/framework/sessions` writable, or set `save_path` to `null` in `config/session.php` to keep PHP's default.
+3. Existing native sessions in the old location are not moved; users are logged out once.

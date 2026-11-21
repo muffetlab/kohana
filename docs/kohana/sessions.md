@@ -10,10 +10,16 @@ Sessions should be used for storing temporary or private data. Very sensitive da
 
 `Cookie` and `Session` provide a very similar API for storing data. The main difference between them is that sessions are accessed using an object, and cookies are accessed using a static class.
 
-Accessing the session instance is done using the `Session::instance()` method:
+Accessing the session instance is done using the `Session::instance()` method, or the `session()` helper:
 
     // Get the session instance
     $session = Session::instance();
+
+    // The helper reads and writes the default session directly
+    session('user_id');                  // get
+    session('user_id', 0);               // get with a default
+    session(['user_id' => 42]);          // set one or more values
+    session()->regenerate();             // the Session object
 
 When using sessions, you can also get all the current session data using the `Session::asArray()` method:
 
@@ -63,105 +69,93 @@ Deleting session or cookie data is done using the `delete` method:
 
 ## Session Configuration
 
-Always check these settings before making your application live, as many of them will have a direct effect on the security of your application.
+Sessions are configured in `config/session.php`, mostly through `.env`. Always check these settings before making your application live, as many of them have a direct effect on its security.
 
-## Session Adapters
+| Variable | Setting |
+|---|---|
+| `SESSION_DRIVER` | default driver: `native`, `cookie`, `database` or `redis` |
+| `SESSION_NAME` | cookie name |
+| `SESSION_LIFETIME` | cookie lifetime in seconds; `0` lasts until the browser closes |
+| `SESSION_TTL` | seconds Redis keeps an idle session |
+| `SESSION_STORE` | cache store (in `config/cache.php`) of the Redis driver |
+| `SESSION_CONNECTION` | database group of the database driver |
 
-When creating or accessing an instance of the `Session` class you can decide which session adapter or driver you wish to use. The session adapters that are available to you are:
+`Session::instance()` uses the default driver; `Session::instance('redis')` picks another one. Setting `Session::$default` in code overrides `SESSION_DRIVER`.
+
+## Session Drivers
 
 Native
-: Stores session data in the default location for your web server. The storage location is defined by [session.save_path](https://www.php.net/session.configuration#ini.session.save-path) in `php.ini` or defined by [ini_set](https://www.php.net/ini_set).
-
-Database
-: Stores session data in a database table using the `DatabaseSession` class. Requires the `Connection` module to be enabled.
+: PHP's own session handling. Files are stored in `storage/framework/sessions` (the `save_path` setting).
 
 Cookie
-: Stores session data in a cookie using the `Cookie` class. **Sessions will have a 4KB limit when using this adapter, and should be encrypted.**
+: Stores the data in a signed cookie. **Cookies are limited to 4KB, and the data should be encrypted** (`'encrypted' => true`).
 
-The default adapter can be set by changing the value of `Session::$default`. The default adapter is "native".
+Database
+: Stores the data in a table (database module). Create it with `php kohana session:migration` and `php kohana migrate`.
 
-To access a Session using the default adapter, simply call `Session::instance()`. To access a Session using something other than the default, pass the adapter name to `instance()`, for example: `Session::instance('cookie')`
+Redis
+: Stores the data in Redis or Valkey (cache module, `ext-redis`), reusing a Redis store from `config/cache.php`. Only the session id travels in the cookie.
 
+The database and Redis drivers create session ids with `random_bytes()` (40 hexadecimal characters) and drop the old id when the session is regenerated.
 
-### Session Adapter Settings
+[!!] Call `$session->regenerate()` after a user logs in, so an id known before the login (session fixation) stops working. The auth module does this for you.
 
-You can apply configuration settings to each of the session adapters by creating a session config file at `APPPATH/config/session.php`. The following sample configuration file defines all the settings for each adapter:
+### Driver Settings
 
-[!!] As with cookies, a "lifetime" setting of "0" means that the session will expire when the browser is closed.
-
+    // config/session.php
     return [
+        'driver' => env('SESSION_DRIVER', 'native'),
+
         'native' => [
-            'name' => 'session_name',
-            'lifetime' => 43200,
+            'name' => 'session',
+            'lifetime' => 0,
+            'save_path' => storage_path('framework/sessions'),
         ],
         'cookie' => [
-            'name' => 'cookie_name',
+            'name' => 'session',
             'encrypted' => true,
-            'lifetime' => 43200,
+            'lifetime' => 0,
         ],
         'database' => [
-            'name' => 'cookie_name',
-            'encrypted' => true,
-            'lifetime' => 43200,
+            'name' => 'session',
+            'lifetime' => 0,
             'group' => 'default',
-            'table' => 'table_name',
+            'table' => 'sessions',
             'columns' => [
                 'session_id' => 'session_id',
                 'last_active' => 'last_active',
-                'contents' => 'contents'
+                'contents' => 'contents',
             ],
             'gc' => 500,
         ],
+        'redis' => [
+            'name' => 'session',
+            'lifetime' => 0,
+            'ttl' => 7200,
+            'store' => 'redis',
+            'prefix' => 'session:',
+        ],
     ];
 
-#### Native Adapter
+Every driver accepts `name`, `lifetime` and `encrypted` (encrypt the data with `Encrypter`; `true` uses the `default` encryption group).
 
-| Type      | Setting  | Description                                   | Default     |
-|-----------|----------|-----------------------------------------------|-------------|
-| `string`  | name     | name of the session                           | `"session"` |
-| `integer` | lifetime | number of seconds the session should live for | `0`         |
+| Driver | Setting | Description | Default |
+|---|---|---|---|
+| native | `save_path` | directory of the session files | PHP's `session.save_path` |
+| database | `group` | database group | `default` |
+| database | `table` | table name | `sessions` |
+| database | `columns` | column names, for an existing table | `session_id`, `last_active`, `contents` |
+| database | `gc` | 1:x chance of deleting expired sessions on a request | `500` |
+| redis | `store` | Redis store in `config/cache.php` | `redis` |
+| redis | `prefix` | key prefix, after the store's own prefix | `session:` |
+| redis | `ttl` | seconds an idle session is kept | `lifetime`, else `session.gc_maxlifetime` |
 
-#### Cookie Adapter
+### Database Table
 
-| Type      | Setting   | Description                                       | Default     |
-|-----------|-----------|---------------------------------------------------|-------------|
-| `string`  | name      | name of the cookie used to store the session data | `"session"` |
-| `boolean` | encrypted | encrypt the session data using `Encrypter`?         | `false`     |
-| `integer` | lifetime  | number of seconds the session should live for     | `0`         |
+`php kohana session:migration` copies a migration that creates the table:
 
-#### Database Adapter
-
-| Type      | Setting   | Description                                       | Default      |
-|-----------|-----------|---------------------------------------------------|--------------|
-| `string`  | group     | `Connection::instance()` group name                   | `"default"`  |
-| `string`  | table     | table name to store sessions in                   | `"sessions"` |
-| `array`   | columns   | associative array of column aliases               | `array`      |
-| `integer` | gc        | 1:x chance that garbage collection will be run    | `500`        |
-| `string`  | name      | name of the cookie used to store the session data | `"session"`  |
-| `boolean` | encrypted | encrypt the session data using `Encrypter`?         | `false`      |
-| `integer` | lifetime  | number of seconds the session should live for     | `0`          |
-
-##### Table Schema
-
-You will need to create the session storage table in the database. This is the default schema:
-
-    CREATE TABLE  `sessions` (
-        `session_id` VARCHAR(24) NOT NULL,
-        `last_active` INT UNSIGNED NOT NULL,
-        `contents` TEXT NOT NULL,
-        PRIMARY KEY (`session_id`),
-        INDEX (`last_active`)
-    ) ENGINE = MYISAM;
-
-##### Table Columns
-
-You can change the column names to match an existing database schema when connecting to a legacy session table. The default value is the same as the key value.
-
-session_id
-: the name of the "id" column
-
-last_active
-: UNIX timestamp of the last time the session was updated
-
-contents
-: session data stored as a serialized string, and optionally encrypted
+    Schema::create('sessions', function (Blueprint $table) {
+        $table->string('session_id', 64)->primary();
+        $table->unsignedInteger('last_active')->index();
+        $table->longText('contents');
+    });

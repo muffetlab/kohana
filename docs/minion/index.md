@@ -29,3 +29,4 @@ The console loads the Minion module by itself, so you only need to enable it in 
 | `migrate:status [--database=group]` | Shows which migrations ran. |
 | `db:seed [--class=Name] [--database=group] [--force]` | Runs a seeder (default `DatabaseSeeder`). |
 | `auth:migration [--force]` | Copies the ORM auth tables migration into `database/migrations` (ORM module). See [Auth](../auth/index). |
+| `session:migration [--force]` | Copies the sessions table migration into `database/migrations` (database module). See [Sessions](../kohana/sessions). |
