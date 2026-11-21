@@ -342,6 +342,26 @@ class Route
     }
 
     /**
+     * Returns the route's URI pattern, e.g. "(<controller>(/<action>(/<id>)))".
+     *
+     * @return string
+     */
+    public function pattern(): string
+    {
+        return $this->uri;
+    }
+
+    /**
+     * Returns the route's regex rules for its keys.
+     *
+     * @return array
+     */
+    public function regex(): array
+    {
+        return $this->regex;
+    }
+
+    /**
      * Filters to be run before route parameters are returned:
      *
      *     $route->filter(function(Route $route, $params, Request $request) {
