@@ -133,7 +133,7 @@ abstract class DatabaseTestCase extends TestCase
      * @param string $path The path to act on
      * @return string
      */
-    public function dirSeparator(string $path): string
+    public static function dirSeparator(string $path): string
     {
         return Helpers::dirSeparator($path);
     }

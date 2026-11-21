@@ -2,14 +2,44 @@
 
 namespace Kohana\Testing;
 
-use PHPUnit\Framework\DOMTestCase;
+use PHPUnit\Framework\DOMAssert;
 
 /**
  * A version of the stock PHPUnit testcase that includes some extra helpers
  * and default settings
  */
-abstract class TestCase extends DOMTestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * Mocks an abstract class: its abstract methods plus $methods are doubled
+     * (replaces PHPUnit's removed getMockForAbstractClass()).
+     *
+     * @param string $class Abstract class name
+     * @param array|null $arguments Constructor arguments, null to skip the constructor
+     * @param array $methods Extra concrete methods to double
+     */
+    protected function mockAbstract(string $class, ?array $arguments = [], array $methods = []): \PHPUnit\Framework\MockObject\MockObject
+    {
+        foreach ((new \ReflectionClass($class))->getMethods() as $method) {
+            if ($method->isAbstract()) {
+                $methods[] = $method->getName();
+            }
+        }
+
+        $builder = $this->getMockBuilder($class)->onlyMethods(array_unique($methods));
+
+        $arguments === null ? $builder->disableOriginalConstructor() : $builder->setConstructorArgs($arguments);
+
+        return $builder->getMock();
+    }
+    /**
+     * Asserts that a CSS selector matches $count elements with $content
+     * (phpunit/phpunit-dom-assertions).
+     */
+    public static function assertSelectEquals(string $selector, ?string $content, array|bool|int $count, \DOMDocument|string $actual, string $message = '', bool $isHtml = true): void
+    {
+        DOMAssert::assertSelectEquals($selector, $content, $count, $actual, $message, $isHtml);
+    }
     /**
      * Make sure PHPUnit backs up globals
      * @var bool
@@ -70,7 +100,7 @@ abstract class TestCase extends DOMTestCase
      * @param string $path The path to act on
      * @return string
      */
-    public function dirSeparator(string $path): string
+    public static function dirSeparator(string $path): string
     {
         return Helpers::dirSeparator($path);
     }

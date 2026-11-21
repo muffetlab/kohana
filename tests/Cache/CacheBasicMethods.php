@@ -1,0 +1,335 @@
+<?php
+
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Kohana\Cache\Cache;
+use Kohana\Cache\CacheException;
+
+/**
+ * @package    Kohana/Cache
+ * @category   Test
+ * @author     Kohana Team
+ * @copyright  (c) 2009-2012 Kohana Team
+ * @license    https://kohana.top/license
+ */
+#[Group('kohana')]
+#[Group('kohana.cache')]
+#[UsesClass('Kohana_CacheBasicMethodsTest::provider_set_get()')]
+abstract class Kohana_CacheBasicMethodsTest extends TestCase
+{
+    /**
+     * @var     Cache driver for this test
+     */
+    protected $_cache_driver;
+
+    /**
+     * This method MUST be implemented by each driver to set up the `Cache`
+     * instance for each test.
+     *
+     * This method should do the following tasks for each driver test:
+     *
+     *  - Test the Cache instance driver is available, skip test otherwise
+     *  - Set up the Cache instance
+     *  - Call the parent setup method, `parent::setUp()`
+     *
+     * @return  void
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+    }
+
+    /**
+     * Accessor method to `$_cache_driver`.
+     *
+     * @return Cache|Kohana_CacheBasicMethodsTest
+     */
+    public function cache(?Cache $cache = null)
+    {
+        if ($cache === null)
+            return $this->_cache_driver;
+
+        $this->_cache_driver = $cache;
+        return $this;
+    }
+
+    /**
+     * Data provider for test_set_get()
+     *
+     * @return  array
+     */
+    public static function provider_set_get(): array
+    {
+        $object = new StdClass;
+        $object->foo = 'foo';
+        $object->bar = 'bar';
+
+        $html_text = <<<TESTTEXT
+<!doctype html>
+<head>
+</head>
+
+<body>
+</body>
+</html>
+TESTTEXT;
+
+        return [
+            [
+                [
+                    'id' => 'string', // Key to set to cache
+                    'value' => 'foobar', // Value to set to key
+                    'ttl' => 0, // Time to live
+                    'wait' => false, // Test wait time to let cache expire
+                    'type' => 'string', // Type test
+                    'default' => null // Default value get should return
+                ],
+                'foobar'
+            ],
+            [
+                [
+                    'id' => 'integer',
+                    'value' => 101010,
+                    'ttl' => 0,
+                    'wait' => false,
+                    'type' => 'int',
+                    'default' => null
+                ],
+                101010
+            ],
+            [
+                [
+                    'id' => 'float',
+                    'value' => 10.00,
+                    'ttl' => 0,
+                    'wait' => false,
+                    'type' => 'float',
+                    'default' => null
+                ],
+                10.00
+            ],
+            [
+                [
+                    'id' => 'array',
+                    'value' => [
+                        'key' => 'foo',
+                        'value' => 'bar'
+                    ],
+                    'ttl' => 0,
+                    'wait' => false,
+                    'type' => 'array',
+                    'default' => null
+                ],
+                [
+                    'key' => 'foo',
+                    'value' => 'bar'
+                ]
+            ],
+            [
+                [
+                    'id' => 'boolean',
+                    'value' => true,
+                    'ttl' => 0,
+                    'wait' => false,
+                    'type' => 'bool',
+                    'default' => null
+                ],
+                true
+            ],
+            [
+                [
+                    'id' => 'null',
+                    'value' => null,
+                    'ttl' => 0,
+                    'wait' => false,
+                    'type' => 'null',
+                    'default' => null
+                ],
+                null
+            ],
+            [
+                [
+                    'id' => 'object',
+                    'value' => $object,
+                    'ttl' => 0,
+                    'wait' => false,
+                    'type' => 'object',
+                    'default' => null
+                ],
+                $object
+            ],
+            [
+                [
+                    'id' => 'bar\\ with / troublesome key',
+                    'value' => 'foo bar snafu',
+                    'ttl' => 0,
+                    'wait' => false,
+                    'type' => 'string',
+                    'default' => null
+                ],
+                'foo bar snafu'
+            ],
+            [
+                [
+                    'id' => 'test ttl 0 means never expire',
+                    'value' => 'cache value that should last',
+                    'ttl' => 0,
+                    'wait' => 1,
+                    'type' => 'string',
+                    'default' => null
+                ],
+                'cache value that should last'
+            ],
+            [
+                [
+                    'id' => 'bar',
+                    'value' => 'foo',
+                    'ttl' => 3,
+                    'wait' => 5,
+                    'type' => 'null',
+                    'default' => null
+                ],
+                null
+            ],
+            [
+                [
+                    'id' => 'snafu',
+                    'value' => 'fubar',
+                    'ttl' => 3,
+                    'wait' => 5,
+                    'type' => 'string',
+                    'default' => 'something completely different!'
+                ],
+                'something completely different!'
+            ],
+            [
+                [
+                    'id' => 'new line test with HTML',
+                    'value' => $html_text,
+                    'ttl' => 10,
+                    'wait' => false,
+                    'type' => 'string',
+                    'default' => null,
+                ],
+                $html_text
+            ],
+            [
+                [
+                    'id' => 'test with 60*5',
+                    'value' => 'blabla',
+                    'ttl' => 60 * 5,
+                    'wait' => false,
+                    'type' => 'string',
+                    'default' => null,
+                ],
+                'blabla'
+            ],
+            [
+                [
+                    'id' => 'test with 60*50',
+                    'value' => 'bla bla',
+                    'ttl' => 60 * 50,
+                    'wait' => false,
+                    'type' => 'string',
+                    'default' => null,
+                ],
+                'bla bla'
+            ]
+        ];
+    }
+
+    /**
+     * Tests the [Cache::set()] method, testing;
+     *
+     *  - The value is cached
+     *  - The lifetime is respected
+     *  - The returned value type is as expected
+     *  - The default not-found value is respected
+     *
+     *
+     * @param array $data data
+     * @param mixed $expected expected
+     * @return  void
+     * @throws CacheException
+     */
+    #[DataProvider('provider_set_get')]
+    public function test_set_get(array $data, $expected)
+    {
+        $cache = $this->cache();
+        extract($data);
+
+        $this->assertTrue($cache->set($id, $value, $ttl));
+
+        if ($wait !== false) {
+            // Lets let the cache expire
+            sleep($wait);
+        }
+
+        $result = $cache->get($id, $default);
+        $this->assertEquals($expected, $result);
+        $this->{($type === 'null' ? 'assert' : 'assertIs') . ucfirst($type)}($result);
+
+        unset($id, $value, $ttl, $wait, $type, $default);
+    }
+
+    /**
+     * Tests the [Cache::delete()] method, testing;
+     *
+     *  - A cached value is deleted from cache
+     *  - The cache returns a true value upon deletion
+     *  - The cache returns a false value if no value exists to delete
+     *
+     * @return  void
+     * @throws CacheException
+     */
+    public function test_delete()
+    {
+        // Init
+        $cache = $this->cache();
+        $cache->deleteAll();
+
+        // Test deletion if real cached value
+        if (!$cache->set('test_delete_1', 'This should not be here!', 0)) {
+            $this->fail('Unable to set cache value to delete!');
+        }
+
+        // Test delete returns true and check the value is gone
+        $this->assertTrue($cache->delete('test_delete_1'));
+        $this->assertNull($cache->get('test_delete_1'));
+
+        // Test non-existent cache value returns false if no error
+        $this->assertFalse($cache->delete('test_delete_1'));
+    }
+
+    /**
+     * Tests [Cache::delete_all()] works as specified
+     *
+     * @return  void
+     * @throws CacheException
+     */
+    public function test_delete_all()
+    {
+        // Init
+        $cache = $this->cache();
+        $data = $this->provider_set_get();
+
+        foreach ($data as $key => $values) {
+            extract($values[0]);
+            if (!$cache->set($id, $value)) {
+                $this->fail('Unable to set: ' . $key . ' => ' . $value . ' to cache');
+            }
+            unset($id, $value, $ttl, $wait, $type, $default);
+        }
+
+        // Test delete_all is successful
+        $this->assertTrue($cache->deleteAll());
+
+        foreach ($data as $values) {
+            // Verify data has been purged
+            $this->assertSame('Cache Deleted!', $cache->get($values[0]['id'], 'Cache Deleted!'));
+        }
+    }
+
+}
