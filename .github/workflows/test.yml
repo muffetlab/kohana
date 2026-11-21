@@ -107,5 +107,9 @@ jobs:
         if: matrix.php-versions == '8.5'
         run: vendor/bin/pint --test
 
+      - name: Static analysis
+        if: matrix.php-versions == '8.5'
+        run: vendor/bin/phpstan analyse --no-progress --memory-limit=1G
+
       - name: Run test suite
         run: vendor/bin/pest

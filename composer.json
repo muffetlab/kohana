@@ -38,7 +38,8 @@
     "require-dev": {
         "pestphp/pest": "^5.3",
         "phpunit/phpunit-dom-assertions": "^3.8",
-        "laravel/pint": "^1.32"
+        "laravel/pint": "^1.32",
+        "phpstan/phpstan": "^2.3"
     },
     "suggest": {
         "ext-apcu": "For the APCu cache store",
@@ -85,6 +86,7 @@
     "scripts": {
         "test": "pest",
         "lint": "pint --test",
-        "format": "pint"
+        "format": "pint",
+        "analyse": "phpstan analyse --memory-limit=1G"
     }
 }
