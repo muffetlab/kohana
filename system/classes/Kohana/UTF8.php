@@ -43,7 +43,7 @@ class Kohana_UTF8
      * @uses    UTF8::strip_ascii_ctrl
      * @uses    UTF8::is_ascii
      */
-    public static function clean($var, string $charset = null)
+    public static function clean($var, ?string $charset = null)
     {
         if (!$charset) {
             // Use the application character set
@@ -206,7 +206,7 @@ class Kohana_UTF8
      * @author  Chris Smith <chris@jalakai.co.uk>
      * @uses    Kohana::$charset
      */
-    public static function substr(string $str, int $offset, int $length = null): string
+    public static function substr(string $str, int $offset, ?int $length = null): string
     {
         return $length === null ? mb_substr($str, $offset, mb_strlen($str), Kohana::$charset) : mb_substr($str, $offset, $length, Kohana::$charset);
     }
@@ -224,7 +224,7 @@ class Kohana_UTF8
      * @return  string
      * @author  Harry Fuecks <hfuecks@gmail.com>
      */
-    public static function substr_replace(string $str, string $replacement, int $offset, int $length = null): string
+    public static function substr_replace(string $str, string $replacement, int $offset, ?int $length = null): string
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
             require Kohana::find_file('utf8', __FUNCTION__);
@@ -348,7 +348,7 @@ class Kohana_UTF8
      * @return  string|array Replaced value, same type as input.
      * @author  Harry Fuecks <hfuecks@gmail.com>
      */
-    public static function str_ireplace($search, $replace, $str, int &$count = null)
+    public static function str_ireplace($search, $replace, $str, ?int &$count = null)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
             require Kohana::find_file('utf8', __FUNCTION__);
@@ -390,7 +390,7 @@ class Kohana_UTF8
      * @return  int length of the initial segment that contains characters in the mask
      * @author  Harry Fuecks <hfuecks@gmail.com>
      */
-    public static function strspn(string $str, string $mask, int $offset = null, int $length = null): int
+    public static function strspn(string $str, string $mask, ?int $offset = null, ?int $length = null): int
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
             require Kohana::find_file('utf8', __FUNCTION__);
@@ -415,7 +415,7 @@ class Kohana_UTF8
      * @return  int length of the initial segment that contains characters not in the mask
      * @author  Harry Fuecks <hfuecks@gmail.com>
      */
-    public static function strcspn(string $str, string $mask, int $offset = null, int $length = null): int
+    public static function strcspn(string $str, string $mask, ?int $offset = null, ?int $length = null): int
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
             require Kohana::find_file('utf8', __FUNCTION__);
@@ -508,7 +508,7 @@ class Kohana_UTF8
      * @return  string
      * @author  Andreas Gohr <andi@splitbrain.org>
      */
-    public static function trim(string $str, string $charlist = null): string
+    public static function trim(string $str, ?string $charlist = null): string
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
             require Kohana::find_file('utf8', __FUNCTION__);
@@ -531,7 +531,7 @@ class Kohana_UTF8
      * @return  string
      * @author  Andreas Gohr <andi@splitbrain.org>
      */
-    public static function ltrim(string $str, string $charlist = null): string
+    public static function ltrim(string $str, ?string $charlist = null): string
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
             require Kohana::find_file('utf8', __FUNCTION__);
@@ -554,7 +554,7 @@ class Kohana_UTF8
      * @return  string
      * @author  Andreas Gohr <andi@splitbrain.org>
      */
-    public static function rtrim(string $str, string $charlist = null): string
+    public static function rtrim(string $str, ?string $charlist = null): string
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
             require Kohana::find_file('utf8', __FUNCTION__);

@@ -93,7 +93,7 @@ class Kohana_Cache_Apcu extends Cache implements Cache_Arithmetic
      * @param int|null $lifetime Lifetime in seconds
      * @return  bool
      */
-    public function set(string $id, $data, int $lifetime = null): bool
+    public function set(string $id, $data, ?int $lifetime = null): bool
     {
         if ($lifetime === null) {
             $lifetime = Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE);

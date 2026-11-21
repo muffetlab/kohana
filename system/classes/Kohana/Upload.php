@@ -50,7 +50,7 @@ class Kohana_Upload
      * @return string|false Full path to new file on success, false on failure.
      * @throws Kohana_Exception
      */
-    public static function save(array $file, string $filename = null, string $directory = null, $chmod = 0644)
+    public static function save(array $file, ?string $filename = null, ?string $directory = null, $chmod = 0644)
     {
         if (!isset($file['tmp_name']) || !is_uploaded_file($file['tmp_name'])) {
             // Ignore corrupted uploads
@@ -198,7 +198,7 @@ class Kohana_Upload
      * @param bool $exact Match width and height exactly?
      * @return  bool
      */
-    public static function image(array $file, int $max_width = null, int $max_height = null, bool $exact = false): bool
+    public static function image(array $file, ?int $max_width = null, ?int $max_height = null, bool $exact = false): bool
     {
         if (Upload::not_empty($file)) {
             try {

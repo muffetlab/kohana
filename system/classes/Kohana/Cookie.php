@@ -102,7 +102,7 @@ class Kohana_Cookie
      * @throws Kohana_Exception
      * @uses    Cookie::salt
      */
-    public static function set(string $name, string $value, int $lifetime = null): bool
+    public static function set(string $name, string $value, ?int $lifetime = null): bool
     {
         if ($lifetime === null) {
             // Use the default expiration

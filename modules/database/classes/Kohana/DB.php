@@ -72,7 +72,7 @@ class Kohana_DB
      * @param array|null $columns columns to select
      * @return  Database_Query_Builder_Select
      */
-    public static function select_array(array $columns = null): Database_Query_Builder_Select
+    public static function select_array(?array $columns = null): Database_Query_Builder_Select
     {
         return new Database_Query_Builder_Select($columns);
     }
@@ -88,7 +88,7 @@ class Kohana_DB
      * @return  Database_Query_Builder_Insert
      * @throws Kohana_Exception
      */
-    public static function insert(string $table = null, array $columns = null): Database_Query_Builder_Insert
+    public static function insert(?string $table = null, ?array $columns = null): Database_Query_Builder_Insert
     {
         return new Database_Query_Builder_Insert($table, $columns);
     }
@@ -102,7 +102,7 @@ class Kohana_DB
      * @param string|null $table Table to update
      * @return  Database_Query_Builder_Update
      */
-    public static function update(string $table = null): Database_Query_Builder_Update
+    public static function update(?string $table = null): Database_Query_Builder_Update
     {
         return new Database_Query_Builder_Update($table);
     }
@@ -116,7 +116,7 @@ class Kohana_DB
      * @param string|null $table Table to delete from
      * @return  Database_Query_Builder_Delete
      */
-    public static function delete(string $table = null): Database_Query_Builder_Delete
+    public static function delete(?string $table = null): Database_Query_Builder_Delete
     {
         return new Database_Query_Builder_Delete($table);
     }

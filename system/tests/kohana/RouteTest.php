@@ -747,7 +747,7 @@ class Kohana_RouteTest extends Unittest_TestCase
      * @throws Kohana_Exception
      * @throws ReflectionException
      */
-    public function test_composing_url_from_route(string $expected, array $params = null, $protocol = null)
+    public function test_composing_url_from_route(string $expected, ?array $params = null, $protocol = null)
     {
         Route::set('foobar', '(<controller>(/<action>(/<id>)))')
             ->defaults(['controller' => 'welcome']);

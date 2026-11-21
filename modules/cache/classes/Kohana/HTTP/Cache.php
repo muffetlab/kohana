@@ -199,7 +199,7 @@ class Kohana_HTTP_Cache
      * @param Cache|null $cache engine to use for caching
      * @return Kohana_Cache|Kohana_HTTP_Cache
      */
-    public function cache(Cache $cache = null)
+    public function cache(?Cache $cache = null)
     {
         if ($cache === null)
             return $this->_cache;
@@ -217,7 +217,7 @@ class Kohana_HTTP_Cache
      * @param bool|null $setting Allow caching of privately marked responses
      * @return bool|Kohana_HTTP_Cache
      */
-    public function allow_private_cache(bool $setting = null)
+    public function allow_private_cache(?bool $setting = null)
     {
         if ($setting === null)
             return $this->_allow_private_cache;
@@ -252,7 +252,7 @@ class Kohana_HTTP_Cache
      * @return callable|Kohana_HTTP_Cache
      * @throws Kohana_Exception
      */
-    public function cache_key_callback(callable $callback = null)
+    public function cache_key_callback(?callable $callback = null)
     {
         if ($callback === null)
             return $this->_cache_key_callback;
@@ -339,7 +339,7 @@ class Kohana_HTTP_Cache
      * @return bool|Response
      * @throws Cache_Exception
      */
-    public function cache_response(string $key, Request $request, Response $response = null)
+    public function cache_response(string $key, Request $request, ?Response $response = null)
     {
         if (!$this->_cache instanceof Cache)
             return false;

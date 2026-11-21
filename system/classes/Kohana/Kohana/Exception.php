@@ -46,7 +46,7 @@ class Kohana_Kohana_Exception extends Exception
      * @param int|string $code the exception code
      * @param Exception|null $previous Previous exception
      */
-    public function __construct(string $message = '', array $variables = null, $code = 0, Exception $previous = null)
+    public function __construct(string $message = '', ?array $variables = null, $code = 0, ?Exception $previous = null)
     {
         // Set the message
         $message = __($message, $variables);

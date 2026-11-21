@@ -296,7 +296,7 @@ class Kohana_DateTest extends Unittest_TestCase
      * @param string|null $timezone The timezone identifier
      * @throws Exception
      */
-    public function test_formatted_time(string $expected, $datetime_str, string $timestamp_format = null, string $timezone = null)
+    public function test_formatted_time(string $expected, $datetime_str, ?string $timestamp_format = null, ?string $timezone = null)
     {
         $timestamp = Date::formatted_time($datetime_str, $timestamp_format, $timezone);
 

@@ -51,7 +51,7 @@ abstract class Kohana_Database
      * @return  Database
      * @throws Kohana_Exception
      */
-    public static function instance(string $name = null, array $config = null): Database
+    public static function instance(?string $name = null, ?array $config = null): Database
     {
         if ($name === null) {
             // Use the default instance name
@@ -194,7 +194,7 @@ abstract class Kohana_Database
      * @return Database_Result|array|int Database_Result for SELECT queries, list (insert ID, row count) for INSERT queries, or number of affected rows for all other queries
      * @throws Database_Exception
      */
-    abstract public function query(int $type, string $sql, $as_object = false, array $params = null);
+    abstract public function query(int $type, string $sql, $as_object = false, ?array $params = null);
     /**
      * Start a SQL transaction
      *
@@ -216,7 +216,7 @@ abstract class Kohana_Database
      * @param string|null $mode Transaction mode
      * @return bool
      */
-    abstract public function begin(string $mode = null): bool;
+    abstract public function begin(?string $mode = null): bool;
     /**
      * Commit the current transaction
      *
@@ -334,7 +334,7 @@ abstract class Kohana_Database
      * @param string|null $like Table to search for
      * @return  array
      */
-    abstract public function list_tables(string $like = null): array;
+    abstract public function list_tables(?string $like = null): array;
     /**
      * Lists all the columns in a table. Optionally, a LIKE string can be
      * used to search for specific fields.
@@ -353,7 +353,7 @@ abstract class Kohana_Database
      * @param bool $add_prefix Whether to add the table prefix automatically or not
      * @return  array
      */
-    abstract public function list_columns(string $table, string $like = null, bool $add_prefix = true): array;
+    abstract public function list_columns(string $table, ?string $like = null, bool $add_prefix = true): array;
     /**
      * Extracts the text between parentheses, if any.
      *

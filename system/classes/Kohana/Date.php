@@ -50,7 +50,7 @@ class Kohana_Date
      * @return int
      * @throws Exception
      */
-    public static function offset(string $remote, string $local = null, $now = null): int
+    public static function offset(string $remote, ?string $local = null, $now = null): int
     {
         if ($local === null) {
             // Use the default timezone
@@ -126,7 +126,7 @@ class Kohana_Date
      * @param int|null $start The hour to start at
      * @return  array   A mirrored (foo => foo) array from start-12 or start-23.
      */
-    public static function hours(int $step = 1, bool $long = false, int $start = null): array
+    public static function hours(int $step = 1, bool $long = false, ?int $start = null): array
     {
         // Set the default start if none was specified.
         if ($start === null) {
@@ -248,7 +248,7 @@ class Kohana_Date
      * @return  array   An array of months based on the specified format
      * @uses    Date::hours
      */
-    public static function months(string $format = null): array
+    public static function months(?string $format = null): array
     {
         $months = [];
 
@@ -382,7 +382,7 @@ class Kohana_Date
      * @param int|null $local_timestamp "Local" timestamp, defaults to time()
      * @return  string
      */
-    public static function fuzzy_span(int $timestamp, int $local_timestamp = null): string
+    public static function fuzzy_span(int $timestamp, ?int $local_timestamp = null): string
     {
         $local_timestamp = $local_timestamp === null ? time() : $local_timestamp;
 
@@ -501,7 +501,7 @@ class Kohana_Date
      * @return  string
      * @throws Exception
      */
-    public static function formatted_time(string $datetime_str = 'now', string $timestamp_format = null, string $timezone = null): string
+    public static function formatted_time(string $datetime_str = 'now', ?string $timestamp_format = null, ?string $timezone = null): string
     {
         $timestamp_format = $timestamp_format === null ? Date::$timestamp_format : $timestamp_format;
         $timezone = $timezone === null ? Date::$timezone : $timezone;

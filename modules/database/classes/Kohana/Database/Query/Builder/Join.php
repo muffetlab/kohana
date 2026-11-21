@@ -28,7 +28,7 @@ class Kohana_Database_Query_Builder_Join extends Database_Query_Builder
      * @param string|null $type Type of JOIN: INNER, RIGHT, LEFT, etc.
      * @return  void
      */
-    public function __construct($table, string $type = null)
+    public function __construct($table, ?string $type = null)
     {
         parent::__construct(null, null);
 

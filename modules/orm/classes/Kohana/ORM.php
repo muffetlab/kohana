@@ -501,7 +501,7 @@ class Kohana_ORM extends Model implements serializable
      * @param string|null $field Field to check for changes
      * @return  bool  Whether the field has changed
      */
-    public function changed(string $field = null): bool
+    public function changed(?string $field = null): bool
     {
         return $field === null ? count($this->_changes) > 0 : array_key_exists($field, $this->_changes);
     }
@@ -1089,7 +1089,7 @@ class Kohana_ORM extends Model implements serializable
      * @throws ORM_Validation_Exception
      * @throws ReflectionException
      */
-    public function check(Validation $extra_validation = null): Kohana_ORM
+    public function check(?Validation $extra_validation = null): Kohana_ORM
     {
         // Determine if any external validation failed
         $extra_errors = $extra_validation && !$extra_validation->check();
@@ -1120,7 +1120,7 @@ class Kohana_ORM extends Model implements serializable
      * @throws ORM_Validation_Exception
      * @throws ReflectionException
      */
-    public function create(Validation $validation = null): Kohana_ORM
+    public function create(?Validation $validation = null): Kohana_ORM
     {
         if ($this->_loaded)
             throw new Kohana_Exception('Cannot create :model model because it is already loaded.', [':model' => $this->_object_name]);
@@ -1176,7 +1176,7 @@ class Kohana_ORM extends Model implements serializable
      * @throws ORM_Validation_Exception
      * @throws ReflectionException
      */
-    public function update(Validation $validation = null): Kohana_ORM
+    public function update(?Validation $validation = null): Kohana_ORM
     {
         if (!$this->_loaded)
             throw new Kohana_Exception('Cannot update :model model because it is not loaded.', [':model' => $this->_object_name]);
@@ -1239,7 +1239,7 @@ class Kohana_ORM extends Model implements serializable
      * @throws ORM_Validation_Exception
      * @throws ReflectionException
      */
-    public function save(Validation $validation = null): Kohana_ORM
+    public function save(?Validation $validation = null): Kohana_ORM
     {
         return $this->loaded() ? $this->update($validation) : $this->create($validation);
     }
@@ -1789,7 +1789,7 @@ class Kohana_ORM extends Model implements serializable
      * @param string|null $direction Direction of sorting
      * @return  $this
      */
-    public function order_by($column, string $direction = null): Kohana_ORM
+    public function order_by($column, ?string $direction = null): Kohana_ORM
     {
         // Add pending database call which is executed after query type is determined
         $this->_db_pending[] = [
@@ -1875,7 +1875,7 @@ class Kohana_ORM extends Model implements serializable
      * @param string|null $type Join type (LEFT, RIGHT, INNER, etc.)
      * @return  $this
      */
-    public function join($table, string $type = null): Kohana_ORM
+    public function join($table, ?string $type = null): Kohana_ORM
     {
         // Add pending database call which is executed after query type is determined
         $this->_db_pending[] = [
@@ -2082,7 +2082,7 @@ class Kohana_ORM extends Model implements serializable
      * @return  $this
      * @uses    Kohana::$cache_life
      */
-    public function cached(int $lifetime = null): Kohana_ORM
+    public function cached(?int $lifetime = null): Kohana_ORM
     {
         // Add pending database call which is executed after query type is determined
         $this->_db_pending[] = [

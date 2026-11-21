@@ -183,7 +183,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect
      * @throws Cache_Exception
      * @throws ErrorException
      */
-    public function set(string $id, $data, int $lifetime = null): bool
+    public function set(string $id, $data, ?int $lifetime = null): bool
     {
         $filename = Cache_File::filename($this->_sanitize_id($id));
         $directory = $this->_resolve_directory($filename);

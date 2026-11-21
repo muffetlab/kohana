@@ -38,7 +38,7 @@ class Kohana_Session_Database extends Session
     // The old session id
     protected $_update_id;
 
-    public function __construct(array $config = null, $id = null)
+    public function __construct(?array $config = null, $id = null)
     {
         if (!isset($config['group'])) {
             // Use the default group
@@ -77,7 +77,7 @@ class Kohana_Session_Database extends Session
         return $this->_session_id;
     }
 
-    protected function _read(string $id = null)
+    protected function _read(?string $id = null)
     {
         if ($id || $id = Cookie::get($this->_name)) {
             $result = DB::select([$this->_columns['contents'], 'contents'])

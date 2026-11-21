@@ -71,7 +71,7 @@ class Kohana_Database_Query
      * @return  $this
      * @uses    Kohana::$cache_life
      */
-    public function cached(int $lifetime = null, bool $force = false): Kohana_Database_Query
+    public function cached(?int $lifetime = null, bool $force = false): Kohana_Database_Query
     {
         if ($lifetime === null) {
             // Use the global setting
@@ -105,7 +105,7 @@ class Kohana_Database_Query
      * @param array|null $params
      * @return  $this
      */
-    public function as_object($class = true, array $params = null): Kohana_Database_Query
+    public function as_object($class = true, ?array $params = null): Kohana_Database_Query
     {
         $this->_as_object = $class;
 
@@ -199,7 +199,7 @@ class Kohana_Database_Query
      * @return Database_Result|array|int Database_Result for SELECT queries, insert ID for INSERT queries, number of affected rows for all other queries.
      * @throws Kohana_Exception
      */
-    public function execute($db = null, string $as_object = null, array $object_params = null)
+    public function execute($db = null, ?string $as_object = null, ?array $object_params = null)
     {
         if (!is_object($db)) {
             // Get the database instance

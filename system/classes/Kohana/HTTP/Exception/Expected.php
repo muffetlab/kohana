@@ -31,7 +31,7 @@ abstract class Kohana_HTTP_Exception_Expected extends HTTP_Exception
      * @param Exception|null $previous
      * @throws Kohana_Exception
      */
-    public function __construct(string $message = '', array $variables = null, Exception $previous = null)
+    public function __construct(string $message = '', ?array $variables = null, ?Exception $previous = null)
     {
         parent::__construct($message, $variables, $previous);
 
@@ -48,7 +48,7 @@ abstract class Kohana_HTTP_Exception_Expected extends HTTP_Exception
      * @return  mixed
      * @see     [Response::headers]
      */
-    public function headers($key = null, string $value = null)
+    public function headers($key = null, ?string $value = null)
     {
         $result = $this->_response->headers($key, $value);
 

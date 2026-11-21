@@ -144,7 +144,7 @@ class Kohana_Response implements HTTP_Response
      *
      * @return Kohana_Response|string
      */
-    public function body(string $content = null)
+    public function body(?string $content = null)
     {
         if ($content === null)
             return $this->_body;
@@ -160,7 +160,7 @@ class Kohana_Response implements HTTP_Response
      * @param string|null $protocol Protocol to set to the request/response
      * @return  Kohana_Response|string
      */
-    public function protocol(string $protocol = null)
+    public function protocol(?string $protocol = null)
     {
         if ($protocol) {
             $this->_protocol = strtoupper($protocol);
@@ -188,7 +188,7 @@ class Kohana_Response implements HTTP_Response
      * @return int|Kohana_Response
      * @throws Kohana_Exception
      */
-    public function status(int $code = null)
+    public function status(?int $code = null)
     {
         if ($code === null) {
             return $this->_status;
@@ -221,7 +221,7 @@ class Kohana_Response implements HTTP_Response
      * @param string|null $value
      * @return mixed
      */
-    public function headers($key = null, string $value = null)
+    public function headers($key = null, ?string $value = null)
     {
         if ($key === null) {
             return $this->_header;
@@ -323,7 +323,7 @@ class Kohana_Response implements HTTP_Response
      * @return  mixed
      * @throws Kohana_Exception
      */
-    public function send_headers(bool $replace = false, callable $callback = null)
+    public function send_headers(bool $replace = false, ?callable $callback = null)
     {
         return $this->_header->send_headers($this, $replace, $callback);
     }
@@ -360,7 +360,7 @@ class Kohana_Response implements HTTP_Response
      * @uses    File::mime
      * @uses    Request::send_headers
      */
-    public function send_file($filename, string $download = null, array $options = null)
+    public function send_file($filename, ?string $download = null, ?array $options = null)
     {
         if (!empty($options['mime_type'])) {
             // The mime-type has been manually set

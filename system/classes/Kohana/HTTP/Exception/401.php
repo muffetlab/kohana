@@ -12,7 +12,7 @@ class Kohana_HTTP_Exception_401 extends HTTP_Exception_Expected
      *
      * @param string|null $challenge WWW-Authenticate challenge (e.g. `Basic realm="Control Panel"`)
      */
-    public function authenticate(string $challenge = null)
+    public function authenticate(?string $challenge = null)
     {
         if ($challenge === null)
             return $this->headers('www-authenticate');

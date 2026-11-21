@@ -139,7 +139,7 @@ class Kohana_Database_MySQLi extends Database
      * @return Database_Result|array|int Database_Result for SELECT queries, list (insert ID, row count) for INSERT queries, or number of affected rows for all other queries
      * @throws Database_Exception
      */
-    public function query(int $type, string $sql, $as_object = false, array $params = null)
+    public function query(int $type, string $sql, $as_object = false, ?array $params = null)
     {
         // Make sure the database is connected
         $this->_connection or $this->connect();
@@ -246,7 +246,7 @@ class Kohana_Database_MySQLi extends Database
      * @return bool
      * @throws Database_Exception
      */
-    public function begin(string $mode = null): bool
+    public function begin(?string $mode = null): bool
     {
         // Make sure the database is connected
         $this->_connection or $this->connect();
@@ -286,7 +286,7 @@ class Kohana_Database_MySQLi extends Database
         return (bool) $this->_connection->query('ROLLBACK');
     }
 
-    public function list_tables(string $like = null): array
+    public function list_tables(?string $like = null): array
     {
         if (is_string($like)) {
             // Search for table names
@@ -304,7 +304,7 @@ class Kohana_Database_MySQLi extends Database
         return $tables;
     }
 
-    public function list_columns(string $table, string $like = null, bool $add_prefix = true): array
+    public function list_columns(string $table, ?string $like = null, bool $add_prefix = true): array
     {
         // Quote the table name
         $table = $add_prefix === true ? $this->quote_table($table) : $table;

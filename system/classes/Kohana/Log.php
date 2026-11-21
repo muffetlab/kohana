@@ -118,7 +118,7 @@ class Kohana_Log
      * @param array|null $additional additional custom parameters to supply to the log writer
      * @return  Kohana_Log
      */
-    public function add(string $level, string $message, array $values = null, array $additional = null): Kohana_Log
+    public function add(string $level, string $message, ?array $values = null, ?array $additional = null): Kohana_Log
     {
         if ($values) {
             // Insert the values into the message

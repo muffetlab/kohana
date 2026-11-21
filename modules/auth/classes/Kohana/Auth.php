@@ -120,7 +120,7 @@ abstract class Kohana_Auth
      * @param string|null $role Role name
      * @return  bool
      */
-    public function logged_in(string $role = null): bool
+    public function logged_in(?string $role = null): bool
     {
         return $this->get_user() !== null;
     }

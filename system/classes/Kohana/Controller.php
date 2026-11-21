@@ -137,7 +137,7 @@ abstract class Kohana_Controller
      * @return Response
      * @throws Request_Exception
      */
-    protected function check_cache(string $etag = null): Response
+    protected function check_cache(?string $etag = null): Response
     {
         return HTTP::check_cache($this->request, $this->response, $etag);
     }

@@ -19,7 +19,7 @@ class Kohana_Auth_ORM extends Auth
      * @throws ORM_Validation_Exception
      * @throws ReflectionException
      */
-    public function logged_in(string $role = null): bool
+    public function logged_in(?string $role = null): bool
     {
         // Get the user from the session
         $user = $this->get_user();

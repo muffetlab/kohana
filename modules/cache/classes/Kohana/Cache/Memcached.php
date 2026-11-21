@@ -198,7 +198,7 @@ class Kohana_Cache_Memcached extends Cache implements Cache_Arithmetic
      * @param int|null $lifetime Lifetime in seconds, maximum value 2592000.
      * @return  bool
      */
-    public function set(string $id, $data, int $lifetime = null): bool
+    public function set(string $id, $data, ?int $lifetime = null): bool
     {
         // If lifetime is null, set to the default expiry.
         if ($lifetime === null) {

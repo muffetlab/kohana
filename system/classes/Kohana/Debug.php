@@ -299,7 +299,7 @@ class Kohana_Debug
      * @return array
      * @throws ReflectionException
      */
-    public static function trace(array $trace = null): array
+    public static function trace(?array $trace = null): array
     {
         if ($trace === null) {
             // Start a new trace

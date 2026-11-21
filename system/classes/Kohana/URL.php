@@ -211,7 +211,7 @@ class Kohana_URL
      * @return bool true if $host is trustworthy.
      * @throws Kohana_Exception
      */
-    public static function is_trusted_host(string $host, array $trusted_hosts = null): bool
+    public static function is_trusted_host(string $host, ?array $trusted_hosts = null): bool
     {
 
         // If list of trusted hosts is not directly provided read from config

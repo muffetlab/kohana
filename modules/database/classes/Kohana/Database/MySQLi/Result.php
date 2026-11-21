@@ -13,7 +13,7 @@ class Kohana_Database_MySQLi_Result extends Database_Result
 {
     protected $_internal_row = 0;
 
-    public function __construct($result, $sql, $as_object = false, array $params = null)
+    public function __construct($result, $sql, $as_object = false, ?array $params = null)
     {
         parent::__construct($result, $sql, $as_object, $params);
 
@@ -27,7 +27,6 @@ class Kohana_Database_MySQLi_Result extends Database_Result
             $this->_result->free();
         }
     }
-
     public function seek($offset): bool
     {
         if ($this->offsetExists($offset) && $this->_result->data_seek($offset)) {

@@ -579,7 +579,7 @@ class Kohana_ArrTest extends Unittest_TestCase
      * @param mixed $expected The expected value
      * @param string|null $delimiter The path delimiter
      */
-    public function test_path($expected, array $array, $path, $default = null, string $delimiter = null)
+    public function test_path($expected, array $array, $path, $default = null, ?string $delimiter = null)
     {
         $this->assertSame(
             $expected, Arr::path($array, $path, $default, $delimiter)
@@ -650,7 +650,7 @@ class Kohana_ArrTest extends Unittest_TestCase
      * @param string|null $delimiter The path delimiter
      * @throws Kohana_Exception
      */
-    public function test_set_path(array $expected, array $array, $path, $value, string $delimiter = null)
+    public function test_set_path(array $expected, array $array, $path, $value, ?string $delimiter = null)
     {
         Arr::set_path($array, $path, $value, $delimiter);
 

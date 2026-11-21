@@ -194,7 +194,7 @@ class Kohana_Core
      * @uses    Kohana::cache
      * @uses    Profiler
      */
-    public static function init(array $settings = null)
+    public static function init(?array $settings = null)
     {
         if (Kohana::$_init) {
             // Do not allow execution twice
@@ -524,7 +524,7 @@ class Kohana_Core
      * @return  array   enabled modules
      * @throws Kohana_Exception
      */
-    public static function modules(array $modules = null): array
+    public static function modules(?array $modules = null): array
     {
         if ($modules === null) {
             // Not changing modules, just return the current set
@@ -606,7 +606,7 @@ class Kohana_Core
      * @param bool $array Return an array of files?
      * @return  string[]|string List of files if $array is true, single file path otherwise.
      */
-    public static function find_file(string $dir, string $file, string $ext = null, bool $array = false)
+    public static function find_file(string $dir, string $file, ?string $ext = null, bool $array = false)
     {
         if ($ext === null) {
             // Use the default extension
@@ -688,7 +688,7 @@ class Kohana_Core
      * @param array|null $paths list of paths to search
      * @return  array
      */
-    public static function list_files(string $directory = null, array $paths = null): array
+    public static function list_files(?string $directory = null, ?array $paths = null): array
     {
         if ($directory !== null) {
             // Add the directory separator
@@ -781,7 +781,7 @@ class Kohana_Core
      * @param int|null $lifetime Number of seconds the cache is valid for
      * @return  mixed|bool The cached data when getting, or a boolean when setting.
      */
-    public static function cache(string $name, $data = null, int $lifetime = null)
+    public static function cache(string $name, $data = null, ?int $lifetime = null)
     {
         // Cache file is a hash of the name
         $file = sha1($name) . '.txt';

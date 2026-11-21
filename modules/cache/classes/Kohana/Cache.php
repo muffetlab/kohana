@@ -112,7 +112,7 @@ abstract class Kohana_Cache
      * @throws Cache_Exception
      * @throws Kohana_Exception
      */
-    public static function instance(string $group = null): Cache
+    public static function instance(?string $group = null): Cache
     {
         // If there is no group supplied
         if ($group === null) {

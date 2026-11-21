@@ -58,7 +58,7 @@ class Kohana_Text
      * @param string|null $end_char End character or entity
      * @return  string
      */
-    public static function limit_words(string $str, int $limit = 100, string $end_char = null): string
+    public static function limit_words(string $str, int $limit = 100, ?string $end_char = null): string
     {
         $end_char = $end_char === null ? '…' : $end_char;
 
@@ -87,7 +87,7 @@ class Kohana_Text
      * @return  string
      * @uses    UTF8::strlen
      */
-    public static function limit_chars(string $str, int $limit = 100, string $end_char = null, bool $preserve_words = false): string
+    public static function limit_chars(string $str, int $limit = 100, ?string $end_char = null, bool $preserve_words = false): string
     {
         $end_char = $end_char === null ? '…' : $end_char;
 
@@ -161,7 +161,7 @@ class Kohana_Text
      * @return  string
      * @uses    UTF8::split
      */
-    public static function random(string $type = null, int $length = 8): string
+    public static function random(?string $type = null, int $length = 8): string
     {
         if ($type === null) {
             // Default is to generate an alphanumeric string
@@ -458,7 +458,7 @@ class Kohana_Text
      * @param bool $si Whether to use SI prefixes or IEC
      * @return  string
      */
-    public static function bytes(int $bytes, string $force_unit = null, string $format = null, bool $si = true): string
+    public static function bytes(int $bytes, ?string $force_unit = null, ?string $format = null, bool $si = true): string
     {
         // Format string
         $format = $format === null ? '%01.2f %s' : $format;

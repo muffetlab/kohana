@@ -46,7 +46,7 @@ class Kohana_Fragment
      * @uses    I18n::lang
      * @since   3.0.4
      */
-    protected static function _cache_key(string $name, bool $i18n = null): string
+    protected static function _cache_key(string $name, ?bool $i18n = null): string
     {
         if ($i18n === null) {
             // Use the default setting
@@ -74,7 +74,7 @@ class Kohana_Fragment
      * @param bool|null $i18n Multilingual fragment support
      * @return bool
      */
-    public static function load(string $name, int $lifetime = null, bool $i18n = null): bool
+    public static function load(string $name, ?int $lifetime = null, ?bool $i18n = null): bool
     {
         // Set the cache lifetime
         $lifetime = $lifetime === null ? Fragment::$lifetime : $lifetime;
@@ -134,7 +134,7 @@ class Kohana_Fragment
      * @param bool|null $i18n Multilingual fragment support
      * @return  void
      */
-    public static function delete(string $name, bool $i18n = null)
+    public static function delete(string $name, ?bool $i18n = null)
     {
         // Invalid the cache
         Kohana::cache(Fragment::_cache_key($name, $i18n), null, -3600);

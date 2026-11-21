@@ -25,7 +25,7 @@ class Kohana_Database_Query_Builder_Insert extends Database_Query_Builder
      * @param array|null $columns column names
      * @throws Kohana_Exception
      */
-    public function __construct($table = null, array $columns = null)
+    public function __construct($table = null, ?array $columns = null)
     {
         if ($table) {
             // Set the initial table name

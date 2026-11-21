@@ -409,7 +409,7 @@ class Kohana_Validation implements ArrayAccess
      * @param array|null $params
      * @return  $this
      */
-    public function error(string $field, string $error, array $params = null): Kohana_Validation
+    public function error(string $field, string $error, ?array $params = null): Kohana_Validation
     {
         $this->_errors[$field] = [$error, $params];
 
@@ -435,7 +435,7 @@ class Kohana_Validation implements ArrayAccess
      * @return  array
      * @uses    Kohana::message
      */
-    public function errors(string $file = null, $translate = true): array
+    public function errors(?string $file = null, $translate = true): array
     {
         if ($file === null) {
             // Return the error list

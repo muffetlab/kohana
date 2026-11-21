@@ -20,7 +20,7 @@ abstract class Kohana_HTTP_Exception_Redirect extends HTTP_Exception_Expected
      * @param string|null $uri URI of the proxy
      * @throws Kohana_Exception
      */
-    public function location(string $uri = null)
+    public function location(?string $uri = null)
     {
         if ($uri === null)
             return $this->headers('Location');

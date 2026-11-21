@@ -115,7 +115,7 @@ class Kohana_Cache_Sqlite extends Cache implements Cache_Tagging, Cache_GarbageC
      * @return bool
      * @throws Cache_Exception
      */
-    public function set(string $id, $data, int $lifetime = null): bool
+    public function set(string $id, $data, ?int $lifetime = null): bool
     {
         return $this->set_with_tags($id, $data, $lifetime);
     }
@@ -173,7 +173,7 @@ class Kohana_Cache_Sqlite extends Cache implements Cache_Tagging, Cache_GarbageC
      * @return  bool
      * @throws Cache_Exception
      */
-    public function set_with_tags(string $id, $data, int $lifetime = null, array $tags = null): bool
+    public function set_with_tags(string $id, $data, ?int $lifetime = null, ?array $tags = null): bool
     {
         // Serialize the data
         $data = serialize($data);

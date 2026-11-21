@@ -86,7 +86,7 @@ class Kohana_Route
      * @param array|null $regex Regex patterns for route keys
      * @return  Route
      */
-    public static function set(string $name, string $uri = null, array $regex = null): Route
+    public static function set(string $name, ?string $uri = null, ?array $regex = null): Route
     {
         return Route::$_routes[$name] = new Route($uri, $regex);
     }
@@ -194,7 +194,7 @@ class Kohana_Route
      * @uses    URL::site
      * @since   3.0.7
      */
-    public static function url(string $name, array $params = null, $protocol = null): string
+    public static function url(string $name, ?array $params = null, $protocol = null): string
     {
         $route = Route::get($name);
 
@@ -221,7 +221,7 @@ class Kohana_Route
      * @uses    Route::REGEX_ESCAPE
      * @uses    Route::REGEX_SEGMENT
      */
-    public static function compile($uri, array $regex = null): string
+    public static function compile($uri, ?array $regex = null): string
     {
         // The URI should be considered literal except for keys and optional parts
         // Escape everything preg_quote would escape except for : ( ) < >
@@ -289,7 +289,7 @@ class Kohana_Route
      * @return  void
      * @uses    Route::_compile
      */
-    public function __construct(string $uri = null, array $regex = null)
+    public function __construct(?string $uri = null, ?array $regex = null)
     {
         if ($uri === null) {
             // Assume the route is from cache
@@ -322,7 +322,7 @@ class Kohana_Route
      * @param array|null $defaults key values
      * @return array|Kohana_Route
      */
-    public function defaults(array $defaults = null)
+    public function defaults(?array $defaults = null)
     {
         if ($defaults === null) {
             return $this->_defaults;
@@ -466,7 +466,7 @@ class Kohana_Route
      * @uses    Route::REGEX_GROUP
      * @uses    Route::REGEX_KEY
      */
-    public function uri(array $params = null): string
+    public function uri(?array $params = null): string
     {
         if ($params) {
             // @issue #4079 rawurlencode parameters

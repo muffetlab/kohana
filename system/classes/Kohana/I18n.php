@@ -69,7 +69,7 @@ class Kohana_I18n
      * @param string|null $lang Target language
      * @return  string
      */
-    public static function get(string $string, string $lang = null): string
+    public static function get(string $string, ?string $lang = null): string
     {
         if (!$lang) {
             // Use the global target language
@@ -145,7 +145,7 @@ if (!function_exists('__')) {
      * @return  string
      * @uses    I18n::get
      */
-    function __(string $string, array $values = null, string $lang = 'en-us'): string
+    function __(string $string, ?array $values = null, string $lang = 'en-us'): string
     {
         if ($lang !== I18n::$lang) {
             // The message and target languages are different

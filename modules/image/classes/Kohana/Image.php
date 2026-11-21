@@ -35,7 +35,7 @@ abstract class Kohana_Image
      * @return  Image
      * @throws Kohana_Exception
      */
-    public static function factory(string $file, string $driver = null): Image
+    public static function factory(string $file, ?string $driver = null): Image
     {
         if ($driver === null) {
             // Use the driver from configuration file
@@ -163,7 +163,7 @@ abstract class Kohana_Image
      * @return  $this
      * @uses    Image::_do_resize
      */
-    public function resize(int $width = null, int $height = null, int $master = null): Kohana_Image
+    public function resize(?int $width = null, ?int $height = null, ?int $master = null): Kohana_Image
     {
         if ($master === null) {
             // Choose the master dimension automatically
@@ -416,7 +416,7 @@ abstract class Kohana_Image
      * @return  $this
      * @uses    Image::_do_reflection
      */
-    public function reflection(int $height = null, int $opacity = 100, bool $fade_in = false): Kohana_Image
+    public function reflection(?int $height = null, int $opacity = 100, bool $fade_in = false): Kohana_Image
     {
         if ($height === null || $height > $this->height) {
             // Use the current height
@@ -540,7 +540,7 @@ abstract class Kohana_Image
      * @throws  Kohana_Exception
      * @uses    Image::_save
      */
-    public function save(string $file = null, int $quality = 100): bool
+    public function save(?string $file = null, int $quality = 100): bool
     {
         if ($file === null) {
             // Overwrite the file
@@ -580,7 +580,7 @@ abstract class Kohana_Image
      * @return  string
      * @uses    Image::_do_render
      */
-    public function render(string $type = null, int $quality = 100): string
+    public function render(?string $type = null, int $quality = 100): string
     {
         if ($type === null) {
             // Use the current image type

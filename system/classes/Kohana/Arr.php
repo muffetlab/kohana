@@ -84,7 +84,7 @@ class Kohana_Arr
      * @param string|null $delimiter Key path delimiter
      * @return  mixed
      */
-    public static function path($array, $path, $default = null, string $delimiter = null)
+    public static function path($array, $path, $default = null, ?string $delimiter = null)
     {
         if (is_array($path)) {
             // The path has already been separated into keys
@@ -175,7 +175,7 @@ class Kohana_Arr
      * @throws Kohana_Exception
      * @see Arr::path()
      */
-    public static function set_path(array &$array, $path, $value, string $delimiter = null)
+    public static function set_path(array &$array, $path, $value, ?string $delimiter = null)
     {
         if (!$delimiter) {
             // Use the default delimiter
@@ -352,7 +352,7 @@ class Kohana_Arr
      * @param array|null $keys Array of keys to apply to
      * @return  array
      */
-    public static function map($callbacks, array $array, array $keys = null): array
+    public static function map($callbacks, array $array, ?array $keys = null): array
     {
         foreach ($array as $key => $val) {
             if (is_array($val)) {

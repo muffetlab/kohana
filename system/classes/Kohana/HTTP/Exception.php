@@ -11,7 +11,7 @@ abstract class Kohana_HTTP_Exception extends Kohana_Exception
      * @param Exception|null $previous
      * @return  HTTP_Exception
      */
-    public static function factory(int $code, string $message = '', array $variables = null, Exception $previous = null): HTTP_Exception
+    public static function factory(int $code, string $message = '', ?array $variables = null, ?Exception $previous = null): HTTP_Exception
     {
         $class = 'HTTP_Exception_' . $code;
 
@@ -37,7 +37,7 @@ abstract class Kohana_HTTP_Exception extends Kohana_Exception
      * @param array|null $variables translation variables
      * @param Exception|null $previous
      */
-    public function __construct(string $message = '', array $variables = null, Exception $previous = null)
+    public function __construct(string $message = '', ?array $variables = null, ?Exception $previous = null)
     {
         parent::__construct($message, $variables, $this->_code, $previous);
     }
@@ -48,7 +48,7 @@ abstract class Kohana_HTTP_Exception extends Kohana_Exception
      * @param Request|null $request Request object that triggered this exception.
      * @return  Kohana_HTTP_Exception|Request
      */
-    public function request(Request $request = null)
+    public function request(?Request $request = null)
     {
         if ($request === null)
             return $this->_request;

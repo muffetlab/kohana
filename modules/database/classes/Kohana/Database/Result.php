@@ -31,7 +31,7 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
      * @param mixed $as_object
      * @param array|null $params
      */
-    public function __construct($result, string $sql, $as_object = false, array $params = null)
+    public function __construct($result, string $sql, $as_object = false, ?array $params = null)
     {
         // Store the result locally
         $this->_result = $result;
@@ -88,7 +88,7 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
      * @param string|null $value Column for values
      * @return  array
      */
-    public function as_array(string $key = null, string $value = null): array
+    public function as_array(?string $key = null, ?string $value = null): array
     {
         $results = [];
 

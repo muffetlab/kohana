@@ -32,7 +32,7 @@ class Kohana_ORM_Validation_Exception extends Kohana_Exception
      * @param int $code The error code for the exception
      * @param Exception|null $previous
      */
-    public function __construct($alias, Validation $object, $message = 'Failed to validate array', array $values = null, int $code = 0, Exception $previous = null)
+    public function __construct($alias, Validation $object, $message = 'Failed to validate array', ?array $values = null, int $code = 0, ?Exception $previous = null)
     {
         $this->_alias = $alias;
         $this->_objects['_object'] = $object;
@@ -117,7 +117,7 @@ class Kohana_ORM_Validation_Exception extends Kohana_Exception
      * @return  array
      * @see generate_errors()
      */
-    public function errors(string $directory = null, $translate = true): array
+    public function errors(?string $directory = null, $translate = true): array
     {
         return $this->generate_errors($this->_alias, $this->_objects, $directory, $translate);
     }

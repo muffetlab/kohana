@@ -155,7 +155,7 @@ abstract class Kohana_Database_Query_Builder_Where extends Database_Query_Builde
      * @param string|null $direction Direction of sorting
      * @return  $this
      */
-    public function order_by($column, string $direction = null): Kohana_Database_Query_Builder_Where
+    public function order_by($column, ?string $direction = null): Kohana_Database_Query_Builder_Where
     {
         $this->_order_by[] = [$column, $direction];
 

@@ -135,7 +135,7 @@ class Kohana_Database_PDO extends Database
      * @return Database_Result|array|int Database_Result for SELECT queries, list (insert ID, row count) for INSERT queries, or number of affected rows for all other queries
      * @throws Database_Exception
      */
-    public function query(int $type, string $sql, $as_object = false, array $params = null)
+    public function query(int $type, string $sql, $as_object = false, ?array $params = null)
     {
         // Make sure the database is connected
         $this->_connection or $this->connect();
@@ -193,7 +193,7 @@ class Kohana_Database_PDO extends Database
         }
     }
 
-    public function begin(string $mode = null): bool
+    public function begin(?string $mode = null): bool
     {
         // Make sure the database is connected
         $this->_connection or $this->connect();
@@ -217,12 +217,12 @@ class Kohana_Database_PDO extends Database
         return $this->_connection->rollBack();
     }
 
-    public function list_tables(string $like = null): array
+    public function list_tables(?string $like = null): array
     {
         throw new Kohana_Exception('Database method :method is not supported by :class', [':method' => __FUNCTION__, ':class' => __CLASS__]);
     }
 
-    public function list_columns(string $table, string $like = null, bool $add_prefix = true): array
+    public function list_columns(string $table, ?string $like = null, bool $add_prefix = true): array
     {
         throw new Kohana_Exception('Database method :method is not supported by :class', [':method' => __FUNCTION__, ':class' => __CLASS__]);
     }

@@ -120,7 +120,7 @@ class Kohana_Unittest_Tests
      * @param array $blacklist_items A set of files to blacklist
      * @param Unittest_TestSuite|null $suite The test suite
      */
-    static public function blacklist(array $blacklist_items, Unittest_TestSuite $suite = null)
+    static public function blacklist(array $blacklist_items, ?Unittest_TestSuite $suite = null)
     {
         foreach ($blacklist_items as $item) {
             if (is_dir($item)) {
@@ -140,7 +140,7 @@ class Kohana_Unittest_Tests
      * @param array|null $directories Optional directories to whitelist
      * @param Unittest_TestSuite|null $suite Suite to load the whitelist into
      */
-    static public function whitelist(array $directories = null, Unittest_TestSuite $suite = null)
+    static public function whitelist(?array $directories = null, ?Unittest_TestSuite $suite = null)
     {
         if (empty($directories)) {
             $directories = self::get_config_whitelist();
@@ -202,7 +202,7 @@ class Kohana_Unittest_Tests
      * @param array $files Array of files to whitelist
      * @param Unittest_TestSuite|null $suite Suite to load the whitelist into
      */
-    static protected function set_whitelist(array $files, Unittest_TestSuite $suite = null)
+    static protected function set_whitelist(array $files, ?Unittest_TestSuite $suite = null)
     {
 
         foreach ($files as $file) {

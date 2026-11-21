@@ -63,7 +63,7 @@ class Kohana_HTTP_Header extends ArrayObject
      * @return  array
      * @since   3.2.0
      */
-    public static function parse_accept_header(string $accepts = null): array
+    public static function parse_accept_header(?string $accepts = null): array
     {
         $accepts = explode(',', (string) $accepts);
 
@@ -102,7 +102,7 @@ class Kohana_HTTP_Header extends ArrayObject
      * @return  array
      * @since   3.2.0
      */
-    public static function parse_charset_header(string $charset = null): array
+    public static function parse_charset_header(?string $charset = null): array
     {
         if ($charset === null) {
             return ['*' => (float) HTTP_Header::DEFAULT_QUALITY];
@@ -120,7 +120,7 @@ class Kohana_HTTP_Header extends ArrayObject
      * @return  array
      * @since   3.2.0
      */
-    public static function parse_encoding_header(string $encoding = null): array
+    public static function parse_encoding_header(?string $encoding = null): array
     {
         // Accept everything
         if ($encoding === null) {
@@ -141,7 +141,7 @@ class Kohana_HTTP_Header extends ArrayObject
      * @return  array
      * @since   3.2.0
      */
-    public static function parse_language_header(string $language = null): array
+    public static function parse_language_header(?string $language = null): array
     {
         if ($language === null) {
             return ['*' => ['*' => (float) HTTP_Header::DEFAULT_QUALITY]];
@@ -769,7 +769,7 @@ class Kohana_HTTP_Header extends ArrayObject
      * @throws Kohana_Exception
      * @since   3.2.0
      */
-    public function send_headers(HTTP_Response $response = null, bool $replace = false, callable $callback = null)
+    public function send_headers(?HTTP_Response $response = null, bool $replace = false, ?callable $callback = null)
     {
         $protocol = $response->protocol();
         $status = $response->status();

@@ -328,7 +328,7 @@ class Kohana_Valid
      * @param array|null $lengths
      * @return  bool
      */
-    public static function phone(string $number, array $lengths = null): bool
+    public static function phone(string $number, ?array $lengths = null): bool
     {
         if (!is_array($lengths)) {
             $lengths = [7, 10, 11];
@@ -445,7 +445,7 @@ class Kohana_Valid
      * @param int|null $step Increment size
      * @return  bool
      */
-    public static function range(int $number, int $min, int $max, int $step = null): bool
+    public static function range(int $number, int $min, int $max, ?int $step = null): bool
     {
         if ($number < $min || $number > $max) {
             // Number is outside of range

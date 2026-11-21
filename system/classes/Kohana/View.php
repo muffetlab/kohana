@@ -27,7 +27,7 @@ class Kohana_View
      * @return  View
      * @throws View_Exception
      */
-    public static function factory(string $file = null, array $data = null): View
+    public static function factory(?string $file = null, ?array $data = null): View
     {
         return new View($file, $data);
     }
@@ -132,7 +132,7 @@ class Kohana_View
      * @throws View_Exception
      * @uses    View::set_filename
      */
-    public function __construct(string $file = null, array $data = null)
+    public function __construct(?string $file = null, ?array $data = null)
     {
         if ($file !== null) {
             $this->set_filename($file);
@@ -319,7 +319,7 @@ class Kohana_View
      * @throws  View_Exception
      * @uses    View::capture
      */
-    public function render(string $file = null): string
+    public function render(?string $file = null): string
     {
         if ($file !== null) {
             $this->set_filename($file);

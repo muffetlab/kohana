@@ -104,7 +104,7 @@ class Kohana_Kodoc
      * @param array|null $list array of files, obtained using Kohana::list_files
      * @return  array   an array of all the class names
      */
-    public static function classes(array $list = null): array
+    public static function classes(?array $list = null): array
     {
         if ($list === null) {
             $list = Kohana::list_files('classes');
@@ -137,7 +137,7 @@ class Kohana_Kodoc
      * >     ~bluehawk
      *
      */
-    public static function class_methods(array $list = null): array
+    public static function class_methods(?array $list = null): array
     {
         $list = Kodoc::classes($list);
 
@@ -377,7 +377,7 @@ class Kohana_Kodoc
      * @return string|bool If this is a transparent extension class, returns the child class name; otherwise false.
      * @throws Kohana_Exception
      */
-    public static function is_transparent(string $class, array $classes = null)
+    public static function is_transparent(string $class, ?array $classes = null)
     {
 
         static $transparent_prefixes = null;

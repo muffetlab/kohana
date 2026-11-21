@@ -36,7 +36,7 @@ abstract class Kohana_Session
      * @throws Kohana_Exception
      * @uses    Kohana::$config
      */
-    public static function instance(string $type = null, string $id = null): Session
+    public static function instance(?string $type = null, ?string $id = null): Session
     {
         if ($type === null) {
             // Use the default type
@@ -95,7 +95,7 @@ abstract class Kohana_Session
      * @throws Session_Exception
      * @uses    Session::read
      */
-    public function __construct(array $config = null, string $id = null)
+    public function __construct(?array $config = null, ?string $id = null)
     {
         if (isset($config['name'])) {
             // Cookie name to store the session id in
@@ -283,7 +283,7 @@ abstract class Kohana_Session
      * @return  void
      * @throws Session_Exception
      */
-    public function read(string $id = null)
+    public function read(?string $id = null)
     {
         try {
             if (is_string($data = $this->_read($id))) {
@@ -443,7 +443,7 @@ abstract class Kohana_Session
      * @param string|null $id Session ID
      * @return string|array
      */
-    abstract protected function _read(string $id = null);
+    abstract protected function _read(?string $id = null);
     /**
      * Generate a new session id and return it.
      *

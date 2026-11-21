@@ -35,7 +35,7 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where
      *
      * @param array|null $columns column list
      */
-    public function __construct(array $columns = null)
+    public function __construct(?array $columns = null)
     {
         if (!empty($columns)) {
             // Set the initial columns
@@ -105,7 +105,7 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where
      * @param string|null $type Join type (LEFT, RIGHT, INNER, etc.)
      * @return  $this
      */
-    public function join($table, string $type = null): Kohana_Database_Query_Builder_Select
+    public function join($table, ?string $type = null): Kohana_Database_Query_Builder_Select
     {
         $this->_join[] = $this->_last_join = new Database_Query_Builder_Join($table, $type);
 
