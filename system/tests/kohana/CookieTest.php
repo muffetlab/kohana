@@ -310,7 +310,7 @@ class Kohana_CookieTest_TestableCookie extends Cookie
     /**
      * {@inheritdoc}
      */
-    protected static function _setcookie(string $name, ?string $value, int $expire, string $path, string $domain, bool $secure, bool $httponly): bool
+    protected static function setcookie(string $name, ?string $value, int $expire, string $path, string $domain, bool $secure, bool $httponly): bool
     {
         self::$_mock_cookies_set[] = [
             'name' => $name,
@@ -328,7 +328,7 @@ class Kohana_CookieTest_TestableCookie extends Cookie
     /**
      * @return int
      */
-    protected static function _time(): int
+    protected static function time(): int
     {
         return Kohana_CookieTest::UNIX_TIMESTAMP;
     }

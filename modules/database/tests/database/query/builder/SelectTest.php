@@ -141,13 +141,13 @@ class Kohana_Database_Query_Builder_SelectTest extends DatabaseTestCase
             [
                 ['users'],
                 [
-                    ['where_open'],
+                    ['whereOpen'],
                     ['where', ['username', '=', 'john']],
-                    ['or_where', ['username', '=', 'jane']],
-                    ['where_close'],
-                    ['and_where', ['logins', '>', 10]],
+                    ['orWhere', ['username', '=', 'jane']],
+                    ['whereClose'],
+                    ['andWhere', ['logins', '>', 10]],
                 ],
-                [['order_by', ['logins', 'DESC']]],
+                [['orderBy', ['logins', 'DESC']]],
                 'SELECT * FROM users WHERE (username = \'john\' OR username = \'jane\') AND logins > 10 ORDER BY logins DESC'
             ],
         ];

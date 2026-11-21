@@ -13,7 +13,7 @@ use Kohana\Support\Utf8;
  */
 function _ucfirst($str): string
 {
-    if (Utf8::is_ascii($str))
+    if (Utf8::isAscii($str))
         return ucfirst($str);
 
     preg_match('/^(.?)(.*)$/us', $str, $matches);

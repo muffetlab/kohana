@@ -301,7 +301,7 @@ class Kohana_DateTest extends TestCase
      */
     public function test_formatted_time(string $expected, $datetime_str, ?string $timestamp_format = null, ?string $timezone = null)
     {
-        $timestamp = Date::formatted_time($datetime_str, $timestamp_format, $timezone);
+        $timestamp = Date::formattedTime($datetime_str, $timestamp_format, $timezone);
 
         $this->assertSame($expected, $timestamp);
     }
@@ -565,7 +565,7 @@ class Kohana_DateTest extends TestCase
     public function test_fuzzy_span(string $expected, int $timestamp, int $local_timestamp)
     {
         $this->assertSame(
-            $expected, Date::fuzzy_span($timestamp, $local_timestamp)
+            $expected, Date::fuzzySpan($timestamp, $local_timestamp)
         );
     }
 

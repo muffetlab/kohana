@@ -13,7 +13,7 @@ use Kohana\Support\Utf8;
  */
 function _ucwords($str)
 {
-    if (Utf8::is_ascii($str))
+    if (Utf8::isAscii($str))
         return ucwords($str);
 
     // [\x0c\x09\x0b\x0a\x0d\x20] matches form feeds, horizontal tabs, vertical tabs, line feeds and carriage returns.

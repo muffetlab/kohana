@@ -13,12 +13,12 @@ use Kohana\Support\Utf8;
  */
 function _str_ireplace($search, $replace, $str, &$count = null)
 {
-    if (Utf8::is_ascii($search) && Utf8::is_ascii($replace) && Utf8::is_ascii($str))
+    if (Utf8::isAscii($search) && Utf8::isAscii($replace) && Utf8::isAscii($str))
         return str_ireplace($search, $replace, $str, $count);
 
     if (is_array($str)) {
         foreach ($str as $key => $val) {
-            $str[$key] = Utf8::str_ireplace($search, $replace, $val, $count);
+            $str[$key] = Utf8::strIreplace($search, $replace, $val, $count);
         }
         return $str;
     }
@@ -29,12 +29,12 @@ function _str_ireplace($search, $replace, $str, &$count = null)
         foreach ($keys as $k) {
             if (is_array($replace)) {
                 if (array_key_exists($k, $replace)) {
-                    $str = Utf8::str_ireplace($search[$k], $replace[$k], $str, $count);
+                    $str = Utf8::strIreplace($search[$k], $replace[$k], $str, $count);
                 } else {
-                    $str = Utf8::str_ireplace($search[$k], '', $str, $count);
+                    $str = Utf8::strIreplace($search[$k], '', $str, $count);
                 }
             } else {
-                $str = Utf8::str_ireplace($search[$k], $replace, $str, $count);
+                $str = Utf8::strIreplace($search[$k], $replace, $str, $count);
             }
         }
         return $str;

@@ -12,7 +12,7 @@ class RequestClientDummyController extends Controller
      * response. Redirect chains can be tested by passing another encoded URI
      * as a location header with an appropriate status code.
      */
-    public function action_fake()
+    public function fake()
     {
         parse_str(urldecode($this->request->param('data')), $data);
         $this->response->status(Arr::get($data, 'status', 200));

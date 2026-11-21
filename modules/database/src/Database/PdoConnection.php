@@ -18,25 +18,25 @@ use Kohana\Foundation\KohanaException;
 class PdoConnection extends Connection
 {
     // PDO uses no quoting for identifiers
-    protected $_identifier = '';
+    protected $identifier = '';
 
     public function __construct($name, array $config)
     {
         parent::__construct($name, $config);
 
-        if (isset($this->_config['identifier'])) {
+        if (isset($this->config['identifier'])) {
             // Allow the identifier to be overloaded per-connection
-            $this->_identifier = (string) $this->_config['identifier'];
+            $this->identifier = (string) $this->config['identifier'];
         }
     }
 
     public function connect()
     {
-        if ($this->_connection)
+        if ($this->connection)
             return;
 
         // Extract the connection parameters, adding required variables
-        extract($this->_config['connection'] + [
+        extract($this->config['connection'] + [
             'dsn' => '',
             'username' => null,
             'password' => null,
@@ -44,7 +44,7 @@ class PdoConnection extends Connection
         ]);
 
         // Clear the connection parameters for security
-        unset($this->_config['connection']);
+        unset($this->config['connection']);
 
         // Force PDO to use exceptions for all errors
         $options[\PDO::ATTR_ERRMODE] = \PDO::ERRMODE_EXCEPTION;
@@ -56,14 +56,14 @@ class PdoConnection extends Connection
 
         try {
             // Create a new PDO connection
-            $this->_connection = new \PDO($dsn, $username, $password, $options);
+            $this->connection = new \PDO($dsn, $username, $password, $options);
         } catch (\PDOException $e) {
             throw new DatabaseException(':error', [':error' => $e->getMessage()], $e->getCode());
         }
 
-        if (!empty($this->_config['charset'])) {
+        if (!empty($this->config['charset'])) {
             // Set the character set
-            $this->set_charset($this->_config['charset']);
+            $this->setCharset($this->config['charset']);
         }
     }
 
@@ -82,11 +82,11 @@ class PdoConnection extends Connection
      * @return bool
      * @throws Database_Exception
      */
-    public function create_aggregate(string $name, callable $step, callable $final, int $arguments = -1): bool
+    public function createAggregate(string $name, callable $step, callable $final, int $arguments = -1): bool
     {
-        $this->_connection or $this->connect();
+        $this->connection or $this->connect();
 
-        return $this->_connection->sqliteCreateAggregate(
+        return $this->connection->sqliteCreateAggregate(
                 $name, $step, $final, $arguments
         );
     }
@@ -105,11 +105,11 @@ class PdoConnection extends Connection
      * @return bool
      * @throws Database_Exception
      */
-    public function create_function(string $name, callable $callback, int $arguments = -1): bool
+    public function createFunction(string $name, callable $callback, int $arguments = -1): bool
     {
-        $this->_connection or $this->connect();
+        $this->connection or $this->connect();
 
-        return $this->_connection->sqliteCreateFunction(
+        return $this->connection->sqliteCreateFunction(
                 $name, $callback, $arguments
         );
     }
@@ -117,18 +117,18 @@ class PdoConnection extends Connection
     public function disconnect(): bool
     {
         // Destroy the PDO object
-        $this->_connection = null;
+        $this->connection = null;
 
         return parent::disconnect();
     }
 
-    public function set_charset(string $charset)
+    public function setCharset(string $charset)
     {
         // Make sure the database is connected
-        $this->_connection or $this->connect();
+        $this->connection or $this->connect();
 
         // This SQL-92 syntax is not supported by all drivers
-        $this->_connection->exec('SET NAMES ' . $this->quote($charset));
+        $this->connection->exec('SET NAMES ' . $this->quote($charset));
     }
 
     /**
@@ -144,15 +144,15 @@ class PdoConnection extends Connection
     public function query(int $type, string $sql, $as_object = false, ?array $params = null)
     {
         // Make sure the database is connected
-        $this->_connection or $this->connect();
+        $this->connection or $this->connect();
 
         if (Application::$profiling) {
             // Benchmark this query for the current instance
-            $benchmark = Profiler::start("Database ($this->_instance)", $sql);
+            $benchmark = Profiler::start("Database ($this->instance)", $sql);
         }
 
         try {
-            $result = $this->_connection->query($sql);
+            $result = $this->connection->query($sql);
         } catch (\Exception $e) {
             if (isset($benchmark)) {
                 // This benchmark is worthless
@@ -171,7 +171,7 @@ class PdoConnection extends Connection
         }
 
         // Set the last query
-        $this->last_query = $sql;
+        $this->lastQuery = $sql;
 
         if ($type === Connection::SELECT) {
             // Convert the result into an array, as PDOStatement::rowCount is not reliable
@@ -190,7 +190,7 @@ class PdoConnection extends Connection
         } elseif ($type === Connection::INSERT) {
             // Return a list of insert id and rows created
             return [
-                $this->_connection->lastInsertId(),
+                $this->connection->lastInsertId(),
                 $result->rowCount(),
             ];
         } else {
@@ -202,33 +202,33 @@ class PdoConnection extends Connection
     public function begin(?string $mode = null): bool
     {
         // Make sure the database is connected
-        $this->_connection or $this->connect();
+        $this->connection or $this->connect();
 
-        return $this->_connection->beginTransaction();
+        return $this->connection->beginTransaction();
     }
 
     public function commit(): bool
     {
         // Make sure the database is connected
-        $this->_connection or $this->connect();
+        $this->connection or $this->connect();
 
-        return $this->_connection->commit();
+        return $this->connection->commit();
     }
 
     public function rollback(): bool
     {
         // Make sure the database is connected
-        $this->_connection or $this->connect();
+        $this->connection or $this->connect();
 
-        return $this->_connection->rollBack();
+        return $this->connection->rollBack();
     }
 
-    public function list_tables(?string $like = null): array
+    public function listTables(?string $like = null): array
     {
         throw new KohanaException('Database method :method is not supported by :class', [':method' => __FUNCTION__, ':class' => __CLASS__]);
     }
 
-    public function list_columns(string $table, ?string $like = null, bool $add_prefix = true): array
+    public function listColumns(string $table, ?string $like = null, bool $add_prefix = true): array
     {
         throw new KohanaException('Database method :method is not supported by :class', [':method' => __FUNCTION__, ':class' => __CLASS__]);
     }
@@ -236,9 +236,9 @@ class PdoConnection extends Connection
     public function escape(string $value): string
     {
         // Make sure the database is connected
-        $this->_connection or $this->connect();
+        $this->connection or $this->connect();
 
-        return $this->_connection->quote($value);
+        return $this->connection->quote($value);
     }
 
 }

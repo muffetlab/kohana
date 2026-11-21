@@ -26,7 +26,7 @@ class StdErrWriter extends Writer
     {
         foreach ($messages as $message) {
             // Writes out each message
-            fwrite(STDERR, $this->format_message($message) . PHP_EOL);
+            fwrite(STDERR, $this->formatMessage($message) . PHP_EOL);
         }
     }
 

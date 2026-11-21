@@ -16,7 +16,7 @@ class SyslogWriter extends Writer
     /**
      * @var  string  The syslog identifier
      */
-    protected $_ident;
+    protected $ident;
 
     /**
      * Creates a new syslog logger.
@@ -29,10 +29,10 @@ class SyslogWriter extends Writer
      */
     public function __construct(string $ident = 'KohanaPHP', int $facility = LOG_USER)
     {
-        $this->_ident = $ident;
+        $this->ident = $ident;
 
         // Open the connection to syslog
-        openlog($this->_ident, LOG_CONS, $facility);
+        openlog($this->ident, LOG_CONS, $facility);
     }
 
     /**
@@ -47,7 +47,7 @@ class SyslogWriter extends Writer
             syslog($message['level'], $message['body']);
 
             if (isset($message['additional']['exception'])) {
-                syslog(Writer::$strace_level, $message['additional']['exception']->getTraceAsString());
+                syslog(Writer::$straceLevel, $message['additional']['exception']->getTraceAsString());
             }
         }
     }

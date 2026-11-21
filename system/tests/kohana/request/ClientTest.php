@@ -50,7 +50,7 @@ class Kohana_Request_ClientTest extends TestCase
         // Set a new Route to the ClientTest controller as the first route
         // This requires reflection as the API for editing defined routes is limited
         $route_class = new ReflectionClass(Route::class);
-        $routes_prop = $route_class->getProperty('_routes');
+        $routes_prop = $route_class->getProperty('routes');
 
         self::$_original_routes = $routes_prop->getValue(null);
 
@@ -72,7 +72,7 @@ class Kohana_Request_ClientTest extends TestCase
         // @codingStandardsIgnoreEnd
         // Reset routes
         $route_class = new ReflectionClass(Route::class);
-        $routes_prop = $route_class->getProperty('_routes');
+        $routes_prop = $route_class->getProperty('routes');
         $routes_prop->setValue(null, self::$_original_routes);
 
         parent::tearDownAfterClass();
@@ -427,7 +427,7 @@ class Kohana_Request_ClientTest extends TestCase
             Request::factory($uri, [
                     'header_callbacks' => [
                         'x-cb' => function ($request, $response, $client) {
-                            $client->callback_params('testcase')->requests_executed++;
+                            $client->callbackParams('testcase')->requests_executed++;
                             // Recurse into a new request
                             return Request::factory($request->uri());
                         }
@@ -457,8 +457,8 @@ class Kohana_Request_ClientTest extends TestCase
      */
     public function callback_assert_params(Request $request, Response $response, Client $client)
     {
-        $this->assertEquals('foo', $client->callback_params('constructor_param'));
-        $this->assertEquals('bar', $client->callback_params('setter_param'));
+        $this->assertEquals('foo', $client->callbackParams('constructor_param'));
+        $this->assertEquals('bar', $client->callbackParams('setter_param'));
         $response->body('assertions_ran');
     }
 
@@ -477,7 +477,7 @@ class Kohana_Request_ClientTest extends TestCase
                 'follow' => true,
                 'header_callbacks' => [
                     'x-cb' => [$this, 'callback_assert_params'],
-                    'location' => 'Kohana\Http\Client\Client::on_header_location',
+                    'location' => 'Kohana\Http\Client\Client::onHeaderLocation',
                 ],
                 'callback_params' => [
                     'constructor_param' => 'foo'
@@ -485,7 +485,7 @@ class Kohana_Request_ClientTest extends TestCase
         ]);
 
         // Test passing param to setter
-        $request->client()->callback_params('setter_param', 'bar');
+        $request->client()->callbackParams('setter_param', 'bar');
 
         // Callback will throw assertion exceptions when executed
         $response = $request->execute();

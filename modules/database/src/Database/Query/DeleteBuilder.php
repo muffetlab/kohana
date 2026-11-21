@@ -16,7 +16,7 @@ use Kohana\Database\Connection;
 class DeleteBuilder extends WhereBuilder
 {
     // DELETE FROM ...
-    protected $_table;
+    protected $table;
 
     /**
      * Set the table for a deletion.
@@ -28,7 +28,7 @@ class DeleteBuilder extends WhereBuilder
     {
         if ($table) {
             // Set the initial table name
-            $this->_table = $table;
+            $this->table = $table;
         }
 
         // Start the query with no SQL
@@ -43,7 +43,7 @@ class DeleteBuilder extends WhereBuilder
      */
     public function table($table): \Kohana\Database\Query\DeleteBuilder
     {
-        $this->_table = $table;
+        $this->table = $table;
 
         return $this;
     }
@@ -64,24 +64,24 @@ class DeleteBuilder extends WhereBuilder
         }
 
         // Start a deletion query
-        $query = 'DELETE FROM ' . $db->quote_table($this->_table);
+        $query = 'DELETE FROM ' . $db->quoteTable($this->table);
 
-        if (!empty($this->_where)) {
+        if (!empty($this->where)) {
             // Add deletion conditions
-            $query .= ' WHERE ' . $this->_compile_conditions($db, $this->_where);
+            $query .= ' WHERE ' . $this->compileConditions($db, $this->where);
         }
 
-        if (!empty($this->_order_by)) {
+        if (!empty($this->orderBy)) {
             // Add sorting
-            $query .= ' ' . $this->_compile_order_by($db, $this->_order_by);
+            $query .= ' ' . $this->compileOrderBy($db, $this->orderBy);
         }
 
-        if ($this->_limit !== null) {
+        if ($this->limit !== null) {
             // Add limiting
-            $query .= ' LIMIT ' . $this->_limit;
+            $query .= ' LIMIT ' . $this->limit;
         }
 
-        $this->_sql = $query;
+        $this->sql = $query;
 
         return parent::compile($db);
     }
@@ -92,12 +92,12 @@ class DeleteBuilder extends WhereBuilder
      */
     public function reset(): \Kohana\Database\Query\DeleteBuilder
     {
-        $this->_table = null;
-        $this->_where = [];
+        $this->table = null;
+        $this->where = [];
 
-        $this->_parameters = [];
+        $this->parameters = [];
 
-        $this->_sql = null;
+        $this->sql = null;
 
         return $this;
     }

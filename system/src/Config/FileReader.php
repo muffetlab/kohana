@@ -22,7 +22,7 @@ class FileReader implements Reader
      * The directory where config files are located
      * @var string
      */
-    protected $_directory = '';
+    protected $directory = '';
 
     /**
      * Creates a new file reader using the given directory as a config source
@@ -32,7 +32,7 @@ class FileReader implements Reader
     public function __construct(string $directory = 'config')
     {
         // Set the configuration directory name
-        $this->_directory = trim($directory, '/');
+        $this->directory = trim($directory, '/');
     }
 
     /**
@@ -48,7 +48,7 @@ class FileReader implements Reader
     {
         $config = [];
 
-        if ($files = Application::find_file($this->_directory, $group, null, true)) {
+        if ($files = Application::findFile($this->directory, $group, null, true)) {
             foreach ($files as $file) {
                 // Merge each file to the configuration array
                 $config = Arr::merge($config, (array) Application::load($file));

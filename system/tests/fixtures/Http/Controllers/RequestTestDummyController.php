@@ -10,7 +10,7 @@ class RequestTestDummyController extends Controller
     // hard coded dummy response
     protected $dummy_response = "this is a dummy response";
 
-    public function action_foobar()
+    public function foobar()
     {
         $this->response->body($this->dummy_response);
     }

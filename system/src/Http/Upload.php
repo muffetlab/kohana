@@ -30,12 +30,12 @@ class Upload
     /**
      * @var bool remove spaces in uploaded files
      */
-    public static $remove_spaces = true;
+    public static $removeSpaces = true;
 
     /**
      * @var  string  default upload directory
      */
-    public static $default_directory = 'upload';
+    public static $defaultDirectory = 'upload';
 
     /**
      * Save an uploaded file to a new location. If no filename is provided,
@@ -68,14 +68,14 @@ class Upload
             $filename = uniqid() . $file['name'];
         }
 
-        if (\Kohana\Http\Upload::$remove_spaces === true) {
+        if (\Kohana\Http\Upload::$removeSpaces === true) {
             // Remove spaces from the filename
             $filename = preg_replace('/\s+/u', '_', $filename);
         }
 
         if ($directory === null) {
             // Use the pre-configured upload directory
-            $directory = \Kohana\Http\Upload::$default_directory;
+            $directory = \Kohana\Http\Upload::$defaultDirectory;
         }
 
         if (!is_dir($directory) || !is_writable(realpath($directory))) {
@@ -125,7 +125,7 @@ class Upload
      * @param   array   $file   $_FILES item
      * @return  bool
      */
-    public static function not_empty(array $file): bool
+    public static function notEmpty(array $file): bool
     {
         return isset($file['error'])
             && isset($file['tmp_name'])
@@ -206,7 +206,7 @@ class Upload
      */
     public static function image(array $file, ?int $max_width = null, ?int $max_height = null, bool $exact = false): bool
     {
-        if (\Kohana\Http\Upload::not_empty($file)) {
+        if (\Kohana\Http\Upload::notEmpty($file)) {
             try {
                 // Get the width and height from the uploaded image
                 list($width, $height) = getimagesize($file['tmp_name']);

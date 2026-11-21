@@ -21,7 +21,7 @@ use Kohana\Routing\Route;
 use Kohana\Http\Request;
 use PHPUnit\Framework\MockObject\MockObject;
 
-include Application::find_file('tests', 'test_data/callback_routes');
+include Application::findFile('tests', 'test_data/callback_routes');
 
 class Kohana_RouteTest extends TestCase
 {
@@ -76,7 +76,7 @@ class Kohana_RouteTest extends TestCase
     public function test_all_returns_all_defined_routes()
     {
         $reflection = new ReflectionClass(Route::class);
-        $property = $reflection->getProperty('_routes');
+        $property = $reflection->getProperty('routes');
 
         $this->assertSame($property->getValue(), Route::all());
     }
@@ -193,10 +193,10 @@ class Kohana_RouteTest extends TestCase
         $route->__construct();
 
         $reflection = new ReflectionClass($route);
-        $uriProperty = $reflection->getProperty('_uri');
-        $regexProperty = $reflection->getProperty('_regex');
-        $defaultsProperty = $reflection->getProperty('_defaults');
-        $routeRegexProperty = $reflection->getProperty('_route_regex');
+        $uriProperty = $reflection->getProperty('uri');
+        $regexProperty = $reflection->getProperty('regex');
+        $defaultsProperty = $reflection->getProperty('defaults');
+        $routeRegexProperty = $reflection->getProperty('routeRegex');
 
         $this->assertSame('', $uriProperty->getValue($route));
         $this->assertSame([], $regexProperty->getValue($route));
@@ -235,13 +235,13 @@ class Kohana_RouteTest extends TestCase
         $route = new Route($uri, []);
 
         $reflection = new ReflectionClass($route);
-        $property = $reflection->getProperty('_regex');
+        $property = $reflection->getProperty('regex');
         $this->assertSame([], $property->getValue($route));
 
         $route = new Route($uri2, null);
 
         $reflection = new ReflectionClass($route);
-        $property = $reflection->getProperty('_regex');
+        $property = $reflection->getProperty('regex');
 
         $this->assertSame([], $property->getValue($route));
     }
@@ -261,12 +261,12 @@ class Kohana_RouteTest extends TestCase
         $route = new Route('<controller>(/<action>(/<id>))', $regex);
 
         $reflection = new ReflectionClass($route);
-        $property = $reflection->getProperty('_regex');
+        $property = $reflection->getProperty('regex');
 
         $this->assertSame($regex, $property->getValue($route));
 
         $reflection = new ReflectionClass($route);
-        $property = $reflection->getProperty('_route_regex');
+        $property = $reflection->getProperty('routeRegex');
 
         $this->assertStringContainsString($regex['id'], $property->getValue($route));
     }
@@ -749,8 +749,8 @@ class Kohana_RouteTest extends TestCase
 
         $this->setEnvironment([
             '_SERVER' => ['HTTP_HOST' => 'kohana.top'],
-            'Kohana\Foundation\Application::$base_url' => '/',
-            'Kohana\Foundation\Application::$index_file' => '',
+            'Kohana\Foundation\Application::$baseUrl' => '/',
+            'Kohana\Foundation\Application::$indexFile' => '',
         ]);
 
         $this->assertSame($expected, Route::url('foobar', $params, $protocol));
@@ -796,10 +796,10 @@ class Kohana_RouteTest extends TestCase
         ]);
 
         // Test internal route
-        $this->assertFalse(Route::get('internal')->is_external());
+        $this->assertFalse(Route::get('internal')->isExternal());
 
         // Test external route
-        $this->assertTrue(Route::get('external')->is_external());
+        $this->assertTrue(Route::get('external')->isExternal());
     }
 
     /**

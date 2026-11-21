@@ -9,7 +9,7 @@ class Http405Exception extends ExpectedHttpException
     /**
      * @var int HTTP 405 Method Not Allowed
      */
-    protected $_code = 405;
+    protected $code = 405;
 
     /**
      * Specifies the list of allowed HTTP methods

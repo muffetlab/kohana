@@ -41,7 +41,7 @@ class Minion_TaskTest extends TestCase
      */
     public function test_convert_task_to_class_name(string $expected, string $task_name)
     {
-        $this->assertSame($expected, Command::convert_task_to_class_name($task_name));
+        $this->assertSame($expected, Command::convertTaskToClassName($task_name));
     }
 
     /**
@@ -67,7 +67,7 @@ class Minion_TaskTest extends TestCase
      */
     public function test_convert_class_to_task(string $expected, $class)
     {
-        $this->assertSame($expected, Command::convert_class_to_task($class));
+        $this->assertSame($expected, Command::convertClassToTask($class));
     }
 
 }

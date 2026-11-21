@@ -6,7 +6,7 @@ use Kohana\Routing\Controller;
 
 class WelcomeController extends Controller
 {
-    public function action_index()
+    public function index()
     {
         $this->response->body('hello, world!');
     }

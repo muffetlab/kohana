@@ -148,7 +148,7 @@ abstract class Cache
     /**
      * @var  Config
      */
-    protected $_config = [];
+    protected $config = [];
 
     /**
      * Ensures singleton pattern is observed, loads the default expiry
@@ -181,15 +181,15 @@ abstract class Cache
     public function config($key = null, $value = null)
     {
         if ($key === null)
-            return $this->_config;
+            return $this->config;
 
         if (is_array($key)) {
-            $this->_config = $key;
+            $this->config = $key;
         } else {
             if ($value === null)
-                return Arr::get($this->_config, $key);
+                return Arr::get($this->config, $key);
 
-            $this->_config[$key] = $value;
+            $this->config[$key] = $value;
         }
 
         return $this;
@@ -275,7 +275,7 @@ abstract class Cache
      *
      * @return bool
      */
-    abstract public function delete_all(): bool;
+    abstract public function deleteAll(): bool;
     /**
      * Replaces troublesome characters with underscores.
      *
@@ -285,7 +285,7 @@ abstract class Cache
      * @param string $id ID of cache to sanitize
      * @return  string
      */
-    protected function _sanitize_id(string $id): string
+    protected function sanitizeId(string $id): string
     {
         // Change slashes and spaces to underscores
         return str_replace(['/', '\\', ' '], '_', $id);

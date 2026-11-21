@@ -32,7 +32,7 @@ class ConsoleException extends KohanaException
             KohanaException::log($e);
 
             if ($e instanceof \Kohana\Console\ConsoleException) {
-                echo $e->format_for_cli();
+                echo $e->formatForCli();
             } else {
                 echo KohanaException::text($e);
             }
@@ -57,7 +57,7 @@ class ConsoleException extends KohanaException
         }
     }
 
-    public function format_for_cli(): string
+    public function formatForCli(): string
     {
         return KohanaException::text($this);
     }

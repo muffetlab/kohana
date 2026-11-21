@@ -47,7 +47,7 @@ class HttpClient extends ExternalClient
      * @var     array     curl options
      * @link    https://www.php.net/function.curl-setopt
      */
-    protected $_options = [];
+    protected $options = [];
 
     /**
      * Sends the HTTP message [Request] to a remote server and processes
@@ -59,7 +59,7 @@ class HttpClient extends ExternalClient
      * @throws Kohana_Exception
      * @throws Request_Exception
      */
-    public function _send_message(Request $request, Response $response): Response
+    public function sendMessage(Request $request, Response $response): Response
     {
         $http_method_mapping = [
             \Kohana\Http\Contracts\Request::GET => \HTTPRequest::METH_GET,
@@ -75,9 +75,9 @@ class HttpClient extends ExternalClient
         // Create an http request object
         $http_request = new \HTTPRequest($request->uri(), $http_method_mapping[$request->method()]);
 
-        if ($this->_options) {
+        if ($this->options) {
             // Set custom options
-            $http_request->setOptions($this->_options);
+            $http_request->setOptions($this->options);
         }
 
         // Set headers

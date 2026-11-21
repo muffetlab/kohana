@@ -32,9 +32,9 @@ class Kohana_ImageTest extends TestCase
     public function test_save_without_extension()
     {
         $image = Image::factory(MODPATH . 'image/tests/test_data/test_image');
-        $this->assertTrue($image->save(Application::$cache_dir . '/test_image'));
+        $this->assertTrue($image->save(Application::$cacheDir . '/test_image'));
 
-        unlink(Application::$cache_dir . '/test_image');
+        unlink(Application::$cacheDir . '/test_image');
     }
 
 }

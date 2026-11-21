@@ -18,7 +18,7 @@ use Kohana\Foundation\KohanaException;
 abstract class Auth
 {
     // Auth instances
-    protected static $_instance;
+    protected static $instance;
 
     /**
      * Singleton pattern
@@ -28,7 +28,7 @@ abstract class Auth
      */
     public static function instance(): \Kohana\Auth\Auth
     {
-        if (!isset(\Kohana\Auth\Auth::$_instance)) {
+        if (!isset(\Kohana\Auth\Auth::$instance)) {
             // Load the configuration for this type
             $config = Application::$config->load('auth');
 
@@ -40,14 +40,14 @@ abstract class Auth
             $class = str_contains($type, '\\') ? $type : __NAMESPACE__ . '\\' . ucfirst(strtolower($type)) . 'Auth';
 
             // Create a new authentication instance
-            \Kohana\Auth\Auth::$_instance = new $class($config->as_array());
+            \Kohana\Auth\Auth::$instance = new $class($config->asArray());
         }
 
-        return \Kohana\Auth\Auth::$_instance;
+        return \Kohana\Auth\Auth::$instance;
     }
 
-    protected $_session;
-    protected $_config;
+    protected $session;
+    protected $config;
 
     /**
      * Loads Session and configuration options.
@@ -59,14 +59,14 @@ abstract class Auth
     public function __construct(array $config = [])
     {
         // Save the config in the object
-        $this->_config = $config;
+        $this->config = $config;
 
-        $this->_session = Session::instance($this->_config['session_type']);
+        $this->session = Session::instance($this->config['session_type']);
     }
 
-    abstract protected function _login($username, $password, $remember);
+    abstract protected function attemptLogin($username, $password, $remember);
     abstract public function password($username);
-    abstract public function check_password($password);
+    abstract public function checkPassword($password);
     /**
      * Gets the currently logged-in user from the session.
      * Returns null if no user is currently logged in.
@@ -74,9 +74,9 @@ abstract class Auth
      * @param   mixed  $default  Default value to return if the user is currently not logged in.
      * @return  mixed
      */
-    public function get_user($default = null)
+    public function getUser($default = null)
     {
-        return $this->_session->get($this->_config['session_key'], $default);
+        return $this->session->get($this->config['session_key'], $default);
     }
 
     /**
@@ -92,7 +92,7 @@ abstract class Auth
         if (empty($password))
             return false;
 
-        return $this->_login($username, $password, $remember);
+        return $this->attemptLogin($username, $password, $remember);
     }
 
     /**
@@ -106,17 +106,17 @@ abstract class Auth
     {
         if ($destroy === true) {
             // Destroy the session completely
-            $this->_session->destroy();
+            $this->session->destroy();
         } else {
             // Remove the user from the session
-            $this->_session->delete($this->_config['session_key']);
+            $this->session->delete($this->config['session_key']);
 
             // Regenerate session_id
-            $this->_session->regenerate();
+            $this->session->regenerate();
         }
 
         // Double check
-        return !$this->logged_in();
+        return !$this->loggedIn();
     }
 
     /**
@@ -126,9 +126,9 @@ abstract class Auth
      * @param string|null $role Role name
      * @return  bool
      */
-    public function logged_in(?string $role = null): bool
+    public function loggedIn(?string $role = null): bool
     {
-        return $this->get_user() !== null;
+        return $this->getUser() !== null;
     }
 
     /**
@@ -140,19 +140,19 @@ abstract class Auth
      */
     public function hash(string $str): string
     {
-        if (!$this->_config['hash_key'])
+        if (!$this->config['hash_key'])
             throw new KohanaException('A valid hash key must be set in your auth config.');
 
-        return hash_hmac($this->_config['hash_method'], $str, $this->_config['hash_key']);
+        return hash_hmac($this->config['hash_method'], $str, $this->config['hash_key']);
     }
 
-    protected function complete_login($user): bool
+    protected function completeLogin($user): bool
     {
         // Regenerate session_id
-        $this->_session->regenerate();
+        $this->session->regenerate();
 
         // Store username in session
-        $this->_session->set($this->_config['session_key'], $user);
+        $this->session->set($this->config['session_key'], $user);
 
         return true;
     }

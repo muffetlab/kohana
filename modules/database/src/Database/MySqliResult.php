@@ -13,29 +13,29 @@ namespace Kohana\Database;
  */
 class MySqliResult extends Result
 {
-    protected $_internal_row = 0;
+    protected $internalRow = 0;
 
     public function __construct($result, $sql, $as_object = false, ?array $params = null)
     {
         parent::__construct($result, $sql, $as_object, $params);
 
         // Find the number of rows in the result
-        $this->_total_rows = $result->num_rows;
+        $this->totalRows = $result->num_rows;
     }
 
     public function __destruct()
     {
-        if (is_resource($this->_result)) {
-            $this->_result->free();
+        if (is_resource($this->result)) {
+            $this->result->free();
         }
     }
 
     #[\ReturnTypeWillChange]
     public function seek($offset): bool
     {
-        if ($this->offsetExists($offset) && $this->_result->data_seek($offset)) {
+        if ($this->offsetExists($offset) && $this->result->data_seek($offset)) {
             // Set the current row to the offset
-            $this->_current_row = $this->_internal_row = $offset;
+            $this->currentRow = $this->internalRow = $offset;
 
             return true;
         } else {
@@ -45,21 +45,21 @@ class MySqliResult extends Result
 
     public function current(): mixed
     {
-        if ($this->_current_row !== $this->_internal_row && !$this->seek($this->_current_row))
+        if ($this->currentRow !== $this->internalRow && !$this->seek($this->currentRow))
             return null;
 
         // Increment internal row for optimization assuming rows are fetched in order
-        $this->_internal_row++;
+        $this->internalRow++;
 
-        if ($this->_as_object === true) {
+        if ($this->asObject === true) {
             // Return an stdClass
-            return $this->_result->fetch_object();
-        } elseif (is_string($this->_as_object)) {
+            return $this->result->fetch_object();
+        } elseif (is_string($this->asObject)) {
             // Return an object of given class name
-            return $this->_result->fetch_object($this->_as_object, (array) $this->_object_params);
+            return $this->result->fetch_object($this->asObject, (array) $this->objectParams);
         } else {
             // Return an array of the row
-            return $this->_result->fetch_assoc();
+            return $this->result->fetch_assoc();
         }
     }
 

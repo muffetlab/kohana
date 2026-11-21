@@ -29,12 +29,12 @@ class CurlClient extends ExternalClient
      * @throws Kohana_Exception
      * @throws Request_Exception
      */
-    public function _send_message(Request $request, Response $response): Response
+    public function sendMessage(Request $request, Response $response): Response
     {
         $options = [];
 
         // Set the request method
-        $options = $this->_set_curl_request_method($request, $options);
+        $options = $this->setCurlRequestMethod($request, $options);
 
         // Set the request body. This is perfectly legal in CURL even
         // if using a request other than POST. PUT does support this method
@@ -65,12 +65,12 @@ class CurlClient extends ExternalClient
         $response_header = $response->headers();
 
         // Implement the standard parsing parameters
-        $options[CURLOPT_HEADERFUNCTION] = [$response_header, 'parse_header_string'];
-        $this->_options[CURLOPT_RETURNTRANSFER] = true;
-        $this->_options[CURLOPT_HEADER] = false;
+        $options[CURLOPT_HEADERFUNCTION] = [$response_header, 'parseHeaderString'];
+        $this->options[CURLOPT_RETURNTRANSFER] = true;
+        $this->options[CURLOPT_HEADER] = false;
 
         // Apply any additional options set to
-        $options += $this->_options;
+        $options += $this->options;
 
         $uri = $request->uri();
 
@@ -117,7 +117,7 @@ class CurlClient extends ExternalClient
      * @param array $options
      * @return array
      */
-    public function _set_curl_request_method(Request $request, array $options): array
+    public function setCurlRequestMethod(Request $request, array $options): array
     {
         switch ($request->method()) {
             case Request::POST:

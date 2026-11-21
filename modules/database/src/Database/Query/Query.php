@@ -19,19 +19,19 @@ use Kohana\Database\CachedResult;
 class Query
 {
     // Query type
-    protected $_type;
+    protected $type;
     // Execute the query during a cache hit
-    protected $_force_execute = false;
+    protected $forceExecute = false;
     // Cache lifetime
-    protected $_lifetime = null;
+    protected $lifetime = null;
     // SQL statement
-    protected $_sql;
+    protected $sql;
     // Quoted query parameters
-    protected $_parameters = [];
+    protected $parameters = [];
     // Return results as associative arrays or objects
-    protected $_as_object = false;
+    protected $asObject = false;
     // Parameters for __construct when using object results
-    protected $_object_params = [];
+    protected $objectParams = [];
 
     /**
      * Creates a new SQL query of the specified type.
@@ -41,8 +41,8 @@ class Query
      */
     public function __construct(?int $type, ?string $sql)
     {
-        $this->_type = $type;
-        $this->_sql = $sql;
+        $this->type = $type;
+        $this->sql = $sql;
     }
 
     /**
@@ -67,7 +67,7 @@ class Query
      */
     public function type(): int
     {
-        return $this->_type;
+        return $this->type;
     }
 
     /**
@@ -82,11 +82,11 @@ class Query
     {
         if ($lifetime === null) {
             // Use the global setting
-            $lifetime = Application::$cache_life;
+            $lifetime = Application::$cacheLife;
         }
 
-        $this->_force_execute = $force;
-        $this->_lifetime = $lifetime;
+        $this->forceExecute = $force;
+        $this->lifetime = $lifetime;
 
         return $this;
     }
@@ -96,11 +96,11 @@ class Query
      *
      * @return  $this
      */
-    public function as_assoc(): \Kohana\Database\Query\Query
+    public function asAssoc(): \Kohana\Database\Query\Query
     {
-        $this->_as_object = false;
+        $this->asObject = false;
 
-        $this->_object_params = [];
+        $this->objectParams = [];
 
         return $this;
     }
@@ -112,13 +112,13 @@ class Query
      * @param array|null $params
      * @return  $this
      */
-    public function as_object($class = true, ?array $params = null): \Kohana\Database\Query\Query
+    public function asObject($class = true, ?array $params = null): \Kohana\Database\Query\Query
     {
-        $this->_as_object = $class;
+        $this->asObject = $class;
 
         if ($params) {
             // Add object parameters
-            $this->_object_params = $params;
+            $this->objectParams = $params;
         }
 
         return $this;
@@ -134,7 +134,7 @@ class Query
     public function param(string $param, $value): \Kohana\Database\Query\Query
     {
         // Add or overload a new parameter
-        $this->_parameters[$param] = $value;
+        $this->parameters[$param] = $value;
 
         return $this;
     }
@@ -149,7 +149,7 @@ class Query
     public function bind(string $param, &$var): \Kohana\Database\Query\Query
     {
         // Bind a value to a variable
-        $this->_parameters[$param] = &$var;
+        $this->parameters[$param] = &$var;
 
         return $this;
     }
@@ -163,7 +163,7 @@ class Query
     public function parameters(array $params): \Kohana\Database\Query\Query
     {
         // Merge the new parameters in
-        $this->_parameters = $params + $this->_parameters;
+        $this->parameters = $params + $this->parameters;
 
         return $this;
     }
@@ -184,11 +184,11 @@ class Query
         }
 
         // Import the SQL locally
-        $sql = $this->_sql;
+        $sql = $this->sql;
 
-        if (!empty($this->_parameters)) {
+        if (!empty($this->parameters)) {
             // Quote all the values
-            $values = array_map([$db, 'quote'], $this->_parameters);
+            $values = array_map([$db, 'quote'], $this->parameters);
 
             // Replace the values in the SQL
             $sql = strtr($sql, $values);
@@ -214,33 +214,33 @@ class Query
         }
 
         if ($as_object === null) {
-            $as_object = $this->_as_object;
+            $as_object = $this->asObject;
         }
 
         if ($object_params === null) {
-            $object_params = $this->_object_params;
+            $object_params = $this->objectParams;
         }
 
         // Compile the SQL query
         $sql = $this->compile($db);
 
-        if ($this->_lifetime !== null && $this->_type === Connection::SELECT) {
+        if ($this->lifetime !== null && $this->type === Connection::SELECT) {
             // Set the cache key based on the database instance name and SQL
             $cache_key = 'Kohana\Database\Connection::query("' . $db . '", "' . $sql . '")';
 
             // Read the cache first to delete a possible hit with lifetime <= 0
-            if (($result = Application::cache($cache_key, null, $this->_lifetime)) !== null && !$this->_force_execute) {
+            if (($result = Application::cache($cache_key, null, $this->lifetime)) !== null && !$this->forceExecute) {
                 // Return a cached result
                 return new CachedResult($result, $sql, $as_object);
             }
         }
 
         // Execute the query
-        $result = $db->query($this->_type, $sql, $as_object, $object_params);
+        $result = $db->query($this->type, $sql, $as_object, $object_params);
 
-        if (isset($cache_key) && $this->_lifetime > 0) {
+        if (isset($cache_key) && $this->lifetime > 0) {
             // Cache the result array
-            Application::cache($cache_key, $result->as_array(), $this->_lifetime);
+            Application::cache($cache_key, $result->asArray(), $this->lifetime);
         }
 
         return $result;

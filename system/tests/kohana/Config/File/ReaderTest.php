@@ -30,7 +30,7 @@ class Kohana_Config_File_ReaderTest extends TestCase
         $reader = new FileReader;
 
         $reflection = new ReflectionClass($reader);
-        $property = $reflection->getProperty('_directory');
+        $property = $reflection->getProperty('directory');
 
         $this->assertSame('config', $property->getValue($reader));
     }
@@ -47,7 +47,7 @@ class Kohana_Config_File_ReaderTest extends TestCase
         $reader = new FileReader('gafloog');
 
         $reflection = new ReflectionClass($reader);
-        $property = $reflection->getProperty('_directory');
+        $property = $reflection->getProperty('directory');
 
         $this->assertSame('gafloog', $property->getValue($reader));
     }

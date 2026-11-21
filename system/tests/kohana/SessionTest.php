@@ -85,7 +85,7 @@ class Kohana_SessionTest extends TestCase
 
         foreach ($expected as $var => $value) {
             $reflection = new ReflectionClass($session);
-            $property = $reflection->getProperty('_' . $var);
+            $property = $reflection->getProperty($var);
 
             $this->assertSame($value, $property->getValue($session));
         }
@@ -151,7 +151,7 @@ class Kohana_SessionTest extends TestCase
     {
         $session = $this->getMockSession();
 
-        $this->assertSame([], $session->as_array());
+        $this->assertSame([], $session->asArray());
     }
 
     /**
@@ -179,7 +179,7 @@ class Kohana_SessionTest extends TestCase
         $session = $this->getMockSession();
 
         $reflection = new ReflectionClass($session);
-        $property = $reflection->getProperty('_encrypted');
+        $property = $reflection->getProperty('encrypted');
 
         $this->assertSame(false, $property->getValue($session));
     }
@@ -195,7 +195,7 @@ class Kohana_SessionTest extends TestCase
         $session = $this->getMockSession();
 
         $reflection = new ReflectionClass($session);
-        $property = $reflection->getProperty('_destroyed');
+        $property = $reflection->getProperty('destroyed');
 
         $this->assertSame(false, $property->getValue($session));
     }
@@ -270,17 +270,17 @@ class Kohana_SessionTest extends TestCase
     {
         $session = $this->getMockSession();
 
-        $data_ref = &$session->as_array();
+        $data_ref = &$session->asArray();
 
         $data_ref['something'] = 'pie';
 
-        $this->assertSame($data_ref, $session->as_array());
+        $this->assertSame($data_ref, $session->asArray());
 
-        $data_copy = $session->as_array();
+        $data_copy = $session->asArray();
 
         $data_copy['pie'] = 'awesome';
 
-        $this->assertNotSame($data_copy, $session->as_array());
+        $this->assertNotSame($data_copy, $session->asArray());
     }
 
     /**
@@ -297,11 +297,11 @@ class Kohana_SessionTest extends TestCase
 
         $this->assertSame($session, $session->set('pork', 'pie'));
 
-        $this->assertSame(['pork' => 'pie'], $session->as_array());
+        $this->assertSame(['pork' => 'pie'], $session->asArray());
 
         $session->set('pork', 'delicious');
 
-        $this->assertSame(['pork' => 'delicious'], $session->as_array());
+        $this->assertSame(['pork' => 'delicious'], $session->asArray());
     }
 
     /**
@@ -315,7 +315,7 @@ class Kohana_SessionTest extends TestCase
         $session = $this->getMockSession();
 
         // A bit of a hack for mass-loading session data
-        $data = &$session->as_array();
+        $data = &$session->asArray();
 
         $data += [
             'a' => 'A',
@@ -390,12 +390,12 @@ class Kohana_SessionTest extends TestCase
         $session = $this->getMockSession($config);
 
         $session->expects($this->once())
-            ->method('_read')
+            ->method('readSession')
             ->with($session_id)
             ->will($this->returnValue($driver_data));
 
         $session->read($session_id);
-        $this->assertSame($expected_data, $session->as_array());
+        $this->assertSame($expected_data, $session->asArray());
     }
 
     /**
@@ -411,7 +411,7 @@ class Kohana_SessionTest extends TestCase
         $new_session_id = 'asdnoawdnoainf';
 
         $session->expects($this->once())
-            ->method('_regenerate')
+            ->method('regenerateSession')
             ->with()
             ->will($this->returnValue($new_session_id));
 
@@ -435,13 +435,13 @@ class Kohana_SessionTest extends TestCase
 
         $session
             ->expects($this->once())
-            ->method('_destroy')
+            ->method('destroySession')
             ->with()
             ->will($this->returnValue(true));
 
         $this->assertTrue($session->destroy());
 
-        $this->assertSame([], $session->as_array());
+        $this->assertSame([], $session->asArray());
     }
 
     /**
@@ -461,12 +461,12 @@ class Kohana_SessionTest extends TestCase
 
         $session
             ->expects($this->once())
-            ->method('_destroy')
+            ->method('destroySession')
             ->with()
             ->will($this->returnValue(false));
 
         $this->assertFalse($session->destroy());
-        $this->assertSame(['asd' => 'dsa', 'dog' => 'god'], $session->as_array());
+        $this->assertSame(['asd' => 'dsa', 'dog' => 'god'], $session->asArray());
     }
 
     /**
@@ -483,14 +483,14 @@ class Kohana_SessionTest extends TestCase
         $session->set('foo', 'bar');
 
         // Test that a default is returned
-        $this->assertSame('mud', $session->get_once('fud', 'mud'));
+        $this->assertSame('mud', $session->getOnce('fud', 'mud'));
 
         // Now test that it actually removes the value
-        $this->assertSame('bar', $session->get_once('foo'));
+        $this->assertSame('bar', $session->getOnce('foo'));
 
-        $this->assertSame([], $session->as_array());
+        $this->assertSame([], $session->asArray());
 
-        $this->assertSame('maybe', $session->get_once('foo', 'maybe'));
+        $this->assertSame('maybe', $session->getOnce('foo', 'maybe'));
     }
 
 }

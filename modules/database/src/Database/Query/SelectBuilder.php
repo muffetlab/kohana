@@ -18,23 +18,23 @@ use Kohana\Foundation\KohanaException;
 class SelectBuilder extends WhereBuilder
 {
     // SELECT ...
-    protected $_select = [];
+    protected $select = [];
     // DISTINCT
-    protected $_distinct = false;
+    protected $distinct = false;
     // FROM ...
-    protected $_from = [];
+    protected $from = [];
     // JOIN ...
-    protected $_join = [];
+    protected $join = [];
     // GROUP BY ...
-    protected $_group_by = [];
+    protected $groupBy = [];
     // HAVING ...
-    protected $_having = [];
+    protected $having = [];
     // OFFSET ...
-    protected $_offset = null;
+    protected $offset = null;
     // UNION ...
-    protected $_union = [];
+    protected $union = [];
     // The last JOIN statement created
-    protected $_last_join;
+    protected $lastJoin;
 
     /**
      * Sets the initial columns to select from.
@@ -45,7 +45,7 @@ class SelectBuilder extends WhereBuilder
     {
         if (!empty($columns)) {
             // Set the initial columns
-            $this->_select = $columns;
+            $this->select = $columns;
         }
 
         // Start the query with no actual SQL statement
@@ -60,7 +60,7 @@ class SelectBuilder extends WhereBuilder
      */
     public function distinct(bool $value): \Kohana\Database\Query\SelectBuilder
     {
-        $this->_distinct = $value;
+        $this->distinct = $value;
 
         return $this;
     }
@@ -73,7 +73,7 @@ class SelectBuilder extends WhereBuilder
      */
     public function select(...$columns): \Kohana\Database\Query\SelectBuilder
     {
-        $this->_select = array_merge($this->_select, $columns);
+        $this->select = array_merge($this->select, $columns);
 
         return $this;
     }
@@ -84,9 +84,9 @@ class SelectBuilder extends WhereBuilder
      * @param   array  $columns  list of column names or aliases
      * @return  $this
      */
-    public function select_array(array $columns): \Kohana\Database\Query\SelectBuilder
+    public function selectArray(array $columns): \Kohana\Database\Query\SelectBuilder
     {
-        $this->_select = array_merge($this->_select, $columns);
+        $this->select = array_merge($this->select, $columns);
 
         return $this;
     }
@@ -99,7 +99,7 @@ class SelectBuilder extends WhereBuilder
      */
     public function from(...$tables): \Kohana\Database\Query\SelectBuilder
     {
-        $this->_from = array_merge($this->_from, $tables);
+        $this->from = array_merge($this->from, $tables);
 
         return $this;
     }
@@ -113,7 +113,7 @@ class SelectBuilder extends WhereBuilder
      */
     public function join($table, ?string $type = null): \Kohana\Database\Query\SelectBuilder
     {
-        $this->_join[] = $this->_last_join = new JoinClause($table, $type);
+        $this->join[] = $this->lastJoin = new JoinClause($table, $type);
 
         return $this;
     }
@@ -128,7 +128,7 @@ class SelectBuilder extends WhereBuilder
      */
     public function on($c1, string $op, $c2): \Kohana\Database\Query\SelectBuilder
     {
-        $this->_last_join->on($c1, $op, $c2);
+        $this->lastJoin->on($c1, $op, $c2);
 
         return $this;
     }
@@ -141,7 +141,7 @@ class SelectBuilder extends WhereBuilder
      */
     public function using(...$columns): \Kohana\Database\Query\SelectBuilder
     {
-        call_user_func_array([$this->_last_join, 'using'], $columns);
+        call_user_func_array([$this->lastJoin, 'using'], $columns);
 
         return $this;
     }
@@ -152,9 +152,9 @@ class SelectBuilder extends WhereBuilder
      * @param mixed ...$columns column name or [$column, $alias] or object
      * @return  $this
      */
-    public function group_by(...$columns): \Kohana\Database\Query\SelectBuilder
+    public function groupBy(...$columns): \Kohana\Database\Query\SelectBuilder
     {
-        $this->_group_by = array_merge($this->_group_by, $columns);
+        $this->groupBy = array_merge($this->groupBy, $columns);
 
         return $this;
     }
@@ -169,7 +169,7 @@ class SelectBuilder extends WhereBuilder
      */
     public function having($column, string $op, $value = null): \Kohana\Database\Query\SelectBuilder
     {
-        return $this->and_having($column, $op, $value);
+        return $this->andHaving($column, $op, $value);
     }
 
     /**
@@ -180,9 +180,9 @@ class SelectBuilder extends WhereBuilder
      * @param   mixed   $value   column value
      * @return  $this
      */
-    public function and_having($column, string $op, $value = null): \Kohana\Database\Query\SelectBuilder
+    public function andHaving($column, string $op, $value = null): \Kohana\Database\Query\SelectBuilder
     {
-        $this->_having[] = ['AND' => [$column, $op, $value]];
+        $this->having[] = ['AND' => [$column, $op, $value]];
 
         return $this;
     }
@@ -195,9 +195,9 @@ class SelectBuilder extends WhereBuilder
      * @param   mixed   $value   column value
      * @return  $this
      */
-    public function or_having($column, string $op, $value = null): \Kohana\Database\Query\SelectBuilder
+    public function orHaving($column, string $op, $value = null): \Kohana\Database\Query\SelectBuilder
     {
-        $this->_having[] = ['OR' => [$column, $op, $value]];
+        $this->having[] = ['OR' => [$column, $op, $value]];
 
         return $this;
     }
@@ -207,9 +207,9 @@ class SelectBuilder extends WhereBuilder
      *
      * @return  $this
      */
-    public function having_open(): \Kohana\Database\Query\SelectBuilder
+    public function havingOpen(): \Kohana\Database\Query\SelectBuilder
     {
-        return $this->and_having_open();
+        return $this->andHavingOpen();
     }
 
     /**
@@ -217,9 +217,9 @@ class SelectBuilder extends WhereBuilder
      *
      * @return  $this
      */
-    public function and_having_open(): \Kohana\Database\Query\SelectBuilder
+    public function andHavingOpen(): \Kohana\Database\Query\SelectBuilder
     {
-        $this->_having[] = ['AND' => '('];
+        $this->having[] = ['AND' => '('];
 
         return $this;
     }
@@ -229,9 +229,9 @@ class SelectBuilder extends WhereBuilder
      *
      * @return  $this
      */
-    public function or_having_open(): \Kohana\Database\Query\SelectBuilder
+    public function orHavingOpen(): \Kohana\Database\Query\SelectBuilder
     {
-        $this->_having[] = ['OR' => '('];
+        $this->having[] = ['OR' => '('];
 
         return $this;
     }
@@ -241,9 +241,9 @@ class SelectBuilder extends WhereBuilder
      *
      * @return  $this
      */
-    public function having_close(): \Kohana\Database\Query\SelectBuilder
+    public function havingClose(): \Kohana\Database\Query\SelectBuilder
     {
-        return $this->and_having_close();
+        return $this->andHavingClose();
     }
 
     /**
@@ -251,9 +251,9 @@ class SelectBuilder extends WhereBuilder
      *
      * @return  $this
      */
-    public function and_having_close(): \Kohana\Database\Query\SelectBuilder
+    public function andHavingClose(): \Kohana\Database\Query\SelectBuilder
     {
-        $this->_having[] = ['AND' => ')'];
+        $this->having[] = ['AND' => ')'];
 
         return $this;
     }
@@ -263,9 +263,9 @@ class SelectBuilder extends WhereBuilder
      *
      * @return  $this
      */
-    public function or_having_close(): \Kohana\Database\Query\SelectBuilder
+    public function orHavingClose(): \Kohana\Database\Query\SelectBuilder
     {
-        $this->_having[] = ['OR' => ')'];
+        $this->having[] = ['OR' => ')'];
 
         return $this;
     }
@@ -286,7 +286,7 @@ class SelectBuilder extends WhereBuilder
         }
         if (!$select instanceof \Kohana\Database\Query\SelectBuilder)
             throw new KohanaException('first parameter must be a string or an instance of Database_Query_Builder_Select');
-        $this->_union [] = ['select' => $select, 'all' => $all];
+        $this->union [] = ['select' => $select, 'all' => $all];
         return $this;
     }
 
@@ -298,7 +298,7 @@ class SelectBuilder extends WhereBuilder
      */
     public function offset(?int $number): \Kohana\Database\Query\SelectBuilder
     {
-        $this->_offset = $number;
+        $this->offset = $number;
 
         return $this;
     }
@@ -319,70 +319,70 @@ class SelectBuilder extends WhereBuilder
         }
 
         // Callback to quote columns
-        $quote_column = [$db, 'quote_column'];
+        $quote_column = [$db, 'quoteColumn'];
 
         // Callback to quote tables
-        $quote_table = [$db, 'quote_table'];
+        $quote_table = [$db, 'quoteTable'];
 
         // Start a selection query
         $query = 'SELECT ';
 
-        if ($this->_distinct === true) {
+        if ($this->distinct === true) {
             // Select only unique results
             $query .= 'DISTINCT ';
         }
 
-        if (empty($this->_select)) {
+        if (empty($this->select)) {
             // Select all columns
             $query .= '*';
         } else {
             // Select all columns
-            $query .= implode(', ', array_unique(array_map($quote_column, $this->_select)));
+            $query .= implode(', ', array_unique(array_map($quote_column, $this->select)));
         }
 
-        if (!empty($this->_from)) {
+        if (!empty($this->from)) {
             // Set tables to select from
-            $query .= ' FROM ' . implode(', ', array_unique(array_map($quote_table, $this->_from)));
+            $query .= ' FROM ' . implode(', ', array_unique(array_map($quote_table, $this->from)));
         }
 
-        if (!empty($this->_join)) {
+        if (!empty($this->join)) {
             // Add tables to join
-            $query .= ' ' . $this->_compile_join($db, $this->_join);
+            $query .= ' ' . $this->compileJoin($db, $this->join);
         }
 
-        if (!empty($this->_where)) {
+        if (!empty($this->where)) {
             // Add selection conditions
-            $query .= ' WHERE ' . $this->_compile_conditions($db, $this->_where);
+            $query .= ' WHERE ' . $this->compileConditions($db, $this->where);
         }
 
-        if (!empty($this->_group_by)) {
+        if (!empty($this->groupBy)) {
             // Add grouping
-            $query .= ' ' . $this->_compile_group_by($db, $this->_group_by);
+            $query .= ' ' . $this->compileGroupBy($db, $this->groupBy);
         }
 
-        if (!empty($this->_having)) {
+        if (!empty($this->having)) {
             // Add filtering conditions
-            $query .= ' HAVING ' . $this->_compile_conditions($db, $this->_having);
+            $query .= ' HAVING ' . $this->compileConditions($db, $this->having);
         }
 
-        if (!empty($this->_order_by)) {
+        if (!empty($this->orderBy)) {
             // Add sorting
-            $query .= ' ' . $this->_compile_order_by($db, $this->_order_by);
+            $query .= ' ' . $this->compileOrderBy($db, $this->orderBy);
         }
 
-        if ($this->_limit !== null) {
+        if ($this->limit !== null) {
             // Add limiting
-            $query .= ' LIMIT ' . $this->_limit;
+            $query .= ' LIMIT ' . $this->limit;
         }
 
-        if ($this->_offset !== null) {
+        if ($this->offset !== null) {
             // Add offsets
-            $query .= ' OFFSET ' . $this->_offset;
+            $query .= ' OFFSET ' . $this->offset;
         }
 
-        if (!empty($this->_union)) {
+        if (!empty($this->union)) {
             $query = '(' . $query . ')';
-            foreach ($this->_union as $u) {
+            foreach ($this->union as $u) {
                 $query .= ' UNION ';
                 if ($u['all'] === true) {
                     $query .= 'ALL ';
@@ -391,7 +391,7 @@ class SelectBuilder extends WhereBuilder
             }
         }
 
-        $this->_sql = $query;
+        $this->sql = $query;
 
         return parent::compile($db);
     }
@@ -402,15 +402,15 @@ class SelectBuilder extends WhereBuilder
      */
     public function reset(): \Kohana\Database\Query\SelectBuilder
     {
-        $this->_select = $this->_from = $this->_join = $this->_where = $this->_group_by = $this->_having = $this->_order_by = $this->_union = [];
+        $this->select = $this->from = $this->join = $this->where = $this->groupBy = $this->having = $this->orderBy = $this->union = [];
 
-        $this->_distinct = false;
+        $this->distinct = false;
 
-        $this->_limit = $this->_offset = $this->_last_join = null;
+        $this->limit = $this->offset = $this->lastJoin = null;
 
-        $this->_parameters = [];
+        $this->parameters = [];
 
-        $this->_sql = null;
+        $this->sql = null;
 
         return $this;
     }

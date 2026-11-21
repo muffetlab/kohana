@@ -20,7 +20,7 @@ class FileWriter extends Writer
     /**
      * @var  string  Directory to place log files in
      */
-    protected $_directory;
+    protected $directory;
 
     /**
      * Creates a new file logger. Checks that the directory exists and
@@ -39,7 +39,7 @@ class FileWriter extends Writer
         }
 
         // Determine the directory path
-        $this->_directory = realpath($directory) . DIRECTORY_SEPARATOR;
+        $this->directory = realpath($directory) . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -56,7 +56,7 @@ class FileWriter extends Writer
     public function write(array $messages)
     {
         // Set the yearly directory name
-        $directory = $this->_directory . date('Y');
+        $directory = $this->directory . date('Y');
 
         if (!is_dir($directory)) {
             // Create the yearly directory
@@ -90,7 +90,7 @@ class FileWriter extends Writer
 
         foreach ($messages as $message) {
             // Write each message into the log file
-            file_put_contents($filename, PHP_EOL . $this->format_message($message), FILE_APPEND);
+            file_put_contents($filename, PHP_EOL . $this->formatMessage($message), FILE_APPEND);
         }
     }
 

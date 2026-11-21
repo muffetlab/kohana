@@ -21,7 +21,7 @@ abstract class TestCase extends DOMTestCase
      * testcases
      * @var Kohana_Unittest_Helpers
      */
-    protected $_helpers = null;
+    protected $helpers = null;
 
     /**
      * A default set of environment to be applied before each test
@@ -37,7 +37,7 @@ abstract class TestCase extends DOMTestCase
      */
     public function setUp(): void
     {
-        $this->_helpers = new Helpers;
+        $this->helpers = new Helpers;
 
         $this->setEnvironment($this->environmentDefault);
     }
@@ -50,7 +50,7 @@ abstract class TestCase extends DOMTestCase
      */
     public function tearDown(): void
     {
-        $this->_helpers->restore_environment();
+        $this->helpers->restoreEnvironment();
     }
 
     /**
@@ -60,7 +60,7 @@ abstract class TestCase extends DOMTestCase
      */
     public function cleanCacheDir()
     {
-        Helpers::clean_cache_dir();
+        Helpers::cleanCacheDir();
     }
 
     /**
@@ -72,7 +72,7 @@ abstract class TestCase extends DOMTestCase
      */
     public function dirSeparator(string $path): string
     {
-        return Helpers::dir_separator($path);
+        return Helpers::dirSeparator($path);
     }
 
     /**
@@ -91,7 +91,7 @@ abstract class TestCase extends DOMTestCase
      */
     public function setEnvironment(array $environment): ?bool
     {
-        return $this->_helpers->set_environment($environment);
+        return $this->helpers->setEnvironment($environment);
     }
 
     /**
@@ -101,6 +101,6 @@ abstract class TestCase extends DOMTestCase
      */
     public function hasInternet(): bool
     {
-        return Helpers::has_internet();
+        return Helpers::hasInternet();
     }
 }

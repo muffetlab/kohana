@@ -38,7 +38,7 @@ class Kohana_SecurityTest extends TestCase
      */
     public function test_encode_php_tags($expected, $input)
     {
-        $this->assertSame($expected, Security::encode_php_tags($input));
+        $this->assertSame($expected, Security::encodePhpTags($input));
     }
 
     /**
@@ -51,7 +51,7 @@ class Kohana_SecurityTest extends TestCase
     {
         $array = [];
         for ($i = 0; $i <= 4; $i++) {
-            Security::$token_name = 'token_' . $i;
+            Security::$tokenName = 'token_' . $i;
             $array[] = [
                 Security::token(true),
                 Security::check(Security::token()), $i
@@ -70,10 +70,10 @@ class Kohana_SecurityTest extends TestCase
     public function test_csrf_token($expected, $input, $iteration)
     {
         //@todo: the Security::token tests need to be reviewed to check how much of the logic they're actually covering
-        Security::$token_name = 'token_' . $iteration;
+        Security::$tokenName = 'token_' . $iteration;
         $this->assertSame(true, $input);
         $this->assertSame($expected, Security::token());
-        Session::instance()->delete(Security::$token_name);
+        Session::instance()->delete(Security::$tokenName);
     }
 
 }

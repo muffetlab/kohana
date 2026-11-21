@@ -7,6 +7,6 @@ class Http303Exception extends RedirectHttpException
     /**
      * @var int HTTP 303 See Other
      */
-    protected $_code = 303;
+    protected $code = 303;
 
 }

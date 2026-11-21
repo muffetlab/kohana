@@ -22,7 +22,7 @@ class Rules
      * @param $value
      * @return bool
      */
-    public static function not_empty($value): bool
+    public static function notEmpty($value): bool
     {
         if ($value instanceof \ArrayObject) {
             // Get the array from the ArrayObject
@@ -52,7 +52,7 @@ class Rules
      * @param int $length Minimum length required
      * @return  bool
      */
-    public static function min_length(string $value, int $length): bool
+    public static function minLength(string $value, int $length): bool
     {
         return Utf8::strlen($value) >= $length;
     }
@@ -64,7 +64,7 @@ class Rules
      * @param int $length Maximum length required
      * @return  bool
      */
-    public static function max_length(string $value, int $length): bool
+    public static function maxLength(string $value, int $length): bool
     {
         return Utf8::strlen($value) <= $length;
     }
@@ -76,7 +76,7 @@ class Rules
      * @param   int|array $length exact length required, or array of valid lengths
      * @return  bool
      */
-    public static function exact_length(string $value, $length): bool
+    public static function exactLength(string $value, $length): bool
     {
         if (is_array($length)) {
             return in_array(Utf8::strlen($value), $length, true);
@@ -143,9 +143,9 @@ class Rules
      * @param string $email Email address
      * @return  bool
      */
-    public static function email_domain(string $email): bool
+    public static function emailDomain(string $email): bool
     {
-        if (!\Kohana\Validation\Rules::not_empty($email))
+        if (!\Kohana\Validation\Rules::notEmpty($email))
             return false; // Empty fields cause issues with checkdnsrr()
 
         // Check if the email domain has a valid MX record
@@ -240,7 +240,7 @@ class Rules
      * @throws Kohana_Exception
      * @uses    Valid::luhn
      */
-    public static function credit_card(string $number, $type = null): bool
+    public static function creditCard(string $number, $type = null): bool
     {
         // Remove all non-digit characters from the number
         if (($number = preg_replace('/\D+/', '', $number)) === '')
@@ -252,7 +252,7 @@ class Rules
         } elseif (is_array($type)) {
             foreach ($type as $t) {
                 // Test each type for validity
-                if (\Kohana\Validation\Rules::credit_card($number, $t))
+                if (\Kohana\Validation\Rules::creditCard($number, $t))
                     return true;
             }
 
@@ -380,7 +380,7 @@ class Rules
      * @param bool $utf8 Trigger UTF-8 compatibility
      * @return  bool
      */
-    public static function alpha_numeric(string $str, bool $utf8 = false): bool
+    public static function alphaNumeric(string $str, bool $utf8 = false): bool
     {
         if ($utf8 === true) {
             return (bool) preg_match('/^[\pL\pN]++$/uD', $str);
@@ -396,7 +396,7 @@ class Rules
      * @param bool $utf8 Trigger UTF-8 compatibility
      * @return  bool
      */
-    public static function alpha_dash(string $str, bool $utf8 = false): bool
+    public static function alphaDash(string $str, bool $utf8 = false): bool
     {
         if ($utf8 === true) {
             $regex = '/^[-\pL\pN_]++$/uD';

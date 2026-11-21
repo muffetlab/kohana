@@ -9,7 +9,7 @@ class Http305Exception extends ExpectedHttpException
     /**
      * @var int HTTP 305 Use Proxy
      */
-    protected $_code = 305;
+    protected $code = 305;
 
     /**
      * Specifies the proxy to replay this request via

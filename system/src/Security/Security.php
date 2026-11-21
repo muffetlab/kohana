@@ -18,7 +18,7 @@ class Security
     /**
      * @var  string  key name used for token storage
      */
-    public static $token_name = 'security_token';
+    public static $tokenName = 'security_token';
 
     /**
      * Generate and store a unique token which can be used to help prevent
@@ -49,7 +49,7 @@ class Security
         $session = Session::instance();
 
         // Get the current token
-        $token = $session->get(\Kohana\Security\Security::$token_name);
+        $token = $session->get(\Kohana\Security\Security::$tokenName);
 
         if ($new === true || !$token) {
             // Generate a new unique token
@@ -63,7 +63,7 @@ class Security
             }
 
             // Store the new token
-            $session->set(\Kohana\Security\Security::$token_name, $token);
+            $session->set(\Kohana\Security\Security::$tokenName, $token);
         }
 
         return $token;
@@ -84,7 +84,7 @@ class Security
      */
     public static function check(string $token): bool
     {
-        return \Kohana\Security\Security::slow_equals(\Kohana\Security\Security::token(), $token);
+        return \Kohana\Security\Security::slowEquals(\Kohana\Security\Security::token(), $token);
     }
 
     /**
@@ -95,7 +95,7 @@ class Security
      * @param string $b cryptographic hash
      * @return bool
      */
-    public static function slow_equals(string $a, string $b): bool
+    public static function slowEquals(string $a, string $b): bool
     {
         $diff = strlen($a) ^ strlen($b);
         for ($i = 0; $i < strlen($a) && $i < strlen($b); $i++) {
@@ -112,7 +112,7 @@ class Security
      * @param string $str String to sanitize
      * @return  string
      */
-    public static function encode_php_tags(string $str): string
+    public static function encodePhpTags(string $str): string
     {
         return str_replace(['<?', '?>'], ['&lt;?', '?&gt;'], $str);
     }

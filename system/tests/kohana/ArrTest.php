@@ -284,7 +284,7 @@ class Kohana_ArrTest extends TestCase
     public function test_is_assoc(array $array, bool $expected)
     {
         $this->assertSame(
-            $expected, Arr::is_assoc($array)
+            $expected, Arr::isAssoc($array)
         );
     }
 
@@ -315,7 +315,7 @@ class Kohana_ArrTest extends TestCase
     public function test_is_array($array, bool $expected)
     {
         $this->assertSame(
-            $expected, Arr::is_array($array)
+            $expected, Arr::isArray($array)
         );
     }
 
@@ -656,7 +656,7 @@ class Kohana_ArrTest extends TestCase
      */
     public function test_set_path(array $expected, array $array, $path, $value, ?string $delimiter = null)
     {
-        Arr::set_path($array, $path, $value, $delimiter);
+        Arr::setPath($array, $path, $value, $delimiter);
 
         $this->assertSame($expected, $array);
     }

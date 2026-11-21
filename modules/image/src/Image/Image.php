@@ -30,7 +30,7 @@ abstract class Image
     const VERTICAL = 0x12;
 
     // Status of the driver check
-    protected static $_checked = false;
+    protected static $checked = false;
 
     /**
      * Loads an image and prepares it for manipulation.
@@ -246,7 +246,7 @@ abstract class Image
         $width = max(round($width), 1);
         $height = max(round($height), 1);
 
-        $this->_do_resize($width, $height);
+        $this->doResize($width, $height);
 
         return $this;
     }
@@ -316,7 +316,7 @@ abstract class Image
             $height = $max_height;
         }
 
-        $this->_do_crop($width, $height, $offset_x, $offset_y);
+        $this->doCrop($width, $height, $offset_x, $offset_y);
 
         return $this;
     }
@@ -350,7 +350,7 @@ abstract class Image
             } while ($degrees < -180);
         }
 
-        $this->_do_rotate($degrees);
+        $this->doRotate($degrees);
 
         return $this;
     }
@@ -375,7 +375,7 @@ abstract class Image
             $direction = \Kohana\Image\Image::VERTICAL;
         }
 
-        $this->_do_flip($direction);
+        $this->doFlip($direction);
 
         return $this;
     }
@@ -395,7 +395,7 @@ abstract class Image
         // The amount must be in the range of 1 to 100
         $amount = min(max($amount, 1), 100);
 
-        $this->_do_sharpen($amount);
+        $this->doSharpen($amount);
 
         return $this;
     }
@@ -433,7 +433,7 @@ abstract class Image
         // The opacity must be in the range of 0 to 100
         $opacity = min(max($opacity, 0), 100);
 
-        $this->_do_reflection($height, $opacity, $fade_in);
+        $this->doReflection($height, $opacity, $fade_in);
 
         return $this;
     }
@@ -483,7 +483,7 @@ abstract class Image
         // The opacity must be in the range of 1 to 100
         $opacity = min(max($opacity, 1), 100);
 
-        $this->_do_watermark($watermark, $offset_x, $offset_y, $opacity);
+        $this->doWatermark($watermark, $offset_x, $offset_y, $opacity);
 
         return $this;
     }
@@ -521,7 +521,7 @@ abstract class Image
         // The opacity must be in the range of 0 to 100
         $opacity = min(max($opacity, 0), 100);
 
-        $this->_do_background($r, $g, $b, $opacity);
+        $this->doBackground($r, $g, $b, $opacity);
 
         return $this;
     }
@@ -570,7 +570,7 @@ abstract class Image
         // The quality must be in the range of 1 to 100
         $quality = min(max($quality, 1), 100);
 
-        return $this->_do_save($file, $quality);
+        return $this->doSave($file, $quality);
     }
 
     /**
@@ -594,7 +594,7 @@ abstract class Image
             $type = image_type_to_extension($this->type, false);
         }
 
-        return $this->_do_render($type, $quality);
+        return $this->doRender($type, $quality);
     }
 
     /**
@@ -604,7 +604,7 @@ abstract class Image
      * @param int $height  New height
      * @return  void
      */
-    abstract protected function _do_resize(int $width, int $height);
+    abstract protected function doResize(int $width, int $height);
     /**
      * Execute a crop.
      *
@@ -614,28 +614,28 @@ abstract class Image
      * @param int $offset_y  Offset from the top
      * @return  void
      */
-    abstract protected function _do_crop(int $width, int $height, int $offset_x, int $offset_y);
+    abstract protected function doCrop(int $width, int $height, int $offset_x, int $offset_y);
     /**
      * Execute a rotation.
      *
      * @param int $degrees Degrees to rotate
      * @return  void
      */
-    abstract protected function _do_rotate(int $degrees);
+    abstract protected function doRotate(int $degrees);
     /**
      * Execute a flip.
      *
      * @param int $direction Direction to flip
      * @return  void
      */
-    abstract protected function _do_flip(int $direction);
+    abstract protected function doFlip(int $direction);
     /**
      * Execute a sharpening.
      *
      * @param int $amount Amount to sharpen
      * @return  void
      */
-    abstract protected function _do_sharpen(int $amount);
+    abstract protected function doSharpen(int $amount);
     /**
      * Execute a reflection.
      *
@@ -644,7 +644,7 @@ abstract class Image
      * @param bool $fade_in True to fade in, false to fade out
      * @return  void
      */
-    abstract protected function _do_reflection(int $height, int $opacity, bool $fade_in);
+    abstract protected function doReflection(int $height, int $opacity, bool $fade_in);
     /**
      * Execute a watermarking.
      *
@@ -654,7 +654,7 @@ abstract class Image
      * @param int $opacity Opacity of watermark
      * @return  void
      */
-    abstract protected function _do_watermark(\Kohana\Image\Image $image, int $offset_x, int $offset_y, int $opacity);
+    abstract protected function doWatermark(\Kohana\Image\Image $image, int $offset_x, int $offset_y, int $opacity);
     /**
      * Execute a background.
      *
@@ -664,7 +664,7 @@ abstract class Image
      * @param int $opacity  Opacity
      * @return void
      */
-    abstract protected function _do_background(int $r, int $g, int $b, int $opacity);
+    abstract protected function doBackground(int $r, int $g, int $b, int $opacity);
     /**
      * Execute a save.
      *
@@ -672,7 +672,7 @@ abstract class Image
      * @param int $quality Quality
      * @return  bool
      */
-    abstract protected function _do_save(string $file, int $quality): bool;
+    abstract protected function doSave(string $file, int $quality): bool;
     /**
      * Execute a render.
      *
@@ -680,5 +680,5 @@ abstract class Image
      * @param int $quality Quality
      * @return  string
      */
-    abstract protected function _do_render(string $type, int $quality): string;
+    abstract protected function doRender(string $type, int $quality): string;
 }

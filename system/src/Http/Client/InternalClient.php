@@ -24,7 +24,7 @@ class InternalClient extends Client
     /**
      * @var    array
      */
-    protected $_previous_environment;
+    protected $previousEnvironment;
 
     /**
      * Processes the request, executing the controller action that handles this
@@ -39,7 +39,7 @@ class InternalClient extends Client
      * @uses    [Kohana::$profiling]
      * @uses    [Profiler]
      */
-    public function execute_request(Request $request, Response $response): Response
+    public function executeRequest(Request $request, Response $response): Response
     {
         // Directory
         $directory = $request->directory();
@@ -109,10 +109,10 @@ class InternalClient extends Client
             }
 
             // Get the response via the Exception
-            $response = $e->get_response();
+            $response = $e->getResponse();
         } catch (\Exception $e) {
             // Generate an appropriate Response object
-            $response = KohanaException::_handler($e);
+            $response = KohanaException::render($e);
         }
 
         // Restore the previous request

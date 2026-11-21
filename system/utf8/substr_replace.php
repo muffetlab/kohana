@@ -13,7 +13,7 @@ use Kohana\Support\Utf8;
  */
 function _substr_replace($str, $replacement, $offset, $length = null)
 {
-    if (Utf8::is_ascii($str))
+    if (Utf8::isAscii($str))
         return $length === null ? substr_replace($str, $replacement, $offset) : substr_replace($str, $replacement, $offset, $length);
 
     $length = $length === null ? Utf8::strlen($str) : (int) $length;

@@ -5,7 +5,7 @@ use Kohana\Cache\Cache;
 use Kohana\Cache\CacheException;
 use Kohana\Foundation\KohanaException;
 
-include_once(Application::find_file('tests/cache', 'CacheBasicMethodsTest'));
+include_once(Application::findFile('tests/cache', 'CacheBasicMethodsTest'));
 
 /**
  * @package    Kohana/Cache
@@ -70,7 +70,7 @@ class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest
         // Let's pollute the cache folder
         file_put_contents($file, 'foobar');
 
-        $this->assertTrue($cache->delete_all());
+        $this->assertTrue($cache->deleteAll());
         $this->assertTrue(file_exists($file));
         $this->assertEquals('foobar', file_get_contents($file));
 
@@ -134,7 +134,7 @@ class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest
         // sleep for more than a second
         sleep(2);
 
-        $cache->garbage_collect();
+        $cache->garbageCollect();
 
         $this->assertTrue($this->is_file('persistent'));
         $this->assertFalse($this->is_file('volatile'));
@@ -152,9 +152,9 @@ class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest
     {
         $cache = $this->cache();
 
-        $method_sanitize_id = new ReflectionMethod($cache, '_sanitize_id');
+        $method_sanitize_id = new ReflectionMethod($cache, 'sanitizeId');
         $method_filename = new ReflectionMethod($cache, 'filename');
-        $method_resolve_directory = new ReflectionMethod($cache, '_resolve_directory');
+        $method_resolve_directory = new ReflectionMethod($cache, 'resolveDirectory');
 
         $sanitized_id = $method_sanitize_id->invoke($cache, $id);
         $filename = $method_filename->invoke($cache, $sanitized_id);

@@ -19,7 +19,7 @@ use Kohana\Foundation\Application;
 class View
 {
     // Array of global variables
-    protected static $_global_data = [];
+    protected static $globalData = [];
 
     /**
      * Returns a new View object. If you do not define the "file" parameter,
@@ -54,9 +54,9 @@ class View
         // Import the view variables to local namespace
         extract($kohana_view_data, EXTR_SKIP);
 
-        if (\Kohana\View\View::$_global_data) {
+        if (\Kohana\View\View::$globalData) {
             // Import the global view variables to local namespace
-            extract(\Kohana\View\View::$_global_data, EXTR_SKIP | EXTR_REFS);
+            extract(\Kohana\View\View::$globalData, EXTR_SKIP | EXTR_REFS);
         }
 
         // Capture the view output
@@ -95,14 +95,14 @@ class View
      * @param   mixed                     $value  value
      * @return  void
      */
-    public static function set_global($key, $value = null)
+    public static function setGlobal($key, $value = null)
     {
         if (is_array($key) || $key instanceof \Traversable) {
             foreach ($key as $name => $value) {
-                \Kohana\View\View::$_global_data[$name] = $value;
+                \Kohana\View\View::$globalData[$name] = $value;
             }
         } else {
-            \Kohana\View\View::$_global_data[$key] = $value;
+            \Kohana\View\View::$globalData[$key] = $value;
         }
     }
 
@@ -116,15 +116,15 @@ class View
      * @param   mixed   $value  referenced variable
      * @return  void
      */
-    public static function bind_global(string $key, &$value)
+    public static function bindGlobal(string $key, &$value)
     {
-        \Kohana\View\View::$_global_data[$key] = &$value;
+        \Kohana\View\View::$globalData[$key] = &$value;
     }
 
     // View filename
-    protected $_file;
+    protected $file;
     // Array of local variables
-    protected $_data = [];
+    protected $data = [];
 
     /**
      * Sets the initial view filename and local data. Views should almost
@@ -140,12 +140,12 @@ class View
     public function __construct(?string $file = null, ?array $data = null)
     {
         if ($file !== null) {
-            $this->set_filename($file);
+            $this->setFilename($file);
         }
 
         if ($data !== null) {
             // Add the values to the current data
-            $this->_data = $data + $this->_data;
+            $this->data = $data + $this->data;
         }
     }
 
@@ -163,10 +163,10 @@ class View
      */
     public function & __get(string $key)
     {
-        if (array_key_exists($key, $this->_data)) {
-            return $this->_data[$key];
-        } elseif (array_key_exists($key, \Kohana\View\View::$_global_data)) {
-            return \Kohana\View\View::$_global_data[$key];
+        if (array_key_exists($key, $this->data)) {
+            return $this->data[$key];
+        } elseif (array_key_exists($key, \Kohana\View\View::$globalData)) {
+            return \Kohana\View\View::$globalData[$key];
         } else {
             throw new KohanaException('View variable is not set: :var', [':var' => $key]);
         }
@@ -198,7 +198,7 @@ class View
      */
     public function __isset(string $key)
     {
-        return isset($this->_data[$key]) || isset(\Kohana\View\View::$_global_data[$key]);
+        return isset($this->data[$key]) || isset(\Kohana\View\View::$globalData[$key]);
     }
 
     /**
@@ -211,7 +211,7 @@ class View
      */
     public function __unset(string $key)
     {
-        unset($this->_data[$key], \Kohana\View\View::$_global_data[$key]);
+        unset($this->data[$key], \Kohana\View\View::$globalData[$key]);
     }
 
     /**
@@ -231,7 +231,7 @@ class View
              * We use this method here because it's impossible to throw an
              * exception from __toString().
              */
-            $error_response = KohanaException::_handler($e);
+            $error_response = KohanaException::render($e);
 
             return $error_response->body();
         }
@@ -246,14 +246,14 @@ class View
      * @return  Kohana_View
      * @throws  View_Exception
      */
-    public function set_filename(string $file): \Kohana\View\View
+    public function setFilename(string $file): \Kohana\View\View
     {
-        if (!$path = Application::find_file('views', $file)) {
+        if (!$path = Application::findFile('views', $file)) {
             throw new ViewException('The requested view :file could not be found', [':file' => $file]);
         }
 
         // Store the file path locally
-        $this->_file = $path;
+        $this->file = $path;
 
         return $this;
     }
@@ -281,10 +281,10 @@ class View
     {
         if (is_array($key) || $key instanceof \Traversable) {
             foreach ($key as $name => $value) {
-                $this->_data[$name] = $value;
+                $this->data[$name] = $value;
             }
         } else {
-            $this->_data[$key] = $value;
+            $this->data[$key] = $value;
         }
 
         return $this;
@@ -305,7 +305,7 @@ class View
      */
     public function bind(string $key, &$value): \Kohana\View\View
     {
-        $this->_data[$key] = &$value;
+        $this->data[$key] = &$value;
 
         return $this;
     }
@@ -327,15 +327,15 @@ class View
     public function render(?string $file = null): string
     {
         if ($file !== null) {
-            $this->set_filename($file);
+            $this->setFilename($file);
         }
 
-        if (empty($this->_file)) {
+        if (empty($this->file)) {
             throw new ViewException('You must set the file to use within your view before rendering');
         }
 
         // Combine local and global data and capture the output
-        return \Kohana\View\View::capture($this->_file, $this->_data);
+        return \Kohana\View\View::capture($this->file, $this->data);
     }
 
 }

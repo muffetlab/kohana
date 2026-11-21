@@ -7,6 +7,6 @@ class Http402Exception extends HttpException
     /**
      * @var int HTTP 402 Payment Required
      */
-    protected $_code = 402;
+    protected $code = 402;
 
 }

@@ -24,9 +24,9 @@ use Kohana\Database\Connection;
 class Expression
 {
     // Unquoted parameters
-    protected $_parameters;
+    protected $parameters;
     // Raw expression string
-    protected $_value;
+    protected $value;
 
     /**
      * Sets the expression string.
@@ -40,8 +40,8 @@ class Expression
     public function __construct(string $value, array $parameters = [])
     {
         // Set the expression string
-        $this->_value = $value;
-        $this->_parameters = $parameters;
+        $this->value = $value;
+        $this->parameters = $parameters;
     }
 
     /**
@@ -53,7 +53,7 @@ class Expression
      */
     public function bind(string $param, &$var): \Kohana\Database\Query\Expression
     {
-        $this->_parameters[$param] = &$var;
+        $this->parameters[$param] = &$var;
 
         return $this;
     }
@@ -67,7 +67,7 @@ class Expression
      */
     public function param(string $param, $value): \Kohana\Database\Query\Expression
     {
-        $this->_parameters[$param] = $value;
+        $this->parameters[$param] = $value;
 
         return $this;
     }
@@ -80,7 +80,7 @@ class Expression
      */
     public function parameters(array $params): \Kohana\Database\Query\Expression
     {
-        $this->_parameters = $params + $this->_parameters;
+        $this->parameters = $params + $this->parameters;
 
         return $this;
     }
@@ -94,7 +94,7 @@ class Expression
      */
     public function value(): string
     {
-        return $this->_value;
+        return $this->value;
     }
 
     /**
@@ -127,9 +127,9 @@ class Expression
 
         $value = $this->value();
 
-        if (!empty($this->_parameters)) {
+        if (!empty($this->parameters)) {
             // Quote all the parameter values
-            $params = array_map([$db, 'quote'], $this->_parameters);
+            $params = array_map([$db, 'quote'], $this->parameters);
 
             // Replace the values in the expression
             $value = strtr($value, $params);

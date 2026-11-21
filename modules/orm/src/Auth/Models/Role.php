@@ -15,7 +15,7 @@ use Kohana\Orm\Model;
 class Role extends Model
 {
     // Relationships
-    protected $_has_many = [
+    protected $hasMany = [
         'users' => ['model' => User::class, 'through' => 'roles_users'],
     ];
 

@@ -23,14 +23,14 @@ class Group extends \ArrayObject
      * Used when updating config
      * @var Kohana_Config
      */
-    protected $_parent_instance = null;
+    protected $parentInstance = null;
 
     /**
      * The group this config is for
      * Used when updating config items
      * @var string
      */
-    protected $_group_name = '';
+    protected $groupName = '';
 
     /**
      * Constructs the group object.  Kohana_Config passes the config group
@@ -42,8 +42,8 @@ class Group extends \ArrayObject
      */
     public function __construct(Repository $instance, $group, array $config = [])
     {
-        $this->_parent_instance = $instance;
-        $this->_group_name = $group;
+        $this->parentInstance = $instance;
+        $this->groupName = $group;
 
         parent::__construct($config, \ArrayObject::ARRAY_AS_PROPS);
     }
@@ -65,7 +65,7 @@ class Group extends \ArrayObject
      *
      * @return array Array copy of the group's config
      */
-    public function as_array(): array
+    public function asArray(): array
     {
         return $this->getArrayCopy();
     }
@@ -75,9 +75,9 @@ class Group extends \ArrayObject
      *
      * @return string The group name
      */
-    public function group_name(): string
+    public function groupName(): string
     {
-        return $this->_group_name;
+        return $this->groupName;
     }
 
     /**
@@ -126,7 +126,7 @@ class Group extends \ArrayObject
      */
     public function offsetSet($key, $value): void
     {
-        $this->_parent_instance->_write_config($this->_group_name, $key, $value);
+        $this->parentInstance->writeConfig($this->groupName, $key, $value);
 
         parent::offsetSet($key, $value);
     }

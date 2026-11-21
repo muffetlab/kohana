@@ -66,7 +66,7 @@ class Cache
      * @param   Request $request
      * @return  string
      */
-    public static function basic_cache_key_generator(Request $request): string
+    public static function basicCacheKeyGenerator(Request $request): string
     {
         $uri = $request->uri();
         $query = $request->query();
@@ -79,28 +79,28 @@ class Cache
     /**
      * @var     Cache    cache driver to use for HTTP caching
      */
-    protected $_cache;
+    protected $cache;
 
     /**
      * @var    callback  Cache key generator callback
      */
-    protected $_cache_key_callback;
+    protected $cacheKeyCallback;
 
     /**
      * @var    bool Defines whether this client should cache `private` cache directives
      * @link   https://www.rfc-editor.org/rfc/rfc9111#name-private
      */
-    protected $_allow_private_cache = false;
+    protected $allowPrivateCache = false;
 
     /**
      * @var    int       The timestamp of the request
      */
-    protected $_request_time;
+    protected $requestTime;
 
     /**
      * @var    int       The timestamp of the response
      */
-    protected $_response_time;
+    protected $responseTime;
 
     /**
      * Constructor method for this class. Allows dependency injection of the
@@ -117,8 +117,8 @@ class Cache
             }
         }
 
-        if ($this->_cache_key_callback === null) {
-            $this->cache_key_callback('Kohana\Http\Cache::basic_cache_key_generator');
+        if ($this->cacheKeyCallback === null) {
+            $this->cacheKeyCallback('Kohana\Http\Cache::basicCacheKeyGenerator');
         }
     }
 
@@ -137,8 +137,8 @@ class Cache
      */
     public function execute(Client $client, Request $request, Response $response)
     {
-        if (!$this->_cache instanceof \Kohana\Cache\Cache)
-            return $client->execute_request($request, $response);
+        if (!$this->cache instanceof \Kohana\Cache\Cache)
+            return $client->executeRequest($request, $response);
 
         // If this is a destructive request, by-pass cache completely
         if (in_array($request->method(), [
@@ -147,11 +147,11 @@ class Cache
                 \Kohana\Http\Contracts\Request::DELETE
             ])) {
             // Kill existing caches for this request
-            $this->invalidate_cache($request);
+            $this->invalidateCache($request);
 
-            $response = $client->execute_request($request, $response);
+            $response = $client->executeRequest($request, $response);
 
-            $cache_control = HeaderBag::create_cache_control([
+            $cache_control = HeaderBag::createCacheControl([
                     'no-cache',
                     'must-revalidate'
             ]);
@@ -161,23 +161,23 @@ class Cache
         }
 
         // Create the cache key
-        $cache_key = $this->create_cache_key($request, $this->_cache_key_callback);
+        $cache_key = $this->createCacheKey($request, $this->cacheKeyCallback);
 
         // Try and return cached version
-        if (($cached_response = $this->cache_response($cache_key, $request)) instanceof Response)
+        if (($cached_response = $this->cacheResponse($cache_key, $request)) instanceof Response)
             return $cached_response;
 
         // Start request time
-        $this->_request_time = time();
+        $this->requestTime = time();
 
         // Execute the request with the Request client
-        $response = $client->execute_request($request, $response);
+        $response = $client->executeRequest($request, $response);
 
         // Stop response time
-        $this->_response_time = time() - $this->_request_time;
+        $this->responseTime = time() - $this->requestTime;
 
         // Cache the response
-        $this->cache_response($cache_key, $request, $response);
+        $this->cacheResponse($cache_key, $request, $response);
 
         $response->headers(\Kohana\Http\Cache::CACHE_STATUS_KEY, \Kohana\Http\Cache::CACHE_STATUS_MISS);
 
@@ -192,10 +192,10 @@ class Cache
      * @param   Request  $request Response to remove from cache
      * @return  void
      */
-    public function invalidate_cache(Request $request)
+    public function invalidateCache(Request $request)
     {
         if (($cache = $this->cache()) instanceof \Kohana\Cache\Cache) {
-            $cache->delete($this->create_cache_key($request, $this->_cache_key_callback));
+            $cache->delete($this->createCacheKey($request, $this->cacheKeyCallback));
         }
     }
 
@@ -209,9 +209,9 @@ class Cache
     public function cache(?\Kohana\Cache\Cache $cache = null)
     {
         if ($cache === null)
-            return $this->_cache;
+            return $this->cache;
 
-        $this->_cache = $cache;
+        $this->cache = $cache;
         return $this;
     }
 
@@ -224,12 +224,12 @@ class Cache
      * @param bool|null $setting Allow caching of privately marked responses
      * @return bool|Kohana_HTTP_Cache
      */
-    public function allow_private_cache(?bool $setting = null)
+    public function allowPrivateCache(?bool $setting = null)
     {
         if ($setting === null)
-            return $this->_allow_private_cache;
+            return $this->allowPrivateCache;
 
-        $this->_allow_private_cache = $setting;
+        $this->allowPrivateCache = $setting;
         return $this;
     }
 
@@ -259,15 +259,15 @@ class Cache
      * @return callable|Kohana_HTTP_Cache
      * @throws Kohana_Exception
      */
-    public function cache_key_callback(?callable $callback = null)
+    public function cacheKeyCallback(?callable $callback = null)
     {
         if ($callback === null)
-            return $this->_cache_key_callback;
+            return $this->cacheKeyCallback;
 
         if (!is_callable($callback))
             throw new KohanaException('cache_key_callback must be callable!');
 
-        $this->_cache_key_callback = $callback;
+        $this->cacheKeyCallback = $callback;
         return $this;
     }
 
@@ -282,12 +282,12 @@ class Cache
      * @param   callable    $callback   optional callback to use instead of built-in method
      * @return  string
      */
-    public function create_cache_key(Request $request, $callback = false): string
+    public function createCacheKey(Request $request, $callback = false): string
     {
         if (is_callable($callback))
             return call_user_func($callback, $request);
         else
-            return \Kohana\Http\Cache::basic_cache_key_generator($request);
+            return \Kohana\Http\Cache::basicCacheKeyGenerator($request);
     }
 
     /**
@@ -298,20 +298,20 @@ class Cache
      * @param   Response  $response The Response
      * @return  bool
      */
-    public function set_cache(Response $response): bool
+    public function setCache(Response $response): bool
     {
         $headers = $response->headers()->getArrayCopy();
 
         if ($cache_control = Arr::get($headers, 'cache-control')) {
             // Parse the cache control
-            $cache_control = HeaderBag::parse_cache_control($cache_control);
+            $cache_control = HeaderBag::parseCacheControl($cache_control);
 
             // If the no-cache or no-store directive is set, return
             if (array_intersect($cache_control, ['no-cache', 'no-store']))
                 return false;
 
             // Check for private cache and get out of here if invalid
-            if (!$this->_allow_private_cache && in_array('private', $cache_control)) {
+            if (!$this->allowPrivateCache && in_array('private', $cache_control)) {
                 if (!isset($cache_control['s-maxage']))
                     return false;
 
@@ -346,9 +346,9 @@ class Cache
      * @return bool|Response
      * @throws Cache_Exception
      */
-    public function cache_response(string $key, Request $request, ?Response $response = null)
+    public function cacheResponse(string $key, Request $request, ?Response $response = null)
     {
-        if (!$this->_cache instanceof \Kohana\Cache\Cache)
+        if (!$this->cache instanceof \Kohana\Cache\Cache)
             return false;
 
         // Check for Pragma: no-cache
@@ -361,17 +361,17 @@ class Cache
 
         // If there is no response, lookup an existing cached response
         if ($response === null) {
-            $response = $this->_cache->get($key);
+            $response = $this->cache->get($key);
 
             if (!$response instanceof Response)
                 return false;
 
             // Do cache hit arithmetic, using fast arithmetic if available
-            if ($this->_cache instanceof Arithmetic) {
-                $hit_count = $this->_cache->increment(\Kohana\Http\Cache::CACHE_HIT_KEY . $key);
+            if ($this->cache instanceof Arithmetic) {
+                $hit_count = $this->cache->increment(\Kohana\Http\Cache::CACHE_HIT_KEY . $key);
             } else {
-                $hit_count = $this->_cache->get(\Kohana\Http\Cache::CACHE_HIT_KEY . $key);
-                $this->_cache->set(\Kohana\Http\Cache::CACHE_HIT_KEY . $key, ++$hit_count);
+                $hit_count = $this->cache->get(\Kohana\Http\Cache::CACHE_HIT_KEY . $key);
+                $this->cache->set(\Kohana\Http\Cache::CACHE_HIT_KEY . $key, ++$hit_count);
             }
 
             // Update the header to have correct HIT status and count
@@ -380,15 +380,15 @@ class Cache
 
             return $response;
         } else {
-            if (($ttl = $this->cache_lifetime($response)) === false)
+            if (($ttl = $this->cacheLifetime($response)) === false)
                 return false;
 
             $response->headers(\Kohana\Http\Cache::CACHE_STATUS_KEY, \Kohana\Http\Cache::CACHE_STATUS_SAVED);
 
             // Set the hit count to zero
-            $this->_cache->set(\Kohana\Http\Cache::CACHE_HIT_KEY . $key, 0);
+            $this->cache->set(\Kohana\Http\Cache::CACHE_HIT_KEY . $key, 0);
 
-            return $this->_cache->set($key, $response, $ttl);
+            return $this->cache->set($key, $response, $ttl);
         }
     }
 
@@ -399,17 +399,17 @@ class Cache
      * @param   Response  $response  Response to evaluate
      * @return  mixed  TTL value or false if the response should not be cached
      */
-    public function cache_lifetime(Response $response)
+    public function cacheLifetime(Response $response)
     {
         // Get out of here if this cannot be cached
-        if (!$this->set_cache($response))
+        if (!$this->setCache($response))
             return false;
 
         // Calculate apparent age
         if ($date = $response->headers('date')) {
-            $apparent_age = max(0, $this->_response_time - strtotime($date));
+            $apparent_age = max(0, $this->responseTime - strtotime($date));
         } else {
-            $apparent_age = max(0, $this->_response_time);
+            $apparent_age = max(0, $this->responseTime);
         }
 
         // Calculate corrected received age
@@ -420,10 +420,10 @@ class Cache
         }
 
         // Corrected initial age
-        $corrected_initial_age = $corrected_received_age + $this->request_execution_time();
+        $corrected_initial_age = $corrected_received_age + $this->requestExecutionTime();
 
         // Resident time
-        $resident_time = time() - $this->_response_time;
+        $resident_time = time() - $this->responseTime;
 
         // Current age
         $current_age = $corrected_initial_age + $resident_time;
@@ -434,13 +434,13 @@ class Cache
         // Cache control overrides
         if ($cache_control = $response->headers('cache-control')) {
             // Parse the cache control header
-            $cache_control = HeaderBag::parse_cache_control($cache_control);
+            $cache_control = HeaderBag::parseCacheControl($cache_control);
 
             if (isset($cache_control['max-age'])) {
                 $ttl = $cache_control['max-age'];
             }
 
-            if (isset($cache_control['s-maxage']) && isset($cache_control['private']) && $this->_allow_private_cache) {
+            if (isset($cache_control['s-maxage']) && isset($cache_control['private']) && $this->allowPrivateCache) {
                 $ttl = $cache_control['s-maxage'];
             }
 
@@ -467,12 +467,12 @@ class Cache
      *
      * @return false|int
      */
-    public function request_execution_time()
+    public function requestExecutionTime()
     {
-        if ($this->_request_time === null || $this->_response_time === null)
+        if ($this->requestTime === null || $this->responseTime === null)
             return false;
 
-        return $this->_response_time - $this->_request_time;
+        return $this->responseTime - $this->requestTime;
     }
 
 }

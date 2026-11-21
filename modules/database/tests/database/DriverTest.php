@@ -43,10 +43,10 @@ class Kohana_Database_DriverTest extends TestCase
         [$id] = DB::insert('driver_test', ['name', 'score'])->values(['ali', 10])->values(['veli', null])->execute($db);
         $this->assertGreaterThan(0, $id);
 
-        $result = DB::select()->from('driver_test')->order_by('id')->execute($db);
+        $result = DB::select()->from('driver_test')->orderBy('id')->execute($db);
         $this->assertCount(2, $result);
         $this->assertSame('ali', $result->get('name'));
-        $this->assertSame(['ali', 'veli'], array_values($result->as_array(null, 'name')));
+        $this->assertSame(['ali', 'veli'], array_values($result->asArray(null, 'name')));
         $this->assertSame('veli', $result[1]['name']);
         $this->assertTrue(isset($result[1]));
         $this->assertFalse(isset($result[2]));
@@ -57,7 +57,7 @@ class Kohana_Database_DriverTest extends TestCase
         }
         $this->assertSame([0 => 'ali', 1 => 'veli'], $names);
 
-        $objects = DB::select()->from('driver_test')->as_object()->execute($db)->as_array();
+        $objects = DB::select()->from('driver_test')->asObject()->execute($db)->asArray();
         $this->assertSame('ali', $objects[0]->name);
 
         $cached = $result->cached();
@@ -90,8 +90,8 @@ class Kohana_Database_DriverTest extends TestCase
 
         if ($name === 'mysqli') {
             // The PDO driver does not implement schema introspection
-            $this->assertContains('driver_test', $db->list_tables());
-            $this->assertArrayHasKey('score', $db->list_columns('driver_test'));
+            $this->assertContains('driver_test', $db->listTables());
+            $this->assertArrayHasKey('score', $db->listColumns('driver_test'));
         }
     }
 }

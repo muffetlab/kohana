@@ -54,7 +54,7 @@ class Kohana_ConfigTest extends TestCase
         $this->assertSame($config, $config->attach($reader));
 
         $reflection = new ReflectionClass($config);
-        $property = $reflection->getProperty('_sources');
+        $property = $reflection->getProperty('sources');
 
         $this->assertContains($reader, $property->getValue($config));
     }
@@ -79,7 +79,7 @@ class Kohana_ConfigTest extends TestCase
         // Rather than do two assertContains we'll do an assertSame to assert
         // the order of the readers
         $reflection = new ReflectionClass($config);
-        $property = $reflection->getProperty('_sources');
+        $property = $reflection->getProperty('sources');
 
         $this->assertSame([$reader2, $reader1], $property->getValue($config));
     }
@@ -101,7 +101,7 @@ class Kohana_ConfigTest extends TestCase
         $config->attach($reader2, false);
 
         $reflection = new ReflectionClass($config);
-        $property = $reflection->getProperty('_sources');
+        $property = $reflection->getProperty('sources');
 
         $this->assertSame([$reader1, $reader2], $property->getValue($config));
     }
@@ -130,7 +130,7 @@ class Kohana_ConfigTest extends TestCase
         $this->assertSame($config, $config->detach($reader1));
 
         $reflection = new ReflectionClass($config);
-        $property = $reflection->getProperty('_sources');
+        $property = $reflection->getProperty('sources');
 
         $this->assertNotContains($reader1, $property->getValue($config));
         $this->assertContains($reader2, $property->getValue($config));
@@ -273,7 +273,7 @@ class Kohana_ConfigTest extends TestCase
 
         $config->attach($reader1)->attach($writer1)->attach($writer2);
 
-        $config->_write_config('some_group', 'key', 'value');
+        $config->writeConfig('some_group', 'key', 'value');
     }
 
     /**
@@ -324,7 +324,7 @@ class Kohana_ConfigTest extends TestCase
             'music' => 'tasteful',
             'life' => ['extraordinary', 'destined', 'normal', 'fated'],
             'foo' => 'bar',
-            ], $config->load($group_name)->as_array());
+            ], $config->load($group_name)->asArray());
     }
 
     /**

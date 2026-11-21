@@ -91,7 +91,7 @@ class Kohana_ValidTest extends TestCase
     public function test_alpha_numeric(string $input, bool $expected, bool $utf8 = false)
     {
         $this->assertSame(
-            $expected, Rules::alpha_numeric($input, $utf8)
+            $expected, Rules::alphaNumeric($input, $utf8)
         );
     }
 
@@ -126,12 +126,12 @@ class Kohana_ValidTest extends TestCase
     {
         if (!$contains_utf8) {
             $this->assertSame(
-                $expected, Rules::alpha_dash($input)
+                $expected, Rules::alphaDash($input)
             );
         }
 
         $this->assertSame(
-            $expected, Rules::alpha_dash($input, true)
+            $expected, Rules::alphaDash($input, true)
         );
     }
 
@@ -317,7 +317,7 @@ class Kohana_ValidTest extends TestCase
     public function test_credit_card(string $number, $type, bool $expected)
     {
         $this->assertSame(
-            $expected, Rules::credit_card($number, $type)
+            $expected, Rules::creditCard($number, $type)
         );
     }
 
@@ -438,7 +438,7 @@ class Kohana_ValidTest extends TestCase
             $this->markTestSkipped('An internet connection is required for this test');
         }
 
-        $this->assertSame($correct, Rules::email_domain($email));
+        $this->assertSame($correct, Rules::emailDomain($email));
     }
 
     /**
@@ -478,7 +478,7 @@ class Kohana_ValidTest extends TestCase
     {
         $this->assertSame(
                 $correct,
-                Rules::exact_length($string, $length),
+                Rules::exactLength($string, $length),
                 'Reported string length is not correct'
         );
     }
@@ -584,7 +584,7 @@ class Kohana_ValidTest extends TestCase
     public function test_max_length(string $string, int $maxlength, bool $correct)
     {
         $this->assertSame(
-            $correct, Rules::max_length($string, $maxlength)
+            $correct, Rules::maxLength($string, $maxlength)
         );
     }
 
@@ -618,7 +618,7 @@ class Kohana_ValidTest extends TestCase
     public function test_min_length(string $string, int $minlength, bool $correct)
     {
         $this->assertSame(
-            $correct, Rules::min_length($string, $minlength)
+            $correct, Rules::minLength($string, $minlength)
         );
     }
 
@@ -662,7 +662,7 @@ class Kohana_ValidTest extends TestCase
      */
     public function test_not_empty($value, bool $empty)
     {
-        $this->assertSame($empty, Rules::not_empty($value));
+        $this->assertSame($empty, Rules::notEmpty($value));
     }
 
     /**

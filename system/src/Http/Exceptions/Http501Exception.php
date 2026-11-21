@@ -7,6 +7,6 @@ class Http501Exception extends HttpException
     /**
      * @var int HTTP 501 Not Implemented
      */
-    protected $_code = 501;
+    protected $code = 501;
 
 }

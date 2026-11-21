@@ -27,7 +27,7 @@ class NativeSession extends Session
      * @param string|null $id Session ID
      * @return  null
      */
-    protected function _read(?string $id = null)
+    protected function readSession(?string $id = null)
     {
         /**
          * session_set_cookie_params will override php ini settings
@@ -46,14 +46,14 @@ class NativeSession extends Session
 
         // Sync up the session cookie with Cookie parameters
         session_set_cookie_params(
-            $this->_lifetime, Cookie::$path, $session_cookie_domain, Cookie::$secure, Cookie::$httponly
+            $this->lifetime, Cookie::$path, $session_cookie_domain, Cookie::$secure, Cookie::$httponly
         );
 
         // Do not allow PHP to send Cache-Control headers
         session_cache_limiter(false);
 
         // Set the session cookie name
-        session_name($this->_name);
+        session_name($this->name);
 
         if ($id) {
             // Set the session id
@@ -64,7 +64,7 @@ class NativeSession extends Session
         session_start();
 
         // Use the $_SESSION global for storing data
-        $this->_data = &$_SESSION;
+        $this->data = &$_SESSION;
 
         return null;
     }
@@ -72,7 +72,7 @@ class NativeSession extends Session
     /**
      * @return  string
      */
-    protected function _regenerate(): string
+    protected function regenerateSession(): string
     {
         // Regenerate the session id
         session_regenerate_id();
@@ -83,7 +83,7 @@ class NativeSession extends Session
     /**
      * @return  bool
      */
-    protected function _write(): bool
+    protected function writeSession(): bool
     {
         // Write and close the session
         session_write_close();
@@ -94,13 +94,13 @@ class NativeSession extends Session
     /**
      * @return  bool
      */
-    protected function _restart(): bool
+    protected function restartSession(): bool
     {
         // Fire up a new session
         $status = session_start();
 
         // Use the $_SESSION global for storing data
-        $this->_data = &$_SESSION;
+        $this->data = &$_SESSION;
 
         return $status;
     }
@@ -108,7 +108,7 @@ class NativeSession extends Session
     /**
      * @return  bool
      */
-    protected function _destroy(): bool
+    protected function destroySession(): bool
     {
         // Destroy the current session
         session_destroy();
@@ -118,7 +118,7 @@ class NativeSession extends Session
 
         if ($status) {
             // Make sure the session cannot be restarted
-            Cookie::delete($this->_name);
+            Cookie::delete($this->name);
         }
 
         return $status;

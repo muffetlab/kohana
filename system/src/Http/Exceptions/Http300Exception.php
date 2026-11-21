@@ -7,6 +7,6 @@ class Http300Exception extends RedirectHttpException
     /**
      * @var int HTTP 300 Multiple Choices
      */
-    protected $_code = 300;
+    protected $code = 300;
 
 }

@@ -81,7 +81,7 @@ class DB
      * @param array|null $columns columns to select
      * @return  Database_Query_Builder_Select
      */
-    public static function select_array(?array $columns = null): SelectBuilder
+    public static function selectArray(?array $columns = null): SelectBuilder
     {
         return new SelectBuilder($columns);
     }

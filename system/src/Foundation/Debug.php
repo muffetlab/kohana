@@ -33,7 +33,7 @@ class Debug
 
         $output = [];
         foreach ($variables as $var) {
-            $output[] = \Kohana\Foundation\Debug::_dump($var, 1024);
+            $output[] = \Kohana\Foundation\Debug::dumpVar($var, 1024);
         }
 
         return '<pre class="debug">' . implode("\n", $output) . '</pre>';
@@ -51,7 +51,7 @@ class Debug
      */
     public static function dump($value, int $length = 128, int $level_recursion = 10): string
     {
-        return \Kohana\Foundation\Debug::_dump($value, $length, $level_recursion);
+        return \Kohana\Foundation\Debug::dumpVar($value, $length, $level_recursion);
     }
 
     /**
@@ -63,7 +63,7 @@ class Debug
      * @param int $level Current recursion level (internal usage only!)
      * @return  string
      */
-    protected static function _dump(&$var, int $length = 128, int $limit = 10, int $level = 0): string
+    protected static function dumpVar(&$var, int $length = 128, int $limit = 10, int $level = 0): string
     {
         if ($var === null) {
             return '<small>NULL</small>';
@@ -143,7 +143,7 @@ class Debug
                         $key = '"' . htmlspecialchars($key, ENT_NOQUOTES, Application::$charset) . '"';
                     }
 
-                    $output[] = "$space$s$key => " . \Kohana\Foundation\Debug::_dump($val, $length, $limit, $level + 1);
+                    $output[] = "$space$s$key => " . \Kohana\Foundation\Debug::dumpVar($val, $length, $limit, $level + 1);
                 }
                 unset($var[$marker]);
 
@@ -189,7 +189,7 @@ class Debug
                         $access = '<small>public</small>';
                     }
 
-                    $output[] = "$space$s$access $key => " . \Kohana\Foundation\Debug::_dump($val, $length, $limit, $level + 1);
+                    $output[] = "$space$s$access $key => " . \Kohana\Foundation\Debug::dumpVar($val, $length, $limit, $level + 1);
                 }
                 unset($objects[$hash]);
 

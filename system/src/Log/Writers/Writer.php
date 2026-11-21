@@ -33,7 +33,7 @@ abstract class Writer
      * Numeric log level to string lookup table.
      * @var array
      */
-    protected $_log_levels = [
+    protected $logLevels = [
         LOG_EMERG => 'EMERGENCY',
         LOG_ALERT => 'ALERT',
         LOG_CRIT => 'CRITICAL',
@@ -47,7 +47,7 @@ abstract class Writer
     /**
      * @var  int  Level to use for stack traces
      */
-    public static $strace_level = LOG_DEBUG;
+    public static $straceLevel = LOG_DEBUG;
 
     /**
      * Write an array of messages.
@@ -78,17 +78,17 @@ abstract class Writer
      * @return  string
      * @throws Exception
      */
-    public function format_message(array $message, string $format = "time --- level: body in file:line"): string
+    public function formatMessage(array $message, string $format = "time --- level: body in file:line"): string
     {
-        $message['time'] = Date::formatted_time('@' . $message['time'], \Kohana\Log\Writers\Writer::$timestamp, \Kohana\Log\Writers\Writer::$timezone);
-        $message['level'] = $this->_log_levels[$message['level']];
+        $message['time'] = Date::formattedTime('@' . $message['time'], \Kohana\Log\Writers\Writer::$timestamp, \Kohana\Log\Writers\Writer::$timezone);
+        $message['level'] = $this->logLevels[$message['level']];
 
         $string = strtr($format, array_filter($message, 'is_scalar'));
 
         if (isset($message['additional']['exception'])) {
             // Re-use as much as possible, just resetting the body to the trace
             $message['body'] = $message['additional']['exception']->getTraceAsString();
-            $message['level'] = $this->_log_levels[\Kohana\Log\Writers\Writer::$strace_level];
+            $message['level'] = $this->logLevels[\Kohana\Log\Writers\Writer::$straceLevel];
 
             $string .= PHP_EOL . strtr($format, array_filter($message, 'is_scalar'));
         }

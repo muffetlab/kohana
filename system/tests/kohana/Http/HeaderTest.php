@@ -71,7 +71,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
      */
     public function test_accept_quality(array $parts, array $expected)
     {
-        $out = HeaderBag::accept_quality($parts);
+        $out = HeaderBag::acceptQuality($parts);
 
         foreach ($out as $value) {
             $this->assertIsFloat($value);
@@ -132,7 +132,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
      */
     public function test_parse_accept_header(string $accept, array $expected)
     {
-        $this->assertSame($expected, HeaderBag::parse_accept_header($accept));
+        $this->assertSame($expected, HeaderBag::parseAcceptHeader($accept));
     }
 
     /**
@@ -182,7 +182,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
      */
     public function test_parse_charset_header(?string $accept, array $expected)
     {
-        $this->assertSame($expected, HeaderBag::parse_charset_header($accept));
+        $this->assertSame($expected, HeaderBag::parseCharsetHeader($accept));
     }
 
     /**
@@ -236,7 +236,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
      */
     public function test_parse_encoding_header(?string $accept, array $expected)
     {
-        $this->assertSame($expected, HeaderBag::parse_encoding_header($accept));
+        $this->assertSame($expected, HeaderBag::parseEncodingHeader($accept));
     }
 
     /**
@@ -305,7 +305,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
      */
     public function test_parse_language_header(?string $accept, array $expected)
     {
-        $this->assertSame($expected, HeaderBag::parse_language_header($accept));
+        $this->assertSame($expected, HeaderBag::parseLanguageHeader($accept));
     }
 
     /**
@@ -358,7 +358,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
      */
     public function test_create_cache_control(array $input, string $expected)
     {
-        $this->assertSame($expected, HeaderBag::create_cache_control($input));
+        $this->assertSame($expected, HeaderBag::createCacheControl($input));
     }
 
     /**
@@ -411,7 +411,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
      */
     public function test_parse_cache_control(string $input, array $expected)
     {
-        $parsed = HeaderBag::parse_cache_control($input);
+        $parsed = HeaderBag::parseCacheControl($input);
 
         $this->assertIsArray($parsed);
 
@@ -784,7 +784,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
 
         foreach ($headers as $header) {
 
-            $this->assertEquals(strlen($header), $http_header->parse_header_string(null, $header));
+            $this->assertEquals(strlen($header), $http_header->parseHeaderString(null, $header));
         }
 
         $this->assertSame($expected, $http_header->getArrayCopy());
@@ -877,7 +877,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
     {
         $header = new HeaderBag($state);
 
-        $this->assertSame($expected, $header->accepts_at_quality($accept, $explicit));
+        $this->assertSame($expected, $header->acceptsAtQuality($accept, $explicit));
     }
 
     /**
@@ -939,7 +939,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
     {
         $header = new HeaderBag($state);
 
-        $this->assertSame($expected, $header->preferred_accept($accepts, $explicit));
+        $this->assertSame($expected, $header->preferredAccept($accepts, $explicit));
     }
 
     /**
@@ -996,7 +996,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
     {
         $header = new HeaderBag($state);
 
-        $this->assertSame($expected, $header->accepts_charset_at_quality($charset));
+        $this->assertSame($expected, $header->acceptsCharsetAtQuality($charset));
     }
 
     /**
@@ -1035,7 +1035,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
     {
         $header = new HeaderBag($state);
 
-        $this->assertSame($expected, $header->preferred_charset($charsets));
+        $this->assertSame($expected, $header->preferredCharset($charsets));
     }
 
     /**
@@ -1104,7 +1104,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
     public function test_accepts_encoding_at_quality(array $state, string $encoding, bool $explicit, float $expected)
     {
         $header = new HeaderBag($state);
-        $this->assertSame($expected, $header->accepts_encoding_at_quality($encoding, $explicit));
+        $this->assertSame($expected, $header->acceptsEncodingAtQuality($encoding, $explicit));
     }
 
     /**
@@ -1165,7 +1165,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
     public function test_preferred_encoding(array $state, array $encodings, bool $explicit, $expected)
     {
         $header = new HeaderBag($state);
-        $this->assertSame($expected, $header->preferred_encoding($encodings, $explicit));
+        $this->assertSame($expected, $header->preferredEncoding($encodings, $explicit));
     }
 
     /**
@@ -1242,7 +1242,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
     public function test_accepts_language_at_quality(array $state, string $language, bool $explicit, float $expected)
     {
         $header = new HeaderBag($state);
-        $this->assertSame($expected, $header->accepts_language_at_quality($language, $explicit));
+        $this->assertSame($expected, $header->acceptsLanguageAtQuality($language, $explicit));
     }
 
     /**
@@ -1311,7 +1311,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
     public function test_preferred_language(array $state, array $languages, bool $explicit, string $expected)
     {
         $header = new HeaderBag($state);
-        $this->assertSame($expected, $header->preferred_language($languages, $explicit));
+        $this->assertSame($expected, $header->preferredLanguage($languages, $explicit));
     }
 
     /**
@@ -1321,7 +1321,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
      */
     public function provider_send_headers(): array
     {
-        $content_type = Application::$content_type . '; charset=' . Application::$charset;
+        $content_type = Application::$contentType . '; charset=' . Application::$charset;
 
         return [
             [
@@ -1400,7 +1400,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
         $response = new Response;
         $response->headers($state);
 
-        $this->assertSame($expected, $response->send_headers(false, function ($response, $headers) {
+        $this->assertSame($expected, $response->sendHeaders(false, function ($response, $headers) {
             return $headers;
         }));
     }

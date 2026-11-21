@@ -62,7 +62,7 @@ class Kohana_Request_Client_CacheTest extends TestCase
 
         $request->client($client_mock);
         $client_mock->expects($this->exactly(0))
-            ->method('execute_request');
+            ->method('executeRequest');
         $client_mock->expects($this->once())
             ->method('execute')
             ->willReturnOnConsecutiveCalls($response, 0);
@@ -94,7 +94,7 @@ class Kohana_Request_Client_CacheTest extends TestCase
 
         $cache_mock->expects($this->once())
             ->method('get')
-            ->with($request->client()->cache()->create_cache_key($request))
+            ->with($request->client()->cache()->createCacheKey($request))
             ->will($this->returnValue(false));
 
         $response = $request->client()->execute($request);
@@ -120,7 +120,7 @@ class Kohana_Request_Client_CacheTest extends TestCase
 
         $response->headers('cache-control', 'max-age=' . $lifetime);
 
-        $key = $request->client()->cache()->create_cache_key($request);
+        $key = $request->client()->cache()->createCacheKey($request);
 
         $cache_mock->expects($this->at(0))
             ->method('set')
@@ -133,7 +133,7 @@ class Kohana_Request_Client_CacheTest extends TestCase
 
         $this->assertTrue(
             $request->client()->cache()
-                ->cache_response($key, $request, $response)
+                ->cacheResponse($key, $request, $response)
         );
 
         $this->assertSame(Cache::CACHE_STATUS_SAVED, $response->headers(Cache::CACHE_STATUS_KEY));
@@ -162,14 +162,14 @@ class Kohana_Request_Client_CacheTest extends TestCase
             Cache::CACHE_STATUS_HIT
         ]);
 
-        $key = $request->client()->cache()->create_cache_key($request);
+        $key = $request->client()->cache()->createCacheKey($request);
 
         $cache_mock->expects($this->exactly(2))
             ->method('get')
             ->with($this->stringContains($key))
             ->willReturnOnConsecutiveCalls($response, 0);
 
-        $request->client()->cache()->cache_response($key, $request);
+        $request->client()->cache()->cacheResponse($key, $request);
 
         $this->assertSame(Cache::CACHE_STATUS_HIT, $response->headers(Cache::CACHE_STATUS_KEY));
     }
@@ -250,7 +250,7 @@ class Kohana_Request_Client_CacheTest extends TestCase
 
         $request = new InternalClient;
         $request->cache(new Cache);
-        $this->assertEquals($request->cache()->set_cache($response), $expected);
+        $this->assertEquals($request->cache()->setCache($response), $expected);
     }
 
 }

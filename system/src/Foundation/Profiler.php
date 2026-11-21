@@ -24,7 +24,7 @@ class Profiler
     /**
      * @var  array  collected benchmarks
      */
-    protected static $_marks = [];
+    protected static $marks = [];
 
     /**
      * Starts a new benchmark and returns a unique token. The returned token
@@ -43,7 +43,7 @@ class Profiler
         // Create a unique token based on the counter
         $token = 'kp/' . base_convert($counter++, 10, 32);
 
-        \Kohana\Foundation\Profiler::$_marks[$token] = [
+        \Kohana\Foundation\Profiler::$marks[$token] = [
             'group' => strtolower($group),
             'name' => $name,
             // Start the benchmark
@@ -68,8 +68,8 @@ class Profiler
     public static function stop(string $token)
     {
         // Stop the benchmark
-        \Kohana\Foundation\Profiler::$_marks[$token]['stop_time'] = microtime(true);
-        \Kohana\Foundation\Profiler::$_marks[$token]['stop_memory'] = memory_get_usage();
+        \Kohana\Foundation\Profiler::$marks[$token]['stop_time'] = microtime(true);
+        \Kohana\Foundation\Profiler::$marks[$token]['stop_memory'] = memory_get_usage();
     }
 
     /**
@@ -85,7 +85,7 @@ class Profiler
     public static function delete(string $token)
     {
         // Remove the benchmark
-        unset(\Kohana\Foundation\Profiler::$_marks[$token]);
+        unset(\Kohana\Foundation\Profiler::$marks[$token]);
     }
 
     /**
@@ -99,7 +99,7 @@ class Profiler
     {
         $groups = [];
 
-        foreach (\Kohana\Foundation\Profiler::$_marks as $token => $mark) {
+        foreach (\Kohana\Foundation\Profiler::$marks as $token => $mark) {
             // Sort the tokens by the group and name
             $groups[$mark['group']][$mark['name']][] = $token;
         }
@@ -188,7 +188,7 @@ class Profiler
      * @uses    Profiler::groups
      * @uses    Profiler::stats
      */
-    public static function group_stats($groups = null): array
+    public static function groupStats($groups = null): array
     {
         // Which groups do we need to calculate stats for?
         $groups = $groups === null ? \Kohana\Foundation\Profiler::groups() : array_intersect_key(\Kohana\Foundation\Profiler::groups(), array_flip((array) $groups));
@@ -267,7 +267,7 @@ class Profiler
     public static function total(string $token): array
     {
         // Import the benchmark data
-        $mark = \Kohana\Foundation\Profiler::$_marks[$token];
+        $mark = \Kohana\Foundation\Profiler::$marks[$token];
 
         if ($mark['stop_time'] === false) {
             // The benchmark has not been stopped yet

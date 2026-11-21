@@ -23,7 +23,7 @@ class User extends Model
      *
      * @var array Relationships
      */
-    protected $_has_many = [
+    protected $hasMany = [
         'user_tokens' => ['model' => UserToken::class],
         'roles' => ['model' => Role::class, 'through' => 'roles_users'],
     ];
@@ -93,9 +93,9 @@ class User extends Model
      * @throws ORM_Validation_Exception
      * @throws ReflectionException
      */
-    public function complete_login()
+    public function completeLogin()
     {
-        if ($this->_loaded) {
+        if ($this->loaded) {
             // Update the number of logins
             $this->logins++;
 
@@ -115,18 +115,18 @@ class User extends Model
      * @return bool
      * @throws Kohana_Exception
      */
-    public function unique_key_exists($value, ?string $field = null): bool
+    public function uniqueKeyExists($value, ?string $field = null): bool
     {
         if ($field === null) {
             // Automatically determine field by looking at the value
-            $field = $this->unique_key($value);
+            $field = $this->uniqueKey($value);
         }
 
         return (bool) DB::select([DB::expr('COUNT(*)'), 'total_count'])
-                ->from($this->_table_name)
+                ->from($this->tableName)
                 ->where($field, '=', $value)
-                ->where($this->_primary_key, '!=', $this->pk())
-                ->execute($this->_db)
+                ->where($this->primaryKey, '!=', $this->pk())
+                ->execute($this->db)
                 ->get('total_count');
     }
 
@@ -136,7 +136,7 @@ class User extends Model
      * @param string $value unique value
      * @return  string  field name
      */
-    public function unique_key(string $value): string
+    public function uniqueKey(string $value): string
     {
         return Rules::email($value) ? 'email' : 'username';
     }
@@ -147,7 +147,7 @@ class User extends Model
      * @param array $values
      * @return Validation
      */
-    public static function get_password_validation(array $values): Validator
+    public static function getPasswordValidation(array $values): Validator
     {
         return Validator::factory($values)
                 ->rule('password', 'min_length', [':value', 8])
@@ -176,10 +176,10 @@ class User extends Model
      * @throws ORM_Validation_Exception
      * @throws ReflectionException
      */
-    public function create_user(array $values, array $expected): Model
+    public function createUser(array $values, array $expected): Model
     {
         // Validation for passwords
-        $extra_validation = \Kohana\Auth\Models\User::get_password_validation($values)
+        $extra_validation = \Kohana\Auth\Models\User::getPasswordValidation($values)
             ->rule('password', 'not_empty');
 
         return $this->values($values, $expected)->create($extra_validation);
@@ -209,14 +209,14 @@ class User extends Model
      * @throws ORM_Validation_Exception
      * @throws ReflectionException
      */
-    public function update_user(array $values, ?array $expected = null): Model
+    public function updateUser(array $values, ?array $expected = null): Model
     {
         if (empty($values['password'])) {
             unset($values['password'], $values['password_confirm']);
         }
 
         // Validation for passwords
-        $extra_validation = \Kohana\Auth\Models\User::get_password_validation($values);
+        $extra_validation = \Kohana\Auth\Models\User::getPasswordValidation($values);
 
         return $this->values($values, $expected)->update($extra_validation);
     }

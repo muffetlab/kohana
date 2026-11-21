@@ -77,7 +77,7 @@ class ApcuStore extends Cache implements Arithmetic
      */
     public function get(string $id, $default = null)
     {
-        $data = apcu_fetch($this->_sanitize_id($id), $success);
+        $data = apcu_fetch($this->sanitizeId($id), $success);
 
         return $success ? $data : $default;
     }
@@ -101,10 +101,10 @@ class ApcuStore extends Cache implements Arithmetic
     public function set(string $id, $data, ?int $lifetime = null): bool
     {
         if ($lifetime === null) {
-            $lifetime = Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE);
+            $lifetime = Arr::get($this->config, 'default_expire', Cache::DEFAULT_EXPIRE);
         }
 
-        return apcu_store($this->_sanitize_id($id), $data, $lifetime);
+        return apcu_store($this->sanitizeId($id), $data, $lifetime);
     }
 
     /**
@@ -118,7 +118,7 @@ class ApcuStore extends Cache implements Arithmetic
      */
     public function delete(string $id): bool
     {
-        return apcu_delete($this->_sanitize_id($id));
+        return apcu_delete($this->sanitizeId($id));
     }
 
     /**
@@ -133,7 +133,7 @@ class ApcuStore extends Cache implements Arithmetic
      *
      * @return bool
      */
-    public function delete_all(): bool
+    public function deleteAll(): bool
     {
         return apcu_clear_cache();
     }

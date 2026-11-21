@@ -16,9 +16,9 @@ use Kohana\Database\Connection;
 class UpdateBuilder extends WhereBuilder
 {
     // UPDATE ...
-    protected $_table;
+    protected $table;
     // SET ...
-    protected $_set = [];
+    protected $set = [];
 
     /**
      * Set the table for an update.
@@ -30,7 +30,7 @@ class UpdateBuilder extends WhereBuilder
     {
         if ($table) {
             // Set the initial table name
-            $this->_table = $table;
+            $this->table = $table;
         }
 
         // Start the query with no SQL
@@ -45,7 +45,7 @@ class UpdateBuilder extends WhereBuilder
      */
     public function table($table): \Kohana\Database\Query\UpdateBuilder
     {
-        $this->_table = $table;
+        $this->table = $table;
 
         return $this;
     }
@@ -59,7 +59,7 @@ class UpdateBuilder extends WhereBuilder
     public function set(array $pairs): \Kohana\Database\Query\UpdateBuilder
     {
         foreach ($pairs as $column => $value) {
-            $this->_set[] = [$column, $value];
+            $this->set[] = [$column, $value];
         }
 
         return $this;
@@ -74,7 +74,7 @@ class UpdateBuilder extends WhereBuilder
      */
     public function value($column, $value): \Kohana\Database\Query\UpdateBuilder
     {
-        $this->_set[] = [$column, $value];
+        $this->set[] = [$column, $value];
 
         return $this;
     }
@@ -95,27 +95,27 @@ class UpdateBuilder extends WhereBuilder
         }
 
         // Start an update query
-        $query = 'UPDATE ' . $db->quote_table($this->_table);
+        $query = 'UPDATE ' . $db->quoteTable($this->table);
 
         // Add the columns to update
-        $query .= ' SET ' . $this->_compile_set($db, $this->_set);
+        $query .= ' SET ' . $this->compileSet($db, $this->set);
 
-        if (!empty($this->_where)) {
+        if (!empty($this->where)) {
             // Add selection conditions
-            $query .= ' WHERE ' . $this->_compile_conditions($db, $this->_where);
+            $query .= ' WHERE ' . $this->compileConditions($db, $this->where);
         }
 
-        if (!empty($this->_order_by)) {
+        if (!empty($this->orderBy)) {
             // Add sorting
-            $query .= ' ' . $this->_compile_order_by($db, $this->_order_by);
+            $query .= ' ' . $this->compileOrderBy($db, $this->orderBy);
         }
 
-        if ($this->_limit !== null) {
+        if ($this->limit !== null) {
             // Add limiting
-            $query .= ' LIMIT ' . $this->_limit;
+            $query .= ' LIMIT ' . $this->limit;
         }
 
-        $this->_sql = $query;
+        $this->sql = $query;
 
         return parent::compile($db);
     }
@@ -126,15 +126,15 @@ class UpdateBuilder extends WhereBuilder
      */
     public function reset(): \Kohana\Database\Query\UpdateBuilder
     {
-        $this->_table = null;
+        $this->table = null;
 
-        $this->_set = $this->_where = [];
+        $this->set = $this->where = [];
 
-        $this->_limit = null;
+        $this->limit = null;
 
-        $this->_parameters = [];
+        $this->parameters = [];
 
-        $this->_sql = null;
+        $this->sql = null;
 
         return $this;
     }

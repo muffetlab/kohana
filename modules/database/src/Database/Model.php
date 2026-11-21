@@ -33,7 +33,7 @@ abstract class Model extends \Kohana\Foundation\Model
     }
 
     // Database instance
-    protected $_db;
+    protected $db;
 
     /**
      * Loads the database.
@@ -48,15 +48,15 @@ abstract class Model extends \Kohana\Foundation\Model
     {
         if ($db) {
             // Set the instance or name
-            $this->_db = $db;
-        } elseif (!$this->_db) {
+            $this->db = $db;
+        } elseif (!$this->db) {
             // Use the default name
-            $this->_db = Connection::$default;
+            $this->db = Connection::$default;
         }
 
-        if (is_string($this->_db)) {
+        if (is_string($this->db)) {
             // Load the database
-            $this->_db = Connection::instance($this->_db);
+            $this->db = Connection::instance($this->db);
         }
     }
 

@@ -20,7 +20,7 @@ class Html
     /**
      * @var  array  preferred order of attributes
      */
-    public static $attribute_order = array
+    public static $attributeOrder = array
         (
         'action',
         'method',
@@ -60,7 +60,7 @@ class Html
     /**
      * @var bool automatically target external URLs to a new window?
      */
-    public static $windowed_urls = false;
+    public static $windowedUrls = false;
 
     /**
      * Convert special characters to HTML entities. All untrusted content
@@ -122,7 +122,7 @@ class Html
             $uri = Url::base($protocol, $index);
         } else {
             if (strpos($uri, '://') !== false) {
-                if (\Kohana\Html\Html::$windowed_urls === true && empty($attributes['target'])) {
+                if (\Kohana\Html\Html::$windowedUrls === true && empty($attributes['target'])) {
                     // Make the link open in a new window
                     $attributes['target'] = '_blank';
                 }
@@ -154,7 +154,7 @@ class Html
      * @uses    HTML::attributes
      * @uses    URL::base
      */
-    public static function file_anchor(string $file, ?string $title = null, ?array $attributes = null, $protocol = null, bool $index = false): string
+    public static function fileAnchor(string $file, ?string $title = null, ?array $attributes = null, $protocol = null, bool $index = false): string
     {
         if ($title === null) {
             // Use the file name as the title
@@ -294,7 +294,7 @@ class Html
             return '';
 
         $sorted = [];
-        foreach (\Kohana\Html\Html::$attribute_order as $key) {
+        foreach (\Kohana\Html\Html::$attributeOrder as $key) {
             if (isset($attributes[$key])) {
                 // Add the attribute to the sorted list
                 $sorted[$key] = $attributes[$key];

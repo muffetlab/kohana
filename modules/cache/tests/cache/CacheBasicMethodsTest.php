@@ -284,7 +284,7 @@ TESTTEXT;
     {
         // Init
         $cache = $this->cache();
-        $cache->delete_all();
+        $cache->deleteAll();
 
         // Test deletion if real cached value
         if (!$cache->set('test_delete_1', 'This should not be here!', 0)) {
@@ -321,7 +321,7 @@ TESTTEXT;
         }
 
         // Test delete_all is successful
-        $this->assertTrue($cache->delete_all());
+        $this->assertTrue($cache->deleteAll());
 
         foreach ($data as $values) {
             // Verify data has been purged

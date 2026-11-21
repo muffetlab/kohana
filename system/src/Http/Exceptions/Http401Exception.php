@@ -9,7 +9,7 @@ class Http401Exception extends ExpectedHttpException
     /**
      * @var int HTTP 401 Unauthorized
      */
-    protected $_code = 401;
+    protected $code = 401;
 
     /**
      * Specifies the WWW-Authenticate challenge.

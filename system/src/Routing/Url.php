@@ -48,7 +48,7 @@ class Url
     public static function base($protocol = null, bool $index = false): string
     {
         // Start with the configured base URL
-        $base_url = Application::$base_url;
+        $base_url = Application::$baseUrl;
 
         if ($protocol === true) {
             // Use the initial request to get the protocol
@@ -69,9 +69,9 @@ class Url
             $protocol = parse_url($base_url, PHP_URL_SCHEME);
         }
 
-        if ($index === true && !empty(Application::$index_file)) {
+        if ($index === true && !empty(Application::$indexFile)) {
             // Add the index file to the URL
-            $base_url .= Application::$index_file . '/';
+            $base_url .= Application::$indexFile . '/';
         }
 
         if (is_string($protocol)) {
@@ -97,7 +97,7 @@ class Url
                 }
 
                 // Validate $host, see if it matches trusted hosts
-                if (!static::is_trusted_host($host)) {
+                if (!static::isTrustedHost($host)) {
                     throw new KohanaException('Untrusted host :host. If you trust :host, add it to the trusted hosts in the `url` config file.', [':host' => $host]);
                 }
             }
@@ -126,7 +126,7 @@ class Url
         // Chop off possible scheme, host, port, user and pass parts
         $path = preg_replace('~^[-a-z0-9+.]++://[^/]++/?~', '', trim($uri, '/'));
 
-        if (!Utf8::is_ascii($path)) {
+        if (!Utf8::isAscii($path)) {
             // Encode all non-ASCII characters, as per RFC 1738
             $path = preg_replace_callback('~([^/]+)~', function ($matches) {
                 return rawurlencode($matches[0]);
@@ -192,7 +192,7 @@ class Url
     {
         if ($ascii_only === true) {
             // Transliterate non-ASCII characters
-            $title = Utf8::transliterate_to_ascii($title);
+            $title = Utf8::transliterateToAscii($title);
 
             // Remove all characters that are not the separator, a-z, 0-9, or whitespace
             $title = preg_replace('![^' . preg_quote($separator) . 'a-z0-9\s]+!', '', strtolower($title));
@@ -219,7 +219,7 @@ class Url
      * @return bool true if $host is trustworthy.
      * @throws Kohana_Exception
      */
-    public static function is_trusted_host(string $host, ?array $trusted_hosts = null): bool
+    public static function isTrustedHost(string $host, ?array $trusted_hosts = null): bool
     {
 
         // If list of trusted hosts is not directly provided read from config

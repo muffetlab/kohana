@@ -3,7 +3,7 @@
 use Kohana\Foundation\Application;
 use Kohana\Cache\Cache;
 
-include_once(Application::find_file('tests/cache', 'CacheBasicMethodsTest'));
+include_once(Application::findFile('tests/cache', 'CacheBasicMethodsTest'));
 
 /**
  * @package    Kohana/Cache
@@ -24,7 +24,7 @@ abstract class Kohana_CacheArithmeticMethodsTest extends Kohana_CacheBasicMethod
         $cache = $this->cache();
 
         if ($cache instanceof Cache) {
-            $cache->delete_all();
+            $cache->deleteAll();
         }
     }
 

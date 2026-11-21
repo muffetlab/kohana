@@ -16,7 +16,7 @@ function _strcspn($str, $mask, $offset = null, $length = null): int
     if ($str === '' || $mask === '')
         return 0;
 
-    if (Utf8::is_ascii($str) && Utf8::is_ascii($mask))
+    if (Utf8::isAscii($str) && Utf8::isAscii($mask))
         return $offset === null ? strcspn($str, $mask) : ($length === null ? strcspn($str, $mask, $offset) : strcspn($str, $mask, $offset, $length));
 
     if ($offset !== null || $length !== null) {

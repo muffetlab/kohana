@@ -5,7 +5,7 @@ use Kohana\Cache\Cache;
 use Kohana\Cache\CacheException;
 use Kohana\Foundation\KohanaException;
 
-include_once(Application::find_file('tests/cache', 'CacheBasicMethodsTest'));
+include_once(Application::findFile('tests/cache', 'CacheBasicMethodsTest'));
 
 /**
  * @package    Kohana/Cache

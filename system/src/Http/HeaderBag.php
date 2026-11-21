@@ -32,7 +32,7 @@ class HeaderBag extends \ArrayObject
      * @return  array
      * @since   3.2.0
      */
-    public static function accept_quality(array $parts): array
+    public static function acceptQuality(array $parts): array
     {
         $parsed = [];
 
@@ -70,7 +70,7 @@ class HeaderBag extends \ArrayObject
      * @return  array
      * @since   3.2.0
      */
-    public static function parse_accept_header(?string $accepts = null): array
+    public static function parseAcceptHeader(?string $accepts = null): array
     {
         $accepts = explode(',', (string) $accepts);
 
@@ -79,7 +79,7 @@ class HeaderBag extends \ArrayObject
             return ['*' => ['*' => (float) \Kohana\Http\HeaderBag::DEFAULT_QUALITY]];
 
         // Parse the Accept header qualities
-        $accepts = \Kohana\Http\HeaderBag::accept_quality($accepts);
+        $accepts = \Kohana\Http\HeaderBag::acceptQuality($accepts);
 
         $parsed_accept = [];
 
@@ -109,13 +109,13 @@ class HeaderBag extends \ArrayObject
      * @return  array
      * @since   3.2.0
      */
-    public static function parse_charset_header(?string $charset = null): array
+    public static function parseCharsetHeader(?string $charset = null): array
     {
         if ($charset === null) {
             return ['*' => (float) \Kohana\Http\HeaderBag::DEFAULT_QUALITY];
         }
 
-        return \Kohana\Http\HeaderBag::accept_quality(explode(',', $charset));
+        return \Kohana\Http\HeaderBag::acceptQuality(explode(',', $charset));
     }
 
     /**
@@ -127,7 +127,7 @@ class HeaderBag extends \ArrayObject
      * @return  array
      * @since   3.2.0
      */
-    public static function parse_encoding_header(?string $encoding = null): array
+    public static function parseEncodingHeader(?string $encoding = null): array
     {
         // Accept everything
         if ($encoding === null) {
@@ -135,7 +135,7 @@ class HeaderBag extends \ArrayObject
         } elseif ($encoding === '') {
             return ['identity' => (float) \Kohana\Http\HeaderBag::DEFAULT_QUALITY];
         } else {
-            return \Kohana\Http\HeaderBag::accept_quality(explode(',', $encoding));
+            return \Kohana\Http\HeaderBag::acceptQuality(explode(',', $encoding));
         }
     }
 
@@ -148,13 +148,13 @@ class HeaderBag extends \ArrayObject
      * @return  array
      * @since   3.2.0
      */
-    public static function parse_language_header(?string $language = null): array
+    public static function parseLanguageHeader(?string $language = null): array
     {
         if ($language === null) {
             return ['*' => ['*' => (float) \Kohana\Http\HeaderBag::DEFAULT_QUALITY]];
         }
 
-        $language = \Kohana\Http\HeaderBag::accept_quality(explode(',', $language));
+        $language = \Kohana\Http\HeaderBag::acceptQuality(explode(',', $language));
 
         $parsed_language = [];
 
@@ -193,7 +193,7 @@ class HeaderBag extends \ArrayObject
      * @param   array   $cache_control  Cache-Control to render to string
      * @return  string
      */
-    public static function create_cache_control(array $cache_control): string
+    public static function createCacheControl(array $cache_control): string
     {
         $parts = [];
 
@@ -220,7 +220,7 @@ class HeaderBag extends \ArrayObject
      * @param string $cache_control Array of headers
      * @return  array|false
      */
-    public static function parse_cache_control(string $cache_control)
+    public static function parseCacheControl(string $cache_control)
     {
         $directives = explode(',', strtolower($cache_control));
 
@@ -245,22 +245,22 @@ class HeaderBag extends \ArrayObject
     /**
      * @var     array    Accept: (content) types
      */
-    protected $_accept_content;
+    protected $acceptContent;
 
     /**
      * @var     array    Accept-Charset: parsed header
      */
-    protected $_accept_charset;
+    protected $acceptCharset;
 
     /**
      * @var     array    Accept-Encoding: parsed header
      */
-    protected $_accept_encoding;
+    protected $acceptEncoding;
 
     /**
      * @var     array    Accept-Language: parsed header
      */
-    protected $_accept_language;
+    protected $acceptLanguage;
 
     /**
      * Constructor method for [Kohana_HTTP_Header]. Uses the standard constructor
@@ -410,7 +410,7 @@ class HeaderBag extends \ArrayObject
      * @return  int
      * @since   3.2.0
      */
-    public function parse_header_string($resource, string $header_line): int
+    public function parseHeaderString($resource, string $header_line): int
     {
         if (preg_match_all('/(\w[^\s:]*):[ ]*([^\r\n]*(?:\r\n[ \t][^\r\n]*)*)/', $header_line, $matches)) {
             foreach ($matches[0] as $key => $value) {
@@ -442,17 +442,17 @@ class HeaderBag extends \ArrayObject
      * @throws Kohana_Exception
      * @since   3.2.0
      */
-    public function accepts_at_quality(string $type, bool $explicit = false)
+    public function acceptsAtQuality(string $type, bool $explicit = false)
     {
         // Parse Accept header if required
-        if ($this->_accept_content === null) {
+        if ($this->acceptContent === null) {
             if ($this->offsetExists('Accept')) {
                 $accept = $this->offsetGet('Accept');
             } else {
                 $accept = '*/*';
             }
 
-            $this->_accept_content = \Kohana\Http\HeaderBag::parse_accept_header($accept);
+            $this->acceptContent = \Kohana\Http\HeaderBag::parseAcceptHeader($accept);
         }
 
         // If not a real mime, try and find it in config
@@ -465,7 +465,7 @@ class HeaderBag extends \ArrayObject
             $quality = false;
 
             foreach ($mime as $_type) {
-                $quality_check = $this->accepts_at_quality($_type, $explicit);
+                $quality_check = $this->acceptsAtQuality($_type, $explicit);
                 $quality = $quality_check > $quality ? $quality_check : $quality;
             }
 
@@ -474,15 +474,15 @@ class HeaderBag extends \ArrayObject
 
         $parts = explode('/', $type, 2);
 
-        if (isset($this->_accept_content[$parts[0]][$parts[1]])) {
-            return $this->_accept_content[$parts[0]][$parts[1]];
+        if (isset($this->acceptContent[$parts[0]][$parts[1]])) {
+            return $this->acceptContent[$parts[0]][$parts[1]];
         } elseif ($explicit === true) {
             return false;
         } else {
-            if (isset($this->_accept_content[$parts[0]]['*'])) {
-                return $this->_accept_content[$parts[0]]['*'];
-            } elseif (isset($this->_accept_content['*']['*'])) {
-                return $this->_accept_content['*']['*'];
+            if (isset($this->acceptContent[$parts[0]]['*'])) {
+                return $this->acceptContent[$parts[0]]['*'];
+            } elseif (isset($this->acceptContent['*']['*'])) {
+                return $this->acceptContent['*']['*'];
             } else {
                 return false;
             }
@@ -514,13 +514,13 @@ class HeaderBag extends \ArrayObject
      * @throws Kohana_Exception
      * @since   3.2.0
      */
-    public function preferred_accept(array $types, bool $explicit = false)
+    public function preferredAccept(array $types, bool $explicit = false)
     {
         $preferred = false;
         $ceiling = 0;
 
         foreach ($types as $type) {
-            $quality = $this->accepts_at_quality($type, $explicit);
+            $quality = $this->acceptsAtQuality($type, $explicit);
 
             if ($quality > $ceiling) {
                 $preferred = $type;
@@ -544,23 +544,23 @@ class HeaderBag extends \ArrayObject
      * @return  float   the quality of the charset
      * @since   3.2.0
      */
-    public function accepts_charset_at_quality(string $charset): float
+    public function acceptsCharsetAtQuality(string $charset): float
     {
-        if ($this->_accept_charset === null) {
+        if ($this->acceptCharset === null) {
             if ($this->offsetExists('Accept-Charset')) {
                 $charset_header = strtolower($this->offsetGet('Accept-Charset'));
-                $this->_accept_charset = \Kohana\Http\HeaderBag::parse_charset_header($charset_header);
+                $this->acceptCharset = \Kohana\Http\HeaderBag::parseCharsetHeader($charset_header);
             } else {
-                $this->_accept_charset = \Kohana\Http\HeaderBag::parse_charset_header();
+                $this->acceptCharset = \Kohana\Http\HeaderBag::parseCharsetHeader();
             }
         }
 
         $charset = strtolower($charset);
 
-        if (isset($this->_accept_charset[$charset])) {
-            return $this->_accept_charset[$charset];
-        } elseif (isset($this->_accept_charset['*'])) {
-            return $this->_accept_charset['*'];
+        if (isset($this->acceptCharset[$charset])) {
+            return $this->acceptCharset[$charset];
+        } elseif (isset($this->acceptCharset['*'])) {
+            return $this->acceptCharset['*'];
         } elseif ($charset === 'iso-8859-1') {
             return 1.0;
         }
@@ -581,13 +581,13 @@ class HeaderBag extends \ArrayObject
      * @return  mixed   preferred charset or `false`
      * @since   3.2.0
      */
-    public function preferred_charset(array $charsets)
+    public function preferredCharset(array $charsets)
     {
         $preferred = false;
         $ceiling = 0;
 
         foreach ($charsets as $charset) {
-            $quality = $this->accepts_charset_at_quality($charset);
+            $quality = $this->acceptsCharsetAtQuality($charset);
 
             if ($quality > $ceiling) {
                 $preferred = $charset;
@@ -613,28 +613,28 @@ class HeaderBag extends \ArrayObject
      * @return  float
      * @since   3.2.0
      */
-    public function accepts_encoding_at_quality(string $encoding, bool $explicit = false): float
+    public function acceptsEncodingAtQuality(string $encoding, bool $explicit = false): float
     {
-        if ($this->_accept_encoding === null) {
+        if ($this->acceptEncoding === null) {
             if ($this->offsetExists('Accept-Encoding')) {
                 $encoding_header = $this->offsetGet('Accept-Encoding');
             } else {
                 $encoding_header = null;
             }
 
-            $this->_accept_encoding = \Kohana\Http\HeaderBag::parse_encoding_header($encoding_header);
+            $this->acceptEncoding = \Kohana\Http\HeaderBag::parseEncodingHeader($encoding_header);
         }
 
         // Normalize the encoding
         $encoding = strtolower($encoding);
 
-        if (isset($this->_accept_encoding[$encoding])) {
-            return $this->_accept_encoding[$encoding];
+        if (isset($this->acceptEncoding[$encoding])) {
+            return $this->acceptEncoding[$encoding];
         }
 
         if ($explicit === false) {
-            if (isset($this->_accept_encoding['*'])) {
-                return $this->_accept_encoding['*'];
+            if (isset($this->acceptEncoding['*'])) {
+                return $this->acceptEncoding['*'];
             } elseif ($encoding === 'identity') {
                 return (float) \Kohana\Http\HeaderBag::DEFAULT_QUALITY;
             }
@@ -659,13 +659,13 @@ class HeaderBag extends \ArrayObject
      * @return  mixed
      * @since   3.2.0
      */
-    public function preferred_encoding(array $encodings, bool $explicit = false)
+    public function preferredEncoding(array $encodings, bool $explicit = false)
     {
         $ceiling = 0;
         $preferred = false;
 
         foreach ($encodings as $encoding) {
-            $quality = $this->accepts_encoding_at_quality($encoding, $explicit);
+            $quality = $this->acceptsEncodingAtQuality($encoding, $explicit);
 
             if ($quality > $ceiling) {
                 $ceiling = $quality;
@@ -696,35 +696,35 @@ class HeaderBag extends \ArrayObject
      * @return  float
      * @since   3.2.0
      */
-    public function accepts_language_at_quality(string $language, bool $explicit = false): float
+    public function acceptsLanguageAtQuality(string $language, bool $explicit = false): float
     {
-        if ($this->_accept_language === null) {
+        if ($this->acceptLanguage === null) {
             if ($this->offsetExists('Accept-Language')) {
                 $language_header = strtolower($this->offsetGet('Accept-Language'));
             } else {
                 $language_header = null;
             }
 
-            $this->_accept_language = \Kohana\Http\HeaderBag::parse_language_header($language_header);
+            $this->acceptLanguage = \Kohana\Http\HeaderBag::parseLanguageHeader($language_header);
         }
 
         // Normalize the language
         $language_parts = explode('-', strtolower($language), 2);
 
-        if (isset($this->_accept_language[$language_parts[0]])) {
+        if (isset($this->acceptLanguage[$language_parts[0]])) {
             if (isset($language_parts[1])) {
-                if (isset($this->_accept_language[$language_parts[0]][$language_parts[1]])) {
-                    return $this->_accept_language[$language_parts[0]][$language_parts[1]];
-                } elseif ($explicit === false && isset($this->_accept_language[$language_parts[0]]['*'])) {
-                    return $this->_accept_language[$language_parts[0]]['*'];
+                if (isset($this->acceptLanguage[$language_parts[0]][$language_parts[1]])) {
+                    return $this->acceptLanguage[$language_parts[0]][$language_parts[1]];
+                } elseif ($explicit === false && isset($this->acceptLanguage[$language_parts[0]]['*'])) {
+                    return $this->acceptLanguage[$language_parts[0]]['*'];
                 }
-            } elseif (isset($this->_accept_language[$language_parts[0]]['*'])) {
-                return $this->_accept_language[$language_parts[0]]['*'];
+            } elseif (isset($this->acceptLanguage[$language_parts[0]]['*'])) {
+                return $this->acceptLanguage[$language_parts[0]]['*'];
             }
         }
 
-        if ($explicit === false && isset($this->_accept_language['*'])) {
-            return $this->_accept_language['*'];
+        if ($explicit === false && isset($this->acceptLanguage['*'])) {
+            return $this->acceptLanguage['*'];
         }
 
         return 0.0;
@@ -744,13 +744,13 @@ class HeaderBag extends \ArrayObject
      * @return  mixed
      * @since   3.2.0
      */
-    public function preferred_language(array $languages, bool $explicit = false)
+    public function preferredLanguage(array $languages, bool $explicit = false)
     {
         $ceiling = 0;
         $preferred = false;
 
         foreach ($languages as $language) {
-            $quality = $this->accepts_language_at_quality($language, $explicit);
+            $quality = $this->acceptsLanguageAtQuality($language, $explicit);
 
             if ($quality > $ceiling) {
                 $ceiling = $quality;
@@ -776,7 +776,7 @@ class HeaderBag extends \ArrayObject
      * @throws Kohana_Exception
      * @since   3.2.0
      */
-    public function send_headers(?Response $response = null, bool $replace = false, ?callable $callback = null)
+    public function sendHeaders(?Response $response = null, bool $replace = false, ?callable $callback = null)
     {
         $protocol = $response->protocol();
         $status = $response->status();
@@ -796,7 +796,7 @@ class HeaderBag extends \ArrayObject
         }
 
         if (!isset($headers['content-type'])) {
-            $processed_headers[] = 'Content-Type: ' . Application::$content_type . '; charset=' . Application::$charset;
+            $processed_headers[] = 'Content-Type: ' . Application::$contentType . '; charset=' . Application::$charset;
         }
 
         if (Application::$expose && !isset($headers['x-powered-by'])) {
@@ -812,7 +812,7 @@ class HeaderBag extends \ArrayObject
             // Use the callback method to set header
             return call_user_func($callback, $response, $processed_headers, $replace);
         } else {
-            $this->_send_headers_to_php($processed_headers, $replace);
+            $this->sendHeadersToPhp($processed_headers, $replace);
             return $response;
         }
     }
@@ -827,7 +827,7 @@ class HeaderBag extends \ArrayObject
      * @throws Kohana_Exception
      * @since   3.2.0
      */
-    protected function _send_headers_to_php(array $headers, bool $replace): \Kohana\Http\HeaderBag
+    protected function sendHeadersToPhp(array $headers, bool $replace): \Kohana\Http\HeaderBag
     {
         // If the headers have been sent, get out
         if (headers_sent())

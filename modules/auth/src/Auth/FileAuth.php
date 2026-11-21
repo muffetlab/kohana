@@ -16,7 +16,7 @@ use Kohana\Support\Arr;
 class FileAuth extends Auth
 {
     // User list
-    protected $_users;
+    protected $users;
 
     /**
      * Constructor loads the user list into the class.
@@ -26,7 +26,7 @@ class FileAuth extends Auth
         parent::__construct($config);
 
         // Load user list
-        $this->_users = Arr::get($config, 'users', []);
+        $this->users = Arr::get($config, 'users', []);
     }
 
     /**
@@ -38,16 +38,16 @@ class FileAuth extends Auth
      * @return bool
      * @throws Kohana_Exception
      */
-    protected function _login($username, $password, $remember): bool
+    protected function attemptLogin($username, $password, $remember): bool
     {
         if (is_string($password)) {
             // Create a hashed password
             $password = $this->hash($password);
         }
 
-        if (isset($this->_users[$username]) && $this->_users[$username] === $password) {
+        if (isset($this->users[$username]) && $this->users[$username] === $password) {
             // Complete the login
-            return $this->complete_login($username);
+            return $this->completeLogin($username);
         }
 
         // Login failed
@@ -60,10 +60,10 @@ class FileAuth extends Auth
      * @param   mixed    $username  Username
      * @return  bool
      */
-    public function force_login($username): bool
+    public function forceLogin($username): bool
     {
         // Complete the login
-        return $this->complete_login($username);
+        return $this->completeLogin($username);
     }
 
     /**
@@ -74,7 +74,7 @@ class FileAuth extends Auth
      */
     public function password($username): string
     {
-        return Arr::get($this->_users, $username, false);
+        return Arr::get($this->users, $username, false);
     }
 
     /**
@@ -83,9 +83,9 @@ class FileAuth extends Auth
      * @param   string   $password  Password
      * @return  bool
      */
-    public function check_password($password): bool
+    public function checkPassword($password): bool
     {
-        $username = $this->get_user();
+        $username = $this->getUser();
 
         if ($username === false) {
             return false;

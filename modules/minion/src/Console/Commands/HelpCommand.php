@@ -22,9 +22,9 @@ class HelpCommand extends Command
      *
      * @return void
      */
-    protected function _execute(array $params)
+    protected function handle(array $params)
     {
-        $tasks = $this->_compile_task_list($this->_list_task_files());
+        $tasks = $this->compileTaskList($this->listTaskFiles());
 
         $view = new View('minion/help/list');
 

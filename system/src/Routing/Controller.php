@@ -15,7 +15,7 @@ use Kohana\Http\Http;
  *
  *     $controller = new Controller_Foo($request);
  *     $controller->before();
- *     $controller->action_bar();
+ *     $controller->bar();
  *     $controller->after();
  *
  * The controller action should add the output it creates to
@@ -76,11 +76,11 @@ abstract class Controller
         // Execute the "before action" method
         $this->before();
 
-        // Determine the action to use
-        $action = 'action_' . $this->request->action();
+        // Determine the action to use: edit_profile => editProfile()
+        $action = lcfirst(str_replace(' ', '', ucwords(str_replace(['_', '-'], ' ', (string) $this->request->action()))));
 
-        // If the action doesn't exist, it's a 404
-        if (!method_exists($this, $action)) {
+        // If the action doesn't exist or is not routable, it's a 404
+        if (!$this->isAction($action)) {
             throw HttpException::factory(404, 'The requested URL :uri was not found on this server.', [':uri' => $this->request->uri()])->request($this->request);
         }
 
@@ -144,9 +144,29 @@ abstract class Controller
      * @return Response
      * @throws Request_Exception
      */
-    protected function check_cache(?string $etag = null): Response
+    protected function checkCache(?string $etag = null): Response
     {
-        return Http::check_cache($this->request, $this->response, $etag);
+        return Http::checkCache($this->request, $this->response, $etag);
     }
 
+    /**
+     * Whether a method may be called as an action from a route: it must be
+     * public, non-static and declared by the application controller, not by
+     * Kohana's base controllers (so before(), execute(), etc. are never routable).
+     *
+     * @param string $action Method name
+     * @return bool
+     */
+    protected function isAction(string $action): bool
+    {
+        if ($action === '' || str_starts_with($action, '__') || !method_exists($this, $action)) {
+            return false;
+        }
+
+        $method = new \ReflectionMethod($this, $action);
+
+        return $method->isPublic()
+            && !$method->isStatic()
+            && !str_starts_with($method->getDeclaringClass()->getName(), 'Kohana\\Routing\\');
+    }
 }

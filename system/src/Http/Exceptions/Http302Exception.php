@@ -7,6 +7,6 @@ class Http302Exception extends RedirectHttpException
     /**
      * @var int HTTP 302 Found
      */
-    protected $_code = 302;
+    protected $code = 302;
 
 }

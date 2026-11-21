@@ -26,7 +26,7 @@ class StdOutWriter extends Writer
     {
         foreach ($messages as $message) {
             // Writes out each message
-            fwrite(STDOUT, $this->format_message($message) . PHP_EOL);
+            fwrite(STDOUT, $this->formatMessage($message) . PHP_EOL);
         }
     }
 

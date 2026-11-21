@@ -21,7 +21,7 @@ class KohanaException extends \Exception
     /**
      * @var  array  PHP error code => human-readable name
      */
-    public static $php_errors = [
+    public static $phpErrors = [
         E_ERROR => 'Fatal Error',
         E_USER_ERROR => 'User Error',
         E_PARSE => 'Parse Error',
@@ -35,12 +35,12 @@ class KohanaException extends \Exception
     /**
      * @var  string  error rendering view
      */
-    public static $error_view = 'kohana/error';
+    public static $errorView = 'kohana/error';
 
     /**
      * @var  string  error view content type
      */
-    public static $error_view_content_type = 'text/html';
+    public static $errorViewContentType = 'text/html';
 
     /**
      * Creates a new translated exception.
@@ -89,10 +89,10 @@ class KohanaException extends \Exception
      */
     public static function handler(\Throwable $e)
     {
-        $response = \Kohana\Foundation\KohanaException::_handler($e);
+        $response = \Kohana\Foundation\KohanaException::render($e);
 
         // Send the response to the browser
-        echo $response->send_headers()->body();
+        echo $response->sendHeaders()->body();
 
         exit(1);
     }
@@ -105,7 +105,7 @@ class KohanaException extends \Exception
      * @return  Response
      * @uses    Kohana_Exception::response
      */
-    public static function _handler(\Throwable $e): Response
+    public static function render(\Throwable $e): Response
     {
         try {
             // Log the exception
@@ -225,9 +225,9 @@ class KohanaException extends \Exception
                     }
                 }
 
-                if (isset(\Kohana\Foundation\KohanaException::$php_errors[$code])) {
+                if (isset(\Kohana\Foundation\KohanaException::$phpErrors[$code])) {
                     // Use the human-readable error name
-                    $code = \Kohana\Foundation\KohanaException::$php_errors[$code];
+                    $code = \Kohana\Foundation\KohanaException::$phpErrors[$code];
                 }
             }
 
@@ -246,7 +246,7 @@ class KohanaException extends \Exception
             }
 
             // Instantiate the error view.
-            $view = View::factory(\Kohana\Foundation\KohanaException::$error_view, get_defined_vars());
+            $view = View::factory(\Kohana\Foundation\KohanaException::$errorView, get_defined_vars());
 
             // Prepare the response object.
             $response = Response::factory();
@@ -255,7 +255,7 @@ class KohanaException extends \Exception
             $response->status($e instanceof HttpException ? $e->getCode() : 500);
 
             // Set the response headers
-            $response->headers('Content-Type', \Kohana\Foundation\KohanaException::$error_view_content_type . '; charset=' . Application::$charset);
+            $response->headers('Content-Type', \Kohana\Foundation\KohanaException::$errorViewContentType . '; charset=' . Application::$charset);
 
             // Set the response body
             $response->body($view->render());

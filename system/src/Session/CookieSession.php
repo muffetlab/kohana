@@ -20,15 +20,15 @@ class CookieSession extends Session
      * @return string|null
      * @throws Kohana_Exception
      */
-    protected function _read(?string $id = null): ?string
+    protected function readSession(?string $id = null): ?string
     {
-        return Cookie::get($this->_name);
+        return Cookie::get($this->name);
     }
 
     /**
      * @return  null
      */
-    protected function _regenerate(): ?string
+    protected function regenerateSession(): ?string
     {
         // Cookie sessions have no id
         return null;
@@ -38,15 +38,15 @@ class CookieSession extends Session
      * @return  bool
      * @throws Kohana_Exception
      */
-    protected function _write(): bool
+    protected function writeSession(): bool
     {
-        return Cookie::set($this->_name, $this->__toString(), $this->_lifetime);
+        return Cookie::set($this->name, $this->__toString(), $this->lifetime);
     }
 
     /**
      * @return  bool
      */
-    protected function _restart(): bool
+    protected function restartSession(): bool
     {
         return true;
     }
@@ -54,9 +54,9 @@ class CookieSession extends Session
     /**
      * @return  bool
      */
-    protected function _destroy(): bool
+    protected function destroySession(): bool
     {
-        return Cookie::delete($this->_name);
+        return Cookie::delete($this->name);
     }
 
 }

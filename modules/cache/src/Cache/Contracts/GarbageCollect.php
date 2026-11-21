@@ -23,5 +23,5 @@ interface GarbageCollect
      *
      * @return void
      */
-    public function garbage_collect();
+    public function garbageCollect();
 }

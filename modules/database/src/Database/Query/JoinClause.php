@@ -17,13 +17,13 @@ use Kohana\Database\Connection;
 class JoinClause extends Builder
 {
     // Type of JOIN
-    protected $_type;
+    protected $type;
     // JOIN ...
-    protected $_table;
+    protected $table;
     // ON ...
-    protected $_on = [];
+    protected $on = [];
     // USING ...
-    protected $_using = [];
+    protected $using = [];
 
     /**
      * Creates a new JOIN statement for a table. Optionally, the type of JOIN
@@ -38,11 +38,11 @@ class JoinClause extends Builder
         parent::__construct(null, null);
 
         // Set the table to JOIN on
-        $this->_table = $table;
+        $this->table = $table;
 
         if ($type !== null) {
             // Set the JOIN type
-            $this->_type = $type;
+            $this->type = $type;
         }
     }
 
@@ -57,11 +57,11 @@ class JoinClause extends Builder
      */
     public function on($c1, string $op, $c2): \Kohana\Database\Query\JoinClause
     {
-        if (!empty($this->_using)) {
+        if (!empty($this->using)) {
             throw new KohanaException('JOIN ... ON ... cannot be combined with JOIN ... USING ...');
         }
 
-        $this->_on[] = [$c1, $op, $c2];
+        $this->on[] = [$c1, $op, $c2];
 
         return $this;
     }
@@ -75,11 +75,11 @@ class JoinClause extends Builder
      */
     public function using(...$columns): \Kohana\Database\Query\JoinClause
     {
-        if (!empty($this->_on)) {
+        if (!empty($this->on)) {
             throw new KohanaException('JOIN ... ON ... cannot be combined with JOIN ... USING ...');
         }
 
-        $this->_using = array_merge($this->_using, $columns);
+        $this->using = array_merge($this->using, $columns);
 
         return $this;
     }
@@ -98,21 +98,21 @@ class JoinClause extends Builder
             $db = Connection::instance($db);
         }
 
-        if ($this->_type) {
-            $sql = strtoupper($this->_type) . ' JOIN';
+        if ($this->type) {
+            $sql = strtoupper($this->type) . ' JOIN';
         } else {
             $sql = 'JOIN';
         }
 
         // Quote the table name that is being joined
-        $sql .= ' ' . $db->quote_table($this->_table);
+        $sql .= ' ' . $db->quoteTable($this->table);
 
-        if (!empty($this->_using)) {
+        if (!empty($this->using)) {
             // Quote and concat the columns
-            $sql .= ' USING (' . implode(', ', array_map([$db, 'quote_column'], $this->_using)) . ')';
+            $sql .= ' USING (' . implode(', ', array_map([$db, 'quoteColumn'], $this->using)) . ')';
         } else {
             $conditions = [];
-            foreach ($this->_on as $condition) {
+            foreach ($this->on as $condition) {
                 // Split the condition
                 list($c1, $op, $c2) = $condition;
 
@@ -122,7 +122,7 @@ class JoinClause extends Builder
                 }
 
                 // Quote each of the columns used for the condition
-                $conditions[] = $db->quote_column($c1) . $op . ' ' . $db->quote_column($c2);
+                $conditions[] = $db->quoteColumn($c1) . $op . ' ' . $db->quoteColumn($c2);
             }
 
             // Concat the conditions "... AND ..."
@@ -138,9 +138,9 @@ class JoinClause extends Builder
      */
     public function reset(): \Kohana\Database\Query\JoinClause
     {
-        $this->_type = $this->_table = null;
+        $this->type = $this->table = null;
 
-        $this->_on = [];
+        $this->on = [];
 
         return $this;
     }

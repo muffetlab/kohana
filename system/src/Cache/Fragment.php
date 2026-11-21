@@ -38,7 +38,7 @@ class Fragment
     /**
      * @var  array  list of buffer => cache key
      */
-    protected static $_caches = [];
+    protected static $caches = [];
 
     /**
      * Generate the cache key name for a fragment.
@@ -51,7 +51,7 @@ class Fragment
      * @uses    I18n::lang
      * @since   3.0.4
      */
-    protected static function _cache_key(string $name, ?bool $i18n = null): string
+    protected static function cacheKey(string $name, ?bool $i18n = null): string
     {
         if ($i18n === null) {
             // Use the default setting
@@ -85,7 +85,7 @@ class Fragment
         $lifetime = $lifetime === null ? \Kohana\Cache\Fragment::$lifetime : $lifetime;
 
         // Get the cache key name
-        $cache_key = \Kohana\Cache\Fragment::_cache_key($name, $i18n);
+        $cache_key = \Kohana\Cache\Fragment::cacheKey($name, $i18n);
 
         if ($fragment = Application::cache($cache_key, null, $lifetime)) {
             // Display the cached fragment now
@@ -97,7 +97,7 @@ class Fragment
             ob_start();
 
             // Store the cache key by the buffer level
-            \Kohana\Cache\Fragment::$_caches[ob_get_level()] = $cache_key;
+            \Kohana\Cache\Fragment::$caches[ob_get_level()] = $cache_key;
 
             return false;
         }
@@ -115,12 +115,12 @@ class Fragment
         // Get the buffer level
         $level = ob_get_level();
 
-        if (isset(\Kohana\Cache\Fragment::$_caches[$level])) {
+        if (isset(\Kohana\Cache\Fragment::$caches[$level])) {
             // Get the cache key based on the level
-            $cache_key = \Kohana\Cache\Fragment::$_caches[$level];
+            $cache_key = \Kohana\Cache\Fragment::$caches[$level];
 
             // Delete the cache key, we don't need it anymore
-            unset(\Kohana\Cache\Fragment::$_caches[$level]);
+            unset(\Kohana\Cache\Fragment::$caches[$level]);
 
             // Get the output buffer and display it at the same time
             $fragment = ob_get_flush();
@@ -142,7 +142,7 @@ class Fragment
     public static function delete(string $name, ?bool $i18n = null)
     {
         // Invalid the cache
-        Application::cache(\Kohana\Cache\Fragment::_cache_key($name, $i18n), null, -3600);
+        Application::cache(\Kohana\Cache\Fragment::cacheKey($name, $i18n), null, -3600);
     }
 
 }

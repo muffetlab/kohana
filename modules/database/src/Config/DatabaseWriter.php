@@ -26,7 +26,7 @@ use Kohana\Database\DB;
  */
 class DatabaseWriter extends DatabaseReader implements Writer
 {
-    protected $_loaded_keys = [];
+    protected $loadedKeys = [];
 
     /**
      * Tries to load the specified configuration group
@@ -42,7 +42,7 @@ class DatabaseWriter extends DatabaseReader implements Writer
         $config = parent::load($group);
 
         if ($config !== false) {
-            $this->_loaded_keys[$group] = array_combine(array_keys($config), array_keys($config));
+            $this->loadedKeys[$group] = array_combine(array_keys($config), array_keys($config));
         }
 
         return $config;
@@ -65,17 +65,17 @@ class DatabaseWriter extends DatabaseReader implements Writer
         $config = serialize($config);
 
         // Check to see if we've loaded the config from the table already
-        if (isset($this->_loaded_keys[$group][$key])) {
-            $this->_update($group, $key, $config);
+        if (isset($this->loadedKeys[$group][$key])) {
+            $this->update($group, $key, $config);
         } else {
             // Attempt to run an insert query
             // This may fail if the config key already exists in the table,
             // and we don't know about it
             try {
-                $this->_insert($group, $key, $config);
+                $this->insert($group, $key, $config);
             } catch (DatabaseException $e) {
                 // Attempt to run an update instead
-                $this->_update($group, $key, $config);
+                $this->update($group, $key, $config);
             }
         }
 
@@ -91,11 +91,11 @@ class DatabaseWriter extends DatabaseReader implements Writer
      * @return Kohana_Config_Database_Writer
      * @throws Kohana_Exception
      */
-    protected function _insert(string $group, string $key, string $config): \Kohana\Config\DatabaseWriter
+    protected function insert(string $group, string $key, string $config): \Kohana\Config\DatabaseWriter
     {
-        DB::insert($this->_table_name, ['group_name', 'config_key', 'config_value'])
+        DB::insert($this->tableName, ['group_name', 'config_key', 'config_value'])
             ->values([$group, $key, $config])
-            ->execute($this->_db_instance);
+            ->execute($this->dbInstance);
 
         return $this;
     }
@@ -109,13 +109,13 @@ class DatabaseWriter extends DatabaseReader implements Writer
      * @return Kohana_Config_Database_Writer
      * @throws Kohana_Exception
      */
-    protected function _update(string $group, string $key, string $config): \Kohana\Config\DatabaseWriter
+    protected function update(string $group, string $key, string $config): \Kohana\Config\DatabaseWriter
     {
-        DB::update($this->_table_name)
+        DB::update($this->tableName)
             ->set(['config_value' => $config])
             ->where('group_name', '=', $group)
             ->where('config_key', '=', $key)
-            ->execute($this->_db_instance);
+            ->execute($this->dbInstance);
 
         return $this;
     }

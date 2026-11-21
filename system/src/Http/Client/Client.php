@@ -24,44 +24,44 @@ abstract class Client
     /**
      * @var HTTP_Cache Caching library for request caching
      */
-    protected $_cache;
+    protected $cache;
 
     /**
      * @var  bool  Should redirects be followed?
      */
-    protected $_follow = false;
+    protected $follow = false;
 
     /**
      * @var  array  Headers to preserve when following a redirect
      */
-    protected $_follow_headers = ['authorization'];
+    protected $followHeaders = ['authorization'];
 
     /**
      * @var  bool  Follow 302 redirect with original request method?
      */
-    protected $_strict_redirect = true;
+    protected $strictRedirect = true;
 
     /**
      * @var array  Callbacks to use when response contains given headers
      */
-    protected $_header_callbacks = [
-        'Location' => [Client::class, 'on_header_location']
+    protected $headerCallbacks = [
+        'Location' => [Client::class, 'onHeaderLocation']
     ];
 
     /**
      * @var int  Maximum number of requests that header callbacks can trigger before the request is aborted
      */
-    protected $_max_callback_depth = 5;
+    protected $maxCallbackDepth = 5;
 
     /**
      * @var int  Tracks the callback depth of the currently executing request
      */
-    protected $_callback_depth = 1;
+    protected $callbackDepth = 1;
 
     /**
      * @var array  Arbitrary parameters that are shared with header callbacks through their Request_Client object
      */
-    protected $_callback_params = [];
+    protected $callbackParams = [];
 
     /**
      * Creates a new `Request_Client` object,
@@ -72,6 +72,9 @@ abstract class Client
     public function __construct(array $params = [])
     {
         foreach ($params as $key => $value) {
+            // follow_headers => followHeaders()
+            $key = lcfirst(str_replace('_', '', ucwords($key, '_')));
+
             if (method_exists($this, $key)) {
                 $this->$key($value);
             }
@@ -102,29 +105,29 @@ abstract class Client
     public function execute(Request $request): Response
     {
         // Prevent too much recursion of header callback requests
-        if ($this->callback_depth() > $this->max_callback_depth())
+        if ($this->callbackDepth() > $this->maxCallbackDepth())
             throw new RecursionException("Could not execute request to :uri - too many recursions after :depth requests", [
             ':uri' => $request->uri(),
-            ':depth' => $this->callback_depth() - 1,
+            ':depth' => $this->callbackDepth() - 1,
             ]);
 
         // Execute the request and pass the currently used protocol
-        $orig_response = $response = Response::factory(['_protocol' => $request->protocol()]);
+        $orig_response = $response = Response::factory(['protocol' => $request->protocol()]);
 
         if (($cache = $this->cache()) instanceof Cache)
             return $cache->execute($this, $request, $response);
 
-        $response = $this->execute_request($request, $response);
+        $response = $this->executeRequest($request, $response);
 
         // Execute response callbacks
-        foreach ($this->header_callbacks() as $header => $callback) {
+        foreach ($this->headerCallbacks() as $header => $callback) {
             if ($response->headers($header)) {
                 $cb_result = call_user_func($callback, $request, $response, $this);
 
                 if ($cb_result instanceof Request) {
                     // If the callback returns a request, automatically assign client params
-                    $this->assign_client_properties($cb_result->client());
-                    $cb_result->client()->callback_depth($this->callback_depth() + 1);
+                    $this->assignClientProperties($cb_result->client());
+                    $cb_result->client()->callbackDepth($this->callbackDepth() + 1);
 
                     // Execute the request
                     $response = $cb_result->execute();
@@ -153,7 +156,7 @@ abstract class Client
      * @return  Response
      * @since   3.2.0
      */
-    abstract public function execute_request(Request $request, Response $response): Response;
+    abstract public function executeRequest(Request $request, Response $response): Response;
 
     /**
      * Getter and setter for the internal caching engine,
@@ -165,9 +168,9 @@ abstract class Client
     public function cache(?Cache $cache = null)
     {
         if ($cache === null)
-            return $this->_cache;
+            return $this->cache;
 
-        $this->_cache = $cache;
+        $this->cache = $cache;
         return $this;
     }
 
@@ -181,9 +184,9 @@ abstract class Client
     public function follow(?bool $follow = null)
     {
         if ($follow === null)
-            return $this->_follow;
+            return $this->follow;
 
-        $this->_follow = $follow;
+        $this->follow = $follow;
 
         return $this;
     }
@@ -195,12 +198,12 @@ abstract class Client
      * @param array|null $follow_headers Array of headers to be re-used when following a Location header
      * @return array|Kohana_Request_Client
      */
-    public function follow_headers(?array $follow_headers = null)
+    public function followHeaders(?array $follow_headers = null)
     {
         if ($follow_headers === null)
-            return $this->_follow_headers;
+            return $this->followHeaders;
 
-        $this->_follow_headers = array_map('strtolower', $follow_headers);
+        $this->followHeaders = array_map('strtolower', $follow_headers);
 
         return $this;
     }
@@ -218,12 +221,12 @@ abstract class Client
      * @param bool|null $strict_redirect Boolean indicating if 302 redirects should be followed with the original method
      * @return bool|Kohana_Request_Client
      */
-    public function strict_redirect(?bool $strict_redirect = null)
+    public function strictRedirect(?bool $strict_redirect = null)
     {
         if ($strict_redirect === null)
-            return $this->_strict_redirect;
+            return $this->strictRedirect;
 
-        $this->_strict_redirect = $strict_redirect;
+        $this->strictRedirect = $strict_redirect;
 
         return $this;
     }
@@ -249,12 +252,12 @@ abstract class Client
      * @param array|null $header_callbacks Array of callbacks to trigger on presence of given headers
      * @return array|Kohana_Request_Client|string[]
      */
-    public function header_callbacks(?array $header_callbacks = null)
+    public function headerCallbacks(?array $header_callbacks = null)
     {
         if ($header_callbacks === null)
-            return $this->_header_callbacks;
+            return $this->headerCallbacks;
 
-        $this->_header_callbacks = $header_callbacks;
+        $this->headerCallbacks = $header_callbacks;
 
         return $this;
     }
@@ -270,12 +273,12 @@ abstract class Client
      * @param int|null $depth Maximum number of callback requests to execute before aborting
      * @return int|Kohana_Request_Client
      */
-    public function max_callback_depth(?int $depth = null)
+    public function maxCallbackDepth(?int $depth = null)
     {
         if ($depth === null)
-            return $this->_max_callback_depth;
+            return $this->maxCallbackDepth;
 
-        $this->_max_callback_depth = $depth;
+        $this->maxCallbackDepth = $depth;
 
         return $this;
     }
@@ -287,12 +290,12 @@ abstract class Client
      * @param int|null $depth Current recursion depth
      * @return int|Kohana_Request_Client
      */
-    public function callback_depth(?int $depth = null)
+    public function callbackDepth(?int $depth = null)
     {
         if ($depth === null)
-            return $this->_callback_depth;
+            return $this->callbackDepth;
 
-        $this->_callback_depth = $depth;
+        $this->callbackDepth = $depth;
 
         return $this;
     }
@@ -319,24 +322,24 @@ abstract class Client
      * @param mixed $value
      * @return Request_Client|mixed
      */
-    public function callback_params($param = null, $value = null)
+    public function callbackParams($param = null, $value = null)
     {
         // Getter for full array
         if ($param === null)
-            return $this->_callback_params;
+            return $this->callbackParams;
 
         // Setter for full array
         if (is_array($param)) {
-            $this->_callback_params = $param;
+            $this->callbackParams = $param;
             return $this;
         }
         // Getter for single value
         elseif ($value === null) {
-            return Arr::get($this->_callback_params, $param);
+            return Arr::get($this->callbackParams, $param);
         }
         // Setter for single value
         else {
-            $this->_callback_params[$param] = $value;
+            $this->callbackParams[$param] = $value;
             return $this;
         }
     }
@@ -347,14 +350,14 @@ abstract class Client
      *
      * @param Request_Client $client
      */
-    public function assign_client_properties(\Kohana\Http\Client\Client $client)
+    public function assignClientProperties(\Kohana\Http\Client\Client $client)
     {
         $client->cache($this->cache());
         $client->follow($this->follow());
-        $client->follow_headers($this->follow_headers());
-        $client->header_callbacks($this->header_callbacks());
-        $client->max_callback_depth($this->max_callback_depth());
-        $client->callback_params($this->callback_params());
+        $client->followHeaders($this->followHeaders());
+        $client->headerCallbacks($this->headerCallbacks());
+        $client->maxCallbackDepth($this->maxCallbackDepth());
+        $client->callbackParams($this->callbackParams());
     }
 
     /**
@@ -371,7 +374,7 @@ abstract class Client
      * @throws Kohana_Exception
      * @throws Request_Exception
      */
-    public static function on_header_location(Request $request, Response $response, \Kohana\Http\Client\Client $client)
+    public static function onHeaderLocation(Request $request, Response $response, \Kohana\Http\Client\Client $client)
     {
         // Do we need to follow a Location header ?
         if ($client->follow() && in_array($response->status(), [201, 301, 302, 303, 307])) {
@@ -388,7 +391,7 @@ abstract class Client
                     break;
                 case 302:
                     // Cater for sites with broken HTTP redirect implementations
-                    if ($client->strict_redirect()) {
+                    if ($client->strictRedirect()) {
                         $follow_method = $request->method();
                     } else {
                         $follow_method = Request::GET;
@@ -398,7 +401,7 @@ abstract class Client
 
             // Prepare the additional request, copying any follow_headers that were present on the original request
             $orig_headers = $request->headers()->getArrayCopy();
-            $follow_header_keys = array_intersect(array_keys($orig_headers), $client->follow_headers());
+            $follow_header_keys = array_intersect(array_keys($orig_headers), $client->followHeaders());
             $follow_headers = Arr::extract($orig_headers, $follow_header_keys);
 
             $follow_request = Request::factory($response->headers('Location'))

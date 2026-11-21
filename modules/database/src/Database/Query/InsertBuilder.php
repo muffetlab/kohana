@@ -17,11 +17,11 @@ use Kohana\Foundation\KohanaException;
 class InsertBuilder extends Builder
 {
     // INSERT INTO ...
-    protected $_table;
+    protected $table;
     // (...)
-    protected $_columns = [];
+    protected $columns = [];
     // VALUES (...)
-    protected $_values = [];
+    protected $values = [];
 
     /**
      * Set the table and columns for an insert.
@@ -39,7 +39,7 @@ class InsertBuilder extends Builder
 
         if ($columns) {
             // Set the column names
-            $this->_columns = $columns;
+            $this->columns = $columns;
         }
 
         // Start the query with no SQL
@@ -58,7 +58,7 @@ class InsertBuilder extends Builder
         if (!is_string($table))
             throw new KohanaException('INSERT INTO syntax does not allow table aliasing');
 
-        $this->_table = $table;
+        $this->table = $table;
 
         return $this;
     }
@@ -71,7 +71,7 @@ class InsertBuilder extends Builder
      */
     public function columns(array $columns): \Kohana\Database\Query\InsertBuilder
     {
-        $this->_columns = $columns;
+        $this->columns = $columns;
 
         return $this;
     }
@@ -85,12 +85,12 @@ class InsertBuilder extends Builder
      */
     public function values(array ...$values): \Kohana\Database\Query\InsertBuilder
     {
-        if (!is_array($this->_values)) {
+        if (!is_array($this->values)) {
             throw new KohanaException('INSERT INTO ... SELECT statements cannot be combined with INSERT INTO ... VALUES');
         }
 
         foreach ($values as $value) {
-            $this->_values[] = $value;
+            $this->values[] = $value;
         }
 
         return $this;
@@ -109,7 +109,7 @@ class InsertBuilder extends Builder
             throw new KohanaException('Only SELECT queries can be combined with INSERT queries');
         }
 
-        $this->_values = $query;
+        $this->values = $query;
 
         return $this;
     }
@@ -129,16 +129,16 @@ class InsertBuilder extends Builder
         }
 
         // Start an insertion query
-        $query = 'INSERT INTO ' . $db->quote_table($this->_table);
+        $query = 'INSERT INTO ' . $db->quoteTable($this->table);
 
         // Add the column names
-        $query .= ' (' . implode(', ', array_map([$db, 'quote_column'], $this->_columns)) . ') ';
+        $query .= ' (' . implode(', ', array_map([$db, 'quoteColumn'], $this->columns)) . ') ';
 
-        if (is_array($this->_values)) {
+        if (is_array($this->values)) {
             $groups = [];
-            foreach ($this->_values as $group) {
+            foreach ($this->values as $group) {
                 foreach ($group as $offset => $value) {
-                    if ((is_string($value) && array_key_exists($value, $this->_parameters)) === false) {
+                    if ((is_string($value) && array_key_exists($value, $this->parameters)) === false) {
                         // Quote the value, it is not a parameter
                         $group[$offset] = $db->quote($value);
                     }
@@ -151,10 +151,10 @@ class InsertBuilder extends Builder
             $query .= 'VALUES ' . implode(', ', $groups);
         } else {
             // Add the sub-query
-            $query .= $this->_values;
+            $query .= $this->values;
         }
 
-        $this->_sql = $query;
+        $this->sql = $query;
 
         return parent::compile($db);
     }
@@ -165,13 +165,13 @@ class InsertBuilder extends Builder
      */
     public function reset(): \Kohana\Database\Query\InsertBuilder
     {
-        $this->_table = null;
+        $this->table = null;
 
-        $this->_columns = $this->_values = [];
+        $this->columns = $this->values = [];
 
-        $this->_parameters = [];
+        $this->parameters = [];
 
-        $this->_sql = null;
+        $this->sql = null;
 
         return $this;
     }

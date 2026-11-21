@@ -23,7 +23,7 @@ abstract class TemplateController extends Controller
     /**
      * @var bool auto render template
      * */
-    public $auto_render = true;
+    public $autoRender = true;
 
     /**
      * Loads the template [View] object.
@@ -32,7 +32,7 @@ abstract class TemplateController extends Controller
     {
         parent::before();
 
-        if ($this->auto_render === true) {
+        if ($this->autoRender === true) {
             // Load the template
             $this->template = View::factory($this->template);
         }
@@ -43,7 +43,7 @@ abstract class TemplateController extends Controller
      */
     public function after()
     {
-        if ($this->auto_render === true) {
+        if ($this->autoRender === true) {
             $this->response->body($this->template->render());
         }
 

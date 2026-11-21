@@ -33,7 +33,7 @@ abstract class RedirectHttpException extends ExpectedHttpException
 
         if (strpos($uri, '://') === false) {
             // Make the URI into a URL
-            $uri = Url::site($uri, true, !empty(Application::$index_file));
+            $uri = Url::site($uri, true, !empty(Application::$indexFile));
         }
 
         $this->headers('Location', $uri);

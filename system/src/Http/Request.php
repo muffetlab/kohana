@@ -31,17 +31,17 @@ class Request implements \Kohana\Http\Contracts\Request
     /**
      * @var  string  client user agent
      */
-    public static $user_agent = '';
+    public static $userAgent = '';
 
     /**
      * @var  string  client IP address
      */
-    public static $client_ip = '0.0.0.0';
+    public static $clientIp = '0.0.0.0';
 
     /**
      * @var  string  trusted proxy server IPs
      */
-    public static $trusted_proxies = ['127.0.0.1', 'localhost', 'localhost.localdomain'];
+    public static $trustedProxies = ['127.0.0.1', 'localhost', 'localhost.localdomain'];
 
     /**
      * @var Request|null Main request instance
@@ -86,7 +86,7 @@ class Request implements \Kohana\Http\Contracts\Request
                 ||
                 isset($_SERVER['HTTP_X_FORWARDED_PROTO'])
                 && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https'
-                && in_array($_SERVER['REMOTE_ADDR'], \Kohana\Http\Request::$trusted_proxies)
+                && in_array($_SERVER['REMOTE_ADDR'], \Kohana\Http\Request::$trustedProxies)
             ) {
                 // This request is secure
                 $secure = true;
@@ -99,7 +99,7 @@ class Request implements \Kohana\Http\Contracts\Request
 
             if (isset($_SERVER['HTTP_USER_AGENT'])) {
                 // Browser type
-                \Kohana\Http\Request::$user_agent = $_SERVER['HTTP_USER_AGENT'];
+                \Kohana\Http\Request::$userAgent = $_SERVER['HTTP_USER_AGENT'];
             }
 
             if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
@@ -109,28 +109,28 @@ class Request implements \Kohana\Http\Contracts\Request
 
             if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])
                 && isset($_SERVER['REMOTE_ADDR'])
-                && in_array($_SERVER['REMOTE_ADDR'], \Kohana\Http\Request::$trusted_proxies)) {
+                && in_array($_SERVER['REMOTE_ADDR'], \Kohana\Http\Request::$trustedProxies)) {
                 // Use the forwarded IP address, typically set when the
                 // client is using a proxy server.
                 // Format: "X-Forwarded-For: client1, proxy1, proxy2"
                 $client_ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
 
-                \Kohana\Http\Request::$client_ip = array_shift($client_ips);
+                \Kohana\Http\Request::$clientIp = array_shift($client_ips);
 
                 unset($client_ips);
             } elseif (isset($_SERVER['HTTP_CLIENT_IP'])
                 && isset($_SERVER['REMOTE_ADDR'])
-                && in_array($_SERVER['REMOTE_ADDR'], \Kohana\Http\Request::$trusted_proxies)) {
+                && in_array($_SERVER['REMOTE_ADDR'], \Kohana\Http\Request::$trustedProxies)) {
                 // Use the forwarded IP address, typically set when the
                 // client is using a proxy server.
                 $client_ips = explode(',', $_SERVER['HTTP_CLIENT_IP']);
 
-                \Kohana\Http\Request::$client_ip = array_shift($client_ips);
+                \Kohana\Http\Request::$clientIp = array_shift($client_ips);
 
                 unset($client_ips);
             } elseif (isset($_SERVER['REMOTE_ADDR'])) {
                 // The remote IP address
-                \Kohana\Http\Request::$client_ip = $_SERVER['REMOTE_ADDR'];
+                \Kohana\Http\Request::$clientIp = $_SERVER['REMOTE_ADDR'];
             }
 
             if ($method !== \Kohana\Http\Contracts\Request::GET) {
@@ -140,7 +140,7 @@ class Request implements \Kohana\Http\Contracts\Request
 
             if ($uri === null) {
                 // Attempt to guess the proper URI
-                $uri = \Kohana\Http\Request::detect_uri();
+                $uri = \Kohana\Http\Request::detectUri();
             }
 
             $cookies = [];
@@ -174,7 +174,7 @@ class Request implements \Kohana\Http\Contracts\Request
 
             if (isset($requested_with)) {
                 // Apply the requested with variable
-                $request->requested_with($requested_with);
+                $request->requestedWith($requested_with);
             }
 
             if (isset($body)) {
@@ -202,7 +202,7 @@ class Request implements \Kohana\Http\Contracts\Request
      * @throws  Kohana_Exception
      * @since   3.0.8
      */
-    public static function detect_uri(): string
+    public static function detectUri(): string
     {
         if (!empty($_SERVER['PATH_INFO'])) {
             // PATH_INFO does not contain the docroot or index
@@ -240,16 +240,16 @@ class Request implements \Kohana\Http\Contracts\Request
             }
 
             // Get the path from the base URL, including the index file
-            $base_url = parse_url(Application::$base_url, PHP_URL_PATH);
+            $base_url = parse_url(Application::$baseUrl, PHP_URL_PATH);
 
             if (strpos($uri, $base_url) === 0) {
                 // Remove the base URL from the URI
                 $uri = (string) substr($uri, strlen($base_url));
             }
 
-            if (Application::$index_file && strpos($uri, Application::$index_file) === 0) {
+            if (Application::$indexFile && strpos($uri, Application::$indexFile) === 0) {
                 // Remove the index file from the URI
-                $uri = (string) substr($uri, strlen(Application::$index_file));
+                $uri = (string) substr($uri, strlen(Application::$indexFile));
             }
         }
 
@@ -299,9 +299,9 @@ class Request implements \Kohana\Http\Contracts\Request
      * @uses    Text::user_agent
      * @uses    Request::$user_agent
      */
-    public static function user_agent($value)
+    public static function userAgent($value)
     {
-        return Str::user_agent(\Kohana\Http\Request::$user_agent, $value);
+        return Str::userAgent(\Kohana\Http\Request::$userAgent, $value);
     }
 
     /**
@@ -314,7 +314,7 @@ class Request implements \Kohana\Http\Contracts\Request
      * @uses    Arr::get
      * @uses    Num::bytes
      */
-    public static function post_max_size_exceeded(): bool
+    public static function postMaxSizeExceeded(): bool
     {
         // Make sure the request method is POST
         if (\Kohana\Http\Request::$initial->method() !== \Kohana\Http\Contracts\Request::POST)
@@ -341,7 +341,7 @@ class Request implements \Kohana\Http\Contracts\Request
 
         foreach ($routes as $route) {
             // Use external routes for reverse routing only
-            if ($route->is_external()) {
+            if ($route->isExternal()) {
                 continue;
             }
 
@@ -367,7 +367,7 @@ class Request implements \Kohana\Http\Contracts\Request
      * @param array|null $accepts Default values
      * @return  array
      */
-    protected static function _parse_accept(string &$header, ?array $accepts = null): array
+    protected static function parseAccept(string &$header, ?array $accepts = null): array
     {
         if (!empty($header)) {
             // Get all the types
@@ -415,97 +415,97 @@ class Request implements \Kohana\Http\Contracts\Request
      * @var  string  the x-requested-with header which most likely
      *               will be xmlhttprequest
      */
-    protected $_requested_with;
+    protected $requestedWith;
 
     /**
      * @var  string  method: GET, POST, PUT, DELETE, HEAD, etc.
      */
-    protected $_method = 'GET';
+    protected $method = 'GET';
 
     /**
      * @var  string  protocol: HTTP/1.1, FTP, CLI, etc.
      */
-    protected $_protocol;
+    protected $protocol;
 
     /**
      * @var bool
      */
-    protected $_secure = false;
+    protected $secure = false;
 
     /**
      * @var  string  referring URL
      */
-    protected $_referrer;
+    protected $referrer;
 
     /**
      * @var  Route       route matched for this request
      */
-    protected $_route;
+    protected $route;
 
     /**
      * @var  Route       array of routes to manually look at instead of the global namespace
      */
-    protected $_routes;
+    protected $routes;
 
     /**
      * @var  Kohana_HTTP_Header  headers to sent as part of the request
      */
-    protected $_header;
+    protected $header;
 
     /**
      * @var  string the body
      */
-    protected $_body;
+    protected $body;
 
     /**
      * @var  string  controller directory
      */
-    protected $_directory = '';
+    protected $directory = '';
 
     /**
      * @var  string  controller to be executed
      */
-    protected $_controller;
+    protected $controller;
 
     /**
      * @var  string  action to be executed in the controller
      */
-    protected $_action;
+    protected $action;
 
     /**
      * @var  string  the URI of the request
      */
-    protected $_uri;
+    protected $uri;
 
     /**
      * @var bool external request
      */
-    protected $_external = false;
+    protected $external = false;
 
     /**
      * @var  array   parameters from the route
      */
-    protected $_params = [];
+    protected $params = [];
 
     /**
      * @var array    query parameters
      */
-    protected $_get = [];
+    protected $get = [];
 
     /**
      * @var array    post parameters
      */
-    protected $_post = [];
+    protected $post = [];
 
     /**
      * @var array    cookies to send with the request
      */
-    protected $_cookies = [];
+    protected $cookies = [];
 
     /**
      * @var Kohana_Request_Client
      */
-    protected $_client;
+    protected $client;
 
     /**
      * Creates a new request object for the given URI. New requests should be
@@ -529,17 +529,17 @@ class Request implements \Kohana\Http\Contracts\Request
         $uri = $uri ?? '';
 
         // Initialise the header
-        $this->_header = new HeaderBag([]);
+        $this->header = new HeaderBag([]);
 
         // Assign injected routes
-        $this->_routes = $injected_routes;
+        $this->routes = $injected_routes;
 
         // Cleanse query parameters from URI (faster that parse_url())
         $split_uri = explode('?', $uri);
         $uri = array_shift($split_uri);
 
         if ($split_uri) {
-            parse_str($split_uri[0], $this->_get);
+            parse_str($split_uri[0], $this->get);
         }
 
         // Detect protocol (if present)
@@ -547,16 +547,16 @@ class Request implements \Kohana\Http\Contracts\Request
         // being able to proxy external pages.
         if (!$allow_external || strpos($uri, '://') === false) {
             // Remove leading and trailing slashes from the URI
-            $this->_uri = trim($uri, '/');
+            $this->uri = trim($uri, '/');
 
             // Apply the client
-            $this->_client = new InternalClient($client_params);
+            $this->client = new InternalClient($client_params);
         } else {
             // Create a route
-            $this->_route = new Route($uri);
+            $this->route = new Route($uri);
 
             // Store the URI
-            $this->_uri = $uri;
+            $this->uri = $uri;
 
             // Set the security setting if required
             if (strpos($uri, 'https://') === 0) {
@@ -564,10 +564,10 @@ class Request implements \Kohana\Http\Contracts\Request
             }
 
             // Set external state
-            $this->_external = true;
+            $this->external = true;
 
             // Set up the client
-            $this->_client = ExternalClient::factory($client_params);
+            $this->client = ExternalClient::factory($client_params);
         }
     }
 
@@ -593,11 +593,11 @@ class Request implements \Kohana\Http\Contracts\Request
     {
         if ($uri === null) {
             // Act as a getter
-            return $this->_uri === '' ? '/' : $this->_uri;
+            return $this->uri === '' ? '/' : $this->uri;
         }
 
         // Act as a setter
-        $this->_uri = $uri;
+        $this->uri = $uri;
 
         return $this;
     }
@@ -615,7 +615,7 @@ class Request implements \Kohana\Http\Contracts\Request
      */
     public function url($protocol = null): string
     {
-        if ($this->is_external()) {
+        if ($this->isExternal()) {
             // If it's an external request return the URI
             return $this->uri();
         }
@@ -637,10 +637,10 @@ class Request implements \Kohana\Http\Contracts\Request
     {
         if ($key === null) {
             // Return the full array
-            return $this->_params;
+            return $this->params;
         }
 
-        return $this->_params[$key] ?? $default;
+        return $this->params[$key] ?? $default;
     }
 
     /**
@@ -653,11 +653,11 @@ class Request implements \Kohana\Http\Contracts\Request
     {
         if ($referrer === null) {
             // Act as a getter
-            return $this->_referrer;
+            return $this->referrer;
         }
 
         // Act as a setter
-        $this->_referrer = $referrer;
+        $this->referrer = $referrer;
 
         return $this;
     }
@@ -672,11 +672,11 @@ class Request implements \Kohana\Http\Contracts\Request
     {
         if ($route === null) {
             // Act as a getter
-            return $this->_route;
+            return $this->route;
         }
 
         // Act as a setter
-        $this->_route = $route;
+        $this->route = $route;
 
         return $this;
     }
@@ -691,11 +691,11 @@ class Request implements \Kohana\Http\Contracts\Request
     {
         if ($directory === null) {
             // Act as a getter
-            return $this->_directory;
+            return $this->directory;
         }
 
         // Act as a setter
-        $this->_directory = $directory;
+        $this->directory = $directory;
 
         return $this;
     }
@@ -710,11 +710,11 @@ class Request implements \Kohana\Http\Contracts\Request
     {
         if ($controller === null) {
             // Act as a getter
-            return $this->_controller;
+            return $this->controller;
         }
 
         // Act as a setter
-        $this->_controller = $controller;
+        $this->controller = $controller;
 
         return $this;
     }
@@ -729,11 +729,11 @@ class Request implements \Kohana\Http\Contracts\Request
     {
         if ($action === null) {
             // Act as a getter
-            return $this->_action;
+            return $this->action;
         }
 
         // Act as a setter
-        $this->_action = $action;
+        $this->action = $action;
 
         return $this;
     }
@@ -746,9 +746,9 @@ class Request implements \Kohana\Http\Contracts\Request
     public function client(?Client $client = null)
     {
         if ($client === null)
-            return $this->_client;
+            return $this->client;
         else {
-            $this->_client = $client;
+            $this->client = $client;
             return $this;
         }
     }
@@ -760,15 +760,15 @@ class Request implements \Kohana\Http\Contracts\Request
      * @param string|null $requested_with Requested with value
      * @return  Kohana_Request|string
      */
-    public function requested_with(?string $requested_with = null)
+    public function requestedWith(?string $requested_with = null)
     {
         if ($requested_with === null) {
             // Act as a getter
-            return $this->_requested_with;
+            return $this->requestedWith;
         }
 
         // Act as a setter
-        $this->_requested_with = strtolower($requested_with);
+        $this->requestedWith = strtolower($requested_with);
 
         return $this;
     }
@@ -796,47 +796,47 @@ class Request implements \Kohana\Http\Contracts\Request
      */
     public function execute(): Response
     {
-        if (!$this->_external) {
-            $processed = \Kohana\Http\Request::process($this, $this->_routes);
+        if (!$this->external) {
+            $processed = \Kohana\Http\Request::process($this, $this->routes);
 
             if ($processed) {
                 // Store the matching route
-                $this->_route = $processed['route'];
+                $this->route = $processed['route'];
                 $params = $processed['params'];
 
                 // Is this route external?
-                $this->_external = $this->_route->is_external();
+                $this->external = $this->route->isExternal();
 
                 if (isset($params['directory'])) {
                     // Controllers are in a subdirectory
-                    $this->_directory = $params['directory'];
+                    $this->directory = $params['directory'];
                 }
 
                 // Store the controller
-                $this->_controller = $params['controller'];
+                $this->controller = $params['controller'];
 
                 // Store the action
-                $this->_action = $params['action'] ?? Route::$default_action;
+                $this->action = $params['action'] ?? Route::$defaultAction;
 
                 // These are accessible as public vars and can be overloaded
                 unset($params['controller'], $params['action'], $params['directory']);
 
                 // Params cannot be changed once matched
-                $this->_params = $params;
+                $this->params = $params;
             }
         }
 
-        if (!$this->_route instanceof Route) {
-            return HttpException::factory(404, 'Unable to find a route to match the URI: :uri', [':uri' => $this->_uri])
+        if (!$this->route instanceof Route) {
+            return HttpException::factory(404, 'Unable to find a route to match the URI: :uri', [':uri' => $this->uri])
                     ->request($this)
-                    ->get_response();
+                    ->getResponse();
         }
 
-        if (!$this->_client instanceof Client) {
-            throw new RequestException('Unable to execute :uri without a Kohana_Request_Client', [':uri' => $this->_uri]);
+        if (!$this->client instanceof Client) {
+            throw new RequestException('Unable to execute :uri without a Kohana_Request_Client', [':uri' => $this->uri]);
         }
 
-        return $this->_client->execute($this);
+        return $this->client->execute($this);
     }
 
     /**
@@ -848,7 +848,7 @@ class Request implements \Kohana\Http\Contracts\Request
      *
      * @return bool
      */
-    public function is_initial(): bool
+    public function isInitial(): bool
     {
         return $this === \Kohana\Http\Request::$initial;
     }
@@ -861,9 +861,9 @@ class Request implements \Kohana\Http\Contracts\Request
      *
      * @return bool
      */
-    public function is_external(): bool
+    public function isExternal(): bool
     {
-        return $this->_external;
+        return $this->external;
     }
 
     /**
@@ -871,9 +871,9 @@ class Request implements \Kohana\Http\Contracts\Request
      *
      * @return bool
      */
-    public function is_ajax(): bool
+    public function isAjax(): bool
     {
-        return $this->requested_with() === 'xmlhttprequest';
+        return $this->requestedWith() === 'xmlhttprequest';
     }
 
     /**
@@ -887,11 +887,11 @@ class Request implements \Kohana\Http\Contracts\Request
     {
         if ($method === null) {
             // Act as a getter
-            return $this->_method;
+            return $this->method;
         }
 
         // Act as a setter
-        $this->_method = strtoupper($method);
+        $this->method = strtoupper($method);
 
         return $this;
     }
@@ -906,14 +906,14 @@ class Request implements \Kohana\Http\Contracts\Request
     public function protocol(?string $protocol = null)
     {
         if ($protocol === null) {
-            if ($this->_protocol)
-                return $this->_protocol;
+            if ($this->protocol)
+                return $this->protocol;
             else
-                return $this->_protocol = Http::$protocol;
+                return $this->protocol = Http::$protocol;
         }
 
         // Act as a setter
-        $this->_protocol = strtoupper($protocol);
+        $this->protocol = strtoupper($protocol);
         return $this;
     }
 
@@ -927,10 +927,10 @@ class Request implements \Kohana\Http\Contracts\Request
     public function secure(?bool $secure = null)
     {
         if ($secure === null)
-            return $this->_secure;
+            return $this->secure;
 
         // Act as a setter
-        $this->_secure = $secure;
+        $this->secure = $secure;
         return $this;
     }
 
@@ -948,33 +948,33 @@ class Request implements \Kohana\Http\Contracts\Request
     {
         if ($key instanceof HeaderBag) {
             // Act a setter, replace all headers
-            $this->_header = $key;
+            $this->header = $key;
 
             return $this;
         }
 
         if (is_array($key)) {
             // Act as a setter, replace all headers
-            $this->_header->exchangeArray($key);
+            $this->header->exchangeArray($key);
 
             return $this;
         }
 
-        if ($this->_header->count() === 0 && $this->is_initial()) {
+        if ($this->header->count() === 0 && $this->isInitial()) {
             // Lazy load the request headers
-            $this->_header = Http::request_headers();
+            $this->header = Http::requestHeaders();
         }
 
         if ($key === null) {
             // Act as a getter, return all headers
-            return $this->_header;
+            return $this->header;
         } elseif ($value === null) {
             // Act as a getter, single header
-            return $this->_header->offsetExists($key) ? $this->_header->offsetGet($key) : null;
+            return $this->header->offsetExists($key) ? $this->header->offsetGet($key) : null;
         }
 
         // Act as a setter for a single header
-        $this->_header[$key] = $value;
+        $this->header[$key] = $value;
 
         return $this;
     }
@@ -990,18 +990,18 @@ class Request implements \Kohana\Http\Contracts\Request
     {
         if (is_array($key)) {
             // Act as a setter, replace all cookies
-            $this->_cookies = $key;
+            $this->cookies = $key;
             return $this;
         } elseif ($key === null) {
             // Act as a getter, all cookies
-            return $this->_cookies;
+            return $this->cookies;
         } elseif ($value === null) {
             // Act as a getting, single cookie
-            return $this->_cookies[$key] ?? null;
+            return $this->cookies[$key] ?? null;
         }
 
         // Act as a setter for a single cookie
-        $this->_cookies[$key] = $value;
+        $this->cookies[$key] = $value;
 
         return $this;
     }
@@ -1017,11 +1017,11 @@ class Request implements \Kohana\Http\Contracts\Request
     {
         if ($content === null) {
             // Act as a getter
-            return $this->_body;
+            return $this->body;
         }
 
         // Act as a setter
-        $this->_body = $content;
+        $this->body = $content;
 
         return $this;
     }
@@ -1032,7 +1032,7 @@ class Request implements \Kohana\Http\Contracts\Request
      *
      * @return int
      */
-    public function content_length(): int
+    public function contentLength(): int
     {
         return strlen($this->body());
     }
@@ -1060,7 +1060,7 @@ class Request implements \Kohana\Http\Contracts\Request
         }
 
         // Set the content length
-        $this->headers('content-length', (string) $this->content_length());
+        $this->headers('content-length', (string) $this->contentLength());
 
         // If Kohana expose, set the user-agent
         if (Application::$expose) {
@@ -1068,20 +1068,20 @@ class Request implements \Kohana\Http\Contracts\Request
         }
 
         // Prepare cookies
-        if ($this->_cookies) {
+        if ($this->cookies) {
             $cookie_string = [];
 
             // Parse each
-            foreach ($this->_cookies as $key => $value) {
+            foreach ($this->cookies as $key => $value) {
                 $cookie_string[] = $key . '=' . $value;
             }
 
             // Create the cookie string
-            $this->_header['cookie'] = implode('; ', $cookie_string);
+            $this->header['cookie'] = implode('; ', $cookie_string);
         }
 
         $output = $this->method() . ' ' . $this->uri() . ' ' . $this->protocol() . "\r\n";
-        $output .= $this->_header;
+        $output .= $this->header;
         $output .= $body;
 
         return $output;
@@ -1099,21 +1099,21 @@ class Request implements \Kohana\Http\Contracts\Request
     {
         if (is_array($key)) {
             // Act as a setter, replace all query strings
-            $this->_get = $key;
+            $this->get = $key;
 
             return $this;
         }
 
         if ($key === null) {
             // Act as a getter, all query strings
-            return $this->_get;
+            return $this->get;
         } elseif ($value === null) {
             // Act as a getter, single query string
-            return Arr::path($this->_get, $key);
+            return Arr::path($this->get, $key);
         }
 
         // Act as a setter, single query string
-        $this->_get[$key] = $value;
+        $this->get[$key] = $value;
 
         return $this;
     }
@@ -1130,21 +1130,21 @@ class Request implements \Kohana\Http\Contracts\Request
     {
         if (is_array($key)) {
             // Act as a setter, replace all fields
-            $this->_post = $key;
+            $this->post = $key;
 
             return $this;
         }
 
         if ($key === null) {
             // Act as a getter, all fields
-            return $this->_post;
+            return $this->post;
         } elseif ($value === null) {
             // Act as a getter, single field
-            return Arr::path($this->_post, $key);
+            return Arr::path($this->post, $key);
         }
 
         // Act as a setter, single field
-        $this->_post[$key] = $value;
+        $this->post[$key] = $value;
 
         return $this;
     }

@@ -16,16 +16,16 @@ use Kohana\Foundation\KohanaException;
 abstract class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess
 {
     // Executed SQL for this result
-    protected $_query;
+    protected $query;
     // Raw result resource
-    protected $_result;
+    protected $result;
     // Total number of rows and current row
-    protected $_total_rows = 0;
-    protected $_current_row = 0;
+    protected $totalRows = 0;
+    protected $currentRow = 0;
     // Return rows as an object or associative array
-    protected $_as_object;
+    protected $asObject;
     // Parameters for __construct when using object results
-    protected $_object_params = null;
+    protected $objectParams = null;
 
     /**
      * Sets the total number of rows and stores the result locally.
@@ -38,10 +38,10 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
     public function __construct($result, string $sql, $as_object = false, ?array $params = null)
     {
         // Store the result locally
-        $this->_result = $result;
+        $this->result = $result;
 
         // Store the SQL locally
-        $this->_query = $sql;
+        $this->query = $sql;
 
         if (is_object($as_object)) {
             // Get the object class name
@@ -49,11 +49,11 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
         }
 
         // Results as objects or associative arrays
-        $this->_as_object = $as_object;
+        $this->asObject = $as_object;
 
         if ($params) {
             // Object constructor params
-            $this->_object_params = $params;
+            $this->objectParams = $params;
         }
     }
 
@@ -73,7 +73,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      */
     public function cached(): \Kohana\Database\Result
     {
-        return new CachedResult($this->as_array(), $this->_query, $this->_as_object);
+        return new CachedResult($this->asArray(), $this->query, $this->asObject);
     }
 
     /**
@@ -92,7 +92,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      * @param string|null $value Column for values
      * @return  array
      */
-    public function as_array(?string $key = null, ?string $value = null): array
+    public function asArray(?string $key = null, ?string $value = null): array
     {
         $results = [];
 
@@ -105,7 +105,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
         } elseif ($key === null) {
             // Indexed columns
 
-            if ($this->_as_object) {
+            if ($this->asObject) {
                 foreach ($this as $row) {
                     $results[] = $row->$value;
                 }
@@ -117,7 +117,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
         } elseif ($value === null) {
             // Associative rows
 
-            if ($this->_as_object) {
+            if ($this->asObject) {
                 foreach ($this as $row) {
                     $results[$row->$key] = $row;
                 }
@@ -129,7 +129,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
         } else {
             // Associative columns
 
-            if ($this->_as_object) {
+            if ($this->asObject) {
                 foreach ($this as $row) {
                     $results[$row->$key] = $row->$value;
                 }
@@ -159,7 +159,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
     {
         $row = $this->current();
 
-        if ($this->_as_object) {
+        if ($this->asObject) {
             if (isset($row->$name))
                 return $row->$name;
         }
@@ -180,7 +180,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      */
     public function count(): int
     {
-        return $this->_total_rows;
+        return $this->totalRows;
     }
 
     /**
@@ -196,7 +196,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      */
     public function offsetExists($offset): bool
     {
-        return $offset >= 0 && $offset < $this->_total_rows;
+        return $offset >= 0 && $offset < $this->totalRows;
     }
 
     /**
@@ -253,7 +253,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      */
     public function key(): int
     {
-        return $this->_current_row;
+        return $this->currentRow;
     }
 
     /**
@@ -266,7 +266,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
     #[\ReturnTypeWillChange]
     public function next(): \Kohana\Database\Result
     {
-        ++$this->_current_row;
+        ++$this->currentRow;
         return $this;
     }
 
@@ -279,7 +279,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      */
     public function prev(): \Kohana\Database\Result
     {
-        --$this->_current_row;
+        --$this->currentRow;
         return $this;
     }
 
@@ -293,7 +293,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
     #[\ReturnTypeWillChange]
     public function rewind(): \Kohana\Database\Result
     {
-        $this->_current_row = 0;
+        $this->currentRow = 0;
         return $this;
     }
 
@@ -306,7 +306,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      */
     public function valid(): bool
     {
-        return $this->offsetExists($this->_current_row);
+        return $this->offsetExists($this->currentRow);
     }
 
 }

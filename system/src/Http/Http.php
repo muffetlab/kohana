@@ -59,11 +59,11 @@ abstract class Http
      * @return Response
      * @throws Request_Exception
      */
-    public static function check_cache(Request $request, Response $response, ?string $etag = null): Response
+    public static function checkCache(Request $request, Response $response, ?string $etag = null): Response
     {
         // Generate an etag if necessary
         if ($etag === null) {
-            $etag = $response->generate_etag();
+            $etag = $response->generateEtag();
         }
 
         // Set the ETag header
@@ -92,7 +92,7 @@ abstract class Http
      * @param string $header_string Header string to parse
      * @return  HTTP_Header
      */
-    public static function parse_header_string(string $header_string): HeaderBag
+    public static function parseHeaderString(string $header_string): HeaderBag
     {
         // If the PECL HTTP extension is loaded
         if (extension_loaded('http')) {
@@ -147,7 +147,7 @@ abstract class Http
      *
      * @return  HTTP_Header
      */
-    public static function request_headers(): HeaderBag
+    public static function requestHeaders(): HeaderBag
     {
         // If running on apache server
         if (function_exists('apache_request_headers')) {
@@ -196,7 +196,7 @@ abstract class Http
      * @param   array   $params  Params
      * @return  string
      */
-    public static function www_form_urlencode(array $params = []): string
+    public static function wwwFormUrlencode(array $params = []): string
     {
         if (!$params)
             return '';

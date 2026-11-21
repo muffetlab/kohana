@@ -29,13 +29,13 @@ class Model extends \Kohana\Foundation\Model
      * Stores column information for ORM models
      * @var array
      */
-    protected static $_column_cache = [];
+    protected static $columnCache = [];
 
     /**
      * Initialization storage for ORM models
      * @var array
      */
-    protected static $_init_cache = [];
+    protected static $initCache = [];
 
     /**
      * Creates and returns a new model.
@@ -60,193 +60,193 @@ class Model extends \Kohana\Foundation\Model
      * "Has one" relationships
      * @var array
      */
-    protected $_has_one = [];
+    protected $hasOne = [];
 
     /**
      * "Belongs to" relationships
      * @var array
      */
-    protected $_belongs_to = [];
+    protected $belongsTo = [];
 
     /**
      * "Has many" relationships
      * @var array
      */
-    protected $_has_many = [];
+    protected $hasMany = [];
 
     /**
      * Relationships that should always be joined
      * @var array
      */
-    protected $_load_with = [];
+    protected $loadWith = [];
 
     /**
      * Validation object created before saving/updating
      * @var Validation
      */
-    protected $_validation = null;
+    protected $validation = null;
 
     /**
      * Current object
      * @var array
      */
-    protected $_object = [];
+    protected $object = [];
 
     /**
      * @var array
      */
-    protected $_changes = [];
+    protected $changes = [];
 
     /**
      * @var array
      */
-    protected $_original_values = [];
+    protected $originalValues = [];
 
     /**
      * @var array
      */
-    protected $_related = [];
+    protected $related = [];
 
     /**
      * @var bool
      */
-    protected $_valid = false;
+    protected $valid = false;
 
     /**
      * @var bool
      */
-    protected $_loaded = false;
+    protected $loaded = false;
 
     /**
      * @var bool
      */
-    protected $_saved = false;
+    protected $saved = false;
 
     /**
      * @var array
      */
-    protected $_sorting;
+    protected $sorting;
 
     /**
      * Foreign key suffix
      * @var string
      */
-    protected $_foreign_key_suffix = '_id';
+    protected $foreignKeySuffix = '_id';
 
     /**
      * Model name
      * @var string
      */
-    protected $_object_name;
+    protected $objectName;
 
     /**
      * Plural model name
      * @var string
      */
-    protected $_object_plural;
+    protected $objectPlural;
 
     /**
      * Table name
      * @var string
      */
-    protected $_table_name;
+    protected $tableName;
 
     /**
      * Auto-update columns for updates
      * @var string
      */
-    protected $_updated_column = null;
+    protected $updatedColumn = null;
 
     /**
      * Auto-update columns for creation
      * @var string
      */
-    protected $_created_column = null;
+    protected $createdColumn = null;
 
     /**
      * Auto-serialize and unserialize columns on get/set
      * @var array
      */
-    protected $_serialize_columns = [];
+    protected $serializeColumns = [];
 
     /**
      * Table primary key
      * @var string
      */
-    protected $_primary_key = 'id';
+    protected $primaryKey = 'id';
 
     /**
      * Primary key value
      * @var mixed
      */
-    protected $_primary_key_value;
+    protected $primaryKeyValue;
 
     /**
      * Model configuration, table names plural?
      * @var bool
      */
-    protected $_table_names_plural = true;
+    protected $tableNamesPlural = true;
 
     /**
      * Model configuration, reload on wakeup?
      * @var bool
      */
-    protected $_reload_on_wakeup = true;
+    protected $reloadOnWakeup = true;
 
     /**
      * Database Object
      * @var Database
      */
-    protected $_db = null;
+    protected $db = null;
 
     /**
      * Database config group
      * @var String
      */
-    protected $_db_group = null;
+    protected $dbGroup = null;
 
     /**
      * Database methods applied
      * @var array
      */
-    protected $_db_applied = [];
+    protected $dbApplied = [];
 
     /**
      * Database methods pending
      * @var array
      */
-    protected $_db_pending = [];
+    protected $dbPending = [];
 
     /**
      * Reset builder
      * @var bool
      */
-    protected $_db_reset = true;
+    protected $dbReset = true;
 
     /**
      * Database query builder
      * @var Database_Query_Builder_Select
      */
-    protected $_db_builder;
+    protected $dbBuilder;
 
     /**
      * With calls already applied
      * @var array
      */
-    protected $_with_applied = [];
+    protected $withApplied = [];
 
     /**
      * Data to be loaded into the model from a database call cast
      * @var array
      */
-    protected $_cast_data = [];
+    protected $castData = [];
 
     /**
      * The message filename used for validation errors.
      * Defaults to ORM::$_object_name
      * @var string
      */
-    protected $_errors_filename = null;
+    protected $errorsFilename = null;
 
     /**
      * Constructs a new model and loads a record if given
@@ -256,7 +256,7 @@ class Model extends \Kohana\Foundation\Model
      */
     public function __construct($id = null)
     {
-        $this->_initialize();
+        $this->initialize();
 
         if ($id !== null) {
             if (is_array($id)) {
@@ -268,13 +268,13 @@ class Model extends \Kohana\Foundation\Model
                 $this->find();
             } else {
                 // Passing the primary key
-                $this->where($this->_object_name . '.' . $this->_primary_key, '=', $id)->find();
+                $this->where($this->objectName . '.' . $this->primaryKey, '=', $id)->find();
             }
-        } elseif (!empty($this->_cast_data)) {
+        } elseif (!empty($this->castData)) {
             // Load preloaded data from a database call cast
-            $this->_load_values($this->_cast_data);
+            $this->loadValues($this->castData);
 
-            $this->_cast_data = [];
+            $this->castData = [];
         }
     }
 
@@ -285,85 +285,85 @@ class Model extends \Kohana\Foundation\Model
      * @return void
      * @throws Kohana_Exception
      */
-    protected function _initialize()
+    protected function initialize()
     {
         // Set the object name if none predefined
-        if (empty($this->_object_name)) {
+        if (empty($this->objectName)) {
             // App\Models\UserToken => user_token, App\Models\Blog\Post => blog_post
             $name = preg_replace('/^.*?\\\\Models\\\\/', '', static::class);
-            $this->_object_name = strtolower(preg_replace('/(?<=[a-z0-9])(?=[A-Z])/', '_', str_replace('\\', '_', $name)));
+            $this->objectName = strtolower(preg_replace('/(?<=[a-z0-9])(?=[A-Z])/', '_', str_replace('\\', '_', $name)));
         }
 
         // Check if this model has already been initialized
-        if (!$init = Arr::get(\Kohana\Orm\Model::$_init_cache, $this->_object_name, false)) {
+        if (!$init = Arr::get(\Kohana\Orm\Model::$initCache, $this->objectName, false)) {
             $init = [
-                '_belongs_to' => [],
-                '_has_one' => [],
-                '_has_many' => [],
+                'belongsTo' => [],
+                'hasOne' => [],
+                'hasMany' => [],
             ];
 
             // Set the object plural name if none predefined
-            if (!isset($this->_object_plural)) {
-                $init['_object_plural'] = Inflector::plural($this->_object_name);
+            if (!isset($this->objectPlural)) {
+                $init['objectPlural'] = Inflector::plural($this->objectName);
             }
 
-            if (!$this->_errors_filename) {
-                $init['_errors_filename'] = $this->_object_name;
+            if (!$this->errorsFilename) {
+                $init['errorsFilename'] = $this->objectName;
             }
 
-            if (!is_object($this->_db)) {
+            if (!is_object($this->db)) {
                 // Get database instance
-                $init['_db'] = Connection::instance($this->_db_group);
+                $init['db'] = Connection::instance($this->dbGroup);
             }
 
-            if (empty($this->_table_name)) {
+            if (empty($this->tableName)) {
                 // Table name is the same as the object name
-                $init['_table_name'] = $this->_object_name;
+                $init['tableName'] = $this->objectName;
 
-                if ($this->_table_names_plural === true) {
+                if ($this->tableNamesPlural === true) {
                     // Make the table name plural
-                    $init['_table_name'] = Arr::get($init, '_object_plural', $this->_object_plural);
+                    $init['tableName'] = Arr::get($init, 'objectPlural', $this->objectPlural);
                 }
             }
 
             $defaults = [];
 
-            foreach ($this->_belongs_to as $alias => $details) {
+            foreach ($this->belongsTo as $alias => $details) {
                 if (!isset($details['model'])) {
                     $defaults['model'] = str_replace(' ', '_', ucwords(str_replace('_', ' ', $alias)));
                 }
 
-                $defaults['foreign_key'] = $alias . $this->_foreign_key_suffix;
+                $defaults['foreign_key'] = $alias . $this->foreignKeySuffix;
 
-                $init['_belongs_to'][$alias] = array_merge($defaults, $details);
+                $init['belongsTo'][$alias] = array_merge($defaults, $details);
             }
 
-            foreach ($this->_has_one as $alias => $details) {
+            foreach ($this->hasOne as $alias => $details) {
                 if (!isset($details['model'])) {
                     $defaults['model'] = str_replace(' ', '_', ucwords(str_replace('_', ' ', $alias)));
                 }
 
-                $defaults['foreign_key'] = $this->_object_name . $this->_foreign_key_suffix;
+                $defaults['foreign_key'] = $this->objectName . $this->foreignKeySuffix;
 
-                $init['_has_one'][$alias] = array_merge($defaults, $details);
+                $init['hasOne'][$alias] = array_merge($defaults, $details);
             }
 
-            foreach ($this->_has_many as $alias => $details) {
+            foreach ($this->hasMany as $alias => $details) {
                 if (!isset($details['model'])) {
                     $defaults['model'] = str_replace(' ', '_', ucwords(str_replace('_', ' ', Inflector::singular($alias))));
                 }
 
-                $defaults['foreign_key'] = $this->_object_name . $this->_foreign_key_suffix;
+                $defaults['foreign_key'] = $this->objectName . $this->foreignKeySuffix;
                 $defaults['through'] = null;
 
                 if (!isset($details['far_key'])) {
-                    $defaults['far_key'] = Inflector::singular($alias) . $this->_foreign_key_suffix;
+                    $defaults['far_key'] = Inflector::singular($alias) . $this->foreignKeySuffix;
                 }
 
-                $init['_has_many'][$alias] = array_merge($defaults, $details);
+                $init['hasMany'][$alias] = array_merge($defaults, $details);
             }
 
-            \Kohana\Orm\Model::$_init_cache[$this->_object_name] = $init;
+            \Kohana\Orm\Model::$initCache[$this->objectName] = $init;
         }
 
         // Assign initialized properties to the current object
@@ -380,26 +380,26 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return void
      */
-    protected function _validation()
+    protected function initializeValidation()
     {
         // Build the validation object with its rules
-        $this->_validation = Validator::factory($this->_object)
+        $this->validation = Validator::factory($this->object)
             ->bind(':model', $this)
-            ->bind(':original_values', $this->_original_values)
-            ->bind(':changes', $this->_changes);
+            ->bind(':original_values', $this->originalValues)
+            ->bind(':changes', $this->changes);
 
         // Use column names by default for labels
         $columns = [];
 
         foreach ($this->rules() as $field => $rules) {
             $columns[$field] = $field;
-            $this->_validation->rules($field, $rules);
+            $this->validation->rules($field, $rules);
         }
 
         // Merge user-defined labels
         $labels = array_merge($columns, $this->labels());
 
-        $this->_validation->labels($labels);
+        $this->validation->labels($labels);
     }
 
     /**
@@ -411,19 +411,19 @@ class Model extends \Kohana\Foundation\Model
     public function clear(): \Kohana\Orm\Model
     {
         // Create an array with all the columns set to null
-        $values = array_combine(array_keys($this->_object), array_fill(0, count($this->_object), null));
+        $values = array_combine(array_keys($this->object), array_fill(0, count($this->object), null));
 
         // Replace the object and reset the object status
-        $this->_object = $this->_changes = $this->_related = $this->_original_values = [];
+        $this->object = $this->changes = $this->related = $this->originalValues = [];
 
         // Replace the current object with an empty one
-        $this->_load_values($values);
+        $this->loadValues($values);
 
         // Reset primary key
-        $this->_primary_key_value = null;
+        $this->primaryKeyValue = null;
 
         // Reset the loaded state
-        $this->_loaded = false;
+        $this->loaded = false;
 
         $this->reset();
 
@@ -442,12 +442,12 @@ class Model extends \Kohana\Foundation\Model
         $primary_key = $this->pk();
 
         // Replace the object and reset the object status
-        $this->_object = $this->_changes = $this->_related = $this->_original_values = [];
+        $this->object = $this->changes = $this->related = $this->originalValues = [];
 
         // Only reload the object if we have one to reload
-        if ($this->_loaded)
+        if ($this->loaded)
             return $this->clear()
-                    ->where($this->_object_name . '.' . $this->_primary_key, '=', $primary_key)
+                    ->where($this->objectName . '.' . $this->primaryKey, '=', $primary_key)
                     ->find();
         else
             return $this->clear();
@@ -461,11 +461,11 @@ class Model extends \Kohana\Foundation\Model
      */
     public function __isset(string $column)
     {
-        return isset($this->_object[$column]) OR
-            isset($this->_related[$column]) OR
-            isset($this->_has_one[$column]) OR
-            isset($this->_belongs_to[$column]) OR
-            isset($this->_has_many[$column]);
+        return isset($this->object[$column]) OR
+            isset($this->related[$column]) OR
+            isset($this->hasOne[$column]) OR
+            isset($this->belongsTo[$column]) OR
+            isset($this->hasMany[$column]);
     }
 
     /**
@@ -476,7 +476,7 @@ class Model extends \Kohana\Foundation\Model
      */
     public function __unset(string $column)
     {
-        unset($this->_object[$column], $this->_changes[$column], $this->_related[$column]);
+        unset($this->object[$column], $this->changes[$column], $this->related[$column]);
     }
 
     /**
@@ -498,7 +498,7 @@ class Model extends \Kohana\Foundation\Model
     public function __serialize(): array
     {
         // Store only information about the object
-        foreach (['_primary_key_value', '_object', '_changes', '_loaded', '_saved', '_sorting', '_original_values'] as $var) {
+        foreach (['primaryKeyValue', 'object', 'changes', 'loaded', 'saved', 'sorting', 'originalValues'] as $var) {
             $data[$var] = $this->{$var};
         }
 
@@ -514,7 +514,7 @@ class Model extends \Kohana\Foundation\Model
      */
     public function changed(?string $field = null): bool
     {
-        return $field === null ? count($this->_changes) > 0 : array_key_exists($field, $this->_changes);
+        return $field === null ? count($this->changes) > 0 : array_key_exists($field, $this->changes);
     }
 
     /**
@@ -525,7 +525,7 @@ class Model extends \Kohana\Foundation\Model
      */
     public function changes(): array
     {
-        return $this->_changes;
+        return $this->changes;
     }
 
     /**
@@ -538,13 +538,13 @@ class Model extends \Kohana\Foundation\Model
     public function __unserialize(array $data): void
     {
         // Initialize model
-        $this->_initialize();
+        $this->initialize();
 
         foreach ($data as $name => $var) {
             $this->{$name} = $var;
         }
 
-        if ($this->_reload_on_wakeup === true) {
+        if ($this->reloadOnWakeup === true) {
             // Reload the object
             $this->reload();
         }
@@ -573,15 +573,15 @@ class Model extends \Kohana\Foundation\Model
      */
     public function get(string $column)
     {
-        if (isset($this->_related[$column])) {
+        if (isset($this->related[$column])) {
             // Return related model that has already been fetched
-            return $this->_related[$column];
-        } elseif (isset($this->_belongs_to[$column])) {
-            $model = $this->_related($column);
+            return $this->related[$column];
+        } elseif (isset($this->belongsTo[$column])) {
+            $model = $this->related($column);
 
             // Use this model's column and foreign model's primary key
-            $col = $model->_object_name . '.' . $model->_primary_key;
-            $val = $this->_object[$this->_belongs_to[$column]['foreign_key']];
+            $col = $model->objectName . '.' . $model->primaryKey;
+            $val = $this->object[$this->belongsTo[$column]['foreign_key']];
 
             // Make sure we don't run WHERE "AUTO_INCREMENT column" = NULL queries. This would
             // return the last inserted record instead of an empty result.
@@ -590,41 +590,41 @@ class Model extends \Kohana\Foundation\Model
                 $model->where($col, '=', $val)->find();
             }
 
-            return $this->_related[$column] = $model;
-        } elseif (isset($this->_has_one[$column])) {
-            $model = $this->_related($column);
+            return $this->related[$column] = $model;
+        } elseif (isset($this->hasOne[$column])) {
+            $model = $this->related($column);
 
             // Use this model's primary key value and foreign model's column
-            $col = $model->_object_name . '.' . $this->_has_one[$column]['foreign_key'];
+            $col = $model->objectName . '.' . $this->hasOne[$column]['foreign_key'];
             $val = $this->pk();
 
             $model->where($col, '=', $val)->find();
 
-            return $this->_related[$column] = $model;
-        } elseif (isset($this->_has_many[$column])) {
-            $model = \Kohana\Orm\Model::factory($this->_has_many[$column]['model']);
+            return $this->related[$column] = $model;
+        } elseif (isset($this->hasMany[$column])) {
+            $model = \Kohana\Orm\Model::factory($this->hasMany[$column]['model']);
 
-            if (isset($this->_has_many[$column]['through'])) {
+            if (isset($this->hasMany[$column]['through'])) {
                 // Grab has_many "through" relationship table
-                $through = $this->_has_many[$column]['through'];
+                $through = $this->hasMany[$column]['through'];
 
                 // Join on through model's target foreign key (far_key) and target model's primary key
-                $join_col1 = $through . '.' . $this->_has_many[$column]['far_key'];
-                $join_col2 = $model->_object_name . '.' . $model->_primary_key;
+                $join_col1 = $through . '.' . $this->hasMany[$column]['far_key'];
+                $join_col2 = $model->objectName . '.' . $model->primaryKey;
 
                 $model->join($through)->on($join_col1, '=', $join_col2);
 
                 // Through table's source foreign key (foreign_key) should be this model's primary key
-                $col = $through . '.' . $this->_has_many[$column]['foreign_key'];
+                $col = $through . '.' . $this->hasMany[$column]['foreign_key'];
             } else {
                 // Simple has_many relationship, search where target model's foreign key is this model's primary key
-                $col = $model->_object_name . '.' . $this->_has_many[$column]['foreign_key'];
+                $col = $model->objectName . '.' . $this->hasMany[$column]['foreign_key'];
             }
             $val = $this->pk();
 
             return $model->where($col, '=', $val);
         } else {
-            return in_array($column, $this->_serialize_columns) ? $this->_unserialize_value($this->_object[$column]) : $this->_object[$column] ?? null;
+            return in_array($column, $this->serializeColumns) ? $this->unserializeValue($this->object[$column]) : $this->object[$column] ?? null;
         }
     }
 
@@ -653,38 +653,38 @@ class Model extends \Kohana\Foundation\Model
      */
     public function set(string $column, $value): \Kohana\Orm\Model
     {
-        if (!isset($this->_object_name)) {
+        if (!isset($this->objectName)) {
             // Object not yet constructed, so we're loading data from a database call cast
-            $this->_cast_data[$column] = $value;
+            $this->castData[$column] = $value;
 
             return $this;
         }
 
-        if (in_array($column, $this->_serialize_columns)) {
-            $value = $this->_serialize_value($value);
+        if (in_array($column, $this->serializeColumns)) {
+            $value = $this->serializeValue($value);
         }
 
-        if (isset($this->_belongs_to[$column])) {
+        if (isset($this->belongsTo[$column])) {
             // Update related object itself
-            $this->_related[$column] = $value;
+            $this->related[$column] = $value;
 
             // Update the foreign key of this model
-            $this->_object[$this->_belongs_to[$column]['foreign_key']] = $value instanceof \Kohana\Orm\Model ? $value->pk() : null;
+            $this->object[$this->belongsTo[$column]['foreign_key']] = $value instanceof \Kohana\Orm\Model ? $value->pk() : null;
 
-            $this->_changes[$column] = $value;
+            $this->changes[$column] = $value;
         } else {
             // Filter the data
-            $value = $this->run_filter($column, $value);
+            $value = $this->runFilter($column, $value);
 
             // See if the data really changed
-            if (!isset($this->_object[$column]) || $value !== $this->_object[$column]) {
-                $this->_object[$column] = $value;
+            if (!isset($this->object[$column]) || $value !== $this->object[$column]) {
+                $this->object[$column] = $value;
 
                 // Data has changed
-                $this->_changes[$column] = $value;
+                $this->changes[$column] = $value;
 
                 // Object is no longer saved or valid
-                $this->_saved = $this->_valid = false;
+                $this->saved = $this->valid = false;
             }
         }
 
@@ -730,18 +730,18 @@ class Model extends \Kohana\Foundation\Model
      * @return array
      * @throws Kohana_Exception
      */
-    public function as_array(): array
+    public function asArray(): array
     {
         $object = [];
 
-        foreach ($this->_object as $column => $value) {
+        foreach ($this->object as $column => $value) {
             // Call __get for any user processing
             $object[$column] = $this->__get($column);
         }
 
-        foreach ($this->_related as $column => $model) {
+        foreach ($this->related as $column => $model) {
             // Include any related objects that are already loaded
-            $object[$column] = $model->as_array();
+            $object[$column] = $model->asArray();
         }
 
         return $object;
@@ -756,7 +756,7 @@ class Model extends \Kohana\Foundation\Model
      */
     public function with(string $target_path): \Kohana\Orm\Model
     {
-        if (isset($this->_with_applied[$target_path])) {
+        if (isset($this->withApplied[$target_path])) {
             // Don't join anything already joined
             return $this;
         }
@@ -767,7 +767,7 @@ class Model extends \Kohana\Foundation\Model
         foreach ($aliases as $alias) {
             // Go down the line of objects to find the given target
             $parent = $target;
-            $target = $parent->_related($alias);
+            $target = $parent->related($alias);
 
             if (!$target) {
                 // Can't find related object
@@ -784,19 +784,19 @@ class Model extends \Kohana\Foundation\Model
 
         if (empty($parent_path)) {
             // Use this table name itself for the parent path
-            $parent_path = $this->_object_name;
+            $parent_path = $this->objectName;
         } else {
-            if (!isset($this->_with_applied[$parent_path])) {
+            if (!isset($this->withApplied[$parent_path])) {
                 // If the parent path hasn't been joined yet, do it first (otherwise LEFT JOINs fail)
                 $this->with($parent_path);
             }
         }
 
         // Add to with_applied to prevent duplicate joins
-        $this->_with_applied[$target_path] = true;
+        $this->withApplied[$target_path] = true;
 
         // Use the keys of the empty object to determine the columns
-        foreach (array_keys($target->_object) as $column) {
+        foreach (array_keys($target->object) as $column) {
             $name = $target_path . '.' . $column;
             $alias = $target_path . ':' . $column;
 
@@ -804,18 +804,18 @@ class Model extends \Kohana\Foundation\Model
             $this->select([$name, $alias]);
         }
 
-        if (isset($parent->_belongs_to[$target_alias])) {
+        if (isset($parent->belongsTo[$target_alias])) {
             // Parent belongs_to target, use target's primary key and parent's foreign key
-            $join_col1 = $target_path . '.' . $target->_primary_key;
-            $join_col2 = $parent_path . '.' . $parent->_belongs_to[$target_alias]['foreign_key'];
+            $join_col1 = $target_path . '.' . $target->primaryKey;
+            $join_col2 = $parent_path . '.' . $parent->belongsTo[$target_alias]['foreign_key'];
         } else {
             // Parent has_one target, use parent's primary key as target's foreign key
-            $join_col1 = $parent_path . '.' . $parent->_primary_key;
-            $join_col2 = $target_path . '.' . $parent->_has_one[$target_alias]['foreign_key'];
+            $join_col1 = $parent_path . '.' . $parent->primaryKey;
+            $join_col2 = $target_path . '.' . $parent->hasOne[$target_alias]['foreign_key'];
         }
 
         // Join the related object into the result
-        $this->join([$target->_table_name, $target_path], 'LEFT')->on($join_col1, '=', $join_col2);
+        $this->join([$target->tableName, $target_path], 'LEFT')->on($join_col1, '=', $join_col2);
 
         return $this;
     }
@@ -826,29 +826,29 @@ class Model extends \Kohana\Foundation\Model
      * @param int $type Type of Database query
      * @return Kohana_ORM
      */
-    protected function _build(int $type): \Kohana\Orm\Model
+    protected function build(int $type): \Kohana\Orm\Model
     {
         // Construct new builder object based on query type
         switch ($type) {
             case Connection::SELECT:
-                $this->_db_builder = DB::select();
+                $this->dbBuilder = DB::select();
                 break;
             case Connection::UPDATE:
-                $this->_db_builder = DB::update($this->_table_name);
+                $this->dbBuilder = DB::update($this->tableName);
                 break;
             case Connection::DELETE:
                 // Cannot use an alias for DELETE queries
-                $this->_db_builder = DB::delete($this->_table_name);
+                $this->dbBuilder = DB::delete($this->tableName);
         }
 
         // Process pending database method calls
-        foreach ($this->_db_pending as $method) {
+        foreach ($this->dbPending as $method) {
             $name = $method['name'];
             $args = $method['args'];
 
-            $this->_db_applied[$name] = $name;
+            $this->dbApplied[$name] = $name;
 
-            call_user_func_array([$this->_db_builder, $name], $args);
+            call_user_func_array([$this->dbBuilder, $name], $args);
         }
 
         return $this;
@@ -863,19 +863,19 @@ class Model extends \Kohana\Foundation\Model
      */
     public function find()
     {
-        if ($this->_loaded)
+        if ($this->loaded)
             throw new KohanaException('Method find() cannot be called on loaded objects');
 
-        if (!empty($this->_load_with)) {
-            foreach ($this->_load_with as $alias) {
+        if (!empty($this->loadWith)) {
+            foreach ($this->loadWith as $alias) {
                 // Bind auto relationships
                 $this->with($alias);
             }
         }
 
-        $this->_build(Connection::SELECT);
+        $this->build(Connection::SELECT);
 
-        return $this->_load_result();
+        return $this->loadResult();
     }
 
     /**
@@ -884,21 +884,21 @@ class Model extends \Kohana\Foundation\Model
      * @throws Kohana_Exception
      * @return Database_Result
      */
-    public function find_all()
+    public function findAll()
     {
-        if ($this->_loaded)
+        if ($this->loaded)
             throw new KohanaException('Method find_all() cannot be called on loaded objects');
 
-        if (!empty($this->_load_with)) {
-            foreach ($this->_load_with as $alias) {
+        if (!empty($this->loadWith)) {
+            foreach ($this->loadWith as $alias) {
                 // Bind auto relationships
                 $this->with($alias);
             }
         }
 
-        $this->_build(Connection::SELECT);
+        $this->build(Connection::SELECT);
 
-        return $this->_load_result(true);
+        return $this->loadResult(true);
     }
 
     /**
@@ -910,45 +910,45 @@ class Model extends \Kohana\Foundation\Model
      * @return Database_Result_Cached|Kohana_ORM|object
      * @throws Kohana_Exception
      */
-    protected function _load_result(bool $multiple = false)
+    protected function loadResult(bool $multiple = false)
     {
-        $this->_db_builder->from([$this->_table_name, $this->_object_name]);
+        $this->dbBuilder->from([$this->tableName, $this->objectName]);
 
         if ($multiple === false) {
             // Only fetch 1 record
-            $this->_db_builder->limit(1);
+            $this->dbBuilder->limit(1);
         }
 
         // Select all columns by default
-        $this->_db_builder->select($this->_object_name . '.*');
+        $this->dbBuilder->select($this->objectName . '.*');
 
-        if (!isset($this->_db_applied['order_by']) && !empty($this->_sorting)) {
-            foreach ($this->_sorting as $column => $direction) {
+        if (!isset($this->dbApplied['order_by']) && !empty($this->sorting)) {
+            foreach ($this->sorting as $column => $direction) {
                 if (strpos($column, '.') === false) {
                     // Sorting column for use in JOINs
-                    $column = $this->_object_name . '.' . $column;
+                    $column = $this->objectName . '.' . $column;
                 }
 
-                $this->_db_builder->order_by($column, $direction);
+                $this->dbBuilder->orderBy($column, $direction);
             }
         }
 
         if ($multiple === true) {
             // Return database iterator casting to this object type
-            $result = $this->_db_builder->as_object(get_class($this))->execute($this->_db);
+            $result = $this->dbBuilder->asObject(get_class($this))->execute($this->db);
 
             $this->reset();
 
             return $result;
         } else {
             // Load the result as an associative array
-            $result = $this->_db_builder->as_assoc()->execute($this->_db);
+            $result = $this->dbBuilder->asAssoc()->execute($this->db);
 
             $this->reset();
 
             if ($result->count() === 1) {
                 // Load object values
-                $this->_load_values($result->current());
+                $this->loadValues($result->current());
             } else {
                 // Clear the object, nothing was found
                 $this->clear();
@@ -965,18 +965,18 @@ class Model extends \Kohana\Foundation\Model
      * @param  array $values Values to load
      * @return Kohana_ORM
      */
-    protected function _load_values(array $values): \Kohana\Orm\Model
+    protected function loadValues(array $values): \Kohana\Orm\Model
     {
-        if (array_key_exists($this->_primary_key, $values)) {
-            if ($values[$this->_primary_key] !== null) {
+        if (array_key_exists($this->primaryKey, $values)) {
+            if ($values[$this->primaryKey] !== null) {
                 // Flag as loaded and valid
-                $this->_loaded = $this->_valid = true;
+                $this->loaded = $this->valid = true;
 
                 // Store primary key
-                $this->_primary_key_value = $values[$this->_primary_key];
+                $this->primaryKeyValue = $values[$this->primaryKey];
             } else {
                 // Not loaded or valid
-                $this->_loaded = $this->_valid = false;
+                $this->loaded = $this->valid = false;
             }
         }
 
@@ -986,7 +986,7 @@ class Model extends \Kohana\Foundation\Model
         foreach ($values as $column => $value) {
             if (strpos($column, ':') === false) {
                 // Load the value to this model
-                $this->_object[$column] = $value;
+                $this->object[$column] = $value;
             } else {
                 // Column belongs to a related model
                 list ($prefix, $column) = explode(':', $column, 2);
@@ -998,13 +998,13 @@ class Model extends \Kohana\Foundation\Model
         if (!empty($related)) {
             foreach ($related as $object => $values) {
                 // Load the related objects with the values in the result
-                $this->_related($object)->_load_values($values);
+                $this->related($object)->loadValues($values);
             }
         }
 
-        if ($this->_loaded) {
+        if ($this->loaded) {
             // Store the object in its original state
-            $this->_original_values = $this->_object;
+            $this->originalValues = $this->object;
         }
 
         return $this;
@@ -1028,7 +1028,7 @@ class Model extends \Kohana\Foundation\Model
      * @return mixed
      * @throws ReflectionException
      */
-    protected function run_filter(string $field, $value)
+    protected function runFilter(string $field, $value)
     {
         $filters = $this->filters();
 
@@ -1106,16 +1106,16 @@ class Model extends \Kohana\Foundation\Model
         $extra_errors = $extra_validation && !$extra_validation->check();
 
         // Always build a new validation object
-        $this->_validation();
+        $this->initializeValidation();
 
-        $array = $this->_validation;
+        $array = $this->validation;
 
-        if (($this->_valid = $array->check()) === false || $extra_errors) {
-            $exception = new ValidationException($this->errors_filename(), $array);
+        if (($this->valid = $array->check()) === false || $extra_errors) {
+            $exception = new ValidationException($this->errorsFilename(), $array);
 
             if ($extra_errors) {
                 // Merge any possible errors from the external object
-                $exception->add_object('_external', $extra_validation);
+                $exception->addObject('external', $extra_validation);
             }
             throw $exception;
         }
@@ -1133,46 +1133,46 @@ class Model extends \Kohana\Foundation\Model
      */
     public function create(?Validator $validation = null): \Kohana\Orm\Model
     {
-        if ($this->_loaded)
-            throw new KohanaException('Cannot create :model model because it is already loaded.', [':model' => $this->_object_name]);
+        if ($this->loaded)
+            throw new KohanaException('Cannot create :model model because it is already loaded.', [':model' => $this->objectName]);
 
         // Require model validation before saving
-        if (!$this->_valid || $validation) {
+        if (!$this->valid || $validation) {
             $this->check($validation);
         }
 
         $data = [];
-        foreach ($this->_changes as $column => $value) {
+        foreach ($this->changes as $column => $value) {
             // Generate list of column => values
-            $data[$column] = $this->_object[$column];
+            $data[$column] = $this->object[$column];
         }
 
-        if (is_array($this->_created_column)) {
+        if (is_array($this->createdColumn)) {
             // Fill the created column
-            $column = $this->_created_column['column'];
-            $format = $this->_created_column['format'];
+            $column = $this->createdColumn['column'];
+            $format = $this->createdColumn['format'];
 
-            $data[$column] = $this->_object[$column] = $format === true ? time() : date($format);
+            $data[$column] = $this->object[$column] = $format === true ? time() : date($format);
         }
 
-        $result = DB::insert($this->_table_name)
+        $result = DB::insert($this->tableName)
             ->columns(array_keys($data))
             ->values(array_values($data))
-            ->execute($this->_db);
+            ->execute($this->db);
 
-        if (!array_key_exists($this->_primary_key, $data)) {
+        if (!array_key_exists($this->primaryKey, $data)) {
             // Load the insert id as the primary key if it was left out
-            $this->_object[$this->_primary_key] = $this->_primary_key_value = $result[0];
+            $this->object[$this->primaryKey] = $this->primaryKeyValue = $result[0];
         } else {
-            $this->_primary_key_value = $this->_object[$this->_primary_key];
+            $this->primaryKeyValue = $this->object[$this->primaryKey];
         }
 
         // Object is now loaded and saved
-        $this->_loaded = $this->_saved = true;
+        $this->loaded = $this->saved = true;
 
         // All changes have been saved
-        $this->_changes = [];
-        $this->_original_values = $this->_object;
+        $this->changes = [];
+        $this->originalValues = $this->object;
 
         return $this;
     }
@@ -1189,53 +1189,53 @@ class Model extends \Kohana\Foundation\Model
      */
     public function update(?Validator $validation = null): \Kohana\Orm\Model
     {
-        if (!$this->_loaded)
-            throw new KohanaException('Cannot update :model model because it is not loaded.', [':model' => $this->_object_name]);
+        if (!$this->loaded)
+            throw new KohanaException('Cannot update :model model because it is not loaded.', [':model' => $this->objectName]);
 
         // Run validation if the model isn't valid, or we have additional validation rules.
-        if (!$this->_valid || $validation) {
+        if (!$this->valid || $validation) {
             $this->check($validation);
         }
 
-        if (empty($this->_changes)) {
+        if (empty($this->changes)) {
             // Nothing to update
             return $this;
         }
 
         $data = [];
-        foreach ($this->_changes as $column => $value) {
+        foreach ($this->changes as $column => $value) {
             // Compile changed data
-            $data[$column] = $this->_object[$column];
+            $data[$column] = $this->object[$column];
         }
 
-        if (is_array($this->_updated_column)) {
+        if (is_array($this->updatedColumn)) {
             // Fill the updated column
-            $column = $this->_updated_column['column'];
-            $format = $this->_updated_column['format'];
+            $column = $this->updatedColumn['column'];
+            $format = $this->updatedColumn['format'];
 
-            $data[$column] = $this->_object[$column] = $format === true ? time() : date($format);
+            $data[$column] = $this->object[$column] = $format === true ? time() : date($format);
         }
 
         // Use primary key value
         $id = $this->pk();
 
         // Update a single record
-        DB::update($this->_table_name)
+        DB::update($this->tableName)
             ->set($data)
-            ->where($this->_primary_key, '=', $id)
-            ->execute($this->_db);
+            ->where($this->primaryKey, '=', $id)
+            ->execute($this->db);
 
-        if (isset($data[$this->_primary_key])) {
+        if (isset($data[$this->primaryKey])) {
             // Primary key was changed, reflect it
-            $this->_primary_key_value = $data[$this->_primary_key];
+            $this->primaryKeyValue = $data[$this->primaryKey];
         }
 
         // Object has been saved
-        $this->_saved = true;
+        $this->saved = true;
 
         // All changes have been saved
-        $this->_changes = [];
-        $this->_original_values = $this->_object;
+        $this->changes = [];
+        $this->originalValues = $this->object;
 
         return $this;
     }
@@ -1264,16 +1264,16 @@ class Model extends \Kohana\Foundation\Model
      */
     public function delete(): \Kohana\Orm\Model
     {
-        if (!$this->_loaded)
-            throw new KohanaException('Cannot delete :model model because it is not loaded.', [':model' => $this->_object_name]);
+        if (!$this->loaded)
+            throw new KohanaException('Cannot delete :model model because it is not loaded.', [':model' => $this->objectName]);
 
         // Use primary key value
         $id = $this->pk();
 
         // Delete the object
-        DB::delete($this->_table_name)
-            ->where($this->_primary_key, '=', $id)
-            ->execute($this->_db);
+        DB::delete($this->tableName)
+            ->where($this->primaryKey, '=', $id)
+            ->execute($this->db);
 
         return $this->clear();
     }
@@ -1300,7 +1300,7 @@ class Model extends \Kohana\Foundation\Model
      */
     public function has(string $alias, $far_keys = null): bool
     {
-        $count = $this->count_relations($alias, $far_keys);
+        $count = $this->countRelations($alias, $far_keys);
         if ($far_keys === null) {
             return (bool) $count;
         }
@@ -1327,9 +1327,9 @@ class Model extends \Kohana\Foundation\Model
      * @return bool
      * @throws Kohana_Exception
      */
-    public function has_any(string $alias, $far_keys = null): bool
+    public function hasAny(string $alias, $far_keys = null): bool
     {
-        return (bool) $this->count_relations($alias, $far_keys);
+        return (bool) $this->countRelations($alias, $far_keys);
     }
 
     /**
@@ -1349,13 +1349,13 @@ class Model extends \Kohana\Foundation\Model
      * @return int
      * @throws Kohana_Exception
      */
-    public function count_relations(string $alias, $far_keys = null): int
+    public function countRelations(string $alias, $far_keys = null): int
     {
         if ($far_keys === null) {
             return (int) DB::select([DB::expr('COUNT(*)'), 'records_found'])
-                    ->from($this->_has_many[$alias]['through'])
-                    ->where($this->_has_many[$alias]['foreign_key'], '=', $this->pk())
-                    ->execute($this->_db)->get('records_found');
+                    ->from($this->hasMany[$alias]['through'])
+                    ->where($this->hasMany[$alias]['foreign_key'], '=', $this->pk())
+                    ->execute($this->db)->get('records_found');
         }
 
         $far_keys = $far_keys instanceof \Kohana\Orm\Model ? $far_keys->pk() : $far_keys;
@@ -1364,16 +1364,16 @@ class Model extends \Kohana\Foundation\Model
         $far_keys = (array) $far_keys;
 
         // Nothing to check if the model isn't loaded, or we don't have any far_keys
-        if (!$far_keys || !$this->_loaded)
+        if (!$far_keys || !$this->loaded)
             return 0;
 
         // Rows found need to match the rows searched
         return (int) DB::select([DB::expr('COUNT(*)'), 'records_found'])
-            ->from($this->_has_many[$alias]['through'])
-            ->where($this->_has_many[$alias]['foreign_key'], '=', $this->pk())
-            ->where($this->_has_many[$alias]['far_key'], 'IN', $far_keys)
-            ->group_by($this->_has_many[$alias]['far_key'])
-            ->execute($this->_db)->get('records_found');
+            ->from($this->hasMany[$alias]['through'])
+            ->where($this->hasMany[$alias]['foreign_key'], '=', $this->pk())
+            ->where($this->hasMany[$alias]['far_key'], 'IN', $far_keys)
+            ->groupBy($this->hasMany[$alias]['far_key'])
+            ->execute($this->db)->get('records_found');
     }
 
     /**
@@ -1395,16 +1395,16 @@ class Model extends \Kohana\Foundation\Model
     {
         $far_keys = $far_keys instanceof \Kohana\Orm\Model ? $far_keys->pk() : $far_keys;
 
-        $columns = [$this->_has_many[$alias]['foreign_key'], $this->_has_many[$alias]['far_key']];
+        $columns = [$this->hasMany[$alias]['foreign_key'], $this->hasMany[$alias]['far_key']];
         $foreign_key = $this->pk();
 
-        $query = DB::insert($this->_has_many[$alias]['through'], $columns);
+        $query = DB::insert($this->hasMany[$alias]['through'], $columns);
 
         foreach ((array) $far_keys as $key) {
             $query->values([$foreign_key, $key]);
         }
 
-        $query->execute($this->_db);
+        $query->execute($this->db);
 
         return $this;
     }
@@ -1430,15 +1430,15 @@ class Model extends \Kohana\Foundation\Model
     {
         $far_keys = $far_keys instanceof \Kohana\Orm\Model ? $far_keys->pk() : $far_keys;
 
-        $query = DB::delete($this->_has_many[$alias]['through'])
-            ->where($this->_has_many[$alias]['foreign_key'], '=', $this->pk());
+        $query = DB::delete($this->hasMany[$alias]['through'])
+            ->where($this->hasMany[$alias]['foreign_key'], '=', $this->pk());
 
         if ($far_keys !== null) {
             // Remove all the relationships in the array
-            $query->where($this->_has_many[$alias]['far_key'], 'IN', (array) $far_keys);
+            $query->where($this->hasMany[$alias]['far_key'], 'IN', (array) $far_keys);
         }
 
-        $query->execute($this->_db);
+        $query->execute($this->db);
 
         return $this;
     }
@@ -1449,34 +1449,34 @@ class Model extends \Kohana\Foundation\Model
      * @return int
      * @throws Kohana_Exception
      */
-    public function count_all(): int
+    public function countAll(): int
     {
         $selects = [];
 
-        foreach ($this->_db_pending as $key => $method) {
+        foreach ($this->dbPending as $key => $method) {
             if ($method['name'] === 'select') {
                 // Ignore any selected columns for now
                 $selects[$key] = $method;
-                unset($this->_db_pending[$key]);
+                unset($this->dbPending[$key]);
             }
         }
 
-        if (!empty($this->_load_with)) {
-            foreach ($this->_load_with as $alias) {
+        if (!empty($this->loadWith)) {
+            foreach ($this->loadWith as $alias) {
                 // Bind relationship
                 $this->with($alias);
             }
         }
 
-        $this->_build(Connection::SELECT);
+        $this->build(Connection::SELECT);
 
-        $records = $this->_db_builder->from([$this->_table_name, $this->_object_name])
-            ->select([DB::expr('COUNT(' . $this->_db->quote_column($this->_object_name . '.' . $this->_primary_key) . ')'), 'records_found'])
-            ->execute($this->_db)
+        $records = $this->dbBuilder->from([$this->tableName, $this->objectName])
+            ->select([DB::expr('COUNT(' . $this->db->quoteColumn($this->objectName . '.' . $this->primaryKey) . ')'), 'records_found'])
+            ->execute($this->db)
             ->get('records_found');
 
         // Add back in selected columns
-        $this->_db_pending += $selects;
+        $this->dbPending += $selects;
 
         $this->reset();
 
@@ -1489,10 +1489,10 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return array
      */
-    public function list_columns(): array
+    public function listColumns(): array
     {
         // Proxy to database
-        return $this->_db->list_columns($this->_table_name);
+        return $this->db->listColumns($this->tableName);
     }
 
     /**
@@ -1501,15 +1501,15 @@ class Model extends \Kohana\Foundation\Model
      * @param string $alias Alias name
      * @return ORM
      */
-    protected function _related(string $alias): ?\Kohana\Orm\Model
+    protected function related(string $alias): ?\Kohana\Orm\Model
     {
         switch (true) {
-            case isset($this->_related[$alias]):
-                return $this->_related[$alias];
-            case isset($this->_has_one[$alias]):
-                return $this->_related[$alias] = \Kohana\Orm\Model::factory($this->_has_one[$alias]['model']);
-            case isset($this->_belongs_to[$alias]):
-                return $this->_related[$alias] = \Kohana\Orm\Model::factory($this->_belongs_to[$alias]['model']);
+            case isset($this->related[$alias]):
+                return $this->related[$alias];
+            case isset($this->hasOne[$alias]):
+                return $this->related[$alias] = \Kohana\Orm\Model::factory($this->hasOne[$alias]['model']);
+            case isset($this->belongsTo[$alias]):
+                return $this->related[$alias] = \Kohana\Orm\Model::factory($this->belongsTo[$alias]['model']);
             default:
                 return null;
         }
@@ -1522,7 +1522,7 @@ class Model extends \Kohana\Foundation\Model
      */
     public function pk()
     {
-        return $this->_primary_key_value;
+        return $this->primaryKeyValue;
     }
 
     /**
@@ -1530,9 +1530,9 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return string
      */
-    public function last_query(): string
+    public function lastQuery(): string
     {
-        return $this->_db->last_query;
+        return $this->db->last_query;
     }
 
     /**
@@ -1544,112 +1544,112 @@ class Model extends \Kohana\Foundation\Model
      */
     public function reset(bool $next = true): \Kohana\Orm\Model
     {
-        if ($next && $this->_db_reset) {
-            $this->_db_pending = [];
-            $this->_db_applied = [];
-            $this->_db_builder = null;
-            $this->_with_applied = [];
+        if ($next && $this->dbReset) {
+            $this->dbPending = [];
+            $this->dbApplied = [];
+            $this->dbBuilder = null;
+            $this->withApplied = [];
         }
 
         // Reset on the next call?
-        $this->_db_reset = $next;
+        $this->dbReset = $next;
 
         return $this;
     }
 
-    protected function _serialize_value($value)
+    protected function serializeValue($value)
     {
         return json_encode($value);
     }
 
-    protected function _unserialize_value($value)
+    protected function unserializeValue($value)
     {
         return json_decode($value, true);
     }
 
-    public function object_name(): string
+    public function objectName(): string
     {
-        return $this->_object_name;
+        return $this->objectName;
     }
 
-    public function object_plural(): string
+    public function objectPlural(): string
     {
-        return $this->_object_plural;
+        return $this->objectPlural;
     }
 
     public function loaded(): bool
     {
-        return $this->_loaded;
+        return $this->loaded;
     }
 
     public function saved(): bool
     {
-        return $this->_saved;
+        return $this->saved;
     }
 
-    public function primary_key(): string
+    public function primaryKey(): string
     {
-        return $this->_primary_key;
+        return $this->primaryKey;
     }
 
-    public function table_name(): string
+    public function tableName(): string
     {
-        return $this->_table_name;
+        return $this->tableName;
     }
 
-    public function has_one(): array
+    public function hasOne(): array
     {
-        return $this->_has_one;
+        return $this->hasOne;
     }
 
-    public function belongs_to(): array
+    public function belongsTo(): array
     {
-        return $this->_belongs_to;
+        return $this->belongsTo;
     }
 
-    public function has_many(): array
+    public function hasMany(): array
     {
-        return $this->_has_many;
+        return $this->hasMany;
     }
 
-    public function load_with(): array
+    public function loadWith(): array
     {
-        return $this->_load_with;
+        return $this->loadWith;
     }
 
-    public function original_values(): array
+    public function originalValues(): array
     {
-        return $this->_original_values;
+        return $this->originalValues;
     }
 
-    public function created_column(): ?string
+    public function createdColumn(): ?string
     {
-        return $this->_created_column;
+        return $this->createdColumn;
     }
 
-    public function updated_column(): ?string
+    public function updatedColumn(): ?string
     {
-        return $this->_updated_column;
+        return $this->updatedColumn;
     }
 
     public function validation(): ?Validator
     {
-        if (!isset($this->_validation)) {
+        if (!isset($this->validation)) {
             // Initialize the validation object
-            $this->_validation();
+            $this->initializeValidation();
         }
 
-        return $this->_validation;
+        return $this->validation;
     }
 
     public function object(): array
     {
-        return $this->_object;
+        return $this->object;
     }
 
-    public function errors_filename(): ?string
+    public function errorsFilename(): ?string
     {
-        return $this->_errors_filename;
+        return $this->errorsFilename;
     }
 
     /**
@@ -1663,7 +1663,7 @@ class Model extends \Kohana\Foundation\Model
     public function where($column, string $op, $value): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
+        $this->dbPending[] = [
             'name' => 'where',
             'args' => [$column, $op, $value],
         ];
@@ -1679,11 +1679,11 @@ class Model extends \Kohana\Foundation\Model
      * @param   mixed   $value   column value
      * @return  $this
      */
-    public function and_where($column, string $op, $value): \Kohana\Orm\Model
+    public function andWhere($column, string $op, $value): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
-            'name' => 'and_where',
+        $this->dbPending[] = [
+            'name' => 'andWhere',
             'args' => [$column, $op, $value],
         ];
 
@@ -1698,11 +1698,11 @@ class Model extends \Kohana\Foundation\Model
      * @param   mixed   $value   column value
      * @return  $this
      */
-    public function or_where($column, string $op, $value): \Kohana\Orm\Model
+    public function orWhere($column, string $op, $value): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
-            'name' => 'or_where',
+        $this->dbPending[] = [
+            'name' => 'orWhere',
             'args' => [$column, $op, $value],
         ];
 
@@ -1714,9 +1714,9 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function where_open(): \Kohana\Orm\Model
+    public function whereOpen(): \Kohana\Orm\Model
     {
-        return $this->and_where_open();
+        return $this->andWhereOpen();
     }
 
     /**
@@ -1724,11 +1724,11 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function and_where_open(): \Kohana\Orm\Model
+    public function andWhereOpen(): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
-            'name' => 'and_where_open',
+        $this->dbPending[] = [
+            'name' => 'andWhereOpen',
             'args' => [],
         ];
 
@@ -1740,11 +1740,11 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function or_where_open(): \Kohana\Orm\Model
+    public function orWhereOpen(): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
-            'name' => 'or_where_open',
+        $this->dbPending[] = [
+            'name' => 'orWhereOpen',
             'args' => [],
         ];
 
@@ -1756,9 +1756,9 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function where_close(): \Kohana\Orm\Model
+    public function whereClose(): \Kohana\Orm\Model
     {
-        return $this->and_where_close();
+        return $this->andWhereClose();
     }
 
     /**
@@ -1766,11 +1766,11 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function and_where_close(): \Kohana\Orm\Model
+    public function andWhereClose(): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
-            'name' => 'and_where_close',
+        $this->dbPending[] = [
+            'name' => 'andWhereClose',
             'args' => [],
         ];
 
@@ -1782,11 +1782,11 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function or_where_close(): \Kohana\Orm\Model
+    public function orWhereClose(): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
-            'name' => 'or_where_close',
+        $this->dbPending[] = [
+            'name' => 'orWhereClose',
             'args' => [],
         ];
 
@@ -1800,11 +1800,11 @@ class Model extends \Kohana\Foundation\Model
      * @param string|null $direction Direction of sorting
      * @return  $this
      */
-    public function order_by($column, ?string $direction = null): \Kohana\Orm\Model
+    public function orderBy($column, ?string $direction = null): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
-            'name' => 'order_by',
+        $this->dbPending[] = [
+            'name' => 'orderBy',
             'args' => [$column, $direction],
         ];
 
@@ -1820,7 +1820,7 @@ class Model extends \Kohana\Foundation\Model
     public function limit(int $number): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
+        $this->dbPending[] = [
             'name' => 'limit',
             'args' => [$number],
         ];
@@ -1837,7 +1837,7 @@ class Model extends \Kohana\Foundation\Model
     public function distinct(bool $value): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
+        $this->dbPending[] = [
             'name' => 'distinct',
             'args' => [$value],
         ];
@@ -1854,7 +1854,7 @@ class Model extends \Kohana\Foundation\Model
     public function select(...$columns): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
+        $this->dbPending[] = [
             'name' => 'select',
             'args' => $columns,
         ];
@@ -1871,7 +1871,7 @@ class Model extends \Kohana\Foundation\Model
     public function from(...$tables): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
+        $this->dbPending[] = [
             'name' => 'from',
             'args' => $tables,
         ];
@@ -1889,7 +1889,7 @@ class Model extends \Kohana\Foundation\Model
     public function join($table, ?string $type = null): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
+        $this->dbPending[] = [
             'name' => 'join',
             'args' => [$table, $type],
         ];
@@ -1908,7 +1908,7 @@ class Model extends \Kohana\Foundation\Model
     public function on($c1, string $op, $c2): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
+        $this->dbPending[] = [
             'name' => 'on',
             'args' => [$c1, $op, $c2],
         ];
@@ -1923,11 +1923,11 @@ class Model extends \Kohana\Foundation\Model
      * @param   ...
      * @return  $this
      */
-    public function group_by(...$columns): \Kohana\Orm\Model
+    public function groupBy(...$columns): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
-            'name' => 'group_by',
+        $this->dbPending[] = [
+            'name' => 'groupBy',
             'args' => $columns,
         ];
 
@@ -1944,7 +1944,7 @@ class Model extends \Kohana\Foundation\Model
      */
     public function having($column, string $op, $value = null): \Kohana\Orm\Model
     {
-        return $this->and_having($column, $op, $value);
+        return $this->andHaving($column, $op, $value);
     }
 
     /**
@@ -1955,11 +1955,11 @@ class Model extends \Kohana\Foundation\Model
      * @param   mixed   $value   column value
      * @return  $this
      */
-    public function and_having($column, string $op, $value = null): \Kohana\Orm\Model
+    public function andHaving($column, string $op, $value = null): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
-            'name' => 'and_having',
+        $this->dbPending[] = [
+            'name' => 'andHaving',
             'args' => [$column, $op, $value],
         ];
 
@@ -1974,11 +1974,11 @@ class Model extends \Kohana\Foundation\Model
      * @param   mixed   $value   column value
      * @return  $this
      */
-    public function or_having($column, string $op, $value = null): \Kohana\Orm\Model
+    public function orHaving($column, string $op, $value = null): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
-            'name' => 'or_having',
+        $this->dbPending[] = [
+            'name' => 'orHaving',
             'args' => [$column, $op, $value],
         ];
 
@@ -1990,9 +1990,9 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function having_open(): \Kohana\Orm\Model
+    public function havingOpen(): \Kohana\Orm\Model
     {
-        return $this->and_having_open();
+        return $this->andHavingOpen();
     }
 
     /**
@@ -2000,11 +2000,11 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function and_having_open(): \Kohana\Orm\Model
+    public function andHavingOpen(): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
-            'name' => 'and_having_open',
+        $this->dbPending[] = [
+            'name' => 'andHavingOpen',
             'args' => [],
         ];
 
@@ -2016,11 +2016,11 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function or_having_open(): \Kohana\Orm\Model
+    public function orHavingOpen(): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
-            'name' => 'or_having_open',
+        $this->dbPending[] = [
+            'name' => 'orHavingOpen',
             'args' => [],
         ];
 
@@ -2032,9 +2032,9 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function having_close(): \Kohana\Orm\Model
+    public function havingClose(): \Kohana\Orm\Model
     {
-        return $this->and_having_close();
+        return $this->andHavingClose();
     }
 
     /**
@@ -2042,11 +2042,11 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function and_having_close(): \Kohana\Orm\Model
+    public function andHavingClose(): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
-            'name' => 'and_having_close',
+        $this->dbPending[] = [
+            'name' => 'andHavingClose',
             'args' => [],
         ];
 
@@ -2058,11 +2058,11 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function or_having_close(): \Kohana\Orm\Model
+    public function orHavingClose(): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
-            'name' => 'or_having_close',
+        $this->dbPending[] = [
+            'name' => 'orHavingClose',
             'args' => [],
         ];
 
@@ -2078,7 +2078,7 @@ class Model extends \Kohana\Foundation\Model
     public function offset(int $number): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
+        $this->dbPending[] = [
             'name' => 'offset',
             'args' => [$number],
         ];
@@ -2096,7 +2096,7 @@ class Model extends \Kohana\Foundation\Model
     public function cached(?int $lifetime = null): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
+        $this->dbPending[] = [
             'name' => 'cached',
             'args' => [$lifetime],
         ];
@@ -2114,7 +2114,7 @@ class Model extends \Kohana\Foundation\Model
     public function param(string $param, $value): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
+        $this->dbPending[] = [
             'name' => 'param',
             'args' => [$param, $value],
         ];
@@ -2131,7 +2131,7 @@ class Model extends \Kohana\Foundation\Model
     public function using(string $columns): \Kohana\Orm\Model
     {
         // Add pending database call which is executed after query type is determined
-        $this->_db_pending[] = [
+        $this->dbPending[] = [
             'name' => 'using',
             'args' => [$columns],
         ];
@@ -2150,7 +2150,7 @@ class Model extends \Kohana\Foundation\Model
      */
     public function unique(string $field, $value): bool
     {
-        $model = \Kohana\Orm\Model::factory($this->object_name())
+        $model = \Kohana\Orm\Model::factory($this->objectName())
             ->where($field, '=', $value)
             ->find();
 

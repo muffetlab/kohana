@@ -68,7 +68,7 @@ class FileStore extends Cache implements GarbageCollect
     /**
      * @var  string   the caching directory
      */
-    protected $_cache_dir;
+    protected $cacheDir;
 
     /**
      * Constructs the file cache driver. This method cannot be invoked externally. The file cache driver must
@@ -83,25 +83,25 @@ class FileStore extends Cache implements GarbageCollect
         parent::__construct($config);
 
         try {
-            $directory = Arr::get($this->_config, 'cache_dir', Application::$cache_dir);
-            $this->_cache_dir = new \SplFileInfo($directory);
+            $directory = Arr::get($this->config, 'cache_dir', Application::$cacheDir);
+            $this->cacheDir = new \SplFileInfo($directory);
         } catch (\UnexpectedValueException $e) {
-            $this->_cache_dir = $this->_make_directory($directory, 0777, true);
+            $this->cacheDir = $this->makeDirectory($directory, 0777, true);
         }
 
         // If the defined directory is a file, get out of here
-        if ($this->_cache_dir->isFile()) {
-            throw new CacheException('Unable to create cache directory as a file already exists : :resource', [':resource' => $this->_cache_dir->getRealPath()]);
+        if ($this->cacheDir->isFile()) {
+            throw new CacheException('Unable to create cache directory as a file already exists : :resource', [':resource' => $this->cacheDir->getRealPath()]);
         }
 
         // Check the read status of the directory
-        if (!$this->_cache_dir->isReadable()) {
-            throw new CacheException('Unable to read from the cache directory :resource', [':resource' => $this->_cache_dir->getRealPath()]);
+        if (!$this->cacheDir->isReadable()) {
+            throw new CacheException('Unable to read from the cache directory :resource', [':resource' => $this->cacheDir->getRealPath()]);
         }
 
         // Check the write status of the directory
-        if (!$this->_cache_dir->isWritable()) {
-            throw new CacheException('Unable to write to the cache directory :resource', [':resource' => $this->_cache_dir->getRealPath()]);
+        if (!$this->cacheDir->isWritable()) {
+            throw new CacheException('Unable to write to the cache directory :resource', [':resource' => $this->cacheDir->getRealPath()]);
         }
     }
 
@@ -122,8 +122,8 @@ class FileStore extends Cache implements GarbageCollect
      */
     public function get(string $id, $default = null)
     {
-        $filename = \Kohana\Cache\FileStore::filename($this->_sanitize_id($id));
-        $directory = $this->_resolve_directory($filename);
+        $filename = \Kohana\Cache\FileStore::filename($this->sanitizeId($id));
+        $directory = $this->resolveDirectory($filename);
 
         // Wrap operations in try/catch to handle notices
         try {
@@ -136,9 +136,9 @@ class FileStore extends Cache implements GarbageCollect
                 return $default;
             } else {
                 // Test the expiry
-                if ($this->_is_expired($file)) {
+                if ($this->isExpired($file)) {
                     // Delete the file
-                    $this->_delete_file($file, false, true);
+                    $this->deleteFile($file, false, true);
                     return $default;
                 }
 
@@ -191,13 +191,13 @@ class FileStore extends Cache implements GarbageCollect
      */
     public function set(string $id, $data, ?int $lifetime = null): bool
     {
-        $filename = \Kohana\Cache\FileStore::filename($this->_sanitize_id($id));
-        $directory = $this->_resolve_directory($filename);
+        $filename = \Kohana\Cache\FileStore::filename($this->sanitizeId($id));
+        $directory = $this->resolveDirectory($filename);
 
         // If lifetime is null
         if ($lifetime === null) {
             // Set to the default expiry
-            $lifetime = Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE);
+            $lifetime = Arr::get($this->config, 'default_expire', Cache::DEFAULT_EXPIRE);
         }
 
         // Open directory
@@ -205,7 +205,7 @@ class FileStore extends Cache implements GarbageCollect
 
         // If the directory path is not a directory
         if (!$dir->isDir()) {
-            $this->_make_directory($directory, 0777, true);
+            $this->makeDirectory($directory, 0777, true);
         }
 
         // Open file to inspect
@@ -240,10 +240,10 @@ class FileStore extends Cache implements GarbageCollect
      */
     public function delete(string $id): bool
     {
-        $filename = \Kohana\Cache\FileStore::filename($this->_sanitize_id($id));
-        $directory = $this->_resolve_directory($filename);
+        $filename = \Kohana\Cache\FileStore::filename($this->sanitizeId($id));
+        $directory = $this->resolveDirectory($filename);
 
-        return $this->_delete_file(new \SplFileInfo($directory . $filename), false, true);
+        return $this->deleteFile(new \SplFileInfo($directory . $filename), false, true);
     }
 
     /**
@@ -259,9 +259,9 @@ class FileStore extends Cache implements GarbageCollect
      * @return bool
      * @throws Cache_Exception
      */
-    public function delete_all(): bool
+    public function deleteAll(): bool
     {
-        return $this->_delete_file($this->_cache_dir, true);
+        return $this->deleteFile($this->cacheDir, true);
     }
 
     /**
@@ -271,9 +271,9 @@ class FileStore extends Cache implements GarbageCollect
      * @return  void
      * @throws Cache_Exception
      */
-    public function garbage_collect()
+    public function garbageCollect()
     {
-        $this->_delete_file($this->_cache_dir, true, false, true);
+        $this->deleteFile($this->cacheDir, true, false, true);
     }
 
     /**
@@ -289,7 +289,7 @@ class FileStore extends Cache implements GarbageCollect
      * @return  bool
      * @throws  Cache_Exception
      */
-    protected function _delete_file(\SplFileInfo $file, bool $retain_parent_directory = false, bool $ignore_errors = false, bool $only_expired = false): bool
+    protected function deleteFile(\SplFileInfo $file, bool $retain_parent_directory = false, bool $ignore_errors = false, bool $only_expired = false): bool
     {
         // Allow graceful error handling
         try {
@@ -307,7 +307,7 @@ class FileStore extends Cache implements GarbageCollect
                     // Otherwise...
                     else {
                         // Assess the file expiry to flag it for deletion
-                        $delete = $this->_is_expired($file);
+                        $delete = $this->isExpired($file);
                     }
 
                     // If the delete flag is set delete file
@@ -335,7 +335,7 @@ class FileStore extends Cache implements GarbageCollect
                         // Create new file resource
                         $fp = new \SplFileInfo($files->getRealPath());
                         // Delete the file
-                        $this->_delete_file($fp, $retain_parent_directory, $ignore_errors, $only_expired);
+                        $this->deleteFile($fp, $retain_parent_directory, $ignore_errors, $only_expired);
                     }
 
                     // Move the file pointer on
@@ -389,9 +389,9 @@ class FileStore extends Cache implements GarbageCollect
      * @param string $filename Filename to resolve
      * @return  string
      */
-    protected function _resolve_directory(string $filename): string
+    protected function resolveDirectory(string $filename): string
     {
-        return $this->_cache_dir->getRealPath() . DIRECTORY_SEPARATOR . $filename[0] . $filename[1] . DIRECTORY_SEPARATOR;
+        return $this->cacheDir->getRealPath() . DIRECTORY_SEPARATOR . $filename[0] . $filename[1] . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -406,7 +406,7 @@ class FileStore extends Cache implements GarbageCollect
      * @return  SplFileInfo
      * @throws  Cache_Exception
      */
-    protected function _make_directory(string $directory, int $mode = 0777, bool $recursive = false, $context = null): \SplFileInfo
+    protected function makeDirectory(string $directory, int $mode = 0777, bool $recursive = false, $context = null): \SplFileInfo
     {
         // call mkdir according to the availability of a passed $context param
         $mkdir_result = $context ?
@@ -431,7 +431,7 @@ class FileStore extends Cache implements GarbageCollect
      * @return bool true if expired false otherwise
      * @throws Cache_Exception
      */
-    protected function _is_expired(\SplFileInfo $file): bool
+    protected function isExpired(\SplFileInfo $file): bool
     {
         // Open the file and parse data
         $created = $file->getMTime();

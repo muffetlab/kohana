@@ -70,27 +70,27 @@ abstract class Session
     /**
      * @var  string  cookie name
      */
-    protected $_name = 'session';
+    protected $name = 'session';
 
     /**
      * @var  int  cookie lifetime
      */
-    protected $_lifetime = 0;
+    protected $lifetime = 0;
 
     /**
      * @var  bool  encrypt session data?
      */
-    protected $_encrypted = false;
+    protected $encrypted = false;
 
     /**
      * @var  array  session data
      */
-    protected $_data = [];
+    protected $data = [];
 
     /**
      * @var  bool  session destroyed?
      */
-    protected $_destroyed = false;
+    protected $destroyed = false;
 
     /**
      * Overloads the name, lifetime, and encrypted session settings.
@@ -106,12 +106,12 @@ abstract class Session
     {
         if (isset($config['name'])) {
             // Cookie name to store the session id in
-            $this->_name = (string) $config['name'];
+            $this->name = (string) $config['name'];
         }
 
         if (isset($config['lifetime'])) {
             // Cookie lifetime
-            $this->_lifetime = (int) $config['lifetime'];
+            $this->lifetime = (int) $config['lifetime'];
         }
 
         if (isset($config['encrypted'])) {
@@ -121,7 +121,7 @@ abstract class Session
             }
 
             // Enable or disable encryption of data
-            $this->_encrypted = $config['encrypted'];
+            $this->encrypted = $config['encrypted'];
         }
 
         // Load the session
@@ -142,14 +142,14 @@ abstract class Session
     public function __toString()
     {
         // Serialize the data array
-        $data = $this->_serialize($this->_data);
+        $data = $this->serializeData($this->data);
 
-        if ($this->_encrypted) {
+        if ($this->encrypted) {
             // Encrypt the data using the default key
-            $data = Encrypter::instance($this->_encrypted)->encode($data);
+            $data = Encrypter::instance($this->encrypted)->encode($data);
         } else {
             // Encode the data
-            $data = $this->_encode($data);
+            $data = $this->encode($data);
         }
 
         return $data;
@@ -167,9 +167,9 @@ abstract class Session
      *
      * @return  array
      */
-    public function & as_array(): array
+    public function & asArray(): array
     {
-        return $this->_data;
+        return $this->data;
     }
 
     /**
@@ -197,7 +197,7 @@ abstract class Session
      */
     public function name(): string
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -211,7 +211,7 @@ abstract class Session
      */
     public function get(string $key, $default = null)
     {
-        return array_key_exists($key, $this->_data) ? $this->_data[$key] : $default;
+        return array_key_exists($key, $this->data) ? $this->data[$key] : $default;
     }
 
     /**
@@ -223,11 +223,11 @@ abstract class Session
      * @param   mixed   $default    default value to return
      * @return  mixed
      */
-    public function get_once(string $key, $default = null)
+    public function getOnce(string $key, $default = null)
     {
         $value = $this->get($key, $default);
 
-        unset($this->_data[$key]);
+        unset($this->data[$key]);
 
         return $value;
     }
@@ -243,7 +243,7 @@ abstract class Session
      */
     public function set(string $key, $value): \Kohana\Session\Session
     {
-        $this->_data[$key] = $value;
+        $this->data[$key] = $value;
 
         return $this;
     }
@@ -259,7 +259,7 @@ abstract class Session
      */
     public function bind(string $key, &$value): \Kohana\Session\Session
     {
-        $this->_data[$key] = &$value;
+        $this->data[$key] = &$value;
 
         return $this;
     }
@@ -275,7 +275,7 @@ abstract class Session
     public function delete(...$keys): \Kohana\Session\Session
     {
         foreach ($keys as $key) {
-            unset($this->_data[$key]);
+            unset($this->data[$key]);
         }
 
         return $this;
@@ -293,17 +293,17 @@ abstract class Session
     public function read(?string $id = null)
     {
         try {
-            if (is_string($data = $this->_read($id))) {
-                if ($this->_encrypted) {
+            if (is_string($data = $this->readSession($id))) {
+                if ($this->encrypted) {
                     // Decrypt the data using the default key
-                    $data = Encrypter::instance($this->_encrypted)->decode($data);
+                    $data = Encrypter::instance($this->encrypted)->decode($data);
                 } else {
                     // Decode the data
-                    $data = $this->_decode($data);
+                    $data = $this->decode($data);
                 }
 
                 // Unserialize the data
-                $data = $this->_unserialize($data);
+                $data = $this->unserializeData($data);
             }
         } catch (\Exception $e) {
             // Error reading the session, usually a corrupt session.
@@ -312,7 +312,7 @@ abstract class Session
 
         if (is_array($data)) {
             // Load the data locally
-            $this->_data = $data;
+            $this->data = $data;
         }
     }
 
@@ -325,7 +325,7 @@ abstract class Session
      */
     public function regenerate(): string
     {
-        return $this->_regenerate();
+        return $this->regenerateSession();
     }
 
     /**
@@ -342,17 +342,17 @@ abstract class Session
      */
     public function write(): bool
     {
-        if (headers_sent() || $this->_destroyed) {
+        if (headers_sent() || $this->destroyed) {
             // Session cannot be written when the headers are sent or when
             // the session has been destroyed
             return false;
         }
 
         // Set the last active timestamp
-        $this->_data['last_active'] = time();
+        $this->data['last_active'] = time();
 
         try {
-            return $this->_write();
+            return $this->writeSession();
         } catch (\Exception $e) {
             // Log & ignore all errors when a write fails
             Application::$log->add(Logger::ERROR, KohanaException::text($e))->write();
@@ -370,14 +370,14 @@ abstract class Session
      */
     public function destroy(): bool
     {
-        if ($this->_destroyed === false) {
-            if ($this->_destroyed = $this->_destroy()) {
+        if ($this->destroyed === false) {
+            if ($this->destroyed = $this->destroySession()) {
                 // The session has been destroyed, clear all data
-                $this->_data = [];
+                $this->data = [];
             }
         }
 
-        return $this->_destroyed;
+        return $this->destroyed;
     }
 
     /**
@@ -389,15 +389,15 @@ abstract class Session
      */
     public function restart(): bool
     {
-        if ($this->_destroyed === false) {
+        if ($this->destroyed === false) {
             // Wipe out the current session.
             $this->destroy();
         }
 
         // Allow the new session to be saved
-        $this->_destroyed = false;
+        $this->destroyed = false;
 
-        return $this->_restart();
+        return $this->restartSession();
     }
 
     /**
@@ -406,7 +406,7 @@ abstract class Session
      * @param array $data Data
      * @return  string
      */
-    protected function _serialize(array $data): string
+    protected function serializeData(array $data): string
     {
         return serialize($data);
     }
@@ -417,7 +417,7 @@ abstract class Session
      * @param string $data Data
      * @return  array
      */
-    protected function _unserialize(string $data): array
+    protected function unserializeData(string $data): array
     {
         return unserialize($data);
     }
@@ -428,7 +428,7 @@ abstract class Session
      * @param string $data Data
      * @return  string
      */
-    protected function _encode(string $data): string
+    protected function encode(string $data): string
     {
         return base64_encode($data);
     }
@@ -439,7 +439,7 @@ abstract class Session
      * @param string $data Data
      * @return  string
      */
-    protected function _decode(string $data): string
+    protected function decode(string $data): string
     {
         return base64_decode($data);
     }
@@ -450,29 +450,29 @@ abstract class Session
      * @param string|null $id Session ID
      * @return string|array
      */
-    abstract protected function _read(?string $id = null);
+    abstract protected function readSession(?string $id = null);
     /**
      * Generate a new session id and return it.
      *
      * @return string|null
      */
-    abstract protected function _regenerate(): ?string;
+    abstract protected function regenerateSession(): ?string;
     /**
      * Writes the current session.
      *
      * @return bool
      */
-    abstract protected function _write(): bool;
+    abstract protected function writeSession(): bool;
     /**
      * Destroys the current session.
      *
      * @return bool
      */
-    abstract protected function _destroy(): bool;
+    abstract protected function destroySession(): bool;
     /**
      * Restarts the current session.
      *
      * @return bool
      */
-    abstract protected function _restart(): bool;
+    abstract protected function restartSession(): bool;
 }

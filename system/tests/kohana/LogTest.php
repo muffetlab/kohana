@@ -32,7 +32,7 @@ class Kohana_LogTest extends TestCase
         $logger = new Logger;
 
         $reflection = new ReflectionClass($logger);
-        $property = $reflection->getProperty('_messages');
+        $property = $reflection->getProperty('messages');
 
         $this->assertSame([], $property->getValue($logger));
     }
@@ -49,7 +49,7 @@ class Kohana_LogTest extends TestCase
         $logger = new Logger;
 
         $reflection = new ReflectionClass($logger);
-        $property = $reflection->getProperty('_writers');
+        $property = $reflection->getProperty('writers');
 
         $this->assertSame([], $property->getValue($logger));
     }
@@ -70,7 +70,7 @@ class Kohana_LogTest extends TestCase
         $this->assertSame($logger, $logger->attach($writer));
 
         $reflection = new ReflectionClass($logger);
-        $property = $reflection->getProperty('_writers');
+        $property = $reflection->getProperty('writers');
 
         $this->assertSame([
             spl_object_hash($writer) => ['object' => $writer, 'levels' => []]
@@ -95,7 +95,7 @@ class Kohana_LogTest extends TestCase
 
 
         $reflection = new ReflectionClass($logger);
-        $property = $reflection->getProperty('_writers');
+        $property = $reflection->getProperty('writers');
 
         $this->assertSame([
             spl_object_hash($writer) => [
@@ -121,7 +121,7 @@ class Kohana_LogTest extends TestCase
         $this->assertSame($logger, $logger->detach($writer));
 
         $reflection = new ReflectionClass($logger);
-        $property = $reflection->getProperty('_writers');
+        $property = $reflection->getProperty('writers');
 
         $this->assertSame([], $property->getValue($logger));
     }

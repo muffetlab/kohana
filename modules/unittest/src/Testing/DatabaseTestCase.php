@@ -28,7 +28,7 @@ abstract class DatabaseTestCase extends TestCase
      * testcases
      * @var Kohana_Unittest_Helpers
      */
-    protected $_helpers = null;
+    protected $helpers = null;
 
     /**
      * A default set of environment to be applied before each test
@@ -40,7 +40,7 @@ abstract class DatabaseTestCase extends TestCase
      * The kohana database connection that PHPUnit should use for this test
      * @var string
      */
-    protected $_database_connection = 'default';
+    protected $databaseConnection = 'default';
 
     /**
      * Creates a predefined environment using the default environment
@@ -54,7 +54,7 @@ abstract class DatabaseTestCase extends TestCase
      */
     public function setUp(): void
     {
-        $this->_helpers = new Helpers;
+        $this->helpers = new Helpers;
 
         $this->setEnvironment($this->environmentDefault);
 
@@ -73,7 +73,7 @@ abstract class DatabaseTestCase extends TestCase
      */
     public function tearDown(): void
     {
-        $this->_helpers->restore_environment();
+        $this->helpers->restoreEnvironment();
 
         parent::tearDown();
     }
@@ -87,7 +87,7 @@ abstract class DatabaseTestCase extends TestCase
     public function getConnection(): \PDO
     {
         // Get the unittesting db connection
-        $config = Application::$config->load('database.' . $this->_database_connection);
+        $config = Application::$config->load('database.' . $this->databaseConnection);
 
         if (strtolower($config['type']) !== 'pdo') {
             $config['connection']['dsn'] = strtolower($config['type']) . ':' .
@@ -123,7 +123,7 @@ abstract class DatabaseTestCase extends TestCase
      */
     public function cleanCacheDir()
     {
-        Helpers::clean_cache_dir();
+        Helpers::cleanCacheDir();
     }
 
     /**
@@ -135,7 +135,7 @@ abstract class DatabaseTestCase extends TestCase
      */
     public function dirSeparator(string $path): string
     {
-        return Helpers::dir_separator($path);
+        return Helpers::dirSeparator($path);
     }
 
     /**
@@ -154,7 +154,7 @@ abstract class DatabaseTestCase extends TestCase
      */
     public function setEnvironment(array $environment): ?bool
     {
-        return $this->_helpers->set_environment($environment);
+        return $this->helpers->setEnvironment($environment);
     }
 
     /**
@@ -164,7 +164,7 @@ abstract class DatabaseTestCase extends TestCase
      */
     public function hasInternet(): bool
     {
-        return Helpers::has_internet();
+        return Helpers::hasInternet();
     }
 
 }

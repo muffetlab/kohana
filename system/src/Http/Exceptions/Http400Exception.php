@@ -7,6 +7,6 @@ class Http400Exception extends HttpException
     /**
      * @var int HTTP 400 Bad Request
      */
-    protected $_code = 400;
+    protected $code = 400;
 
 }

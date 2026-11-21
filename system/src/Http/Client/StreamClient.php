@@ -34,7 +34,7 @@ class StreamClient extends ExternalClient
      * @throws Kohana_Exception
      * @uses    [PHP cURL](https://www.php.net/manual/en/book.curl.php)
      */
-    public function _send_message(Request $request, Response $response): Response
+    public function sendMessage(Request $request, Response $response): Response
     {
         // Calculate stream mode
         $mode = $request->method() === \Kohana\Http\Contracts\Request::GET ? 'r' : 'r+';
@@ -68,7 +68,7 @@ class StreamClient extends ExternalClient
         // Create the context stream
         $context = stream_context_create($options);
 
-        stream_context_set_option($context, $this->_options);
+        stream_context_set_option($context, $this->options);
 
         $uri = $request->uri();
 
@@ -95,7 +95,7 @@ class StreamClient extends ExternalClient
         $response_header = $response->headers();
 
         // Process headers
-        array_map([$response_header, 'parse_header_string'], [], $meta_data['wrapper_data']);
+        array_map([$response_header, 'parseHeaderString'], [], $meta_data['wrapper_data']);
 
         $response->status($status)
             ->protocol($protocol)

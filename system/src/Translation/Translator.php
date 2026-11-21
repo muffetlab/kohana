@@ -38,7 +38,7 @@ class Translator
     /**
      * @var  array  cache of loaded languages
      */
-    protected static $_cache = [];
+    protected static $cache = [];
 
     /**
      * Get and set the target language.
@@ -98,8 +98,8 @@ class Translator
      */
     public static function load(string $lang): array
     {
-        if (isset(\Kohana\Translation\Translator::$_cache[$lang])) {
-            return \Kohana\Translation\Translator::$_cache[$lang];
+        if (isset(\Kohana\Translation\Translator::$cache[$lang])) {
+            return \Kohana\Translation\Translator::$cache[$lang];
         }
 
         // New translation table
@@ -112,7 +112,7 @@ class Translator
             // Create a path for this set of parts
             $path = implode(DIRECTORY_SEPARATOR, $parts);
 
-            if ($files = Application::find_file('i18n', $path, null, true)) {
+            if ($files = Application::findFile('i18n', $path, null, true)) {
                 $t = [];
                 foreach ($files as $file) {
                     // Merge the language strings into the sub table
@@ -129,7 +129,7 @@ class Translator
         } while ($parts);
 
         // Cache the translation table locally
-        return \Kohana\Translation\Translator::$_cache[$lang] = $table;
+        return \Kohana\Translation\Translator::$cache[$lang] = $table;
     }
 
 }

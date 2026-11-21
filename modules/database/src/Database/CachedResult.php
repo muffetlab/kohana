@@ -18,7 +18,7 @@ class CachedResult extends Result
         parent::__construct($result, $sql, $as_object);
 
         // Find the number of rows in the result
-        $this->_total_rows = count($result);
+        $this->totalRows = count($result);
     }
 
     public function __destruct()
@@ -35,7 +35,7 @@ class CachedResult extends Result
     public function seek($offset): bool
     {
         if ($this->offsetExists($offset)) {
-            $this->_current_row = $offset;
+            $this->currentRow = $offset;
 
             return true;
         } else {
@@ -46,7 +46,7 @@ class CachedResult extends Result
     public function current(): mixed
     {
         // Return an array of the row
-        return $this->valid() ? $this->_result[$this->_current_row] : null;
+        return $this->valid() ? $this->result[$this->currentRow] : null;
     }
 
 }

@@ -31,7 +31,7 @@ class Kohana_FileTest extends TestCase
         return [
             // $value, $result
             [
-                Application::find_file('tests', 'test_data/github', 'png'),
+                Application::findFile('tests', 'test_data/github', 'png'),
                 'image/png'
             ],
         ];
@@ -61,7 +61,7 @@ class Kohana_FileTest extends TestCase
     {
         return [
             // $value, $result
-            [Application::find_file('tests', 'test_data/github', 'png'), .01, 1],
+            [Application::findFile('tests', 'test_data/github', 'png'), .01, 1],
         ];
     }
 
@@ -79,7 +79,7 @@ class Kohana_FileTest extends TestCase
         $this->assertSame($expected, File::split($input, $peices));
         $this->assertSame($expected, File::join($input));
 
-        foreach (glob(Application::find_file('tests', 'test_data/github', 'png') . '.*') as $file) {
+        foreach (glob(Application::findFile('tests', 'test_data/github', 'png') . '.*') as $file) {
             unlink($file);
         }
     }

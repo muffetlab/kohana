@@ -30,12 +30,12 @@ class Logger
     /**
      * @var bool immediately write when logs are added
      */
-    public static $write_on_add = false;
+    public static $writeOnAdd = false;
 
     /**
      * @var  Log  Singleton instance container
      */
-    protected static $_instance;
+    protected static $instance;
 
     /**
      * Get the singleton instance of this class and enable writing at shutdown.
@@ -46,26 +46,26 @@ class Logger
      */
     public static function instance(): \Kohana\Log\Logger
     {
-        if (\Kohana\Log\Logger::$_instance === null) {
+        if (\Kohana\Log\Logger::$instance === null) {
             // Create a new instance
-            \Kohana\Log\Logger::$_instance = new \Kohana\Log\Logger;
+            \Kohana\Log\Logger::$instance = new \Kohana\Log\Logger;
 
             // Write the logs at shutdown
-            register_shutdown_function([\Kohana\Log\Logger::$_instance, 'write']);
+            register_shutdown_function([\Kohana\Log\Logger::$instance, 'write']);
         }
 
-        return \Kohana\Log\Logger::$_instance;
+        return \Kohana\Log\Logger::$instance;
     }
 
     /**
      * @var  array  list of added messages
      */
-    protected $_messages = [];
+    protected $messages = [];
 
     /**
      * @var  array  list of log writers
      */
-    protected $_writers = [];
+    protected $writers = [];
 
     /**
      * Attaches a log writer, and optionally limits the levels of messages that
@@ -84,7 +84,7 @@ class Logger
             $levels = range($min_level, $levels);
         }
 
-        $this->_writers["$writer"] = [
+        $this->writers["$writer"] = [
             'object' => $writer,
             'levels' => $levels
         ];
@@ -103,7 +103,7 @@ class Logger
     public function detach(Writer $writer): \Kohana\Log\Logger
     {
         // Remove the writer
-        unset($this->_writers["$writer"]);
+        unset($this->writers["$writer"]);
 
         return $this;
     }
@@ -149,7 +149,7 @@ class Logger
         }
 
         // Create a new message
-        $this->_messages[] = [
+        $this->messages[] = [
             'time' => time(),
             'level' => $level,
             'body' => $message,
@@ -161,7 +161,7 @@ class Logger
             'additional' => $additional,
         ];
 
-        if (\Kohana\Log\Logger::$write_on_add) {
+        if (\Kohana\Log\Logger::$writeOnAdd) {
             // Write logs as they are added
             $this->write();
         }
@@ -178,18 +178,18 @@ class Logger
      */
     public function write()
     {
-        if (empty($this->_messages)) {
+        if (empty($this->messages)) {
             // There is nothing to write, move along
             return;
         }
 
         // Import all messages locally
-        $messages = $this->_messages;
+        $messages = $this->messages;
 
         // Reset the messages array
-        $this->_messages = [];
+        $this->messages = [];
 
-        foreach ($this->_writers as $writer) {
+        foreach ($this->writers as $writer) {
             if (empty($writer['levels'])) {
                 // Write all the messages
                 $writer['object']->write($messages);

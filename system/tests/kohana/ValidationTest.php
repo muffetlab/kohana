@@ -69,7 +69,7 @@ class Kohana_ValidationTest extends TestCase
 
         $this->assertNotSame($validation, $copy);
 
-        foreach (['_rules', '_bound', '_labels', '_empty_rules', '_errors'] as $attribute) {
+        foreach (['rules', 'bound', 'labels', 'emptyRules', 'errors'] as $attribute) {
             $reflection = new ReflectionClass($validation);
             $property = $reflection->getProperty($attribute);
 
@@ -92,7 +92,7 @@ class Kohana_ValidationTest extends TestCase
         $validation = new Validator([]);
 
         $reflection = new ReflectionClass($validation);
-        $property = $reflection->getProperty('_labels');
+        $property = $reflection->getProperty('labels');
 
         $this->assertSame([], $property->getValue($validation));
     }
@@ -113,7 +113,7 @@ class Kohana_ValidationTest extends TestCase
         $this->assertSame($validation, $validation->label('email', 'Email Address'));
 
         $reflection = new ReflectionClass($validation);
-        $property = $reflection->getProperty('_labels');
+        $property = $reflection->getProperty('labels');
 
         $this->assertSame(['email' => 'Email Address'], $property->getValue($validation));
 
@@ -140,7 +140,7 @@ class Kohana_ValidationTest extends TestCase
         $this->assertSame($validation, $validation->labels($initial_data));
 
         $reflection = new ReflectionClass($validation);
-        $property = $reflection->getProperty('_labels');
+        $property = $reflection->getProperty('labels');
 
         $this->assertSame($initial_data, $property->getValue($validation));
 
@@ -168,7 +168,7 @@ class Kohana_ValidationTest extends TestCase
         $this->assertSame($validation, $validation->bind($bound));
 
         $reflection = new ReflectionClass($validation);
-        $property = $reflection->getProperty('_bound');
+        $property = $reflection->getProperty('bound');
 
         $this->assertSame($bound, $property->getValue($validation));
 
@@ -192,7 +192,7 @@ class Kohana_ValidationTest extends TestCase
         $validation = new Validator($data);
         $validation->bind(':class', \Kohana\Validation\Rules::class)
             // Use the bound value in a callback
-            ->rule('fast', [':class', 'max_length'], [':value', 2]);
+            ->rule('fast', [':class', 'maxLength'], [':value', 2]);
 
         // The rule should have run and check() should fail
         $this->assertFalse($validation->check());
@@ -235,9 +235,9 @@ class Kohana_ValidationTest extends TestCase
                     'foo' => [
                         ['not_empty', null],
                         // Tests the array syntax for callbacks
-                        [[\Kohana\Validation\Rules::class, 'exact_length'], [':value', 3]],
+                        [[\Kohana\Validation\Rules::class, 'exactLength'], [':value', 3]],
                         // Tests the Class::method syntax for callbacks
-                        ['Kohana\Validation\Rules::exact_length', [':value', 3]],
+                        ['Kohana\Validation\Rules::exactLength', [':value', 3]],
                         // Tests the lambda function syntax for callbacks
                         [function ($value) {
                             return $value === 'bar';
@@ -269,7 +269,7 @@ class Kohana_ValidationTest extends TestCase
             // Test array rules use method as error name
             [
                 ['foo' => 'test'],
-                ['foo' => [[[\Kohana\Validation\Rules::class, 'min_length'], [':value', 10]]]],
+                ['foo' => [[[\Kohana\Validation\Rules::class, 'minLength'], [':value', 10]]]],
                 [],
                 false,
                 ['foo' => 'foo must be at least 10 characters long']
@@ -406,7 +406,7 @@ class Kohana_ValidationTest extends TestCase
         $this->assertSame($expected, $validation->errors('Validation', false));
         // Should be able to get raw errors array
         $reflection = new ReflectionClass($validation);
-        $property = $reflection->getProperty('_errors');
+        $property = $reflection->getProperty('errors');
         $this->assertSame($validation->errors(), $property->getValue($validation));
     }
 

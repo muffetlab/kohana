@@ -96,27 +96,27 @@ class Response implements \Kohana\Http\Contracts\Response
     /**
      * @var int The response http status
      */
-    protected $_status = 200;
+    protected $status = 200;
 
     /**
      * @var  HTTP_Header  Headers returned in the response
      */
-    protected $_header;
+    protected $header;
 
     /**
      * @var  string      The response body
      */
-    protected $_body = '';
+    protected $body = '';
 
     /**
      * @var  array       Cookies to be returned in the response
      */
-    protected $_cookies = [];
+    protected $cookies = [];
 
     /**
      * @var  string      The response protocol
      */
-    protected $_protocol;
+    protected $protocol;
 
     /**
      * Sets up the response object
@@ -126,11 +126,11 @@ class Response implements \Kohana\Http\Contracts\Response
      */
     public function __construct(array $config = [])
     {
-        $this->_header = new HeaderBag;
+        $this->header = new HeaderBag;
 
         foreach ($config as $key => $value) {
             if (property_exists($this, $key)) {
-                if ($key === '_header') {
+                if ($key === 'header') {
                     $this->headers($value);
                 } else {
                     $this->$key = $value;
@@ -146,7 +146,7 @@ class Response implements \Kohana\Http\Contracts\Response
      */
     public function __toString()
     {
-        return $this->_body;
+        return $this->body;
     }
 
     /**
@@ -157,9 +157,9 @@ class Response implements \Kohana\Http\Contracts\Response
     public function body(?string $content = null)
     {
         if ($content === null)
-            return $this->_body;
+            return $this->body;
 
-        $this->_body = $content;
+        $this->body = $content;
         return $this;
     }
 
@@ -173,15 +173,15 @@ class Response implements \Kohana\Http\Contracts\Response
     public function protocol(?string $protocol = null)
     {
         if ($protocol) {
-            $this->_protocol = strtoupper($protocol);
+            $this->protocol = strtoupper($protocol);
             return $this;
         }
 
-        if ($this->_protocol === null) {
-            $this->_protocol = Http::$protocol;
+        if ($this->protocol === null) {
+            $this->protocol = Http::$protocol;
         }
 
-        return $this->_protocol;
+        return $this->protocol;
     }
 
     /**
@@ -201,9 +201,9 @@ class Response implements \Kohana\Http\Contracts\Response
     public function status(?int $code = null)
     {
         if ($code === null) {
-            return $this->_status;
+            return $this->status;
         } elseif (array_key_exists($code, \Kohana\Http\Response::$messages)) {
-            $this->_status = $code;
+            $this->status = $code;
             return $this;
         } else {
             throw new KohanaException(__METHOD__ . ' unknown status value : :value', [':value' => $code]);
@@ -234,14 +234,14 @@ class Response implements \Kohana\Http\Contracts\Response
     public function headers($key = null, ?string $value = null)
     {
         if ($key === null) {
-            return $this->_header;
+            return $this->header;
         } elseif (is_array($key)) {
-            $this->_header->exchangeArray($key);
+            $this->header->exchangeArray($key);
             return $this;
         } elseif ($value === null) {
-            return Arr::get($this->_header, $key);
+            return Arr::get($this->header, $key);
         } else {
-            $this->_header[$key] = $value;
+            $this->header[$key] = $value;
             return $this;
         }
     }
@@ -252,7 +252,7 @@ class Response implements \Kohana\Http\Contracts\Response
      *
      * @return int
      */
-    public function content_length(): int
+    public function contentLength(): int
     {
         return strlen($this->body());
     }
@@ -277,9 +277,9 @@ class Response implements \Kohana\Http\Contracts\Response
     {
         // Handle the get cookie calls
         if ($key === null)
-            return $this->_cookies;
+            return $this->cookies;
         elseif (!is_array($key) && !$value)
-            return Arr::get($this->_cookies, $key);
+            return Arr::get($this->cookies, $key);
 
         // Handle the set cookie calls
         if (is_array($key)) {
@@ -296,7 +296,7 @@ class Response implements \Kohana\Http\Contracts\Response
                 $value['expiration'] = Cookie::$expiration;
             }
 
-            $this->_cookies[$key] = $value;
+            $this->cookies[$key] = $value;
         }
 
         return $this;
@@ -308,9 +308,9 @@ class Response implements \Kohana\Http\Contracts\Response
      * @param string $name
      * @return  Kohana_Response
      */
-    public function delete_cookie(string $name): \Kohana\Http\Response
+    public function deleteCookie(string $name): \Kohana\Http\Response
     {
-        unset($this->_cookies[$name]);
+        unset($this->cookies[$name]);
         return $this;
     }
 
@@ -319,9 +319,9 @@ class Response implements \Kohana\Http\Contracts\Response
      *
      * @return Kohana_Response
      */
-    public function delete_cookies(): \Kohana\Http\Response
+    public function deleteCookies(): \Kohana\Http\Response
     {
-        $this->_cookies = [];
+        $this->cookies = [];
         return $this;
     }
 
@@ -333,9 +333,9 @@ class Response implements \Kohana\Http\Contracts\Response
      * @return  mixed
      * @throws Kohana_Exception
      */
-    public function send_headers(bool $replace = false, ?callable $callback = null)
+    public function sendHeaders(bool $replace = false, ?callable $callback = null)
     {
-        return $this->_header->send_headers($this, $replace, $callback);
+        return $this->header->sendHeaders($this, $replace, $callback);
     }
 
     /**
@@ -370,7 +370,7 @@ class Response implements \Kohana\Http\Contracts\Response
      * @uses    File::mime
      * @uses    Request::send_headers
      */
-    public function send_file($filename, ?string $download = null, ?array $options = null)
+    public function sendFile($filename, ?string $download = null, ?array $options = null)
     {
         if (!empty($options['mime_type'])) {
             // The mime-type has been manually set
@@ -387,11 +387,11 @@ class Response implements \Kohana\Http\Contracts\Response
 
             if (!isset($mime)) {
                 // Guess the mime using the file extension
-                $mime = File::mime_by_ext(strtolower(pathinfo($download, PATHINFO_EXTENSION)));
+                $mime = File::mimeByExt(strtolower(pathinfo($download, PATHINFO_EXTENSION)));
             }
 
             // Force the data to be rendered if
-            $file_data = $this->_body;
+            $file_data = $this->body;
 
             // Get the content size
             $size = strlen($file_data);
@@ -418,7 +418,7 @@ class Response implements \Kohana\Http\Contracts\Response
 
             if (!isset($mime)) {
                 // Get the mime type from the extension of the download file
-                $mime = File::mime_by_ext(pathinfo($download, PATHINFO_EXTENSION));
+                $mime = File::mimeByExt(pathinfo($download, PATHINFO_EXTENSION));
             }
 
             // Open the file for reading
@@ -435,29 +435,29 @@ class Response implements \Kohana\Http\Contracts\Response
         $disposition = empty($options['inline']) ? 'attachment' : 'inline';
 
         // Calculate byte range to download.
-        list($start, $end) = $this->_calculate_byte_range($size);
+        list($start, $end) = $this->calculateByteRange($size);
 
         if (!empty($options['resumable'])) {
             if ($start > 0 || $end < $size - 1) {
                 // Partial Content
-                $this->_status = 206;
+                $this->status = 206;
             }
 
             // Range of bytes being sent
-            $this->_header['content-range'] = 'bytes ' . $start . '-' . $end . '/' . $size;
-            $this->_header['accept-ranges'] = 'bytes';
+            $this->header['content-range'] = 'bytes ' . $start . '-' . $end . '/' . $size;
+            $this->header['accept-ranges'] = 'bytes';
         }
 
         // Set the headers for a download
-        $this->_header['content-disposition'] = $disposition . '; filename="' . $download . '"';
-        $this->_header['content-type'] = $mime;
-        $this->_header['content-length'] = (string) ($end - $start + 1);
+        $this->header['content-disposition'] = $disposition . '; filename="' . $download . '"';
+        $this->header['content-type'] = $mime;
+        $this->header['content-length'] = (string) ($end - $start + 1);
 
         // Prevent MIME-sniffing in all browsers
-        $this->_header['x-content-type-options'] = 'nosniff';
+        $this->header['x-content-type-options'] = 'nosniff';
 
         // Send all headers now
-        $this->send_headers();
+        $this->sendHeaders();
 
         while (ob_get_level()) {
             // Flush all output buffers
@@ -467,7 +467,7 @@ class Response implements \Kohana\Http\Contracts\Response
         // Manually stop execution
         ignore_user_abort(true);
 
-        if (!Application::$safe_mode) {
+        if (!Application::$safeMode) {
             // Keep the script running forever
             set_time_limit(0);
         }
@@ -531,13 +531,13 @@ class Response implements \Kohana\Http\Contracts\Response
      */
     public function render(): string
     {
-        if (!$this->_header->offsetExists('content-type')) {
+        if (!$this->header->offsetExists('content-type')) {
             // Add the default Content-Type header if required
-            $this->_header['content-type'] = Application::$content_type . '; charset=' . Application::$charset;
+            $this->header['content-type'] = Application::$contentType . '; charset=' . Application::$charset;
         }
 
         // Set the content length
-        $this->headers('content-length', (string) $this->content_length());
+        $this->headers('content-length', (string) $this->contentLength());
 
         // If Kohana expose, set the user-agent
         if (Application::$expose) {
@@ -545,28 +545,28 @@ class Response implements \Kohana\Http\Contracts\Response
         }
 
         // Prepare cookies
-        if ($this->_cookies) {
+        if ($this->cookies) {
             if (extension_loaded('http')) {
                 $cookies = version_compare(phpversion('http'), '2.0.0', '>=') ?
-                    (string) new \http\Cookie($this->_cookies) :
-                    http_build_cookie($this->_cookies);
+                    (string) new \http\Cookie($this->cookies) :
+                    http_build_cookie($this->cookies);
             } else {
                 $cookies = [];
 
                 // Parse each
-                foreach ($this->_cookies as $key => $value) {
+                foreach ($this->cookies as $key => $value) {
                     $string = $key . '=' . $value['value'] . '; expires=' . date('l, d M Y H:i:s T', $value['expiration']);
                     $cookies[] = $string;
                 }
             }
 
             // Create the cookie string
-            $this->_header['set-cookie'] = $cookies;
+            $this->header['set-cookie'] = $cookies;
         }
 
-        $output = $this->_protocol . ' ' . $this->_status . ' ' . \Kohana\Http\Response::$messages[$this->_status] . "\r\n";
-        $output .= $this->_header;
-        $output .= $this->_body;
+        $output = $this->protocol . ' ' . $this->status . ' ' . \Kohana\Http\Response::$messages[$this->status] . "\r\n";
+        $output .= $this->header;
+        $output .= $this->body;
 
         return $output;
     }
@@ -578,9 +578,9 @@ class Response implements \Kohana\Http\Contracts\Response
      * @throws Request_Exception
      * @return String Generated ETag
      */
-    public function generate_etag(): string
+    public function generateEtag(): string
     {
-        if ($this->_body === '') {
+        if ($this->body === '') {
             throw new RequestException('No response yet associated with request - cannot auto generate resource ETag');
         }
 
@@ -595,7 +595,7 @@ class Response implements \Kohana\Http\Contracts\Response
      * @link   https://www.rfc-editor.org/rfc/rfc9110.html#name-byte-ranges
      * @return array|false
      */
-    protected function _parse_byte_range()
+    protected function parseByteRange()
     {
         if (!isset($_SERVER['HTTP_RANGE'])) {
             return false;
@@ -614,13 +614,13 @@ class Response implements \Kohana\Http\Contracts\Response
      * @param int $size
      * @return array
      */
-    protected function _calculate_byte_range(int $size): array
+    protected function calculateByteRange(int $size): array
     {
         // Defaults to start with when the HTTP_RANGE header doesn't exist.
         $start = 0;
         $end = $size - 1;
 
-        if ($range = $this->_parse_byte_range()) {
+        if ($range = $this->parseByteRange()) {
             // We have a byte range from HTTP_RANGE
             $start = $range[1];
 

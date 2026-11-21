@@ -54,7 +54,7 @@ class File
         }
 
         if (!empty($extension)) {
-            return \Kohana\Filesystem\File::mime_by_ext($extension);
+            return \Kohana\Filesystem\File::mimeByExt($extension);
         }
 
         // Unable to find the mime-type
@@ -70,7 +70,7 @@ class File
      * @return string|false MIME type on success or false on failure.
      * @throws Kohana_Exception
      */
-    public static function mime_by_ext(string $extension)
+    public static function mimeByExt(string $extension)
     {
         // Load all the mime types
         $mimes = Application::$config->load('mimes');
@@ -86,7 +86,7 @@ class File
      * @throws Kohana_Exception
      * @see Kohana_File::mime_by_ext()
      */
-    public static function mimes_by_ext(string $extension): array
+    public static function mimesByExt(string $extension): array
     {
         // Load all the mime types
         $mimes = Application::$config->load('mimes');
@@ -101,7 +101,7 @@ class File
      * @return  array   File extensions matching MIME type
      * @throws Kohana_Exception
      */
-    public static function exts_by_mime(string $type): array
+    public static function extsByMime(string $type): array
     {
         static $types = [];
 
@@ -133,9 +133,9 @@ class File
      * @return  mixed          First file extension matching or false
      * @throws Kohana_Exception
      */
-    public static function ext_by_mime(string $type)
+    public static function extByMime(string $type)
     {
-        return current(\Kohana\Filesystem\File::exts_by_mime($type));
+        return current(\Kohana\Filesystem\File::extsByMime($type));
     }
 
     /**

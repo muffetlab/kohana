@@ -14,7 +14,7 @@ use Kohana\Support\Utf8Exception;
  */
 function _str_pad($str, $final_str_length, $pad_str = ' ', $pad_type = STR_PAD_RIGHT)
 {
-    if (Utf8::is_ascii($str) && Utf8::is_ascii($pad_str))
+    if (Utf8::isAscii($str) && Utf8::isAscii($pad_str))
         return str_pad($str, $final_str_length, $pad_str, $pad_type);
 
     $str_length = Utf8::strlen($str);

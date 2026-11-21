@@ -32,7 +32,7 @@ class Arr
      * @param   array   $array  array to check
      * @return  bool
      */
-    public static function is_assoc(array $array): bool
+    public static function isAssoc(array $array): bool
     {
         // Keys of the array
         $keys = array_keys($array);
@@ -57,7 +57,7 @@ class Arr
      * @param   mixed   $value  value to check
      * @return  bool
      */
-    public static function is_array($value): bool
+    public static function isArray($value): bool
     {
         if (is_array($value)) {
             // Definitely an array
@@ -125,7 +125,7 @@ class Arr
 
             if (isset($array[$key])) {
                 if ($keys) {
-                    if (\Kohana\Support\Arr::is_array($array[$key])) {
+                    if (\Kohana\Support\Arr::isArray($array[$key])) {
                         // Dig down into the next part of the path
                         $array = $array[$key];
                     } else {
@@ -180,7 +180,7 @@ class Arr
      * @throws Kohana_Exception
      * @see Arr::path()
      */
-    public static function set_path(array &$array, $path, $value, ?string $delimiter = null)
+    public static function setPath(array &$array, $path, $value, ?string $delimiter = null)
     {
         if (!$delimiter) {
             // Use the default delimiter
@@ -281,7 +281,7 @@ class Arr
     {
         $found = [];
         foreach ($paths as $path) {
-            \Kohana\Support\Arr::set_path($found, $path, \Kohana\Support\Arr::path($array, $path, $default));
+            \Kohana\Support\Arr::setPath($found, $path, \Kohana\Support\Arr::path($array, $path, $default));
         }
 
         return $found;
@@ -399,7 +399,7 @@ class Arr
     public static function merge(array $array1, ...$arrays): array
     {
         foreach ($arrays as $array2) {
-            if (\Kohana\Support\Arr::is_assoc($array2)) {
+            if (\Kohana\Support\Arr::isAssoc($array2)) {
                 foreach ($array2 as $key => $value) {
                     if (is_array($value) && isset($array1[$key]) && is_array($array1[$key])) {
                         $array1[$key] = \Kohana\Support\Arr::merge($array1[$key], $value);
@@ -506,7 +506,7 @@ class Arr
      */
     public static function flatten(array $array): array
     {
-        $is_assoc = \Kohana\Support\Arr::is_assoc($array);
+        $is_assoc = \Kohana\Support\Arr::isAssoc($array);
 
         $flat = [];
         foreach ($array as $key => $value) {

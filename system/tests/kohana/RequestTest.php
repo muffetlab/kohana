@@ -56,8 +56,8 @@ class Kohana_RequestTest extends TestCase
     {
         $this->setEnvironment([
             'Kohana\Http\Request::$initial' => null,
-            'Kohana\Http\Request::$client_ip' => null,
-            'Kohana\Http\Request::$user_agent' => null,
+            'Kohana\Http\Request::$clientIp' => null,
+            'Kohana\Http\Request::$userAgent' => null,
             '_SERVER' => [
                 'HTTPS' => null,
                 'PATH_INFO' => '/',
@@ -75,15 +75,15 @@ class Kohana_RequestTest extends TestCase
 
         $this->assertEquals(Request::$initial, $request);
 
-        $this->assertEquals('127.0.0.1', Request::$client_ip);
+        $this->assertEquals('127.0.0.1', Request::$clientIp);
 
-        $this->assertEquals('whatever (Mozilla 5.0/compatible)', Request::$user_agent);
+        $this->assertEquals('whatever (Mozilla 5.0/compatible)', Request::$userAgent);
 
         $this->assertEquals('HTTP/1.1', $request->protocol());
 
         $this->assertEquals('http://example.com/', $request->referrer());
 
-        $this->assertEquals('ajax-or-something', $request->requested_with());
+        $this->assertEquals('ajax-or-something', $request->requestedWith());
 
         $this->assertEquals([], $request->query());
 
@@ -104,7 +104,7 @@ class Kohana_RequestTest extends TestCase
 
         $request = new Request('http://www.google.com/', [], false);
 
-        $this->assertFalse($request->is_external());
+        $this->assertFalse($request->isExternal());
     }
 
     /**
@@ -258,12 +258,12 @@ class Kohana_RequestTest extends TestCase
         }
 
         $this->setEnvironment([
-            'Kohana\Foundation\Application::$base_url' => '/kohana/',
+            'Kohana\Foundation\Application::$baseUrl' => '/kohana/',
             '_SERVER' => [
                 'HTTP_HOST' => 'localhost',
                 'argc' => $_SERVER['argc']
             ],
-            'Kohana\Foundation\Application::$index_file' => false,
+            'Kohana\Foundation\Application::$indexFile' => false,
         ]);
 
         // issue #3967: inject the route so that we don't conflict with the application's default route
@@ -352,7 +352,7 @@ class Kohana_RequestTest extends TestCase
         $_SERVER['CONTENT_LENGTH'] = $content_length;
 
         // Test the post_max_size_exceeded() method
-        $this->assertSame(Request::post_max_size_exceeded(), $expected);
+        $this->assertSame(Request::postMaxSizeExceeded(), $expected);
     }
 
     /**
@@ -676,7 +676,7 @@ class Kohana_RequestTest extends TestCase
         $client = $request->client();
 
         $this->assertTrue($client->follow());
-        $this->assertFalse($client->strict_redirect());
+        $this->assertFalse($client->strictRedirect());
     }
 
     /**
@@ -732,7 +732,7 @@ class Kohana_RequestTest_Header_Spying_Request_Client_External extends ExternalC
 {
     private $headers;
 
-    protected function _send_message(Request $request, Response $response): Response
+    protected function sendMessage(Request $request, Response $response): Response
     {
         $this->headers = $request->headers();
 

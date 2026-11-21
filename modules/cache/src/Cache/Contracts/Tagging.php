@@ -25,13 +25,13 @@ interface Tagging
      * @param array|null $tags Tags to associate with the cache entry
      * @return  bool
      */
-    public function set_with_tags(string $id, $data, ?int $lifetime = null, ?array $tags = null): bool;
+    public function setWithTags(string $id, $data, ?int $lifetime = null, ?array $tags = null): bool;
     /**
      * Delete cache entries based on a tag
      *
      * @param string $tag Tag label identifying cache entries to be deleted.
      */
-    public function delete_tag(string $tag);
+    public function deleteTag(string $tag);
     /**
      * Find cache entries based on a tag
      *

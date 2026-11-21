@@ -78,7 +78,7 @@ class Kohana_CoreTest extends TestCase
      */
     public function test_sanitize(string $value, string $result)
     {
-        $this->setEnvironment(['Kohana\Foundation\Application::$magic_quotes' => true]);
+        $this->setEnvironment(['Kohana\Foundation\Application::$magicQuotes' => true]);
 
         $this->assertSame($result, Application::sanitize($value));
     }
@@ -93,7 +93,7 @@ class Kohana_CoreTest extends TestCase
     public function test_find_file_no_extension()
     {
         // ".php" is manually appended to the _file name_, not passed as the extension
-        $path = Application::find_file('src', $file = 'Foundation/Application.php', false);
+        $path = Application::findFile('src', $file = 'Foundation/Application.php', false);
 
         $this->assertIsString($path);
 
@@ -110,9 +110,9 @@ class Kohana_CoreTest extends TestCase
      */
     public function test_find_file_returns_false_or_array_on_failure()
     {
-        $this->assertFalse(Application::find_file('configy', 'zebra'));
+        $this->assertFalse(Application::findFile('configy', 'zebra'));
 
-        $this->assertSame([], Application::find_file('configy', 'zebra', null, true));
+        $this->assertSame([], Application::findFile('configy', 'zebra', null, true));
     }
 
     /**
@@ -123,12 +123,12 @@ class Kohana_CoreTest extends TestCase
      */
     public function test_list_files_returns_array_on_success_and_failure()
     {
-        $files = Application::list_files('config');
+        $files = Application::listFiles('config');
 
         $this->assertIsArray($files);
         $this->assertGreaterThan(3, count($files));
 
-        $this->assertSame([], Application::list_files('geshmuck'));
+        $this->assertSame([], Application::listFiles('geshmuck'));
     }
 
     /**
@@ -289,7 +289,7 @@ class Kohana_CoreTest extends TestCase
         $error_level = error_reporting();
         error_reporting(E_ALL);
         try {
-            Application::error_handler($code, $error, $file, $line);
+            Application::errorHandler($code, $error, $file, $line);
         } catch (Exception $e) {
             $this->assertEquals($code, $e->getCode());
             $this->assertEquals($error, $e->getMessage());
@@ -408,7 +408,7 @@ class Kohana_CoreTest extends TestCase
      */
     public function test_include_paths()
     {
-        $include_paths = Application::include_paths();
+        $include_paths = Application::includePaths();
         $modules = Application::modules();
 
         $this->assertIsArray($include_paths);

@@ -18,10 +18,10 @@ use Kohana\Support\Str;
 class UserToken extends Model
 {
     // Relationships
-    protected $_belongs_to = [
+    protected $belongsTo = [
         'user' => ['model' => User::class],
     ];
-    protected $_created_column = [
+    protected $createdColumn = [
         'column' => 'created',
         'format' => true,
     ];
@@ -38,10 +38,10 @@ class UserToken extends Model
 
         if (mt_rand(1, 100) === 1) {
             // Do garbage collection
-            $this->delete_expired();
+            $this->deleteExpired();
         }
 
-        if ($this->expires < time() && $this->_loaded) {
+        if ($this->expires < time() && $this->loaded) {
             // This object has expired
             $this->delete();
         }
@@ -53,24 +53,24 @@ class UserToken extends Model
      * @return  ORM
      * @throws Kohana_Exception
      */
-    public function delete_expired(): Model
+    public function deleteExpired(): Model
     {
         // Delete all expired tokens
-        DB::delete($this->_table_name)
+        DB::delete($this->tableName)
             ->where('expires', '<', time())
-            ->execute($this->_db);
+            ->execute($this->db);
 
         return $this;
     }
 
     public function create(?Validator $validation = null): Model
     {
-        $this->token = $this->create_token();
+        $this->token = $this->createToken();
 
         return parent::create($validation);
     }
 
-    protected function create_token(): string
+    protected function createToken(): string
     {
         do {
             $token = sha1(uniqid(Str::random('alnum', 32), true));

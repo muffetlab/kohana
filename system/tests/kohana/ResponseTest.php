@@ -182,7 +182,7 @@ class Kohana_ResponseTest extends TestCase
         $content_type = 'application/json';
         $response = new Response;
         $response->headers('content-type', $content_type);
-        $headers = $response->send_headers()->headers();
+        $headers = $response->sendHeaders()->headers();
         $this->assertSame($content_type, (string) $headers['content-type']);
     }
 

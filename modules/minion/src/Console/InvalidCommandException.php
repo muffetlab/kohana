@@ -13,7 +13,7 @@ namespace Kohana\Console;
  */
 class InvalidCommandException extends ConsoleException
 {
-    public function format_for_cli(): string
+    public function formatForCli(): string
     {
         return 'ERROR: ' . $this->getMessage() . PHP_EOL;
     }

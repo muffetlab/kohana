@@ -76,7 +76,7 @@ class Cookie
             // Separate the salt and the value
             list ($hash, $value) = explode('~', $cookie, 2);
 
-            if (Security::slow_equals(\Kohana\Cookie\Cookie::salt($key, $value), $hash)) {
+            if (Security::slowEquals(\Kohana\Cookie\Cookie::salt($key, $value), $hash)) {
                 // Cookie signature is valid
                 return $value;
             }
@@ -116,13 +116,13 @@ class Cookie
 
         if ($lifetime !== 0) {
             // The expiration is expected to be a UNIX timestamp
-            $lifetime += static::_time();
+            $lifetime += static::time();
         }
 
         // Add the salt to the cookie value
         $value = \Kohana\Cookie\Cookie::salt($name, $value) . '~' . $value;
 
-        return static::_setcookie($name, $value, $lifetime, \Kohana\Cookie\Cookie::$path, \Kohana\Cookie\Cookie::$domain, \Kohana\Cookie\Cookie::$secure, \Kohana\Cookie\Cookie::$httponly);
+        return static::setcookie($name, $value, $lifetime, \Kohana\Cookie\Cookie::$path, \Kohana\Cookie\Cookie::$domain, \Kohana\Cookie\Cookie::$secure, \Kohana\Cookie\Cookie::$httponly);
     }
 
     /**
@@ -139,7 +139,7 @@ class Cookie
         unset($_COOKIE[$name]);
 
         // Nullify the cookie and make it expire
-        return static::_setcookie($name, '', -86400, \Kohana\Cookie\Cookie::$path, \Kohana\Cookie\Cookie::$domain, \Kohana\Cookie\Cookie::$secure, \Kohana\Cookie\Cookie::$httponly);
+        return static::setcookie($name, '', -86400, \Kohana\Cookie\Cookie::$path, \Kohana\Cookie\Cookie::$domain, \Kohana\Cookie\Cookie::$secure, \Kohana\Cookie\Cookie::$httponly);
     }
 
     /**
@@ -178,7 +178,7 @@ class Cookie
      * @return bool
      * @see setcookie
      */
-    protected static function _setcookie(string $name, string $value, int $expire, string $path, string $domain, bool $secure, bool $httponly): bool
+    protected static function setcookie(string $name, string $value, int $expire, string $path, string $domain, bool $secure, bool $httponly): bool
     {
         return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
     }
@@ -189,7 +189,7 @@ class Cookie
      * @return int
      * @see    time
      */
-    protected static function _time(): int
+    protected static function time(): int
     {
         return time();
     }

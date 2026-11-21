@@ -7,6 +7,6 @@ class Http404Exception extends HttpException
     /**
      * @var int HTTP 404 Not Found
      */
-    protected $_code = 404;
+    protected $code = 404;
 
 }

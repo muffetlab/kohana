@@ -7,6 +7,6 @@ class Http307Exception extends RedirectHttpException
     /**
      * @var int HTTP 307 Temporary Redirect
      */
-    protected $_code = 307;
+    protected $code = 307;
 
 }

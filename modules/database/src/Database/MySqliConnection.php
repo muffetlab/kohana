@@ -18,27 +18,27 @@ use Kohana\Foundation\Profiler;
 class MySqliConnection extends Connection
 {
     // Database in use by each connection
-    protected static $_current_databases = [];
+    protected static $currentDatabases = [];
     // Use SET NAMES to set the character set
-    protected static $_set_names;
+    protected static $setNames;
     // Identifier for this connection within the PHP driver
-    protected $_connection_id;
+    protected $connectionId;
     // MySQL uses a backtick for identifiers
-    protected $_identifier = '`';
+    protected $identifier = '`';
 
     public function connect()
     {
-        if ($this->_connection)
+        if ($this->connection)
             return;
 
-        if (\Kohana\Database\MySqliConnection::$_set_names === null) {
+        if (\Kohana\Database\MySqliConnection::$setNames === null) {
             // Determine if we can use mysqli_set_charset(), which is only
             // available on PHP 5.2.3+ when compiled against MySQL 5.0+
-            \Kohana\Database\MySqliConnection::$_set_names = !function_exists('mysqli_set_charset');
+            \Kohana\Database\MySqliConnection::$setNames = !function_exists('mysqli_set_charset');
         }
 
         // Extract the connection parameters, adding required variables
-        extract($this->_config['connection'] + [
+        extract($this->config['connection'] + [
                 'hostname' => '',
                 'username' => '',
                 'password' => '',
@@ -50,42 +50,42 @@ class MySqliConnection extends Connection
             ]);
 
         // Prevent this information from showing up in traces
-        unset($this->_config['connection']['username'], $this->_config['connection']['password']);
+        unset($this->config['connection']['username'], $this->config['connection']['password']);
 
         try {
             if (is_array($ssl)) {
-                $this->_connection = mysqli_init();
-                $this->_connection->ssl_set(
+                $this->connection = mysqli_init();
+                $this->connection->ssl_set(
                     Arr::get($ssl, 'client_key_path'), Arr::get($ssl, 'client_cert_path'), Arr::get($ssl, 'ca_cert_path'), Arr::get($ssl, 'ca_dir_path'), Arr::get($ssl, 'cipher')
                 );
-                $this->_connection->real_connect($hostname, $username, $password, $database, $port, $socket, MYSQLI_CLIENT_SSL | $flags);
+                $this->connection->real_connect($hostname, $username, $password, $database, $port, $socket, MYSQLI_CLIENT_SSL | $flags);
             } else {
-                $this->_connection = new \mysqli($hostname, $username, $password, $database, $port, $socket);
+                $this->connection = new \mysqli($hostname, $username, $password, $database, $port, $socket);
             }
         } catch (\Exception $e) {
             // No connection exists
-            $this->_connection = null;
+            $this->connection = null;
 
             throw new DatabaseException(':error', [':error' => $e->getMessage()], $e->getCode());
         }
 
         // \xFF is a better delimiter, but the PHP driver uses underscore
-        $this->_connection_id = sha1($hostname . '_' . $username . '_' . $password);
+        $this->connectionId = sha1($hostname . '_' . $username . '_' . $password);
 
-        if (!empty($this->_config['charset'])) {
+        if (!empty($this->config['charset'])) {
             // Set the character set
-            $this->set_charset($this->_config['charset']);
+            $this->setCharset($this->config['charset']);
         }
 
-        if (!empty($this->_config['connection']['variables'])) {
+        if (!empty($this->config['connection']['variables'])) {
             // Set session variables
             $variables = [];
 
-            foreach ($this->_config['connection']['variables'] as $var => $val) {
+            foreach ($this->config['connection']['variables'] as $var => $val) {
                 $variables[] = 'SESSION ' . $var . ' = ' . $this->quote($val);
             }
 
-            $this->_connection->query('SET ' . implode(', ', $variables));
+            $this->connection->query('SET ' . implode(', ', $variables));
         }
     }
 
@@ -100,10 +100,10 @@ class MySqliConnection extends Connection
             // Database is assumed disconnected
             $status = true;
 
-            if (is_resource($this->_connection)) {
-                if ($status = $this->_connection->close()) {
+            if (is_resource($this->connection)) {
+                if ($status = $this->connection->close()) {
                     // Clear the connection
-                    $this->_connection = null;
+                    $this->connection = null;
 
                     // Clear the instance
                     parent::disconnect();
@@ -111,27 +111,27 @@ class MySqliConnection extends Connection
             }
         } catch (\Exception $e) {
             // Database is probably not disconnected
-            $status = !is_resource($this->_connection);
+            $status = !is_resource($this->connection);
         }
 
         return $status;
     }
 
-    public function set_charset(string $charset)
+    public function setCharset(string $charset)
     {
         // Make sure the database is connected
-        $this->_connection or $this->connect();
+        $this->connection or $this->connect();
 
-        if (\Kohana\Database\MySqliConnection::$_set_names === true) {
+        if (\Kohana\Database\MySqliConnection::$setNames === true) {
             // PHP is compiled against MySQL 4.x
-            $status = (bool) $this->_connection->query('SET NAMES ' . $this->quote($charset));
+            $status = (bool) $this->connection->query('SET NAMES ' . $this->quote($charset));
         } else {
             // PHP is compiled against MySQL 5.x
-            $status = $this->_connection->set_charset($charset);
+            $status = $this->connection->set_charset($charset);
         }
 
         if ($status === false) {
-            throw new DatabaseException(':error', [':error' => $this->_connection->error], $this->_connection->errno);
+            throw new DatabaseException(':error', [':error' => $this->connection->error], $this->connection->errno);
         }
     }
 
@@ -148,24 +148,24 @@ class MySqliConnection extends Connection
     public function query(int $type, string $sql, $as_object = false, ?array $params = null)
     {
         // Make sure the database is connected
-        $this->_connection or $this->connect();
+        $this->connection or $this->connect();
 
         if (Application::$profiling) {
             // Benchmark this query for the current instance
-            $benchmark = Profiler::start("Database ($this->_instance)", $sql);
+            $benchmark = Profiler::start("Database ($this->instance)", $sql);
         }
 
         // Execute the query
-        if (($result = $this->_connection->query($sql)) === false) {
+        if (($result = $this->connection->query($sql)) === false) {
             if (isset($benchmark)) {
                 // This benchmark is worthless
                 Profiler::delete($benchmark);
             }
 
             throw new DatabaseException(':error [ :query ]', [
-            ':error' => $this->_connection->error,
+            ':error' => $this->connection->error,
             ':query' => $sql
-            ], $this->_connection->errno);
+            ], $this->connection->errno);
         }
 
         if (isset($benchmark)) {
@@ -173,7 +173,7 @@ class MySqliConnection extends Connection
         }
 
         // Set the last query
-        $this->last_query = $sql;
+        $this->lastQuery = $sql;
 
         if ($type === Connection::SELECT) {
             // Return an iterator of results
@@ -181,12 +181,12 @@ class MySqliConnection extends Connection
         } elseif ($type === Connection::INSERT) {
             // Return a list of insert id and rows created
             return [
-                $this->_connection->insert_id,
-                $this->_connection->affected_rows,
+                $this->connection->insert_id,
+                $this->connection->affected_rows,
             ];
         } else {
             // Return the number of rows affected
-            return $this->_connection->affected_rows;
+            return $this->connection->affected_rows;
         }
     }
 
@@ -255,13 +255,13 @@ class MySqliConnection extends Connection
     public function begin(?string $mode = null): bool
     {
         // Make sure the database is connected
-        $this->_connection or $this->connect();
+        $this->connection or $this->connect();
 
-        if ($mode && !$this->_connection->query("SET TRANSACTION ISOLATION LEVEL $mode")) {
-            throw new DatabaseException(':error', [':error' => $this->_connection->error], $this->_connection->errno);
+        if ($mode && !$this->connection->query("SET TRANSACTION ISOLATION LEVEL $mode")) {
+            throw new DatabaseException(':error', [':error' => $this->connection->error], $this->connection->errno);
         }
 
-        return (bool) $this->_connection->query('START TRANSACTION');
+        return (bool) $this->connection->query('START TRANSACTION');
     }
 
     /**
@@ -273,9 +273,9 @@ class MySqliConnection extends Connection
     public function commit(): bool
     {
         // Make sure the database is connected
-        $this->_connection or $this->connect();
+        $this->connection or $this->connect();
 
-        return (bool) $this->_connection->query('COMMIT');
+        return (bool) $this->connection->query('COMMIT');
     }
 
     /**
@@ -287,12 +287,12 @@ class MySqliConnection extends Connection
     public function rollback(): bool
     {
         // Make sure the database is connected
-        $this->_connection or $this->connect();
+        $this->connection or $this->connect();
 
-        return (bool) $this->_connection->query('ROLLBACK');
+        return (bool) $this->connection->query('ROLLBACK');
     }
 
-    public function list_tables(?string $like = null): array
+    public function listTables(?string $like = null): array
     {
         if (is_string($like)) {
             // Search for table names
@@ -310,10 +310,10 @@ class MySqliConnection extends Connection
         return $tables;
     }
 
-    public function list_columns(string $table, ?string $like = null, bool $add_prefix = true): array
+    public function listColumns(string $table, ?string $like = null, bool $add_prefix = true): array
     {
         // Quote the table name
-        $table = $add_prefix === true ? $this->quote_table($table) : $table;
+        $table = $add_prefix === true ? $this->quoteTable($table) : $table;
 
         if (is_string($like)) {
             // Search for column names
@@ -326,7 +326,7 @@ class MySqliConnection extends Connection
         $count = 0;
         $columns = [];
         foreach ($result as $row) {
-            list($type, $length) = $this->_parse_type($row['Type']);
+            list($type, $length) = $this->parseType($row['Type']);
 
             $column = $this->datatype($type);
 
@@ -389,10 +389,10 @@ class MySqliConnection extends Connection
     public function escape(string $value): string
     {
         // Make sure the database is connected
-        $this->_connection or $this->connect();
+        $this->connection or $this->connect();
 
-        if (($value = $this->_connection->real_escape_string($value)) === false) {
-            throw new DatabaseException(':error', [':error' => $this->_connection->error], $this->_connection->errno);
+        if (($value = $this->connection->real_escape_string($value)) === false) {
+            throw new DatabaseException(':error', [':error' => $this->connection->error], $this->connection->errno);
         }
 
         // SQL standard is to use single-quotes for all values

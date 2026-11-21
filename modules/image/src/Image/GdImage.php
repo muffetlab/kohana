@@ -21,7 +21,7 @@ class GdImage extends Image
     const IMAGEFILTER = 'imagefilter';
     const IMAGELAYEREFFECT = 'imagelayereffect';
 
-    protected static $_available_functions = [];
+    protected static $availableFunctions = [];
 
     /**
      * Checks if GD is enabled and verify that key methods exist, some of which require GD to
@@ -43,7 +43,7 @@ class GdImage extends Image
             \Kohana\Image\GdImage::IMAGELAYEREFFECT
         ];
         foreach ($functions as $function) {
-            \Kohana\Image\GdImage::$_available_functions[$function] = function_exists($function);
+            \Kohana\Image\GdImage::$availableFunctions[$function] = function_exists($function);
         }
 
         if (defined('GD_VERSION')) {
@@ -64,13 +64,13 @@ class GdImage extends Image
             throw new KohanaException('GdImage requires GD version :required or greater, you have :version', ['required' => '2.0.1', ':version' => $version]);
         }
 
-        return \Kohana\Image\GdImage::$_checked = true;
+        return \Kohana\Image\GdImage::$checked = true;
     }
 
     // Temporary image resource
-    protected $_image;
+    protected $image;
     // Function name to open Image
-    protected $_create_function;
+    protected $createFunction;
 
     /**
      * Runs [Image_GD::check] and loads the image.
@@ -81,7 +81,7 @@ class GdImage extends Image
      */
     public function __construct(string $file)
     {
-        if (!\Kohana\Image\GdImage::$_checked) {
+        if (!\Kohana\Image\GdImage::$checked) {
             // Run the installation check
             \Kohana\Image\GdImage::check();
         }
@@ -106,7 +106,7 @@ class GdImage extends Image
         }
 
         // Save function for future use
-        $this->_create_function = $create;
+        $this->createFunction = $create;
     }
 
     /**
@@ -116,9 +116,9 @@ class GdImage extends Image
      */
     public function __destruct()
     {
-        if (is_resource($this->_image)) {
+        if (is_resource($this->image)) {
             // Free all resources
-            imagedestroy($this->_image);
+            imagedestroy($this->image);
         }
     }
 
@@ -127,17 +127,17 @@ class GdImage extends Image
      *
      * @return  void
      */
-    protected function _load_image()
+    protected function loadImage()
     {
-        if (!is_resource($this->_image)) {
+        if (!is_resource($this->image)) {
             // Gets create function
-            $create = $this->_create_function;
+            $create = $this->createFunction;
 
             // Open the temporary image
-            $this->_image = $create($this->file);
+            $this->image = $create($this->file);
 
             // Preserve transparency when saving
-            imagesavealpha($this->_image, true);
+            imagesavealpha($this->image, true);
         }
     }
 
@@ -148,14 +148,14 @@ class GdImage extends Image
      * @param int $height  New height
      * @return  void
      */
-    protected function _do_resize(int $width, int $height)
+    protected function doResize(int $width, int $height)
     {
         // Pre-size width and height
         $pre_width = $this->width;
         $pre_height = $this->height;
 
         // Loads image if not yet loaded
-        $this->_load_image();
+        $this->loadImage();
 
         // Test if we can do a resize without resampling to speed up the final resize
         if ($width > ($this->width / 2) && $height > ($this->height / 2)) {
@@ -170,23 +170,23 @@ class GdImage extends Image
             }
 
             // Create the temporary image to copy to
-            $image = $this->_create($pre_width, $pre_height);
+            $image = $this->create($pre_width, $pre_height);
 
-            if (imagecopyresized($image, $this->_image, 0, 0, 0, 0, $pre_width, $pre_height, $this->width, $this->height)) {
+            if (imagecopyresized($image, $this->image, 0, 0, 0, 0, $pre_width, $pre_height, $this->width, $this->height)) {
                 // Swap the new image for the old one
-                imagedestroy($this->_image);
-                $this->_image = $image;
+                imagedestroy($this->image);
+                $this->image = $image;
             }
         }
 
         // Create the temporary image to copy to
-        $image = $this->_create($width, $height);
+        $image = $this->create($width, $height);
 
         // Execute the resize
-        if (imagecopyresampled($image, $this->_image, 0, 0, 0, 0, $width, $height, $pre_width, $pre_height)) {
+        if (imagecopyresampled($image, $this->image, 0, 0, 0, 0, $width, $height, $pre_width, $pre_height)) {
             // Swap the new image for the old one
-            imagedestroy($this->_image);
-            $this->_image = $image;
+            imagedestroy($this->image);
+            $this->image = $image;
 
             // Reset the width and height
             $this->width = imagesx($image);
@@ -203,19 +203,19 @@ class GdImage extends Image
      * @param int $offset_y  Offset from the top
      * @return  void
      */
-    protected function _do_crop(int $width, int $height, int $offset_x, int $offset_y)
+    protected function doCrop(int $width, int $height, int $offset_x, int $offset_y)
     {
         // Create the temporary image to copy to
-        $image = $this->_create($width, $height);
+        $image = $this->create($width, $height);
 
         // Loads image if not yet loaded
-        $this->_load_image();
+        $this->loadImage();
 
         // Execute the crop
-        if (imagecopyresampled($image, $this->_image, 0, 0, $offset_x, $offset_y, $width, $height, $width, $height)) {
+        if (imagecopyresampled($image, $this->image, 0, 0, $offset_x, $offset_y, $width, $height, $width, $height)) {
             // Swap the new image for the old one
-            imagedestroy($this->_image);
-            $this->_image = $image;
+            imagedestroy($this->image);
+            $this->image = $image;
 
             // Reset the width and height
             $this->width = imagesx($image);
@@ -230,20 +230,20 @@ class GdImage extends Image
      * @return  void
      * @throws Kohana_Exception
      */
-    protected function _do_rotate(int $degrees)
+    protected function doRotate(int $degrees)
     {
-        if (empty(\Kohana\Image\GdImage::$_available_functions[\Kohana\Image\GdImage::IMAGEROTATE])) {
+        if (empty(\Kohana\Image\GdImage::$availableFunctions[\Kohana\Image\GdImage::IMAGEROTATE])) {
             throw new KohanaException('This method requires :function, which is only available in the bundled version of GD', [':function' => 'imagerotate']);
         }
 
         // Loads image if not yet loaded
-        $this->_load_image();
+        $this->loadImage();
 
         // Transparent black will be used as the background for the uncovered region
-        $transparent = imagecolorallocatealpha($this->_image, 0, 0, 0, 127);
+        $transparent = imagecolorallocatealpha($this->image, 0, 0, 0, 127);
 
         // Rotate, setting the transparent color
-        $image = imagerotate($this->_image, 360 - $degrees, $transparent, 1);
+        $image = imagerotate($this->image, 360 - $degrees, $transparent, 1);
 
         // Save the alpha of the rotated image
         imagesavealpha($image, true);
@@ -252,10 +252,10 @@ class GdImage extends Image
         $width = imagesx($image);
         $height = imagesy($image);
 
-        if (imagecopymerge($this->_image, $image, 0, 0, 0, 0, $width, $height, 100)) {
+        if (imagecopymerge($this->image, $image, 0, 0, 0, 0, $width, $height, 100)) {
             // Swap the new image for the old one
-            imagedestroy($this->_image);
-            $this->_image = $image;
+            imagedestroy($this->image);
+            $this->image = $image;
 
             // Reset the width and height
             $this->width = $width;
@@ -269,29 +269,29 @@ class GdImage extends Image
      * @param int $direction Direction to flip
      * @return  void
      */
-    protected function _do_flip(int $direction)
+    protected function doFlip(int $direction)
     {
         // Create the flipped image
-        $flipped = $this->_create($this->width, $this->height);
+        $flipped = $this->create($this->width, $this->height);
 
         // Loads image if not yet loaded
-        $this->_load_image();
+        $this->loadImage();
 
         if ($direction === Image::HORIZONTAL) {
             for ($x = 0; $x < $this->width; $x++) {
                 // Flip each row from top to bottom
-                imagecopy($flipped, $this->_image, $x, 0, $this->width - $x - 1, 0, 1, $this->height);
+                imagecopy($flipped, $this->image, $x, 0, $this->width - $x - 1, 0, 1, $this->height);
             }
         } else {
             for ($y = 0; $y < $this->height; $y++) {
                 // Flip each column from left to right
-                imagecopy($flipped, $this->_image, 0, $y, 0, $this->height - $y - 1, $this->width, 1);
+                imagecopy($flipped, $this->image, 0, $y, 0, $this->height - $y - 1, $this->width, 1);
             }
         }
 
         // Swap the new image for the old one
-        imagedestroy($this->_image);
-        $this->_image = $flipped;
+        imagedestroy($this->image);
+        $this->image = $flipped;
 
         // Reset the width and height
         $this->width = imagesx($flipped);
@@ -305,14 +305,14 @@ class GdImage extends Image
      * @return  void
      * @throws Kohana_Exception
      */
-    protected function _do_sharpen(int $amount)
+    protected function doSharpen(int $amount)
     {
-        if (empty(\Kohana\Image\GdImage::$_available_functions[\Kohana\Image\GdImage::IMAGECONVOLUTION])) {
+        if (empty(\Kohana\Image\GdImage::$availableFunctions[\Kohana\Image\GdImage::IMAGECONVOLUTION])) {
             throw new KohanaException('This method requires :function, which is only available in the bundled version of GD', [':function' => 'imageconvolution']);
         }
 
         // Loads image if not yet loaded
-        $this->_load_image();
+        $this->loadImage();
 
         // Amount should be in the range of 18-10
         $amount = round(abs(-18 + ($amount * 0.08)), 2);
@@ -325,10 +325,10 @@ class GdImage extends Image
         ];
 
         // Perform the sharpening
-        if (imageconvolution($this->_image, $matrix, $amount - 8, 0)) {
+        if (imageconvolution($this->image, $matrix, $amount - 8, 0)) {
             // Reset the width and height
-            $this->width = imagesx($this->_image);
-            $this->height = imagesy($this->_image);
+            $this->width = imagesx($this->image);
+            $this->height = imagesy($this->image);
         }
     }
 
@@ -341,14 +341,14 @@ class GdImage extends Image
      * @return  void
      * @throws Kohana_Exception
      */
-    protected function _do_reflection(int $height, int $opacity, bool $fade_in)
+    protected function doReflection(int $height, int $opacity, bool $fade_in)
     {
-        if (empty(\Kohana\Image\GdImage::$_available_functions[\Kohana\Image\GdImage::IMAGEFILTER])) {
+        if (empty(\Kohana\Image\GdImage::$availableFunctions[\Kohana\Image\GdImage::IMAGEFILTER])) {
             throw new KohanaException('This method requires :function, which is only available in the bundled version of GD', [':function' => 'imagefilter']);
         }
 
         // Loads image if not yet loaded
-        $this->_load_image();
+        $this->loadImage();
 
         // Convert an opacity range of 0-100 to 127-0
         $opacity = round(abs($opacity * 127 / 100 - 127));
@@ -362,10 +362,10 @@ class GdImage extends Image
         }
 
         // Create the reflection image
-        $reflection = $this->_create($this->width, $this->height + $height);
+        $reflection = $this->create($this->width, $this->height + $height);
 
         // Copy the image to the reflection
-        imagecopy($reflection, $this->_image, 0, 0, 0, 0, $this->width, $this->height);
+        imagecopy($reflection, $this->image, 0, 0, 0, 0, $this->width, $this->height);
 
         for ($offset = 0; $height >= $offset; $offset++) {
             // Read the next line down
@@ -383,10 +383,10 @@ class GdImage extends Image
             }
 
             // Create a single line of the image
-            $line = $this->_create($this->width, 1);
+            $line = $this->create($this->width, 1);
 
             // Copy a single line from the current image into the line
-            imagecopy($line, $this->_image, 0, 0, 0, $src_y, $this->width, 1);
+            imagecopy($line, $this->image, 0, 0, 0, $src_y, $this->width, 1);
 
             // Colorize the line to add the correct alpha level
             imagefilter($line, IMG_FILTER_COLORIZE, 0, 0, 0, $dst_opacity);
@@ -396,8 +396,8 @@ class GdImage extends Image
         }
 
         // Swap the new image for the old one
-        imagedestroy($this->_image);
-        $this->_image = $reflection;
+        imagedestroy($this->image);
+        $this->image = $reflection;
 
         // Reset the width and height
         $this->width = imagesx($reflection);
@@ -414,14 +414,14 @@ class GdImage extends Image
      * @return  void
      * @throws Kohana_Exception
      */
-    protected function _do_watermark(Image $image, int $offset_x, int $offset_y, int $opacity)
+    protected function doWatermark(Image $image, int $offset_x, int $offset_y, int $opacity)
     {
-        if (empty(\Kohana\Image\GdImage::$_available_functions[\Kohana\Image\GdImage::IMAGELAYEREFFECT])) {
+        if (empty(\Kohana\Image\GdImage::$availableFunctions[\Kohana\Image\GdImage::IMAGELAYEREFFECT])) {
             throw new KohanaException('This method requires :function, which is only available in the bundled version of GD', [':function' => 'imagelayereffect']);
         }
 
         // Loads image if not yet loaded
-        $this->_load_image();
+        $this->loadImage();
 
         // Create the watermark image resource
         $overlay = imagecreatefromstring($image->render());
@@ -447,9 +447,9 @@ class GdImage extends Image
         }
 
         // Alpha blending must be enabled on the background!
-        imagealphablending($this->_image, true);
+        imagealphablending($this->image, true);
 
-        if (imagecopy($this->_image, $overlay, $offset_x, $offset_y, 0, 0, $width, $height)) {
+        if (imagecopy($this->image, $overlay, $offset_x, $offset_y, 0, 0, $width, $height)) {
             // Destroy the overlay image
             imagedestroy($overlay);
         }
@@ -464,16 +464,16 @@ class GdImage extends Image
      * @param int $opacity  Opacity
      * @return void
      */
-    protected function _do_background(int $r, int $g, int $b, int $opacity)
+    protected function doBackground(int $r, int $g, int $b, int $opacity)
     {
         // Loads image if not yet loaded
-        $this->_load_image();
+        $this->loadImage();
 
         // Convert an opacity range of 0-100 to 127-0
         $opacity = round(abs($opacity * 127 / 100 - 127));
 
         // Create a new background
-        $background = $this->_create($this->width, $this->height);
+        $background = $this->create($this->width, $this->height);
 
         // Allocate the color
         $color = imagecolorallocatealpha($background, $r, $g, $b, $opacity);
@@ -485,10 +485,10 @@ class GdImage extends Image
         imagealphablending($background, true);
 
         // Copy the image onto a white background to remove all transparency
-        if (imagecopy($background, $this->_image, 0, 0, 0, 0, $this->width, $this->height)) {
+        if (imagecopy($background, $this->image, 0, 0, 0, 0, $this->width, $this->height)) {
             // Swap the new image for the old one
-            imagedestroy($this->_image);
-            $this->_image = $background;
+            imagedestroy($this->image);
+            $this->image = $background;
         }
     }
 
@@ -500,19 +500,19 @@ class GdImage extends Image
      * @return bool
      * @throws Kohana_Exception
      */
-    protected function _do_save(string $file, int $quality): bool
+    protected function doSave(string $file, int $quality): bool
     {
         // Loads image if not yet loaded
-        $this->_load_image();
+        $this->loadImage();
 
         // Get the extension of the file
         $extension = pathinfo($file, PATHINFO_EXTENSION);
 
         // Get the save function and IMAGETYPE
-        list($save, $type) = $this->_save_function($extension, $quality);
+        list($save, $type) = $this->saveFunction($extension, $quality);
 
         // Save the image to a file
-        $status = isset($quality) ? $save($this->_image, $file, $quality) : $save($this->_image, $file);
+        $status = isset($quality) ? $save($this->image, $file, $quality) : $save($this->image, $file);
 
         if ($status === true && $type !== $this->type) {
             // Reset the image type and mime type
@@ -531,19 +531,19 @@ class GdImage extends Image
      * @return  string
      * @throws Kohana_Exception
      */
-    protected function _do_render(string $type, int $quality): string
+    protected function doRender(string $type, int $quality): string
     {
         // Loads image if not yet loaded
-        $this->_load_image();
+        $this->loadImage();
 
         // Get the save function and IMAGETYPE
-        list($save, $type) = $this->_save_function($type, $quality);
+        list($save, $type) = $this->saveFunction($type, $quality);
 
         // Capture the output
         ob_start();
 
         // Render the image
-        $status = isset($quality) ? $save($this->_image, null, $quality) : $save($this->_image, null);
+        $status = isset($quality) ? $save($this->image, null, $quality) : $save($this->image, null);
 
         if ($status === true && $type !== $this->type) {
             // Reset the image type and mime type
@@ -563,7 +563,7 @@ class GdImage extends Image
      * @return  array    save function, IMAGETYPE_* constant
      * @throws  Kohana_Exception
      */
-    protected function _save_function(string $extension, int &$quality): array
+    protected function saveFunction(string $extension, int &$quality): array
     {
         if (!$extension) {
             // Use the current image type
@@ -608,7 +608,7 @@ class GdImage extends Image
      * @param int $height  Image height
      * @return  resource
      */
-    protected function _create(int $width, int $height)
+    protected function create(int $width, int $height)
     {
         // Create an empty image
         $image = imagecreatetruecolor($width, $height);

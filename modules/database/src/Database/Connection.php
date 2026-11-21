@@ -94,15 +94,15 @@ abstract class Connection
     /**
      * @var  string  the last query executed
      */
-    public $last_query;
+    public $lastQuery;
     // Character that is used to quote identifiers
-    protected $_identifier = '"';
+    protected $identifier = '"';
     // Instance name
-    protected $_instance;
+    protected $instance;
     // Raw server connection
-    protected $_connection;
+    protected $connection;
     // Configuration array
-    protected $_config;
+    protected $config;
 
     /**
      * Stores the database configuration locally and name the instance.
@@ -114,13 +114,13 @@ abstract class Connection
     public function __construct($name, array $config)
     {
         // Set the instance name
-        $this->_instance = $name;
+        $this->instance = $name;
 
         // Store the config locally
-        $this->_config = $config;
+        $this->config = $config;
 
-        if (empty($this->_config['table_prefix'])) {
-            $this->_config['table_prefix'] = '';
+        if (empty($this->config['table_prefix'])) {
+            $this->config['table_prefix'] = '';
         }
     }
 
@@ -149,7 +149,7 @@ abstract class Connection
      */
     public function __toString()
     {
-        return $this->_instance;
+        return $this->instance;
     }
 
     /**
@@ -172,7 +172,7 @@ abstract class Connection
      */
     public function disconnect(): bool
     {
-        unset(\Kohana\Database\Connection::$instances[$this->_instance]);
+        unset(\Kohana\Database\Connection::$instances[$this->instance]);
 
         return true;
     }
@@ -180,13 +180,13 @@ abstract class Connection
     /**
      * Set the connection character set. This is called automatically by [Database::connect].
      *
-     *     $db->set_charset('utf8');
+     *     $db->setCharset('utf8');
      *
      * @param   string   $charset  character set name
      * @return  void
      * @throws  Database_Exception
      */
-    abstract public function set_charset(string $charset);
+    abstract public function setCharset(string $charset);
 
     /**
      * Perform an SQL query of the given type.
@@ -256,10 +256,10 @@ abstract class Connection
      * @return int
      * @throws Kohana_Exception
      */
-    public function count_records($table): int
+    public function countRecords($table): int
     {
         // Quote the table name
-        $table = $this->quote_table($table);
+        $table = $this->quoteTable($table);
 
         return $this->query(\Kohana\Database\Connection::SELECT, 'SELECT COUNT(*) AS total_row_count FROM ' . $table)
                 ->get('total_row_count');
@@ -344,7 +344,7 @@ abstract class Connection
      * @param string|null $like Table to search for
      * @return  array
      */
-    abstract public function list_tables(?string $like = null): array;
+    abstract public function listTables(?string $like = null): array;
     /**
      * Lists all the columns in a table. Optionally, a LIKE string can be
      * used to search for specific fields.
@@ -363,7 +363,7 @@ abstract class Connection
      * @param bool $add_prefix Whether to add the table prefix automatically or not
      * @return  array
      */
-    abstract public function list_columns(string $table, ?string $like = null, bool $add_prefix = true): array;
+    abstract public function listColumns(string $table, ?string $like = null, bool $add_prefix = true): array;
     /**
      * Extracts the text between parentheses, if any.
      *
@@ -373,7 +373,7 @@ abstract class Connection
      * @param string $type
      * @return  array   list containing the type and length, if any
      */
-    protected function _parse_type(string $type): array
+    protected function parseType(string $type): array
     {
         if (($open = strpos($type, '(')) === false) {
             // No length specified
@@ -399,9 +399,9 @@ abstract class Connection
      *
      * @return  string
      */
-    public function table_prefix(): string
+    public function tablePrefix(): string
     {
-        return $this->_config['table_prefix'];
+        return $this->config['table_prefix'];
     }
 
     /**
@@ -472,14 +472,14 @@ abstract class Connection
      * @uses    Database::table_prefix
      * @uses    Database::quote_identifier
      */
-    public function quote_column($column): string
+    public function quoteColumn($column): string
     {
         // Identifiers are escaped by repeating them
-        $escaped_identifier = $this->_identifier . $this->_identifier;
+        $escaped_identifier = $this->identifier . $this->identifier;
 
         if (is_array($column)) {
             list($column, $alias) = $column;
-            $alias = str_replace($this->_identifier, $escaped_identifier, $alias);
+            $alias = str_replace($this->identifier, $escaped_identifier, $alias);
         }
 
         if ($column instanceof Query) {
@@ -492,14 +492,14 @@ abstract class Connection
             // Convert to a string
             $column = (string) $column;
 
-            $column = str_replace($this->_identifier, $escaped_identifier, $column);
+            $column = str_replace($this->identifier, $escaped_identifier, $column);
 
             if ($column === '*') {
                 return $column;
             } elseif (strpos($column, '.') !== false) {
                 $parts = explode('.', $column);
 
-                if ($prefix = $this->table_prefix()) {
+                if ($prefix = $this->tablePrefix()) {
                     // Get the offset of the table name, 2nd-to-last part
                     $offset = count($parts) - 2;
 
@@ -510,18 +510,18 @@ abstract class Connection
                 foreach ($parts as &$part) {
                     if ($part !== '*') {
                         // Quote each of the parts
-                        $part = $this->_identifier . $part . $this->_identifier;
+                        $part = $this->identifier . $part . $this->identifier;
                     }
                 }
 
                 $column = implode('.', $parts);
             } else {
-                $column = $this->_identifier . $column . $this->_identifier;
+                $column = $this->identifier . $column . $this->identifier;
             }
         }
 
         if (isset($alias)) {
-            $column .= ' AS ' . $this->_identifier . $alias . $this->_identifier;
+            $column .= ' AS ' . $this->identifier . $alias . $this->identifier;
         }
 
         return $column;
@@ -543,14 +543,14 @@ abstract class Connection
      * @uses    Database::table_prefix
      * @uses    Database::quote_identifier
      */
-    public function quote_table($table): string
+    public function quoteTable($table): string
     {
         // Identifiers are escaped by repeating them
-        $escaped_identifier = $this->_identifier . $this->_identifier;
+        $escaped_identifier = $this->identifier . $this->identifier;
 
         if (is_array($table)) {
             list($table, $alias) = $table;
-            $alias = str_replace($this->_identifier, $escaped_identifier, $alias);
+            $alias = str_replace($this->identifier, $escaped_identifier, $alias);
         }
 
         if ($table instanceof Query) {
@@ -563,12 +563,12 @@ abstract class Connection
             // Convert to a string
             $table = (string) $table;
 
-            $table = str_replace($this->_identifier, $escaped_identifier, $table);
+            $table = str_replace($this->identifier, $escaped_identifier, $table);
 
             if (strpos($table, '.') !== false) {
                 $parts = explode('.', $table);
 
-                if ($prefix = $this->table_prefix()) {
+                if ($prefix = $this->tablePrefix()) {
                     // Get the offset of the table name, last part
                     $offset = count($parts) - 1;
 
@@ -578,19 +578,19 @@ abstract class Connection
 
                 foreach ($parts as &$part) {
                     // Quote each of the parts
-                    $part = $this->_identifier . $part . $this->_identifier;
+                    $part = $this->identifier . $part . $this->identifier;
                 }
 
                 $table = implode('.', $parts);
             } else {
                 // Add the table prefix
-                $table = $this->_identifier . $this->table_prefix() . $table . $this->_identifier;
+                $table = $this->identifier . $this->tablePrefix() . $table . $this->identifier;
             }
         }
 
         if (isset($alias)) {
             // Attach table prefix to alias
-            $table .= ' AS ' . $this->_identifier . $this->table_prefix() . $alias . $this->_identifier;
+            $table .= ' AS ' . $this->identifier . $this->tablePrefix() . $alias . $this->identifier;
         }
 
         return $table;
@@ -608,14 +608,14 @@ abstract class Connection
      * @return  string
      * @throws Kohana_Exception
      */
-    public function quote_identifier($value): string
+    public function quoteIdentifier($value): string
     {
         // Identifiers are escaped by repeating them
-        $escaped_identifier = $this->_identifier . $this->_identifier;
+        $escaped_identifier = $this->identifier . $this->identifier;
 
         if (is_array($value)) {
             list($value, $alias) = $value;
-            $alias = str_replace($this->_identifier, $escaped_identifier, $alias);
+            $alias = str_replace($this->identifier, $escaped_identifier, $alias);
         }
 
         if ($value instanceof Query) {
@@ -628,24 +628,24 @@ abstract class Connection
             // Convert to a string
             $value = (string) $value;
 
-            $value = str_replace($this->_identifier, $escaped_identifier, $value);
+            $value = str_replace($this->identifier, $escaped_identifier, $value);
 
             if (strpos($value, '.') !== false) {
                 $parts = explode('.', $value);
 
                 foreach ($parts as &$part) {
                     // Quote each of the parts
-                    $part = $this->_identifier . $part . $this->_identifier;
+                    $part = $this->identifier . $part . $this->identifier;
                 }
 
                 $value = implode('.', $parts);
             } else {
-                $value = $this->_identifier . $value . $this->_identifier;
+                $value = $this->identifier . $value . $this->identifier;
             }
         }
 
         if (isset($alias)) {
-            $value .= ' AS ' . $this->_identifier . $alias . $this->_identifier;
+            $value .= ' AS ' . $this->identifier . $alias . $this->identifier;
         }
 
         return $value;

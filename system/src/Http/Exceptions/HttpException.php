@@ -27,12 +27,12 @@ abstract class HttpException extends KohanaException
     /**
      * @var  int        http status code
      */
-    protected $_code = 0;
+    protected $code = 0;
 
     /**
      * @var  Request    Request instance that triggered this exception.
      */
-    protected $_request;
+    protected $request;
 
     /**
      * Creates a new translated exception.
@@ -45,7 +45,7 @@ abstract class HttpException extends KohanaException
      */
     public function __construct(string $message = '', ?array $variables = null, ?\Exception $previous = null)
     {
-        parent::__construct($message, $variables, $this->_code, $previous);
+        parent::__construct($message, $variables, $this->code, $previous);
     }
 
     /**
@@ -57,9 +57,9 @@ abstract class HttpException extends KohanaException
     public function request(?Request $request = null)
     {
         if ($request === null)
-            return $this->_request;
+            return $this->request;
 
-        $this->_request = $request;
+        $this->request = $request;
 
         return $this;
     }
@@ -71,7 +71,7 @@ abstract class HttpException extends KohanaException
      * @throws Kohana_Exception
      * @uses   Kohana_Exception::response()
      */
-    public function get_response(): Response
+    public function getResponse(): Response
     {
         return KohanaException::response($this);
     }

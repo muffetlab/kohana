@@ -28,7 +28,7 @@ class Date
      * Default timestamp format for formatted_time
      * @var  string
      */
-    public static $timestamp_format = 'Y-m-d H:i:s';
+    public static $timestampFormat = 'Y-m-d H:i:s';
 
     /**
      * Timezone for formatted_time
@@ -384,7 +384,7 @@ class Date
      * @param int|null $local_timestamp "Local" timestamp, defaults to time()
      * @return  string
      */
-    public static function fuzzy_span(int $timestamp, ?int $local_timestamp = null): string
+    public static function fuzzySpan(int $timestamp, ?int $local_timestamp = null): string
     {
         $local_timestamp = $local_timestamp === null ? time() : $local_timestamp;
 
@@ -503,9 +503,9 @@ class Date
      * @return  string
      * @throws Exception
      */
-    public static function formatted_time(string $datetime_str = 'now', ?string $timestamp_format = null, ?string $timezone = null): string
+    public static function formattedTime(string $datetime_str = 'now', ?string $timestamp_format = null, ?string $timezone = null): string
     {
-        $timestamp_format = $timestamp_format === null ? \Kohana\Support\Date::$timestamp_format : $timestamp_format;
+        $timestamp_format = $timestamp_format === null ? \Kohana\Support\Date::$timestampFormat : $timestamp_format;
         $timezone = $timezone === null ? \Kohana\Support\Date::$timezone : $timezone;
 
         $tz = new \DateTimeZone($timezone ?: date_default_timezone_get());

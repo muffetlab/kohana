@@ -64,7 +64,7 @@ class Kohana_Config_GroupTest extends TestCase
         // by casting the object in question into an array.  This usually works fine, but as Kohana_Config_Group
         // is a subclass of ArrayObject, casting to an array returns the config items!
         // Therefore, we have to use this little workaround
-        $this->assertSame($group_name, $group->group_name());
+        $this->assertSame($group_name, $group->groupName());
         $this->assertSame($group_values, $group->getArrayCopy());
     }
 
@@ -137,11 +137,11 @@ class Kohana_Config_GroupTest extends TestCase
     public function test_writes_changes_to_config()
     {
         $mock = $this->getMockBuilder(Repository::class)
-            ->setMethods(['_write_config'])
+            ->setMethods(['writeConfig'])
             ->getMock();
 
         $mock->expects($this->exactly(3))
-            ->method('_write_config')
+            ->method('writeConfig')
             ->with('kohana', 'status', $this->LogicalOr('totally', 'maybe', 'not'));
 
         $group = $this->get_mock_group('kohana', ['status' => 'kool'], $mock);
@@ -163,7 +163,7 @@ class Kohana_Config_GroupTest extends TestCase
     {
         $config = $this->get_mock_group('something', ['var' => 'value']);
 
-        $this->assertSame(['var' => 'value'], $config->as_array());
+        $this->assertSame(['var' => 'value'], $config->asArray());
 
         // Now change some vars **ahem**
         $config->var = 'LOLCAT';
@@ -172,11 +172,11 @@ class Kohana_Config_GroupTest extends TestCase
         $this->assertSame([
             'var' => 'LOLCAT',
             'lolcat' => 'IN UR CODE'
-            ], $config->as_array());
+            ], $config->asArray());
 
         // And if we remove an item it should be removed from the exported array
         unset($config['lolcat']);
-        $this->assertSame(['var' => 'LOLCAT'], $config->as_array());
+        $this->assertSame(['var' => 'LOLCAT'], $config->asArray());
     }
 
     /**

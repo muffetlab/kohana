@@ -19,8 +19,8 @@ use Kohana\Foundation\KohanaException;
  */
 class Cli
 {
-    public static $wait_msg = 'Press any key to continue...';
-    protected static $foreground_colors = [
+    public static $waitMsg = 'Press any key to continue...';
+    protected static $foregroundColors = [
         'black' => '0;30',
         'dark_gray' => '1;30',
         'blue' => '0;34',
@@ -38,7 +38,7 @@ class Cli
         'light_gray' => '0;37',
         'white' => '1;37',
     ];
-    protected static $background_colors = [
+    protected static $backgroundColors = [
         'black' => '40',
         'red' => '41',
         'green' => '42',
@@ -169,7 +169,7 @@ class Cli
     {
         $text .= ': ';
 
-        if (Application::$is_windows) {
+        if (Application::$isWindows) {
             $vbscript = sys_get_temp_dir() . 'Minion_CLI_Password.vbs';
 
             // Create temporary file
@@ -221,7 +221,7 @@ class Cli
      * @param string $text The text to output
      * @param bool $end_line whether the line is done being replaced
      */
-    public static function write_replace(string $text = '', bool $end_line = false)
+    public static function writeReplace(string $text = '', bool $end_line = false)
     {
         // Append a newline if $end_line is true
         $text = $end_line ? $text . PHP_EOL : $text;
@@ -255,7 +255,7 @@ class Cli
             if ($seconds > 0) {
                 sleep($seconds);
             } else {
-                \Kohana\Console\Cli::write(\Kohana\Console\Cli::$wait_msg);
+                \Kohana\Console\Cli::write(\Kohana\Console\Cli::$waitMsg);
                 \Kohana\Console\Cli::read();
             }
         }
@@ -278,22 +278,22 @@ class Cli
     public static function color(string $text, string $foreground, ?string $background = null): string
     {
 
-        if (Application::$is_windows) {
+        if (Application::$isWindows) {
             return $text;
         }
 
-        if (!array_key_exists($foreground, \Kohana\Console\Cli::$foreground_colors)) {
+        if (!array_key_exists($foreground, \Kohana\Console\Cli::$foregroundColors)) {
             throw new KohanaException('Invalid CLI foreground color: ' . $foreground);
         }
 
-        if ($background !== null && !array_key_exists($background, \Kohana\Console\Cli::$background_colors)) {
+        if ($background !== null && !array_key_exists($background, \Kohana\Console\Cli::$backgroundColors)) {
             throw new KohanaException('Invalid CLI background color: ' . $background);
         }
 
-        $string = "\033[" . \Kohana\Console\Cli::$foreground_colors[$foreground] . "m";
+        $string = "\033[" . \Kohana\Console\Cli::$foregroundColors[$foreground] . "m";
 
         if ($background !== null) {
-            $string .= "\033[" . \Kohana\Console\Cli::$background_colors[$background] . "m";
+            $string .= "\033[" . \Kohana\Console\Cli::$backgroundColors[$background] . "m";
         }
 
         $string .= $text . "\033[0m";

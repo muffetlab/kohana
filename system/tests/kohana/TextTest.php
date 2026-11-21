@@ -36,7 +36,7 @@ class Kohana_TextTest extends TestCase
      */
     function test_auto_para_returns_empty_string_on_empty_input()
     {
-        $this->assertSame('', Str::auto_p(''));
+        $this->assertSame('', Str::autoP(''));
     }
 
     /**
@@ -61,7 +61,7 @@ class Kohana_TextTest extends TestCase
      */
     function test_auto_para_does_not_enclose_html_tags_in_paragraphs($text)
     {
-        $output = Str::auto_p($text);
+        $output = Str::autoP($text);
 
         $this->assertSelectEquals('p', null, false, $output);
     }
@@ -77,7 +77,7 @@ class Kohana_TextTest extends TestCase
     {
         $text = 'Pick a pinch of purple pepper';
 
-        $this->assertSame('<p>' . $text . '</p>', Str::auto_p($text));
+        $this->assertSame('<p>' . $text . '</p>', Str::autoP($text));
     }
 
     /**
@@ -89,7 +89,7 @@ class Kohana_TextTest extends TestCase
     public function test_auto_para_replaces_multiple_newlines_with_paragraph()
     {
         $this->assertSame(
-            "<p>My name is john</p>\n\n<p>I'm a developer</p>", Str::auto_p("My name is john\n\n\n\nI'm a developer")
+            "<p>My name is john</p>\n\n<p>I'm a developer</p>", Str::autoP("My name is john\n\n\n\nI'm a developer")
         );
     }
 
@@ -115,7 +115,7 @@ class Kohana_TextTest extends TestCase
      */
     function test_limit_words($expected, $str, $limit, $end_char)
     {
-        $this->assertSame($expected, Str::limit_words($str, $limit, $end_char));
+        $this->assertSame($expected, Str::limitWords($str, $limit, $end_char));
     }
 
     /**
@@ -201,7 +201,7 @@ class Kohana_TextTest extends TestCase
      */
     function test_limit_chars($expected, $str, $limit, $end_char, $preserve_words)
     {
-        $this->assertSame($expected, Str::limit_chars($str, $limit, $end_char, $preserve_words));
+        $this->assertSame($expected, Str::limitChars($str, $limit, $end_char, $preserve_words));
     }
 
     /**
@@ -282,7 +282,7 @@ class Kohana_TextTest extends TestCase
      */
     function test_reduce_slashes($expected, $str)
     {
-        $this->assertSame($expected, Str::reduce_slashes($str));
+        $this->assertSame($expected, Str::reduceSlashes($str));
     }
 
     /**
@@ -582,7 +582,7 @@ class Kohana_TextTest extends TestCase
 						<li>vicevoorzitter@xxxx.com</li>
 					</ul>';
 
-        $this->assertFalse(strpos('vice', Str::auto_link_emails($original)));
+        $this->assertFalse(strpos('vice', Str::autoLinkEmails($original)));
     }
 
     /**
@@ -705,7 +705,7 @@ class Kohana_TextTest extends TestCase
      */
     public function test_auto_link_urls($expected, $text)
     {
-        $this->assertSame($expected, Str::auto_link_urls($text));
+        $this->assertSame($expected, Str::autoLinkUrls($text));
     }
 
     /**
@@ -742,7 +742,7 @@ class Kohana_TextTest extends TestCase
     public function test_auto_link_emails($expected, $text)
     {
         // Use html_entity_decode because emails will be randomly encoded by HTML::mailto
-        $this->assertSame($expected, html_entity_decode(Str::auto_link_emails($text)));
+        $this->assertSame($expected, html_entity_decode(Str::autoLinkEmails($text)));
     }
 
     /**
@@ -773,14 +773,14 @@ class Kohana_TextTest extends TestCase
      */
     public function test_auto_link($text, $urls = [], $emails = [])
     {
-        $linked_text = Str::auto_link($text);
+        $linked_text = Str::autoLink($text);
 
         if ($urls === false) {
             $this->assertStringNotContainsString('http://', $linked_text);
         } elseif (count($urls)) {
             foreach ($urls as $url) {
                 // Assert that all the URLs have been caught by text auto_link_urls()
-                $this->assertStringContainsString(Str::auto_link_urls($url), $linked_text);
+                $this->assertStringContainsString(Str::autoLinkUrls($url), $linked_text);
             }
         }
 
@@ -835,7 +835,7 @@ class Kohana_TextTest extends TestCase
      */
     public function test_user_agent_returns_correct_browser($userAgent, $expectedData)
     {
-        $browser = Str::user_agent($userAgent, 'browser');
+        $browser = Str::userAgent($userAgent, 'browser');
 
         $this->assertEquals($expectedData['browser'], $browser);
     }
@@ -848,7 +848,7 @@ class Kohana_TextTest extends TestCase
      */
     public function test_user_agent_returns_correct_version($userAgent, $expectedData)
     {
-        $version = Str::user_agent($userAgent, 'version');
+        $version = Str::userAgent($userAgent, 'version');
 
         $this->assertEquals($expectedData['version'], $version);
     }
@@ -859,7 +859,7 @@ class Kohana_TextTest extends TestCase
      */
     public function test_user_agent_recognizes_robots()
     {
-        $bot = Str::user_agent('Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)', 'robot');
+        $bot = Str::userAgent('Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)', 'robot');
 
         $this->assertEquals('Googlebot', $bot);
     }
@@ -872,7 +872,7 @@ class Kohana_TextTest extends TestCase
      */
     public function test_user_agent_returns_correct_platform($userAgent, $expectedData)
     {
-        $platform = Str::user_agent($userAgent, 'platform');
+        $platform = Str::userAgent($userAgent, 'platform');
 
         $this->assertEquals($expectedData['platform'], $platform);
     }
@@ -883,7 +883,7 @@ class Kohana_TextTest extends TestCase
      */
     public function test_user_agent_accepts_array()
     {
-        $agent_info = Str::user_agent('Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2049.0 Safari/537.36', [
+        $agent_info = Str::userAgent('Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2049.0 Safari/537.36', [
                 'browser',
                 'version',
                 'platform'

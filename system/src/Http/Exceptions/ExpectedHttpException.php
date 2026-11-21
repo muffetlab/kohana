@@ -21,7 +21,7 @@ abstract class ExpectedHttpException extends HttpException
     /**
      * @var  Response   Response Object
      */
-    protected $_response;
+    protected $response;
 
     /**
      * Creates a new translated exception.
@@ -40,8 +40,8 @@ abstract class ExpectedHttpException extends HttpException
         parent::__construct($message, $variables, $previous);
 
         // Prepare our response object and set the correct status code.
-        $this->_response = Response::factory()
-            ->status($this->_code);
+        $this->response = Response::factory()
+            ->status($this->code);
     }
 
     /**
@@ -54,7 +54,7 @@ abstract class ExpectedHttpException extends HttpException
      */
     public function headers($key = null, ?string $value = null)
     {
-        $result = $this->_response->headers($key, $value);
+        $result = $this->response->headers($key, $value);
 
         if (!$result instanceof Response)
             return $result;
@@ -78,11 +78,11 @@ abstract class ExpectedHttpException extends HttpException
      * @return Response
      * @uses   Kohana_Exception::response()
      */
-    public function get_response(): Response
+    public function getResponse(): Response
     {
         $this->check();
 
-        return $this->_response;
+        return $this->response;
     }
 
 }

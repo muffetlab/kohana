@@ -63,8 +63,8 @@ class Kohana_UploadTest extends TestCase
                             'error' => UPLOAD_ERR_OK,
                             'name' => 'Unit_Test File',
                             'type' => 'image/png',
-                            'tmp_name' => Application::find_file('tests', 'test_data/github', 'png'),
-                            'size' => filesize(Application::find_file('tests', 'test_data/github', 'png')),
+                            'tmp_name' => Application::findFile('tests', 'test_data/github', 'png'),
+                            'size' => filesize(Application::findFile('tests', 'test_data/github', 'png')),
                         ]
                     ]
                 ],
@@ -78,8 +78,8 @@ class Kohana_UploadTest extends TestCase
                             'error' => UPLOAD_ERR_OK,
                             'name' => 'Unit_Test File',
                             'type' => 'image/png',
-                            'tmp_name' => Application::find_file('tests', 'test_data/github', 'png'),
-                            'size' => filesize(Application::find_file('tests', 'test_data/github', 'png')),
+                            'tmp_name' => Application::findFile('tests', 'test_data/github', 'png'),
+                            'size' => filesize(Application::findFile('tests', 'test_data/github', 'png')),
                         ]
                     ]
                 ],
@@ -124,8 +124,8 @@ class Kohana_UploadTest extends TestCase
                     'error' => UPLOAD_ERR_OK,
                     'name' => 'Unit_Test File',
                     'type' => 'image/png',
-                    'tmp_name' => Application::find_file('tests', 'test_data/github', 'png'),
-                    'size' => filesize(Application::find_file('tests', 'test_data/github', 'png')),
+                    'tmp_name' => Application::findFile('tests', 'test_data/github', 'png'),
+                    'size' => filesize(Application::findFile('tests', 'test_data/github', 'png')),
                 ]
             ]
         ]);
@@ -147,8 +147,8 @@ class Kohana_UploadTest extends TestCase
                     'error' => UPLOAD_ERR_OK,
                     'name' => 'Unit_Test File',
                     'type' => 'image/png',
-                    'tmp_name' => Application::find_file('tests', 'test_data/github', 'png'),
-                    'size' => filesize(Application::find_file('tests', 'test_data/github', 'png')),
+                    'tmp_name' => Application::findFile('tests', 'test_data/github', 'png'),
+                    'size' => filesize(Application::findFile('tests', 'test_data/github', 'png')),
                 ]
             ],
             [
@@ -156,8 +156,8 @@ class Kohana_UploadTest extends TestCase
                 [
                     'name' => 'Unit_Test File',
                     'type' => 'image/png',
-                    'tmp_name' => Application::find_file('tests', 'test_data/github', 'png'),
-                    'size' => filesize(Application::find_file('tests', 'test_data/github', 'png')),
+                    'tmp_name' => Application::findFile('tests', 'test_data/github', 'png'),
+                    'size' => filesize(Application::findFile('tests', 'test_data/github', 'png')),
                 ]
             ],
             [
@@ -165,8 +165,8 @@ class Kohana_UploadTest extends TestCase
                 [
                     'error' => UPLOAD_ERR_OK,
                     'type' => 'image/png',
-                    'tmp_name' => Application::find_file('tests', 'test_data/github', 'png'),
-                    'size' => filesize(Application::find_file('tests', 'test_data/github', 'png')),
+                    'tmp_name' => Application::findFile('tests', 'test_data/github', 'png'),
+                    'size' => filesize(Application::findFile('tests', 'test_data/github', 'png')),
                 ]
             ],
             [
@@ -174,17 +174,8 @@ class Kohana_UploadTest extends TestCase
                 [
                     'name' => 'Unit_Test File',
                     'error' => UPLOAD_ERR_OK,
-                    'tmp_name' => Application::find_file('tests', 'test_data/github', 'png'),
-                    'size' => filesize(Application::find_file('tests', 'test_data/github', 'png')),
-                ]
-            ],
-            [
-                false,
-                [
-                    'error' => UPLOAD_ERR_OK,
-                    'name' => 'Unit_Test File',
-                    'type' => 'image/png',
-                    'size' => filesize(Application::find_file('tests', 'test_data/github', 'png')),
+                    'tmp_name' => Application::findFile('tests', 'test_data/github', 'png'),
+                    'size' => filesize(Application::findFile('tests', 'test_data/github', 'png')),
                 ]
             ],
             [
@@ -193,7 +184,16 @@ class Kohana_UploadTest extends TestCase
                     'error' => UPLOAD_ERR_OK,
                     'name' => 'Unit_Test File',
                     'type' => 'image/png',
-                    'tmp_name' => Application::find_file('tests', 'test_data/github', 'png'),
+                    'size' => filesize(Application::findFile('tests', 'test_data/github', 'png')),
+                ]
+            ],
+            [
+                false,
+                [
+                    'error' => UPLOAD_ERR_OK,
+                    'name' => 'Unit_Test File',
+                    'type' => 'image/png',
+                    'tmp_name' => Application::findFile('tests', 'test_data/github', 'png'),
                 ]
             ],
         ];
@@ -231,8 +231,8 @@ class Kohana_UploadTest extends TestCase
                     'error' => UPLOAD_ERR_OK,
                     'name' => 'github.png',
                     'type' => 'image/png',
-                    'tmp_name' => Application::find_file('tests', 'test_data/github', 'png'),
-                    'size' => filesize(Application::find_file('tests', 'test_data/github', 'png')),
+                    'tmp_name' => Application::findFile('tests', 'test_data/github', 'png'),
+                    'size' => filesize(Application::findFile('tests', 'test_data/github', 'png')),
                 ]
             ]
         ]);

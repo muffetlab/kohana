@@ -57,10 +57,10 @@ class Kohana_ORMTest extends TestCase
             Model::factory('OrmPost')->values(['orm_author_id' => $author->pk(), 'title' => $title], ['orm_author_id', 'title'])->create();
         }
 
-        $this->assertSame(2, $author->posts->count_all());
-        $this->assertSame(['Bir', 'İki'], array_values($author->posts->order_by('id')->find_all()->as_array('id', 'title')));
+        $this->assertSame(2, $author->posts->countAll());
+        $this->assertSame(['Bir', 'İki'], array_values($author->posts->orderBy('id')->findAll()->asArray('id', 'title')));
         $this->assertSame('Ali', Model::factory('OrmPost')->find()->author->name);
-        $this->assertSame('Ali', $author->as_array()['name']);
+        $this->assertSame('Ali', $author->asArray()['name']);
     }
 
     public function test_validation()

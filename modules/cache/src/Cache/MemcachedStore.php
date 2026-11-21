@@ -126,7 +126,7 @@ class MemcachedStore extends Cache implements Arithmetic
         $this->memcached = new \Memcached;
 
         // Load servers from configuration.
-        $servers = Arr::get($this->_config, 'servers');
+        $servers = Arr::get($this->config, 'servers');
 
         if (!$servers) {
             // Throw an exception if no server found.
@@ -176,7 +176,7 @@ class MemcachedStore extends Cache implements Arithmetic
     public function get(string $id, $default = null)
     {
         // Get the value from Memcached.
-        $value = $this->memcached->get($this->_sanitize_id($id));
+        $value = $this->memcached->get($this->sanitizeId($id));
 
         // If the value wasn't found, normalise it.
         if ($value === false) {
@@ -207,7 +207,7 @@ class MemcachedStore extends Cache implements Arithmetic
     {
         // If lifetime is null, set to the default expiry.
         if ($lifetime === null) {
-            $lifetime = Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE);
+            $lifetime = Arr::get($this->config, 'default_expire', Cache::DEFAULT_EXPIRE);
         }
 
         // If the lifetime is greater than the ceiling.
@@ -226,7 +226,7 @@ class MemcachedStore extends Cache implements Arithmetic
         }
 
         // Set the data to memcached.
-        return $this->memcached->set($this->_sanitize_id($id), $data, $lifetime);
+        return $this->memcached->set($this->sanitizeId($id), $data, $lifetime);
     }
 
     /**
@@ -244,7 +244,7 @@ class MemcachedStore extends Cache implements Arithmetic
      */
     public function delete(string $id, int $time = 0): bool
     {
-        return $this->memcached->delete($this->_sanitize_id($id), $time);
+        return $this->memcached->delete($this->sanitizeId($id), $time);
     }
 
     /**
@@ -258,7 +258,7 @@ class MemcachedStore extends Cache implements Arithmetic
      *
      * @return  bool
      */
-    public function delete_all(): bool
+    public function deleteAll(): bool
     {
         return $this->memcached->flush();
     }

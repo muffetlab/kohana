@@ -59,8 +59,8 @@ class Kohana_HTTPTest extends TestCase
      */
     // @codingStandardsIgnoreStart
     protected $environmentDefault = [
-        'Kohana\Foundation\Application::$base_url' => '/kohana/',
-        'Kohana\Foundation\Application::$index_file' => 'index.php',
+        'Kohana\Foundation\Application::$baseUrl' => '/kohana/',
+        'Kohana\Foundation\Application::$indexFile' => 'index.php',
         'HTTP_HOST' => 'www.example.com',
     ];
 
@@ -110,7 +110,7 @@ class Kohana_HTTPTest extends TestCase
         try {
             Http::redirect($location, $code);
         } catch (RedirectHttpException $e) {
-            $response = $e->get_response();
+            $response = $e->getResponse();
 
             $this->assertInstanceOf($expected_exception, $e);
             $this->assertEquals($expected_location, $response->headers('Location'));
@@ -175,7 +175,7 @@ class Kohana_HTTPTest extends TestCase
         $tmp_server = $_SERVER;
 
         $_SERVER = array_replace_recursive($_SERVER, $server_globals);
-        $headers = Http::request_headers();
+        $headers = Http::requestHeaders();
 
         $actual_headers = array_intersect_key($headers->getArrayCopy(), $expected_headers);
 

@@ -40,8 +40,8 @@ class Kohana_HTMLTest extends TestCase
      */
     // @codingStandardsIgnoreStart
     protected $environmentDefault = [
-        'Kohana\Foundation\Application::$base_url' => '/kohana/',
-        'Kohana\Foundation\Application::$index_file' => 'index.php',
+        'Kohana\Foundation\Application::$baseUrl' => '/kohana/',
+        'Kohana\Foundation\Application::$indexFile' => 'index.php',
         'Kohana\Html\Html::$strict' => true,
         'HTTP_HOST' => 'www.kohanaframework.org',
     ];
@@ -400,7 +400,7 @@ class Kohana_HTMLTest extends TestCase
     public function test_file_anchor($expected, array $attributes, $file, $title = null, $protocol = null, $index = false)
     {
         $this->assertSame(
-            $expected, Html::file_anchor($file, $title, $attributes, $protocol, $index)
+            $expected, Html::fileAnchor($file, $title, $attributes, $protocol, $index)
         );
     }
 

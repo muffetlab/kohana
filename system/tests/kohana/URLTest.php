@@ -43,8 +43,8 @@ class Kohana_URLTest extends TestCase
      */
     // @codingStandardsIgnoreStart
     protected $environmentDefault = [
-        'Kohana\Foundation\Application::$base_url' => '/kohana/',
-        'Kohana\Foundation\Application::$index_file' => 'index.php',
+        'Kohana\Foundation\Application::$baseUrl' => '/kohana/',
+        'Kohana\Foundation\Application::$indexFile' => 'index.php',
         'HTTP_HOST' => 'example.com',
         '_GET' => [],
     ];
@@ -113,7 +113,7 @@ class Kohana_URLTest extends TestCase
                 false,
                 'https://example.com/kohana/',
                 [
-                    'Kohana\Foundation\Application::$base_url' => 'omglol://example.com/kohana/'
+                    'Kohana\Foundation\Application::$baseUrl' => 'omglol://example.com/kohana/'
                 ]
             ],
             // Use port in base URL, issue #3307
@@ -122,7 +122,7 @@ class Kohana_URLTest extends TestCase
                 false,
                 'http://example.com:8080/',
                 [
-                    'Kohana\Foundation\Application::$base_url' => 'example.com:8080/'
+                    'Kohana\Foundation\Application::$baseUrl' => 'example.com:8080/'
                 ]
             ],
             // Use protocol from base URL if none specified
@@ -131,7 +131,7 @@ class Kohana_URLTest extends TestCase
                 false,
                 'http://www.example.com/',
                 [
-                    'Kohana\Foundation\Application::$base_url' => 'http://www.example.com/'
+                    'Kohana\Foundation\Application::$baseUrl' => 'http://www.example.com/'
                 ]
             ],
             // Use HTTP_HOST before SERVER_NAME
@@ -567,7 +567,7 @@ class Kohana_URLTest extends TestCase
     public function test_is_trusted_host(string $host, array $trusted_hosts, bool $expected)
     {
         $this->assertSame(
-            $expected, Url::is_trusted_host($host, $trusted_hosts)
+            $expected, Url::isTrustedHost($host, $trusted_hosts)
         );
     }
 

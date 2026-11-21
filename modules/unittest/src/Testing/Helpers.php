@@ -15,23 +15,23 @@ class Helpers
      * @see has_internet
      * @var bool
      */
-    static protected $_has_internet = null;
+    static protected $hasInternet = null;
 
     /**
      * Check for internet connectivity
      *
      * @return bool Whether an internet connection is available
      */
-    public static function has_internet(): ?bool
+    public static function hasInternet(): ?bool
     {
-        if (!isset(self::$_has_internet)) {
+        if (!isset(self::$hasInternet)) {
             // The @ operator is used here to avoid DNS errors when there is no connection.
             $sock = @fsockopen("www.google.com", 80, $errno, $errstr, 1);
 
-            self::$_has_internet = (bool) $sock;
+            self::$hasInternet = (bool) $sock;
         }
 
-        return self::$_has_internet;
+        return self::$hasInternet;
     }
 
     /**
@@ -40,7 +40,7 @@ class Helpers
      * @param string $path
      * @return string
      */
-    static public function dir_separator(string $path): string
+    static public function dirSeparator(string $path): string
     {
         return str_replace('/', DIRECTORY_SEPARATOR, $path);
     }
@@ -50,14 +50,14 @@ class Helpers
      *
      * @return void
      */
-    static public function clean_cache_dir()
+    static public function cleanCacheDir()
     {
-        $cache_dir = opendir(Application::$cache_dir);
+        $cache_dir = opendir(Application::$cacheDir);
 
         while ($dir = readdir($cache_dir)) {
             // Cache files are split into directories based on first two characters of hash
             if ($dir[0] !== '.' && strlen($dir) === 2) {
-                $dir = self::dir_separator(Application::$cache_dir . '/' . $dir . '/');
+                $dir = self::dirSeparator(Application::$cacheDir . '/' . $dir . '/');
 
                 $cache = opendir($dir);
 
@@ -81,7 +81,7 @@ class Helpers
      * @see set_environment
      * @var array
      */
-    protected $_environment_backup = [];
+    protected $environmentBackup = [];
 
     /**
      * Allows easy setting & backing up of environment config
@@ -97,13 +97,13 @@ class Helpers
      * @throws Kohana_Exception
      * @throws ReflectionException
      */
-    public function set_environment(array $environment)
+    public function setEnvironment(array $environment)
     {
         if (!count($environment))
             return false;
 
         foreach ($environment as $option => $value) {
-            $backup_needed = !array_key_exists($option, $this->_environment_backup);
+            $backup_needed = !array_key_exists($option, $this->environmentBackup);
 
             // Handle changing superglobals
             if (in_array($option, ['_GET', '_POST', '_SERVER', '_FILES'])) {
@@ -111,7 +111,7 @@ class Helpers
                 global $$option;
 
                 if ($backup_needed) {
-                    $this->_environment_backup[$option] = $$option;
+                    $this->environmentBackup[$option] = $$option;
                 }
 
                 // PHPUnit makes a backup of superglobals automatically
@@ -124,7 +124,7 @@ class Helpers
                 $class = new \ReflectionClass($class);
 
                 if ($backup_needed) {
-                    $this->_environment_backup[$option] = $class->getStaticPropertyValue($var);
+                    $this->environmentBackup[$option] = $class->getStaticPropertyValue($var);
                 }
 
                 $class->setStaticPropertyValue($var, $value);
@@ -132,7 +132,7 @@ class Helpers
             // If this is an environment variable
             elseif (preg_match('/^[A-Z_-]+$/', $option) || isset($_SERVER[$option])) {
                 if ($backup_needed) {
-                    $this->_environment_backup[$option] = $_SERVER[$option] ?? '';
+                    $this->environmentBackup[$option] = $_SERVER[$option] ?? '';
                 }
 
                 $_SERVER[$option] = $value;
@@ -140,7 +140,7 @@ class Helpers
             // Else we assume this is a config option
             else {
                 if ($backup_needed) {
-                    $this->_environment_backup[$option] = Application::$config->load($option);
+                    $this->environmentBackup[$option] = Application::$config->load($option);
                 }
 
                 list($group, $var) = explode('.', $option, 2);
@@ -158,9 +158,9 @@ class Helpers
      * @throws Kohana_Exception
      * @throws ReflectionException
      */
-    public function restore_environment()
+    public function restoreEnvironment()
     {
-        $this->set_environment($this->_environment_backup);
+        $this->setEnvironment($this->environmentBackup);
     }
 
 }

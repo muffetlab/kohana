@@ -6,7 +6,7 @@ use Kohana\Orm\Model;
 
 class OrmAuthor extends Model
 {
-    protected $_has_many = ['posts' => ['model' => OrmPost::class]];
+    protected $hasMany = ['posts' => ['model' => OrmPost::class]];
 
     public function rules(): array
     {

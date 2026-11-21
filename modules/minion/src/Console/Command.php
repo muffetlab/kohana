@@ -22,7 +22,7 @@ abstract class Command
      * The separator used to separate different levels of tasks
      * @var string
      */
-    public static $task_separator = ':';
+    public static $taskSeparator = ':';
 
     /**
      * Converts a task (e.g. db:migrate to a class name)
@@ -30,7 +30,7 @@ abstract class Command
      * @param string $task Task name
      * @return string Class name
      */
-    public static function convert_task_to_class_name(string $task): string
+    public static function convertTaskToClassName(string $task): string
     {
         $task = trim($task);
 
@@ -38,7 +38,7 @@ abstract class Command
             return '';
 
         // db:migrate => App\Console\Commands\Db\MigrateCommand, falling back to Kohana\Console\Commands
-        $class = implode('\\', array_map('ucfirst', explode(static::$task_separator, $task))) . 'Command';
+        $class = implode('\\', array_map('ucfirst', explode(static::$taskSeparator, $task))) . 'Command';
 
         foreach (['App\\Console\\Commands\\', 'Kohana\\Console\\Commands\\'] as $namespace) {
             if (class_exists($namespace . $class)) {
@@ -55,7 +55,7 @@ abstract class Command
      * @param string|Minion_Task $class The task class / object
      * @return string             The task name
      */
-    public static function convert_class_to_task($class): string
+    public static function convertClassToTask($class): string
     {
         if (is_object($class)) {
             $class = get_class($class);
@@ -63,7 +63,7 @@ abstract class Command
 
         $class = preg_replace('/^(App|Kohana)\\\\Console\\\\Commands\\\\|Command$/', '', $class);
 
-        return strtolower(str_replace('\\', static::$task_separator, $class));
+        return strtolower(str_replace('\\', static::$taskSeparator, $class));
     }
 
     /**
@@ -85,7 +85,7 @@ abstract class Command
             $task = 'help';
         }
 
-        $class = \Kohana\Console\Command::convert_task_to_class_name($task);
+        $class = \Kohana\Console\Command::convertTaskToClassName($task);
 
         if (!class_exists($class)) {
             throw new InvalidCommandException("Task ':task' is not a valid minion task", [':task' => $class]);
@@ -97,11 +97,11 @@ abstract class Command
             throw new InvalidCommandException("Task ':task' is not a valid minion task", [':task' => $class]);
         }
 
-        $class->set_options($options);
+        $class->setOptions($options);
 
         // Show the help page for this task if requested
         if (array_key_exists('help', $options)) {
-            $class->_method = '_help';
+            $class->method = 'help';
         }
 
         return $class;
@@ -117,7 +117,7 @@ abstract class Command
      *
      * @var array
      */
-    protected $_options = [];
+    protected $options = [];
 
     /**
      * Populated with the accepted options for this task.
@@ -125,20 +125,20 @@ abstract class Command
      *
      * @var array
      */
-    protected $_accepted_options = [];
-    protected $_method = '_execute';
+    protected $acceptedOptions = [];
+    protected $method = 'handle';
 
     protected function __construct()
     {
         // Populate $_accepted_options based on keys from $_options
-        $this->_accepted_options = array_keys($this->_options);
+        $this->acceptedOptions = array_keys($this->options);
     }
 
     /**
      * The file passed to Validation::errors() when validation fails
      * @var string|null
      */
-    protected $_errors_file = 'validation';
+    protected $errorsFile = 'validation';
 
     /**
      * Gets the task name for the task
@@ -150,7 +150,7 @@ abstract class Command
         static $task_name = null;
 
         if ($task_name === null) {
-            $task_name = \Kohana\Console\Command::convert_class_to_task($this);
+            $task_name = \Kohana\Console\Command::convertClassToTask($this);
         }
 
         return $task_name;
@@ -162,10 +162,10 @@ abstract class Command
      * @param array $options The array of options to set
      * @return Kohana_Minion_Task
      */
-    public function set_options(array $options): \Kohana\Console\Command
+    public function setOptions(array $options): \Kohana\Console\Command
     {
         foreach ($options as $key => $value) {
-            $this->_options[$key] = $value;
+            $this->options[$key] = $value;
         }
 
         return $this;
@@ -176,9 +176,9 @@ abstract class Command
      *
      * @return array
      */
-    public function get_options(): array
+    public function getOptions(): array
     {
-        return $this->_options;
+        return $this->options;
     }
 
     /**
@@ -186,9 +186,9 @@ abstract class Command
      *
      * @return array
      */
-    public function get_accepted_options(): array
+    public function getAcceptedOptions(): array
     {
-        return $this->_accepted_options;
+        return $this->acceptedOptions;
     }
 
     /**
@@ -204,11 +204,11 @@ abstract class Command
      *
      * @return Validation
      */
-    public function build_validation(Validator $validation): Validator
+    public function buildValidation(Validator $validation): Validator
     {
         // Add a rule to each key making sure it's in the task
         foreach ($validation->data() as $key => $value) {
-            $validation->rule($key, [$this, 'valid_option'], [':validation', ':field']);
+            $validation->rule($key, [$this, 'validOption'], [':validation', ':field']);
         }
 
         return $validation;
@@ -219,9 +219,9 @@ abstract class Command
      *
      * @return string
      */
-    public function get_errors_file(): ?string
+    public function getErrorsFile(): ?string
     {
-        return $this->_errors_file;
+        return $this->errorsFile;
     }
 
     /**
@@ -233,24 +233,24 @@ abstract class Command
      */
     public function execute()
     {
-        $options = $this->get_options();
+        $options = $this->getOptions();
 
         // Validate $options
         $validation = Validator::factory($options);
-        $validation = $this->build_validation($validation);
+        $validation = $this->buildValidation($validation);
 
-        if ($this->_method !== '_help' && !$validation->check()) {
+        if ($this->method !== 'help' && !$validation->check()) {
             echo View::factory('minion/error/validation')
-                ->set('task', \Kohana\Console\Command::convert_class_to_task($this))
-                ->set('errors', $validation->errors($this->get_errors_file()));
+                ->set('task', \Kohana\Console\Command::convertClassToTask($this))
+                ->set('errors', $validation->errors($this->getErrorsFile()));
         } else {
             // Finally, run the task
-            $method = $this->_method;
+            $method = $this->method;
             echo $this->{$method}($options);
         }
     }
 
-    abstract protected function _execute(array $params);
+    abstract protected function handle(array $params);
 
     /**
      * Outputs help for this task
@@ -258,24 +258,24 @@ abstract class Command
      * @return void
      * @throws View_Exception
      */
-    protected function _help(array $params)
+    protected function help(array $params)
     {
 
         $inspector = new \ReflectionClass($this);
 
-        list($description, $tags) = $this->_parse_doccomment($inspector->getDocComment());
+        list($description, $tags) = $this->parseDoccomment($inspector->getDocComment());
 
         $view = View::factory('minion/help/task')
             ->set('description', $description)
             ->set('tags', (array) $tags)
-            ->set('task', \Kohana\Console\Command::convert_class_to_task($this));
+            ->set('task', \Kohana\Console\Command::convertClassToTask($this));
 
         echo $view;
     }
 
-    public function valid_option(Validator $validation, $option)
+    public function validOption(Validator $validation, $option)
     {
-        if (!in_array($option, $this->_accepted_options)) {
+        if (!in_array($option, $this->acceptedOptions)) {
             $validation->error($option, 'minion_option');
         }
     }
@@ -288,7 +288,7 @@ abstract class Command
      * @param string $comment The comment to parse
      * @return array First element is the comment, second is an array of tags
      */
-    protected function _parse_doccomment(string $comment): array
+    protected function parseDoccomment(string $comment): array
     {
         // Normalize all new lines to \n
         $comment = str_replace(["\r\n", "\n"], "\n", $comment);
@@ -335,12 +335,12 @@ abstract class Command
      *
      * @return array Directory structure of tasks
      */
-    protected function _list_task_files(): array
+    protected function listTaskFiles(): array
     {
-        return Arr::merge(Application::list_files('classes/Console/Commands'), Application::list_files('src/Console/Commands'));
+        return Arr::merge(Application::listFiles('classes/Console/Commands'), Application::listFiles('src/Console/Commands'));
     }
 
-    protected function _compile_task_list(array $files, string $prefix = ''): array
+    protected function compileTaskList(array $files, string $prefix = ''): array
     {
         $output = [];
 
@@ -348,7 +348,7 @@ abstract class Command
             $file = substr($file, strrpos($file, DIRECTORY_SEPARATOR) + 1);
 
             if (is_array($path) && count($path)) {
-                $task = $this->_compile_task_list($path, $prefix . $file . \Kohana\Console\Command::$task_separator);
+                $task = $this->compileTaskList($path, $prefix . $file . \Kohana\Console\Command::$taskSeparator);
 
                 if ($task) {
                     $output = array_merge($output, $task);

@@ -1,9 +1,9 @@
 <style>
-<?php include \Kohana\Foundation\Application::find_file('views', 'profiler/style', 'css') ?>
+<?php include \Kohana\Foundation\Application::findFile('views', 'profiler/style', 'css') ?>
 </style>
 
 <?php
-$group_stats = \Kohana\Foundation\Profiler::group_stats();
+$group_stats = \Kohana\Foundation\Profiler::groupStats();
 $group_cols = ['min', 'max', 'average', 'total'];
 $application_cols = ['min', 'max', 'average', 'current'];
 ?>

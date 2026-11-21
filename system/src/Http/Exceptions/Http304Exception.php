@@ -7,6 +7,6 @@ class Http304Exception extends ExpectedHttpException
     /**
      * @var int HTTP 304 Not Modified
      */
-    protected $_code = 304;
+    protected $code = 304;
 
 }

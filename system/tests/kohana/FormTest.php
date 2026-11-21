@@ -26,9 +26,9 @@ class Kohana_FormTest extends TestCase
      */
     // @codingStandardsIgnoreStart
     protected $environmentDefault = [
-        'Kohana\Foundation\Application::$base_url' => '/',
+        'Kohana\Foundation\Application::$baseUrl' => '/',
         'HTTP_HOST' => 'kohanaframework.org',
-        'Kohana\Foundation\Application::$index_file' => '',
+        'Kohana\Foundation\Application::$indexFile' => '',
     ];
 
     // @codingStandardsIgnoreEnd

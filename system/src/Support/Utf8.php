@@ -61,9 +61,9 @@ class Utf8
             }
         } elseif (is_string($var) && $var !== '') {
             // Remove control characters
-            $var = \Kohana\Support\Utf8::strip_ascii_ctrl($var);
+            $var = \Kohana\Support\Utf8::stripAsciiCtrl($var);
 
-            if (!\Kohana\Support\Utf8::is_ascii($var)) {
+            if (!\Kohana\Support\Utf8::isAscii($var)) {
                 // Temporarily save the mb_substitute_character() value into a variable
                 $mb_substitute_character = mb_substitute_character();
 
@@ -90,7 +90,7 @@ class Utf8
      * @param   mixed   $str    string or array of strings to check
      * @return  bool
      */
-    public static function is_ascii($str): bool
+    public static function isAscii($str): bool
     {
         if (is_array($str)) {
             $str = implode($str);
@@ -107,7 +107,7 @@ class Utf8
      * @param string $str String to clean
      * @return  string
      */
-    public static function strip_ascii_ctrl(string $str): string
+    public static function stripAsciiCtrl(string $str): string
     {
         return preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S', '', $str);
     }
@@ -120,7 +120,7 @@ class Utf8
      * @param string $str String to clean
      * @return  string
      */
-    public static function strip_non_ascii(string $str): string
+    public static function stripNonAscii(string $str): string
     {
         return preg_replace('/[^\x00-\x7F]+/S', '', $str);
     }
@@ -135,10 +135,10 @@ class Utf8
      * @return  string
      * @author  Andreas Gohr <andi@splitbrain.org>
      */
-    public static function transliterate_to_ascii(string $str, int $case = 0): string
+    public static function transliterateToAscii(string $str, int $case = 0): string
     {
         if (!isset(\Kohana\Support\Utf8::$called[__FUNCTION__])) {
-            require Application::find_file('utf8', __FUNCTION__);
+            require Application::findFile('utf8', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', __FUNCTION__)));
 
             // Function has been called
             \Kohana\Support\Utf8::$called[__FUNCTION__] = true;
@@ -228,10 +228,10 @@ class Utf8
      * @return  string
      * @author  Harry Fuecks <hfuecks@gmail.com>
      */
-    public static function substr_replace(string $str, string $replacement, int $offset, ?int $length = null): string
+    public static function substrReplace(string $str, string $replacement, int $offset, ?int $length = null): string
     {
         if (!isset(\Kohana\Support\Utf8::$called[__FUNCTION__])) {
-            require Application::find_file('utf8', __FUNCTION__);
+            require Application::findFile('utf8', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', __FUNCTION__)));
 
             // Function has been called
             \Kohana\Support\Utf8::$called[__FUNCTION__] = true;
@@ -283,7 +283,7 @@ class Utf8
     public static function ucfirst(string $str): string
     {
         if (!isset(\Kohana\Support\Utf8::$called[__FUNCTION__])) {
-            require Application::find_file('utf8', __FUNCTION__);
+            require Application::findFile('utf8', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', __FUNCTION__)));
 
             // Function has been called
             \Kohana\Support\Utf8::$called[__FUNCTION__] = true;
@@ -305,7 +305,7 @@ class Utf8
     public static function ucwords(string $str): string
     {
         if (!isset(\Kohana\Support\Utf8::$called[__FUNCTION__])) {
-            require Application::find_file('utf8', __FUNCTION__);
+            require Application::findFile('utf8', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', __FUNCTION__)));
 
             // Function has been called
             \Kohana\Support\Utf8::$called[__FUNCTION__] = true;
@@ -328,7 +328,7 @@ class Utf8
     public static function strcasecmp(string $str1, string $str2): int
     {
         if (!isset(\Kohana\Support\Utf8::$called[__FUNCTION__])) {
-            require Application::find_file('utf8', __FUNCTION__);
+            require Application::findFile('utf8', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', __FUNCTION__)));
 
             // Function has been called
             \Kohana\Support\Utf8::$called[__FUNCTION__] = true;
@@ -352,10 +352,10 @@ class Utf8
      * @return  string|array Replaced value, same type as input.
      * @author  Harry Fuecks <hfuecks@gmail.com>
      */
-    public static function str_ireplace($search, $replace, $str, ?int &$count = null)
+    public static function strIreplace($search, $replace, $str, ?int &$count = null)
     {
         if (!isset(\Kohana\Support\Utf8::$called[__FUNCTION__])) {
-            require Application::find_file('utf8', __FUNCTION__);
+            require Application::findFile('utf8', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', __FUNCTION__)));
 
             // Function has been called
             \Kohana\Support\Utf8::$called[__FUNCTION__] = true;
@@ -397,7 +397,7 @@ class Utf8
     public static function strspn(string $str, string $mask, ?int $offset = null, ?int $length = null): int
     {
         if (!isset(\Kohana\Support\Utf8::$called[__FUNCTION__])) {
-            require Application::find_file('utf8', __FUNCTION__);
+            require Application::findFile('utf8', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', __FUNCTION__)));
 
             // Function has been called
             \Kohana\Support\Utf8::$called[__FUNCTION__] = true;
@@ -422,7 +422,7 @@ class Utf8
     public static function strcspn(string $str, string $mask, ?int $offset = null, ?int $length = null): int
     {
         if (!isset(\Kohana\Support\Utf8::$called[__FUNCTION__])) {
-            require Application::find_file('utf8', __FUNCTION__);
+            require Application::findFile('utf8', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', __FUNCTION__)));
 
             // Function has been called
             \Kohana\Support\Utf8::$called[__FUNCTION__] = true;
@@ -445,10 +445,10 @@ class Utf8
      * @throws UTF8_Exception
      * @author  Harry Fuecks <hfuecks@gmail.com>
      */
-    public static function str_pad(string $str, int $final_str_length, string $pad_str = ' ', $pad_type = STR_PAD_RIGHT): string
+    public static function strPad(string $str, int $final_str_length, string $pad_str = ' ', $pad_type = STR_PAD_RIGHT): string
     {
         if (!isset(\Kohana\Support\Utf8::$called[__FUNCTION__])) {
-            require Application::find_file('utf8', __FUNCTION__);
+            require Application::findFile('utf8', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', __FUNCTION__)));
 
             // Function has been called
             \Kohana\Support\Utf8::$called[__FUNCTION__] = true;
@@ -468,10 +468,10 @@ class Utf8
      * @return  array
      * @author  Harry Fuecks <hfuecks@gmail.com>
      */
-    public static function str_split(string $str, int $split_length = 1): array
+    public static function strSplit(string $str, int $split_length = 1): array
     {
         if (!isset(\Kohana\Support\Utf8::$called[__FUNCTION__])) {
-            require Application::find_file('utf8', __FUNCTION__);
+            require Application::findFile('utf8', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', __FUNCTION__)));
 
             // Function has been called
             \Kohana\Support\Utf8::$called[__FUNCTION__] = true;
@@ -492,7 +492,7 @@ class Utf8
     public static function strrev(string $str): string
     {
         if (!isset(\Kohana\Support\Utf8::$called[__FUNCTION__])) {
-            require Application::find_file('utf8', __FUNCTION__);
+            require Application::findFile('utf8', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', __FUNCTION__)));
 
             // Function has been called
             \Kohana\Support\Utf8::$called[__FUNCTION__] = true;
@@ -515,7 +515,7 @@ class Utf8
     public static function trim(string $str, ?string $charlist = null): string
     {
         if (!isset(\Kohana\Support\Utf8::$called[__FUNCTION__])) {
-            require Application::find_file('utf8', __FUNCTION__);
+            require Application::findFile('utf8', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', __FUNCTION__)));
 
             // Function has been called
             \Kohana\Support\Utf8::$called[__FUNCTION__] = true;
@@ -538,7 +538,7 @@ class Utf8
     public static function ltrim(string $str, ?string $charlist = null): string
     {
         if (!isset(\Kohana\Support\Utf8::$called[__FUNCTION__])) {
-            require Application::find_file('utf8', __FUNCTION__);
+            require Application::findFile('utf8', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', __FUNCTION__)));
 
             // Function has been called
             \Kohana\Support\Utf8::$called[__FUNCTION__] = true;
@@ -561,7 +561,7 @@ class Utf8
     public static function rtrim(string $str, ?string $charlist = null): string
     {
         if (!isset(\Kohana\Support\Utf8::$called[__FUNCTION__])) {
-            require Application::find_file('utf8', __FUNCTION__);
+            require Application::findFile('utf8', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', __FUNCTION__)));
 
             // Function has been called
             \Kohana\Support\Utf8::$called[__FUNCTION__] = true;
@@ -584,7 +584,7 @@ class Utf8
     public static function ord(string $chr): int
     {
         if (!isset(\Kohana\Support\Utf8::$called[__FUNCTION__])) {
-            require Application::find_file('utf8', __FUNCTION__);
+            require Application::findFile('utf8', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', __FUNCTION__)));
 
             // Function has been called
             \Kohana\Support\Utf8::$called[__FUNCTION__] = true;
@@ -610,10 +610,10 @@ class Utf8
      * @return array|false Unicode code points if succeeded, or false if the string is invalid.
      * @throws UTF8_Exception
      */
-    public static function to_unicode(string $str)
+    public static function toUnicode(string $str)
     {
         if (!isset(\Kohana\Support\Utf8::$called[__FUNCTION__])) {
-            require Application::find_file('utf8', __FUNCTION__);
+            require Application::findFile('utf8', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', __FUNCTION__)));
 
             // Function has been called
             \Kohana\Support\Utf8::$called[__FUNCTION__] = true;
@@ -639,10 +639,10 @@ class Utf8
      * @return string|false UTF-8 encoded string on success, false if invalid code point encountered.
      * @throws UTF8_Exception
      */
-    public static function from_unicode(array $arr)
+    public static function fromUnicode(array $arr)
     {
         if (!isset(\Kohana\Support\Utf8::$called[__FUNCTION__])) {
-            require Application::find_file('utf8', __FUNCTION__);
+            require Application::findFile('utf8', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', __FUNCTION__)));
 
             // Function has been called
             \Kohana\Support\Utf8::$called[__FUNCTION__] = true;

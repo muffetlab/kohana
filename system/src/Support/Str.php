@@ -63,7 +63,7 @@ class Str
      * @param string|null $end_char End character or entity
      * @return  string
      */
-    public static function limit_words(string $str, int $limit = 100, ?string $end_char = null): string
+    public static function limitWords(string $str, int $limit = 100, ?string $end_char = null): string
     {
         $end_char = $end_char === null ? '…' : $end_char;
 
@@ -92,7 +92,7 @@ class Str
      * @return  string
      * @uses    UTF8::strlen
      */
-    public static function limit_chars(string $str, int $limit = 100, ?string $end_char = null, bool $preserve_words = false): string
+    public static function limitChars(string $str, int $limit = 100, ?string $end_char = null, bool $preserve_words = false): string
     {
         $end_char = $end_char === null ? '…' : $end_char;
 
@@ -196,12 +196,12 @@ class Str
                 break;
             default:
                 $pool = (string) $type;
-                $utf8 = !Utf8::is_ascii($pool);
+                $utf8 = !Utf8::isAscii($pool);
                 break;
         }
 
         // Split the pool into an array of characters
-        $pool = $utf8 === true ? Utf8::str_split($pool) : str_split($pool);
+        $pool = $utf8 === true ? Utf8::strSplit($pool) : str_split($pool);
 
         // Largest pool key
         $max = count($pool) - 1;
@@ -251,7 +251,7 @@ class Str
      * @param string $str String to reduce slashes of
      * @return  string
      */
-    public static function reduce_slashes(string $str): string
+    public static function reduceSlashes(string $str): string
     {
         return preg_replace('#(?<!:)//+#', '/', $str);
     }
@@ -335,10 +335,10 @@ class Str
      * @uses    Text::auto_link_urls
      * @uses    Text::auto_link_emails
      */
-    public static function auto_link(string $text): string
+    public static function autoLink(string $text): string
     {
         // Auto link emails first to prevent problems with "www.domain.com@example.com"
-        return \Kohana\Support\Str::auto_link_urls(\Kohana\Support\Str::auto_link_emails($text));
+        return \Kohana\Support\Str::autoLinkUrls(\Kohana\Support\Str::autoLinkEmails($text));
     }
 
     /**
@@ -352,21 +352,21 @@ class Str
      * @return  string
      * @uses    HTML::anchor
      */
-    public static function auto_link_urls(string $text): string
+    public static function autoLinkUrls(string $text): string
     {
         // Find and replace all http/https/ftp/ftps links that are not part of an existing HTML anchor
-        $text = preg_replace_callback('~\b(?<!href="|">)(?:ht|f)tps?://[^<\s]+(?:/|\b)~i', [Str::class, '_auto_link_urls_callback1'], $text);
+        $text = preg_replace_callback('~\b(?<!href="|">)(?:ht|f)tps?://[^<\s]+(?:/|\b)~i', [Str::class, 'autoLinkUrlsCallback1'], $text);
 
         // Find and replace all naked www.links.com (without http://)
-        return preg_replace_callback('~\b(?<!://|">)www(?:\.[a-z0-9][-a-z0-9]*+)+\.[a-z]{2,6}[^<\s]*\b~i', [Str::class, '_auto_link_urls_callback2'], $text);
+        return preg_replace_callback('~\b(?<!://|">)www(?:\.[a-z0-9][-a-z0-9]*+)+\.[a-z]{2,6}[^<\s]*\b~i', [Str::class, 'autoLinkUrlsCallback2'], $text);
     }
 
-    protected static function _auto_link_urls_callback1($matches): string
+    protected static function autoLinkUrlsCallback1($matches): string
     {
         return Html::anchor($matches[0]);
     }
 
-    protected static function _auto_link_urls_callback2($matches): string
+    protected static function autoLinkUrlsCallback2($matches): string
     {
         return Html::anchor('http://' . $matches[0], $matches[0]);
     }
@@ -383,15 +383,15 @@ class Str
      * @return  string
      * @uses    HTML::mailto
      */
-    public static function auto_link_emails(string $text): string
+    public static function autoLinkEmails(string $text): string
     {
         // Find and replace all email addresses that are not part of an existing HTML mailto anchor
         // Note: The "58;" negative lookbehind prevents matching of existing encoded HTML mailto anchors
         //       The HTML entity for a colon (:) is &#58; or &#058; or &#0058; etc.
-        return preg_replace_callback('~\b(?<!href="mailto:|58;)(?!\.)[-+_a-z0-9.]++(?<!\.)@(?![-.])[-a-z0-9.]+(?<!\.)\.[a-z]{2,6}\b(?!</a>)~i', [Str::class, '_auto_link_emails_callback'], $text);
+        return preg_replace_callback('~\b(?<!href="mailto:|58;)(?!\.)[-+_a-z0-9.]++(?<!\.)@(?![-.])[-a-z0-9.]+(?<!\.)\.[a-z]{2,6}\b(?!</a>)~i', [Str::class, 'autoLinkEmailsCallback'], $text);
     }
 
-    protected static function _auto_link_emails_callback($matches): string
+    protected static function autoLinkEmailsCallback($matches): string
     {
         return Html::mailto($matches[0]);
     }
@@ -408,7 +408,7 @@ class Str
      * @param bool $br Convert single linebreaks to <br />
      * @return  string
      */
-    public static function auto_p(string $str, bool $br = true): string
+    public static function autoP(string $str, bool $br = true): string
     {
         // Trim whitespace
         if (($str = trim($str)) === '')
@@ -599,13 +599,13 @@ class Str
      * @throws Kohana_Exception
      * @uses    Kohana::$config
      */
-    public static function user_agent(string $agent, $value)
+    public static function userAgent(string $agent, $value)
     {
         if (is_array($value)) {
             $data = [];
             foreach ($value as $part) {
                 // Add each part to the set
-                $data[$part] = \Kohana\Support\Str::user_agent($agent, $part);
+                $data[$part] = \Kohana\Support\Str::userAgent($agent, $part);
             }
 
             return $data;

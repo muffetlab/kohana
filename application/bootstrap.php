@@ -34,7 +34,7 @@ setlocale(LC_ALL, 'en_US.utf-8');
  * @link https://kohana.top/guide/using.autoloading
  * @link https://www.php.net/function.spl-autoload-register
  */
-spl_autoload_register([Application::class, 'auto_load']);
+spl_autoload_register([Application::class, 'autoLoad']);
 
 /**
  * Optionally, you can enable a compatibility autoloader for use with

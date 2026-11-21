@@ -66,6 +66,6 @@ if (PHP_SAPI === 'cli') {
      */
     echo Request::factory(null, [], false)
         ->execute()
-        ->send_headers(true)
+        ->sendHeaders(true)
         ->body();
 }

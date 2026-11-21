@@ -124,7 +124,7 @@ class Kohana_ViewTest extends TestCase
     public function test_set_global($data_key, $value, $test_key, $expected)
     {
         $view = View::factory();
-        $view::set_global($data_key, $value);
+        $view::setGlobal($data_key, $value);
         $this->assertSame($expected, $view->$test_key);
     }
 

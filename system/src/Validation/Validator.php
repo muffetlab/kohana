@@ -30,17 +30,17 @@ class Validator implements \ArrayAccess
     }
 
     // Bound values
-    protected $_bound = [];
+    protected $bound = [];
     // Field rules
-    protected $_rules = [];
+    protected $rules = [];
     // Field labels
-    protected $_labels = [];
+    protected $labels = [];
     // Rules that are executed even when the value is empty
-    protected $_empty_rules = ['not_empty', 'matches'];
+    protected $emptyRules = ['not_empty', 'matches'];
     // Error list, field => rule
-    protected $_errors = [];
+    protected $errors = [];
     // Array to validate
-    protected $_data = [];
+    protected $data = [];
 
     /**
      * Sets the unique "any field" key and creates an ArrayObject from the
@@ -51,7 +51,7 @@ class Validator implements \ArrayAccess
      */
     public function __construct(array $array)
     {
-        $this->_data = $array;
+        $this->data = $array;
     }
 
     /**
@@ -77,7 +77,7 @@ class Validator implements \ArrayAccess
      */
     public function offsetExists($offset): bool
     {
-        return isset($this->_data[$offset]);
+        return isset($this->data[$offset]);
     }
 
     /**
@@ -102,7 +102,7 @@ class Validator implements \ArrayAccess
      */
     public function offsetGet($offset): mixed
     {
-        return $this->_data[$offset];
+        return $this->data[$offset];
     }
 
     /**
@@ -120,7 +120,7 @@ class Validator implements \ArrayAccess
         $copy = clone $this;
 
         // Replace the data set
-        $copy->_data = $array;
+        $copy->data = $array;
 
         return $copy;
     }
@@ -132,7 +132,7 @@ class Validator implements \ArrayAccess
      */
     public function data(): array
     {
-        return $this->_data;
+        return $this->data;
     }
 
     /**
@@ -145,7 +145,7 @@ class Validator implements \ArrayAccess
     public function label(string $field, string $label): \Kohana\Validation\Validator
     {
         // Set the label for this field
-        $this->_labels[$field] = $label;
+        $this->labels[$field] = $label;
 
         return $this;
     }
@@ -158,7 +158,7 @@ class Validator implements \ArrayAccess
      */
     public function labels(array $labels): \Kohana\Validation\Validator
     {
-        $this->_labels = $labels + $this->_labels;
+        $this->labels = $labels + $this->labels;
 
         return $this;
     }
@@ -202,13 +202,13 @@ class Validator implements \ArrayAccess
             $params = [':value'];
         }
 
-        if ($field !== true && !isset($this->_labels[$field])) {
+        if ($field !== true && !isset($this->labels[$field])) {
             // Set the field label to the field name
-            $this->_labels[$field] = $field;
+            $this->labels[$field] = $field;
         }
 
         // Store the rule and params for this rule
-        $this->_rules[$field][] = [$rule, $params];
+        $this->rules[$field][] = [$rule, $params];
 
         return $this;
     }
@@ -244,10 +244,10 @@ class Validator implements \ArrayAccess
     {
         if (is_array($key)) {
             foreach ($key as $name => $value) {
-                $this->_bound[$name] = $value;
+                $this->bound[$name] = $value;
             }
         } else {
-            $this->_bound[$key] = $value;
+            $this->bound[$key] = $value;
         }
 
         return $this;
@@ -273,16 +273,16 @@ class Validator implements \ArrayAccess
         }
 
         // New data set
-        $data = $this->_errors = [];
+        $data = $this->errors = [];
 
         // Store the original data because this class should not modify it post-validation
-        $original = $this->_data;
+        $original = $this->data;
 
         // Get a list of the expected fields
-        $expected = Arr::merge(array_keys($original), array_keys($this->_labels));
+        $expected = Arr::merge(array_keys($original), array_keys($this->labels));
 
         // Import the rules locally
-        $rules = $this->_rules;
+        $rules = $this->rules;
 
         foreach ($expected as $field) {
             // Use the submitted value or null if no data exists
@@ -300,7 +300,7 @@ class Validator implements \ArrayAccess
         }
 
         // Overload the current array with the new one
-        $this->_data = $data;
+        $this->data = $data;
 
         // Remove the rules that apply to every field
         unset($rules[true]);
@@ -308,7 +308,7 @@ class Validator implements \ArrayAccess
         // Bind the validation object to :validation
         $this->bind(':validation', $this);
         // Bind the data to :data
-        $this->bind(':data', $this->_data);
+        $this->bind(':data', $this->data);
 
         // Execute the rules
         foreach ($rules as $field => $set) {
@@ -326,14 +326,14 @@ class Validator implements \ArrayAccess
                 list($rule, $params) = $array;
 
                 foreach ($params as $key => $param) {
-                    if (is_string($param) && array_key_exists($param, $this->_bound)) {
+                    if (is_string($param) && array_key_exists($param, $this->bound)) {
                         // Replace with bound value
-                        $params[$key] = $this->_bound[$param];
+                        $params[$key] = $this->bound[$param];
                     }
                 }
 
                 // Ignore return values from rules when the field is empty
-                if (!in_array($rule, $this->_empty_rules) && !Rules::not_empty($value)) {
+                if (!in_array($rule, $this->emptyRules) && !Rules::notEmpty($value)) {
                     continue;
                 }
 
@@ -342,21 +342,21 @@ class Validator implements \ArrayAccess
 
                 if (is_array($rule)) {
                     // Allows rule('field', [':model', 'some_rule']);
-                    if (is_string($rule[0]) && array_key_exists($rule[0], $this->_bound)) {
+                    if (is_string($rule[0]) && array_key_exists($rule[0], $this->bound)) {
                         // Replace with bound value
-                        $rule[0] = $this->_bound[$rule[0]];
+                        $rule[0] = $this->bound[$rule[0]];
                     }
 
                     // This is an array callback, the method name is the error name
-                    $error_name = $rule[1];
+                    $error_name = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $rule[1])); // minLength => min_length
                     $passed = call_user_func_array($rule, $params);
                 } elseif (!is_string($rule)) {
                     // This is a lambda function, there is no error name (errors must be added manually)
                     $error_name = false;
                     $passed = call_user_func_array($rule, $params);
-                } elseif (method_exists(Rules::class, $rule)) {
-                    // Use a method in this object
-                    $method = new \ReflectionMethod(Rules::class, $rule);
+                } elseif (method_exists(Rules::class, $rule_method = lcfirst(str_replace('_', '', ucwords($rule, '_'))))) {
+                    // Snake case rule names (not_empty) map to Rules methods (notEmpty)
+                    $method = new \ReflectionMethod(Rules::class, $rule_method);
 
                     // Call static::$rule($this[$field], $param, ...) with Reflection
                     $passed = $method->invokeArgs(null, $params);
@@ -383,7 +383,7 @@ class Validator implements \ArrayAccess
 
                     // This field has an error, stop executing rules
                     break;
-                } elseif (isset($this->_errors[$field])) {
+                } elseif (isset($this->errors[$field])) {
                     // The callback added the error manually, stop checking rules
                     break;
                 }
@@ -391,21 +391,21 @@ class Validator implements \ArrayAccess
         }
 
         // Unbind all the automatic bindings to avoid memory leaks.
-        unset($this->_bound[':validation']);
-        unset($this->_bound[':data']);
-        unset($this->_bound[':field']);
-        unset($this->_bound[':value']);
+        unset($this->bound[':validation']);
+        unset($this->bound[':data']);
+        unset($this->bound[':field']);
+        unset($this->bound[':value']);
 
 
         // Restore the data to its original form
-        $this->_data = $original;
+        $this->data = $original;
 
         if (isset($benchmark)) {
             // Stop benchmarking
             Profiler::stop($benchmark);
         }
 
-        return empty($this->_errors);
+        return empty($this->errors);
     }
 
     /**
@@ -418,7 +418,7 @@ class Validator implements \ArrayAccess
      */
     public function error(string $field, string $error, ?array $params = null): \Kohana\Validation\Validator
     {
-        $this->_errors[$field] = [$error, $params];
+        $this->errors[$field] = [$error, $params];
 
         return $this;
     }
@@ -446,17 +446,17 @@ class Validator implements \ArrayAccess
     {
         if ($file === null) {
             // Return the error list
-            return $this->_errors;
+            return $this->errors;
         }
 
         // Create a new message list
         $messages = [];
 
-        foreach ($this->_errors as $field => $set) {
+        foreach ($this->errors as $field => $set) {
             list($error, $params) = $set;
 
             // Get the label for this field
-            $label = $this->_labels[$field];
+            $label = $this->labels[$field];
 
             if ($translate) {
                 if (is_string($translate)) {
@@ -490,9 +490,9 @@ class Validator implements \ArrayAccess
                     }
 
                     // Check if a label for this parameter exists
-                    if ($value !== null && isset($this->_labels[$value])) {
+                    if ($value !== null && isset($this->labels[$value])) {
                         // Use the label as the value, e.g., related field name for "matches"
-                        $value = $this->_labels[$value];
+                        $value = $this->labels[$value];
 
                         if ($translate) {
                             if (is_string($translate)) {

@@ -26,10 +26,10 @@ class OrmAuth extends Auth
      * @throws ORM_Validation_Exception
      * @throws ReflectionException
      */
-    public function logged_in(?string $role = null): bool
+    public function loggedIn(?string $role = null): bool
     {
         // Get the user from the session
-        $user = $this->get_user();
+        $user = $this->getUser();
 
         if (!$user)
             return false;
@@ -41,10 +41,10 @@ class OrmAuth extends Auth
 
             if (is_array($role)) {
                 // Get all the roles
-                $roles = $this->_model('Role')
+                $roles = $this->model('Role')
                     ->where('name', 'IN', $role)
-                    ->find_all()
-                    ->as_array(null, 'id');
+                    ->findAll()
+                    ->asArray(null, 'id');
 
                 // Make sure all the roles are valid ones
                 if (count($roles) !== count($role))
@@ -53,7 +53,7 @@ class OrmAuth extends Auth
             else {
                 if (!is_object($role)) {
                     // Load the role
-                    $roles = $this->_model('Role', ['name' => $role]);
+                    $roles = $this->model('Role', ['name' => $role]);
 
                     if (!$roles->loaded())
                         return false;
@@ -80,14 +80,14 @@ class OrmAuth extends Auth
      * @throws ORM_Validation_Exception
      * @throws ReflectionException
      */
-    protected function _login($user, $password, $remember): bool
+    protected function attemptLogin($user, $password, $remember): bool
     {
         if (!is_object($user)) {
             $username = $user;
 
             // Load the user
-            $user = $this->_model('User');
-            $user->where($user->unique_key($username), '=', $username)->find();
+            $user = $this->model('User');
+            $user->where($user->uniqueKey($username), '=', $username)->find();
         }
 
         if (is_string($password)) {
@@ -96,26 +96,26 @@ class OrmAuth extends Auth
         }
 
         // If the passwords match, perform a login
-        if ($user->has('roles', $this->_model('Role', ['name' => 'login'])) && $user->password === $password) {
+        if ($user->has('roles', $this->model('Role', ['name' => 'login'])) && $user->password === $password) {
             if ($remember === true) {
                 // Token data
                 $data = [
                     'user_id' => $user->pk(),
-                    'expires' => time() + $this->_config['lifetime'],
-                    'user_agent' => sha1(Request::$user_agent),
+                    'expires' => time() + $this->config['lifetime'],
+                    'user_agent' => sha1(Request::$userAgent),
                 ];
 
                 // Create a new autologin token
-                $token = $this->_model('User_Token')
+                $token = $this->model('User_Token')
                     ->values($data, array_keys($data))
                     ->create();
 
                 // Set the autologin cookie
-                Cookie::set('authautologin', $token->token, $this->_config['lifetime']);
+                Cookie::set('authautologin', $token->token, $this->config['lifetime']);
             }
 
             // Finish the login
-            $this->complete_login($user);
+            $this->completeLogin($user);
 
             return true;
         }
@@ -132,23 +132,23 @@ class OrmAuth extends Auth
      * @return  void
      * @throws Kohana_Exception
      */
-    public function force_login($user, bool $mark_session_as_forced = false)
+    public function forceLogin($user, bool $mark_session_as_forced = false)
     {
         if (!is_object($user)) {
             $username = $user;
 
             // Load the user
-            $user = $this->_model('User');
-            $user->where($user->unique_key($username), '=', $username)->find();
+            $user = $this->model('User');
+            $user->where($user->uniqueKey($username), '=', $username)->find();
         }
 
         if ($mark_session_as_forced === true) {
             // Mark the session as forced, to prevent users from changing account information
-            $this->_session->set('auth_forced', true);
+            $this->session->set('auth_forced', true);
         }
 
         // Run the standard completion
-        $this->complete_login($user);
+        $this->completeLogin($user);
     }
 
     /**
@@ -159,14 +159,14 @@ class OrmAuth extends Auth
      * @throws ORM_Validation_Exception
      * @throws ReflectionException
      */
-    public function auto_login()
+    public function autoLogin()
     {
         if ($token = Cookie::get('authautologin')) {
             // Load the token and user
-            $token = $this->_model('User_Token', ['token' => $token]);
+            $token = $this->model('User_Token', ['token' => $token]);
 
             if ($token->loaded() && $token->user->loaded()) {
-                if ($token->user_agent === sha1(Request::$user_agent)) {
+                if ($token->user_agent === sha1(Request::$userAgent)) {
                     // Save the token to create a new unique token
                     $token->save();
 
@@ -174,7 +174,7 @@ class OrmAuth extends Auth
                     Cookie::set('authautologin', $token->token, $token->expires - time());
 
                     // Complete the login with the found data
-                    $this->complete_login($token->user);
+                    $this->completeLogin($token->user);
 
                     // Automatic login was successful
                     return $token->user;
@@ -198,13 +198,13 @@ class OrmAuth extends Auth
      * @throws ORM_Validation_Exception
      * @throws ReflectionException
      */
-    public function get_user($default = null)
+    public function getUser($default = null)
     {
-        $user = parent::get_user($default);
+        $user = parent::getUser($default);
 
         if ($user === $default) {
             // check for "remembered" login
-            if (($user = $this->auto_login()) === false)
+            if (($user = $this->autoLogin()) === false)
                 return $default;
         }
 
@@ -222,18 +222,18 @@ class OrmAuth extends Auth
     public function logout(bool $destroy = false, bool $logout_all = false): bool
     {
         // Set by force_login()
-        $this->_session->delete('auth_forced');
+        $this->session->delete('auth_forced');
 
         if ($token = Cookie::get('authautologin')) {
             // Delete the autologin cookie to prevent re-login
             Cookie::delete('authautologin');
 
             // Clear the autologin token from the database
-            $token = $this->_model('User_Token', ['token' => $token]);
+            $token = $this->model('User_Token', ['token' => $token]);
 
             if ($token->loaded() && $logout_all) {
                 // Delete all user tokens. This isn't the most elegant solution but does the job
-                $tokens = $this->_model('User_Token')->where('user_id', '=', $token->user_id)->find_all();
+                $tokens = $this->model('User_Token')->where('user_id', '=', $token->user_id)->findAll();
 
                 foreach ($tokens as $_token) {
                     $_token->delete();
@@ -259,8 +259,8 @@ class OrmAuth extends Auth
             $username = $user;
 
             // Load the user
-            $user = $this->_model('User');
-            $user->where($user->unique_key($username), '=', $username)->find();
+            $user = $this->model('User');
+            $user->where($user->uniqueKey($username), '=', $username)->find();
         }
 
         return $user->password;
@@ -273,11 +273,11 @@ class OrmAuth extends Auth
      * @param   object  $user  user ORM object
      * @return bool
      */
-    protected function complete_login($user): bool
+    protected function completeLogin($user): bool
     {
-        $user->complete_login();
+        $user->completeLogin();
 
-        return parent::complete_login($user);
+        return parent::completeLogin($user);
     }
 
     /**
@@ -289,9 +289,9 @@ class OrmAuth extends Auth
      * @throws ORM_Validation_Exception
      * @throws ReflectionException
      */
-    public function check_password($password): bool
+    public function checkPassword($password): bool
     {
-        $user = $this->get_user();
+        $user = $this->getUser();
 
         if (!$user)
             return false;
@@ -307,7 +307,7 @@ class OrmAuth extends Auth
      * @param mixed $id Parameter for find or object to load
      * @return Model
      */
-    protected function _model(string $name, $id = null): Model
+    protected function model(string $name, $id = null): Model
     {
         $name = str_replace('_', '', $name);
         $class = class_exists('App\\Models\\' . $name) ? 'App\\Models\\' . $name : 'Kohana\\Auth\\Models\\' . $name;

@@ -82,7 +82,7 @@ abstract class ExternalClient extends Client
      * @var     array     curl options
      * @link    https://www.php.net/manual/en/function.curl-setopt
      */
-    protected $_options = [];
+    protected $options = [];
 
     /**
      * Processes the request, executing the controller action that handles this
@@ -105,7 +105,7 @@ abstract class ExternalClient extends Client
      * @uses    [Kohana::$profiling]
      * @uses    [Profiler]
      */
-    public function execute_request(Request $request, Response $response): Response
+    public function executeRequest(Request $request, Response $response): Response
     {
         if (Application::$profiling) {
             // Set the benchmark name
@@ -130,7 +130,7 @@ abstract class ExternalClient extends Client
                 ->headers('content-type', 'application/x-www-form-urlencoded; charset=' . Application::$charset);
         }
 
-        $request->headers('content-length', (string) $request->content_length());
+        $request->headers('content-length', (string) $request->contentLength());
 
         // If Kohana expose, set the user-agent
         if (Application::$expose) {
@@ -138,7 +138,7 @@ abstract class ExternalClient extends Client
         }
 
         try {
-            $response = $this->_send_message($request, $response);
+            $response = $this->sendMessage($request, $response);
         } catch (\Exception $e) {
             // Restore the previous request
             Request::$current = $previous;
@@ -174,14 +174,14 @@ abstract class ExternalClient extends Client
     public function options($key = null, $value = null)
     {
         if ($key === null)
-            return $this->_options;
+            return $this->options;
 
         if (is_array($key)) {
-            $this->_options = $key;
+            $this->options = $key;
         } elseif ($value === null) {
-            return Arr::get($this->_options, $key);
+            return Arr::get($this->options, $key);
         } else {
-            $this->_options[$key] = $value;
+            $this->options[$key] = $value;
         }
 
         return $this;
@@ -195,5 +195,5 @@ abstract class ExternalClient extends Client
      * @param   Response  $response   Response to send
      * @return  Response
      */
-    abstract protected function _send_message(Request $request, Response $response): Response;
+    abstract protected function sendMessage(Request $request, Response $response): Response;
 }

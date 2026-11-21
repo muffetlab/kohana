@@ -17,8 +17,8 @@ use Kohana\Database\DB;
  */
 class DatabaseReader implements Reader
 {
-    protected $_db_instance;
-    protected $_table_name = 'config';
+    protected $dbInstance;
+    protected $tableName = 'config';
 
     /**
      * Constructs the database reader object
@@ -28,13 +28,13 @@ class DatabaseReader implements Reader
     public function __construct(?array $config = null)
     {
         if (isset($config['instance'])) {
-            $this->_db_instance = $config['instance'];
-        } elseif ($this->_db_instance === null) {
-            $this->_db_instance = Connection::$default;
+            $this->dbInstance = $config['instance'];
+        } elseif ($this->dbInstance === null) {
+            $this->dbInstance = Connection::$default;
         }
 
         if (isset($config['table_name'])) {
-            $this->_table_name = $config['table_name'];
+            $this->tableName = $config['table_name'];
         }
     }
 
@@ -59,11 +59,11 @@ class DatabaseReader implements Reader
             return false;
 
         $query = DB::select('config_key', 'config_value')
-            ->from($this->_table_name)
+            ->from($this->tableName)
             ->where('group_name', '=', $group)
-            ->execute($this->_db_instance);
+            ->execute($this->dbInstance);
 
-        return count($query) ? array_map('unserialize', $query->as_array('config_key', 'config_value')) : false;
+        return count($query) ? array_map('unserialize', $query->asArray('config_key', 'config_value')) : false;
     }
 
 }

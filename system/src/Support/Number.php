@@ -24,7 +24,7 @@ class Number
     /**
      * @var  array  Valid byte units => power of 2 that defines the unit's size
      */
-    public static $byte_units = [
+    public static $byteUnits = [
         'B' => 0,
         'K' => 10,
         'Ki' => 10,
@@ -192,7 +192,7 @@ class Number
         $size = trim($size);
 
         // Construct an OR list of byte units for the regex
-        $accepted = implode('|', array_keys(\Kohana\Support\Number::$byte_units));
+        $accepted = implode('|', array_keys(\Kohana\Support\Number::$byteUnits));
 
         // Construct the regex pattern for verifying the size format
         $pattern = '/^([0-9]+(?:\.[0-9]+)?)(' . $accepted . ')?$/Di';
@@ -208,7 +208,7 @@ class Number
         $unit = Arr::get($matches, 2, 'B');
 
         // Convert the size into bytes
-        return $size * pow(2, \Kohana\Support\Number::$byte_units[$unit]);
+        return $size * pow(2, \Kohana\Support\Number::$byteUnits[$unit]);
     }
 
 }

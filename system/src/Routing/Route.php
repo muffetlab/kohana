@@ -57,7 +57,7 @@ class Route
      *
      * @example  'http://'
      */
-    public static $default_protocol = 'http://';
+    public static $defaultProtocol = 'http://';
 
     /**
      * @var  array   list of valid localhost entries
@@ -67,7 +67,7 @@ class Route
     /**
      * @var  string  default action for all routes
      */
-    public static $default_action = 'index';
+    public static $defaultAction = 'index';
 
     /**
      * @var  bool Indicates whether routes are cached
@@ -77,7 +77,7 @@ class Route
     /**
      * @var  array
      */
-    protected static $_routes = [];
+    protected static $routes = [];
 
     /**
      * Stores a named route and returns it. The "action" will always be set to
@@ -95,7 +95,7 @@ class Route
      */
     public static function set(string $name, ?string $uri = null, ?array $regex = null): \Kohana\Routing\Route
     {
-        return \Kohana\Routing\Route::$_routes[$name] = new \Kohana\Routing\Route($uri, $regex);
+        return \Kohana\Routing\Route::$routes[$name] = new \Kohana\Routing\Route($uri, $regex);
     }
 
     /**
@@ -109,11 +109,11 @@ class Route
      */
     public static function get(string $name): \Kohana\Routing\Route
     {
-        if (!isset(\Kohana\Routing\Route::$_routes[$name])) {
+        if (!isset(\Kohana\Routing\Route::$routes[$name])) {
             throw new KohanaException('The requested route does not exist: :route', [':route' => $name]);
         }
 
-        return \Kohana\Routing\Route::$_routes[$name];
+        return \Kohana\Routing\Route::$routes[$name];
     }
 
     /**
@@ -125,7 +125,7 @@ class Route
      */
     public static function all(): array
     {
-        return \Kohana\Routing\Route::$_routes;
+        return \Kohana\Routing\Route::$routes;
     }
 
     /**
@@ -138,7 +138,7 @@ class Route
      */
     public static function name(\Kohana\Routing\Route $route)
     {
-        return array_search($route, \Kohana\Routing\Route::$_routes);
+        return array_search($route, \Kohana\Routing\Route::$routes);
     }
 
     /**
@@ -162,7 +162,7 @@ class Route
         if ($save) {
             try {
                 // Cache all defined routes
-                Application::cache('Kohana\Routing\Route::cache()', \Kohana\Routing\Route::$_routes);
+                Application::cache('Kohana\Routing\Route::cache()', \Kohana\Routing\Route::$routes);
             } catch (\Exception $e) {
                 // We most likely have a lambda in a route, which cannot be cached
                 throw new KohanaException('One or more routes could not be cached (:message)', [
@@ -173,10 +173,10 @@ class Route
             if ($routes = Application::cache('Kohana\Routing\Route::cache()')) {
                 if ($append) {
                     // Append cached routes
-                    \Kohana\Routing\Route::$_routes += $routes;
+                    \Kohana\Routing\Route::$routes += $routes;
                 } else {
                     // Replace existing routes
-                    \Kohana\Routing\Route::$_routes = $routes;
+                    \Kohana\Routing\Route::$routes = $routes;
                 }
 
                 // Routes were cached
@@ -206,7 +206,7 @@ class Route
         $route = \Kohana\Routing\Route::get($name);
 
         // Create a URI with the route and convert it to a URL
-        if ($route->is_external())
+        if ($route->isExternal())
             return $route->uri($params);
         else
             return Url::site($route->uri($params), $protocol);
@@ -259,27 +259,27 @@ class Route
     /**
      * @var  array  route filters
      */
-    protected $_filters = [];
+    protected $filters = [];
 
     /**
      * @var  string  route URI
      */
-    protected $_uri = '';
+    protected $uri = '';
 
     /**
      * @var  array
      */
-    protected $_regex = [];
+    protected $regex = [];
 
     /**
      * @var  array
      */
-    protected $_defaults = ['action' => 'index', 'host' => false];
+    protected $defaults = ['action' => 'index', 'host' => false];
 
     /**
      * @var  string
      */
-    protected $_route_regex;
+    protected $routeRegex;
 
     /**
      * Creates a new route. Sets the URI and regular expressions for keys.
@@ -304,15 +304,15 @@ class Route
         }
 
         if (!empty($uri)) {
-            $this->_uri = $uri;
+            $this->uri = $uri;
         }
 
         if (!empty($regex)) {
-            $this->_regex = $regex;
+            $this->regex = $regex;
         }
 
         // Store the compiled regex locally
-        $this->_route_regex = \Kohana\Routing\Route::compile($uri, $regex);
+        $this->routeRegex = \Kohana\Routing\Route::compile($uri, $regex);
     }
 
     /**
@@ -332,10 +332,10 @@ class Route
     public function defaults(?array $defaults = null)
     {
         if ($defaults === null) {
-            return $this->_defaults;
+            return $this->defaults;
         }
 
-        $this->_defaults = $defaults;
+        $this->defaults = $defaults;
 
         return $this;
     }
@@ -370,7 +370,7 @@ class Route
             throw new KohanaException('Invalid Route::callback specified');
         }
 
-        $this->_filters[] = $callback;
+        $this->filters[] = $callback;
 
         return $this;
     }
@@ -397,7 +397,7 @@ class Route
         // Get the URI from the Request
         $uri = trim($request->uri(), '/');
 
-        if (!preg_match($this->_route_regex, $uri, $matches))
+        if (!preg_match($this->routeRegex, $uri, $matches))
             return false;
 
         $params = [];
@@ -411,7 +411,7 @@ class Route
             $params[$key] = $value;
         }
 
-        foreach ($this->_defaults as $key => $value) {
+        foreach ($this->defaults as $key => $value) {
             if (!isset($params[$key]) || $params[$key] === '') {
                 // Set default values for any key that was not matched
                 $params[$key] = $value;
@@ -428,8 +428,8 @@ class Route
             $params['directory'] = str_replace(' ', '_', ucwords(str_replace('_', ' ', $params['directory'])));
         }
 
-        if ($this->_filters) {
-            foreach ($this->_filters as $callback) {
+        if ($this->filters) {
+            foreach ($this->filters as $callback) {
                 // Execute the filter giving it the route, params, and request
                 $return = call_user_func($callback, $this, $params, $request);
 
@@ -452,9 +452,9 @@ class Route
      *
      * @return bool
      */
-    public function is_external(): bool
+    public function isExternal(): bool
     {
-        return !in_array(Arr::get($this->_defaults, 'host', false), \Kohana\Routing\Route::$localhosts);
+        return !in_array(Arr::get($this->defaults, 'host', false), \Kohana\Routing\Route::$localhosts);
     }
 
     /**
@@ -482,7 +482,7 @@ class Route
             $params = str_replace(['%2F', '%5C'], ['/', '\\'], $params);
         }
 
-        $defaults = $this->_defaults;
+        $defaults = $this->defaults;
 
         /**
          * Recursively compiles a portion of a URI specification by replacing
@@ -544,18 +544,18 @@ class Route
             return [$result, $required];
         };
 
-        list($uri) = $compile($this->_uri, true);
+        list($uri) = $compile($this->uri, true);
 
         // Trim all extra slashes from the URI
         $uri = preg_replace('#//+#', '/', rtrim($uri, '/'));
 
-        if ($this->is_external()) {
+        if ($this->isExternal()) {
             // Need to add the host to the URI
-            $host = $this->_defaults['host'];
+            $host = $this->defaults['host'];
 
             if (strpos($host, '://') === false) {
                 // Use the default defined protocol
-                $host = \Kohana\Routing\Route::$default_protocol . $host;
+                $host = \Kohana\Routing\Route::$defaultProtocol . $host;
             }
 
             // Clean up the host and prepend it to the URI

@@ -221,7 +221,7 @@ class Kohana_CacheTest extends TestCase
         $cache = $this->createMock(Cache::class);
 
         $cache_reflection = new ReflectionClass($cache);
-        $sanitize_id = $cache_reflection->getMethod('_sanitize_id');
+        $sanitize_id = $cache_reflection->getMethod('sanitizeId');
 
         $this->assertSame($expected, $sanitize_id->invoke($cache, $id));
     }

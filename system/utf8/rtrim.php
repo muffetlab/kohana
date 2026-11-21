@@ -16,7 +16,7 @@ function _rtrim($str, $charlist = null)
     if ($charlist === null)
         return rtrim($str);
 
-    if (Utf8::is_ascii($charlist))
+    if (Utf8::isAscii($charlist))
         return rtrim($str, $charlist);
 
     $charlist = preg_replace('#[-\[\]:\\\\^/]#', '\\\\$0', $charlist);

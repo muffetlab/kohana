@@ -15,7 +15,7 @@ function _str_split($str, $split_length = 1)
 {
     $split_length = (int) $split_length;
 
-    if (Utf8::is_ascii($str))
+    if (Utf8::isAscii($str))
         return str_split($str, $split_length);
 
     if ($split_length < 1)

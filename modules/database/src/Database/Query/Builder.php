@@ -23,7 +23,7 @@ abstract class Builder extends Query
      * @param array $joins join statements
      * @return  string
      */
-    protected function _compile_join(Connection $db, array $joins): string
+    protected function compileJoin(Connection $db, array $joins): string
     {
         $statements = [];
 
@@ -44,7 +44,7 @@ abstract class Builder extends Query
      * @return  string
      * @throws Kohana_Exception
      */
-    protected function _compile_conditions(Connection $db, array $conditions): string
+    protected function compileConditions(Connection $db, array $conditions): string
     {
         $last_condition = null;
 
@@ -87,19 +87,19 @@ abstract class Builder extends Query
                         // BETWEEN always has exactly two arguments
                         list($min, $max) = $value;
 
-                        if ((is_string($min) && array_key_exists($min, $this->_parameters)) === false) {
+                        if ((is_string($min) && array_key_exists($min, $this->parameters)) === false) {
                             // Quote the value, it is not a parameter
                             $min = $db->quote($min);
                         }
 
-                        if ((is_string($max) && array_key_exists($max, $this->_parameters)) === false) {
+                        if ((is_string($max) && array_key_exists($max, $this->parameters)) === false) {
                             // Quote the value, it is not a parameter
                             $max = $db->quote($max);
                         }
 
                         // Quote the min and max value
                         $value = $min . ' AND ' . $max;
-                    } elseif ((is_string($value) && array_key_exists($value, $this->_parameters)) === false) {
+                    } elseif ((is_string($value) && array_key_exists($value, $this->parameters)) === false) {
                         // Quote the value, it is not a parameter
                         $value = $db->quote($value);
                     }
@@ -107,10 +107,10 @@ abstract class Builder extends Query
                     if ($column) {
                         if (is_array($column)) {
                             // Use the column name
-                            $column = $db->quote_identifier(reset($column));
+                            $column = $db->quoteIdentifier(reset($column));
                         } else {
                             // Apply proper quoting to the column
-                            $column = $db->quote_column($column);
+                            $column = $db->quoteColumn($column);
                         }
                     }
 
@@ -133,7 +133,7 @@ abstract class Builder extends Query
      * @return  string
      * @throws Kohana_Exception
      */
-    protected function _compile_set(Connection $db, array $values): string
+    protected function compileSet(Connection $db, array $values): string
     {
         $set = [];
         foreach ($values as $group) {
@@ -141,9 +141,9 @@ abstract class Builder extends Query
             list ($column, $value) = $group;
 
             // Quote the column name
-            $column = $db->quote_column($column);
+            $column = $db->quoteColumn($column);
 
-            if ((is_string($value) && array_key_exists($value, $this->_parameters)) === false) {
+            if ((is_string($value) && array_key_exists($value, $this->parameters)) === false) {
                 // Quote the value, it is not a parameter
                 $value = $db->quote($value);
             }
@@ -162,17 +162,17 @@ abstract class Builder extends Query
      * @return  string
      * @throws Kohana_Exception
      */
-    protected function _compile_group_by(Connection $db, array $columns): string
+    protected function compileGroupBy(Connection $db, array $columns): string
     {
         $group = [];
 
         foreach ($columns as $column) {
             if (is_array($column)) {
                 // Use the column alias
-                $column = $db->quote_identifier(end($column));
+                $column = $db->quoteIdentifier(end($column));
             } else {
                 // Apply proper quoting to the column
-                $column = $db->quote_column($column);
+                $column = $db->quoteColumn($column);
             }
 
             $group[] = $column;
@@ -190,7 +190,7 @@ abstract class Builder extends Query
      * @throws Database_Exception
      * @throws Kohana_Exception
      */
-    protected function _compile_order_by(Connection $db, array $columns): string
+    protected function compileOrderBy(Connection $db, array $columns): string
     {
         $sort = [];
         foreach ($columns as $group) {
@@ -198,10 +198,10 @@ abstract class Builder extends Query
 
             if (is_array($column)) {
                 // Use the column alias
-                $column = $db->quote_identifier(end($column));
+                $column = $db->quoteIdentifier(end($column));
             } else {
                 // Apply proper quoting to the column
-                $column = $db->quote_column($column);
+                $column = $db->quoteColumn($column);
             }
 
             if ($direction) {
