@@ -74,3 +74,11 @@ On PHP 8.2+, string comparison functions return only -1, 0 or 1, not the byte di
 `ReflectionProperty::setAccessible()` and `ReflectionMethod::setAccessible()` are deprecated in PHP 8.5 and have had no effect since 8.1.
 
 **Action:** Delete these calls from your own tests.
+
+## 12. ORM no longer implements `Serializable`
+
+`Serializable` is deprecated in PHP 8.1. `ORM::serialize()` and `ORM::unserialize()` are replaced by `__serialize(): array` and `__unserialize(array $data): void`.
+
+**Action:**
+- Models that override `serialize()`/`unserialize()` must override `__serialize()`/`__unserialize()` instead.
+- ORM objects serialized before the upgrade (in sessions or cache) use the old `C:` format and cannot be restored. Clear sessions and cache that hold ORM objects when you deploy.
