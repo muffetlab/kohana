@@ -136,7 +136,7 @@ trait HasAttributes
 
             return $model->where($col, '=', $val);
         } else {
-            return in_array($column, $this->serializeColumns) ? $this->unserializeValue($this->object[$column]) : $this->object[$column] ?? null;
+            return $this->castGet($column, in_array($column, $this->serializeColumns) ? $this->unserializeValue($this->object[$column]) : $this->object[$column] ?? null);
         }
     }
 
@@ -186,7 +186,7 @@ trait HasAttributes
             $this->changes[$column] = $value;
         } else {
             // Filter the data
-            $value = $this->runFilter($column, $value);
+            $value = $this->castSet($column, $this->runFilter($column, $value));
 
             // See if the data really changed
             if (!isset($this->object[$column]) || $value !== $this->object[$column]) {
@@ -211,8 +211,11 @@ trait HasAttributes
      * @param array $columns Array of columns to be set
      * @return \Kohana\Orm\Model
      */
-    public function values(array $values, array $columns): self
+    public function values(array $values, ?array $columns = null): self
     {
+        // Without a column list, only the fillable columns are set
+        $columns ??= $this->fillableColumns($values);
+
         foreach ($columns as $key => $column) {
             if (is_string($key)) {
                 // isset() fails when the value is null (we want it to pass)

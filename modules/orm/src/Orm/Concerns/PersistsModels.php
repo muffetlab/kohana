@@ -200,6 +200,8 @@ trait PersistsModels
             $data[$column] = $this->object[$column];
         }
 
+        $this->applyTimestamps($data, true);
+
         if (is_array($this->createdColumn)) {
             // Fill the created column
             $column = $this->createdColumn['column'];
@@ -261,6 +263,8 @@ trait PersistsModels
             // Compile changed data
             $data[$column] = $this->object[$column];
         }
+
+        $this->applyTimestamps($data, false);
 
         if (is_array($this->updatedColumn)) {
             // Fill the updated column

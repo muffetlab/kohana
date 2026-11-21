@@ -19,8 +19,10 @@ use Kohana\Support\Inflector;
  * @author     Kohana Team
  * @copyright  (c) 2007-2012 Kohana Team
  * @license    https://kohana.top/license
+ *
+ * @phpstan-consistent-constructor
  */
-class Model extends \Kohana\Foundation\Model
+class Model extends \Kohana\Foundation\Model implements \JsonSerializable
 {
     use Concerns\HasAttributes;
     use Concerns\HasRelationships;
@@ -28,12 +30,21 @@ class Model extends \Kohana\Foundation\Model
     use Concerns\PersistsModels;
     use Concerns\ValidatesAttributes;
     use Concerns\SerializesModels;
+    use Concerns\GuardsAttributes;
+    use Concerns\CastsAttributes;
+    use Concerns\HasTimestamps;
+    use Concerns\QueriesStatically;
+    use Concerns\ConvertsToArray;
 
     /**
-     * Stores column information for ORM models
-     * @var array
+     * Column filled when a record is created, with $timestamps = true; null to skip it
      */
-    protected static $columnCache = [];
+    public const CREATED_AT = 'created_at';
+
+    /**
+     * Column filled when a record is saved, with $timestamps = true; null to skip it
+     */
+    public const UPDATED_AT = 'updated_at';
 
     /**
      * Initialization storage for ORM models
@@ -204,8 +215,8 @@ class Model extends \Kohana\Foundation\Model
     protected $db = null;
 
     /**
-     * Database config group
-     * @var String
+     * Database config group; null uses Connection::$default
+     * @var string|null
      */
     protected $dbGroup = null;
 
@@ -299,7 +310,10 @@ class Model extends \Kohana\Foundation\Model
         }
 
         // Check if this model has already been initialized
-        if (!$init = Arr::get(static::$initCache, $this->objectName, false)) {
+        // Per class and connection: one model class may be used on several databases
+        $cacheKey = static::class . '|' . ($this->dbGroup ?? Connection::$default);
+
+        if (!$init = Arr::get(static::$initCache, $cacheKey, false)) {
             $init = [
                 'belongsTo' => [],
                 'hasOne' => [],
@@ -367,7 +381,7 @@ class Model extends \Kohana\Foundation\Model
                 $init['hasMany'][$alias] = array_merge($defaults, $details);
             }
 
-            static::$initCache[$this->objectName] = $init;
+            static::$initCache[$cacheKey] = $init;
         }
 
         // Assign initialized properties to the current object
@@ -386,7 +400,7 @@ class Model extends \Kohana\Foundation\Model
      */
     public function pk()
     {
-        return $this->primaryKeyValue;
+        return $this->keyType === 'int' && is_numeric($this->primaryKeyValue) ? (int) $this->primaryKeyValue : $this->primaryKeyValue;
     }
 
     public function objectName(): string
