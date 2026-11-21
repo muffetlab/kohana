@@ -53,7 +53,7 @@ if (strpos($_SERVER['HTTP_HOST'], 'kohana.top') !== false) {
     Kohana::$environment = Kohana::PRODUCTION;
 
     // Turn off notices and strict errors
-    error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
+    error_reporting(E_ALL ^ E_NOTICE);
 }
 
 /**

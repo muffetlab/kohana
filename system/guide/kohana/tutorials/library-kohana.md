@@ -52,7 +52,7 @@ The new file creates the initial request object, rather than fully executing the
      * and warnings. Enable them by using: E_ALL
      *
      * In a production environment, it is safe to ignore notices and warnings.
-     * Disable them by using: E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED
+     * Disable them by using: E_ALL & ~E_NOTICE & ~E_DEPRECATED
      */
     error_reporting(E_ALL);
 
