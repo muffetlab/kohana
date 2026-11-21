@@ -252,6 +252,6 @@ The framework's tests moved from `system/tests` and `modules/*/tests` to a root 
 
 The database module has a PostgreSQL driver, `Kohana\Database\PgsqlConnection` (type `'pgsql'`, needs `ext-pdo_pgsql`). It supports `listTables()` and `listColumns()`, so ORM works on PostgreSQL. See [`docs/database/config.md`](docs/database/config.md#postgresql) for the options.
 
-If you used the generic `PDO` type with a `pgsql:` DSN, switch to `'type' => 'pgsql'`. You can drop the `'identifier' => '"'` option and any `$tableColumns` you declared on your models only because `PDO` could not list columns.
+If you used the generic `PDO` type with a `pgsql:` DSN, switch to `'type' => 'pgsql'`. You can drop the `'identifier' => '"'` option. ORM did not work with the generic `PDO` type because it could not list columns; it does now.
 
 An unknown `type` now throws `DatabaseException('Unknown database type ...')` instead of a PHP warning.
