@@ -2,13 +2,15 @@
 
 return [
     /**
-     * Session driver used by Session::instance(): native, cookie or database.
+     * Session driver used by Session::instance(): native, cookie, database or redis.
      */
     'driver' => env('SESSION_DRIVER', 'native'),
 
     'native' => [
         'name' => env('SESSION_NAME', 'session'),
         'lifetime' => (int) env('SESSION_LIFETIME', 0),
+        // Where PHP stores the session files
+        'save_path' => storage_path('framework/sessions'),
     ],
 
     'cookie' => [
@@ -18,7 +20,19 @@ return [
     ],
 
     /**
-     * Database sessions (database module): create the table with a migration.
+     * Redis sessions (cache module, ext-redis): uses a Redis store of config/cache.php.
+     */
+    'redis' => [
+        'name' => env('SESSION_NAME', 'session'),
+        'lifetime' => (int) env('SESSION_LIFETIME', 0),
+        // Seconds an idle session is kept
+        'ttl' => (int) env('SESSION_TTL', 7200),
+        'store' => env('SESSION_STORE', 'redis'),
+        'prefix' => 'session:',
+    ],
+
+    /**
+     * Database sessions (database module): php kohana session:migration creates the table.
      */
     'database' => [
         'name' => env('SESSION_NAME', 'session'),
