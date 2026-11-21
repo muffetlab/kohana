@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Support\Arr;
+use Kohana\Foundation\KohanaException;
+
 /**
  * Tests the Arr lib that's shipped with kohana
  *
@@ -14,7 +18,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_ArrTest extends Unittest_TestCase
+class Kohana_ArrTest extends TestCase
 {
     /**
      * Provides test data for test_callback()
@@ -169,7 +173,7 @@ class Kohana_ArrTest extends Unittest_TestCase
      * @param array $paths
      * @param mixed $default
      * @param array $expected
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_extract(array $array, array $paths, $default, array $expected)
     {
@@ -648,7 +652,7 @@ class Kohana_ArrTest extends Unittest_TestCase
      * @param mixed $value The value to set.
      * @param array $expected The expected value
      * @param string|null $delimiter The path delimiter
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_set_path(array $expected, array $array, $path, $value, ?string $delimiter = null)
     {

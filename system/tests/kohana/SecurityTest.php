@@ -1,5 +1,10 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Security\Security;
+use Kohana\Session\Session;
+use Kohana\Foundation\KohanaException;
+
 /**
  * Tests Kohana_Security
  *
@@ -10,7 +15,7 @@
  * @package    Kohana
  * @category   Tests
  */
-class Kohana_SecurityTest extends Unittest_TestCase
+class Kohana_SecurityTest extends TestCase
 {
     /**
      * Provides test data for test_encode_php_tags()
@@ -40,7 +45,7 @@ class Kohana_SecurityTest extends Unittest_TestCase
      * Provides test data for Security::token()
      *
      * @return array Test data sets
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function provider_csrf_token(): array
     {

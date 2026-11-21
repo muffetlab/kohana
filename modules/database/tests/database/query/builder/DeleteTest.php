@@ -1,5 +1,10 @@
 <?php
 
+use Kohana\Testing\DatabaseTestCase;
+use Kohana\Database\DB;
+use Kohana\Database\DatabaseException;
+use Kohana\Foundation\KohanaException;
+
 /**
  * @package    Kohana/Database
  * @group      kohana
@@ -11,7 +16,7 @@
  * @copyright  (c) 2025 Kohana Group
  * @license    https://kohana.top/license
  */
-class Kohana_Database_Query_Builder_DeleteTest extends Kohana_Unittest_Database_TestCase
+class Kohana_Database_Query_Builder_DeleteTest extends DatabaseTestCase
 {
     public function setUp(): void
     {
@@ -44,8 +49,8 @@ class Kohana_Database_Query_Builder_DeleteTest extends Kohana_Unittest_Database_
      * @param string $table
      * @param array $whereConditions
      * @param string $expected
-     * @throws Database_Exception
-     * @throws Kohana_Exception
+     * @throws DatabaseException
+     * @throws KohanaException
      */
     public function test_delete_where(string $table, array $whereConditions, string $expected)
     {

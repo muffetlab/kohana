@@ -1,6 +1,9 @@
 <?php
 
-include_once(Kohana::find_file('tests/cache', 'CacheBasicMethodsTest'));
+use Kohana\Foundation\Application;
+use Kohana\Cache\Cache;
+
+include_once(Application::find_file('tests/cache', 'CacheBasicMethodsTest'));
 
 /**
  * @package    Kohana/Cache

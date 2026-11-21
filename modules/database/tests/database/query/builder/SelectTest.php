@@ -1,5 +1,10 @@
 <?php
 
+use Kohana\Testing\DatabaseTestCase;
+use Kohana\Database\DB;
+use Kohana\Database\DatabaseException;
+use Kohana\Foundation\KohanaException;
+
 /**
  * @package    Kohana/Database
  * @group      kohana
@@ -11,7 +16,7 @@
  * @copyright  (c) 2025 Kohana Group
  * @license    https://kohana.top/license
  */
-class Kohana_Database_Query_Builder_SelectTest extends Kohana_Unittest_Database_TestCase
+class Kohana_Database_Query_Builder_SelectTest extends DatabaseTestCase
 {
     public function setUp(): void
     {
@@ -48,8 +53,8 @@ class Kohana_Database_Query_Builder_SelectTest extends Kohana_Unittest_Database_
      * @param array $columns
      * @param array|null $modifiers
      * @param string $expected
-     * @throws Database_Exception
-     * @throws Kohana_Exception
+     * @throws DatabaseException
+     * @throws KohanaException
      */
     public function test_select(array $columns, ?array $modifiers, string $expected)
     {
@@ -98,8 +103,8 @@ class Kohana_Database_Query_Builder_SelectTest extends Kohana_Unittest_Database_
      * @param array $columns
      * @param array $tables
      * @param string $expected
-     * @throws Database_Exception
-     * @throws Kohana_Exception
+     * @throws DatabaseException
+     * @throws KohanaException
      */
     public function test_select_from(array $columns, array $tables, string $expected)
     {
@@ -157,8 +162,8 @@ class Kohana_Database_Query_Builder_SelectTest extends Kohana_Unittest_Database_
      * @param array $whereConditions
      * @param array $clauses
      * @param string $expected
-     * @throws Database_Exception
-     * @throws Kohana_Exception
+     * @throws DatabaseException
+     * @throws KohanaException
      */
     public function test_select_from_where(array $tables, array $whereConditions, array $clauses, string $expected)
     {
@@ -224,8 +229,8 @@ class Kohana_Database_Query_Builder_SelectTest extends Kohana_Unittest_Database_
      * @param array $tables
      * @param array $joins
      * @param string $expected
-     * @throws Database_Exception
-     * @throws Kohana_Exception
+     * @throws DatabaseException
+     * @throws KohanaException
      */
     public function test_select_from_join(array $columns, array $tables, array $joins, string $expected)
     {

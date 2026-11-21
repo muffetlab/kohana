@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Session\Session;
+
 /**
  * Tests the session class
  *
@@ -14,7 +17,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_SessionTest extends Unittest_TestCase
+class Kohana_SessionTest extends TestCase
 {
     /**
      * Gets a mock of the session class
@@ -27,7 +30,7 @@ class Kohana_SessionTest extends Unittest_TestCase
     public function getMockSession(array $config = []): Session
         // @codingStandardsIgnoreEnd
     {
-        return $this->getMockForAbstractClass('Session', [$config]);
+        return $this->getMockForAbstractClass(Session::class, [$config]);
     }
 
     /**
@@ -78,7 +81,7 @@ class Kohana_SessionTest extends Unittest_TestCase
      */
     public function test_constructor_uses_settings_from_config_and_casts($expected, $config)
     {
-        $session = $this->getMockForAbstractClass('Session', [$config]);
+        $session = $this->getMockForAbstractClass(Session::class, [$config]);
 
         foreach ($expected as $var => $value) {
             $reflection = new ReflectionClass($session);
@@ -102,7 +105,7 @@ class Kohana_SessionTest extends Unittest_TestCase
         $session_id = 'lolums';
 
         // Don't auto-call constructor, we need to set up the mock first
-        $session = $this->getMockBuilder('Session')
+        $session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['read'])
             ->getMockForAbstractClass();
@@ -125,7 +128,7 @@ class Kohana_SessionTest extends Unittest_TestCase
      */
     public function test_bind_actually_binds_variable()
     {
-        $session = $this->getMockForAbstractClass('Session');
+        $session = $this->getMockForAbstractClass(Session::class);
 
         $var = 'asd';
 

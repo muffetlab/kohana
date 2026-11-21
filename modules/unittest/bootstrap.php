@@ -1,5 +1,7 @@
 <?php
 
+use Kohana\Foundation\Application;
+
 /**
  * Set the path to the document root
  *
@@ -61,9 +63,9 @@ if (($ob_len = ob_get_length()) !== false) {
 }
 
 // Enable the unittest module if it is not already loaded - use the absolute path
-$modules = Kohana::modules();
+$modules = Application::modules();
 $unittest_path = realpath(__DIR__) . DIRECTORY_SEPARATOR;
 if (!in_array($unittest_path, $modules)) {
     $modules['unittest'] = $unittest_path;
-    Kohana::modules($modules);
+    Application::modules($modules);
 }

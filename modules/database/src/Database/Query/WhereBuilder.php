@@ -1,0 +1,180 @@
+<?php
+
+namespace Kohana\Database\Query;
+
+/**
+ * Database query builder for WHERE statements. See [Query Builder](/database/query/builder) for usage and examples.
+ *
+ * @package    Kohana/Database
+ * @category   Query
+ * @author     Kohana Team
+ * @copyright  (c) 2008-2009 Kohana Team
+ * @license    https://kohana.top/license
+ */
+abstract class WhereBuilder extends Builder
+{
+    // WHERE ...
+    protected $_where = [];
+    // ORDER BY ...
+    protected $_order_by = [];
+    // LIMIT ...
+    protected $_limit = null;
+
+    /**
+     * Alias of and_where()
+     *
+     * @param   mixed   $column  column name or [$column, $alias] or object
+     * @param string $op Logic operator
+     * @param   mixed   $value   column value
+     * @return  $this
+     */
+    public function where($column, string $op, $value): \Kohana\Database\Query\WhereBuilder
+    {
+        return $this->and_where($column, $op, $value);
+    }
+
+    /**
+     * Creates a new "AND WHERE" condition for the query.
+     *
+     * @param   mixed   $column  column name or [$column, $alias] or object
+     * @param string $op Logic operator
+     * @param   mixed   $value   column value
+     * @return  $this
+     */
+    public function and_where($column, string $op, $value): \Kohana\Database\Query\WhereBuilder
+    {
+        $this->_where[] = ['AND' => [$column, $op, $value]];
+
+        return $this;
+    }
+
+    /**
+     * Creates a new "OR WHERE" condition for the query.
+     *
+     * @param   mixed   $column  column name or [$column, $alias] or object
+     * @param string $op Logic operator
+     * @param   mixed   $value   column value
+     * @return  $this
+     */
+    public function or_where($column, string $op, $value): \Kohana\Database\Query\WhereBuilder
+    {
+        $this->_where[] = ['OR' => [$column, $op, $value]];
+
+        return $this;
+    }
+
+    /**
+     * Alias of and_where_open()
+     *
+     * @return  $this
+     */
+    public function where_open(): \Kohana\Database\Query\WhereBuilder
+    {
+        return $this->and_where_open();
+    }
+
+    /**
+     * Opens a new "AND WHERE (...)" grouping.
+     *
+     * @return  $this
+     */
+    public function and_where_open(): \Kohana\Database\Query\WhereBuilder
+    {
+        $this->_where[] = ['AND' => '('];
+
+        return $this;
+    }
+
+    /**
+     * Opens a new "OR WHERE (...)" grouping.
+     *
+     * @return  $this
+     */
+    public function or_where_open(): \Kohana\Database\Query\WhereBuilder
+    {
+        $this->_where[] = ['OR' => '('];
+
+        return $this;
+    }
+
+    /**
+     * Closes an open "WHERE (...)" grouping.
+     *
+     * @return  $this
+     */
+    public function where_close(): \Kohana\Database\Query\WhereBuilder
+    {
+        return $this->and_where_close();
+    }
+
+    /**
+     * Closes an open "WHERE (...)" grouping or removes the grouping when it is
+     * empty.
+     *
+     * @return  $this
+     */
+    public function where_close_empty(): \Kohana\Database\Query\WhereBuilder
+    {
+        $group = end($this->_where);
+
+        if ($group && reset($group) === '(') {
+            array_pop($this->_where);
+
+            return $this;
+        }
+
+        return $this->where_close();
+    }
+
+    /**
+     * Closes an open "WHERE (...)" grouping.
+     *
+     * @return  $this
+     */
+    public function and_where_close(): \Kohana\Database\Query\WhereBuilder
+    {
+        $this->_where[] = ['AND' => ')'];
+
+        return $this;
+    }
+
+    /**
+     * Closes an open "WHERE (...)" grouping.
+     *
+     * @return  $this
+     */
+    public function or_where_close(): \Kohana\Database\Query\WhereBuilder
+    {
+        $this->_where[] = ['OR' => ')'];
+
+        return $this;
+    }
+
+    /**
+     * Applies sorting with "ORDER BY ..."
+     *
+     * @param   mixed   $column     column name or [$column, $alias] or object
+     * @param string|null $direction Direction of sorting
+     * @return  $this
+     */
+    public function order_by($column, ?string $direction = null): \Kohana\Database\Query\WhereBuilder
+    {
+        $this->_order_by[] = [$column, $direction];
+
+        return $this;
+    }
+
+    /**
+     * Return up to "LIMIT ..." results
+     *
+     * @param int|null $number Maximum results to return or null to reset
+     * @return  $this
+     */
+    public function limit(?int $number): \Kohana\Database\Query\WhereBuilder
+    {
+        $this->_limit = $number === null ? null : $number;
+
+        return $this;
+    }
+
+}

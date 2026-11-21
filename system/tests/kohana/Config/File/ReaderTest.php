@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Config\FileReader;
+
 /**
  * Tests the Config file reader that's shipped with kohana
  *
@@ -13,7 +16,7 @@
  * @copyright  (c) 2008-2014 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Config_File_ReaderTest extends Kohana_Unittest_TestCase
+class Kohana_Config_File_ReaderTest extends TestCase
 {
     /**
      * If we don't pass a directory to the reader then it should assume
@@ -24,7 +27,7 @@ class Kohana_Config_File_ReaderTest extends Kohana_Unittest_TestCase
      */
     public function test_default_search_dir_is_config()
     {
-        $reader = new Kohana_Config_File_Reader;
+        $reader = new FileReader;
 
         $reflection = new ReflectionClass($reader);
         $property = $reflection->getProperty('_directory');
@@ -41,7 +44,7 @@ class Kohana_Config_File_ReaderTest extends Kohana_Unittest_TestCase
      */
     public function test_constructor_sets_search_dir_from_param()
     {
-        $reader = new Kohana_Config_File_Reader('gafloog');
+        $reader = new FileReader('gafloog');
 
         $reflection = new ReflectionClass($reader);
         $property = $reflection->getProperty('_directory');
@@ -58,7 +61,7 @@ class Kohana_Config_File_ReaderTest extends Kohana_Unittest_TestCase
      */
     public function test_load_returns_empty_array_if_conf_dir_dnx()
     {
-        $config = new Kohana_Config_File_Reader('gafloogle');
+        $config = new FileReader('gafloogle');
 
         $this->assertSame([], $config->load('values'));
     }
@@ -72,7 +75,7 @@ class Kohana_Config_File_ReaderTest extends Kohana_Unittest_TestCase
      */
     public function test_load_returns_empty_array_if_conf_dnx()
     {
-        $config = new Kohana_Config_File_Reader;
+        $config = new FileReader;
 
         $this->assertSame([], $config->load('gafloogle'));
     }
@@ -86,7 +89,7 @@ class Kohana_Config_File_ReaderTest extends Kohana_Unittest_TestCase
      */
     public function test_loads_config_from_files()
     {
-        $config = new Kohana_Config_File_Reader;
+        $config = new FileReader;
 
         $values = $config->load('inflector');
 

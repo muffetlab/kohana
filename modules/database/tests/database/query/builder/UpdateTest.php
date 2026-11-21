@@ -1,5 +1,10 @@
 <?php
 
+use Kohana\Testing\DatabaseTestCase;
+use Kohana\Database\DB;
+use Kohana\Database\DatabaseException;
+use Kohana\Foundation\KohanaException;
+
 /**
  * @package    Kohana/Database
  * @group      kohana
@@ -11,7 +16,7 @@
  * @copyright  (c) 2025 Kohana Group
  * @license    https://kohana.top/license
  */
-class Kohana_Database_Query_Builder_UpdateTest extends Kohana_Unittest_Database_TestCase
+class Kohana_Database_Query_Builder_UpdateTest extends DatabaseTestCase
 {
     public function setUp(): void
     {
@@ -44,8 +49,8 @@ class Kohana_Database_Query_Builder_UpdateTest extends Kohana_Unittest_Database_
      * @param string $table
      * @param array $assignments
      * @param string $expected
-     * @throws Database_Exception
-     * @throws Kohana_Exception
+     * @throws DatabaseException
+     * @throws KohanaException
      */
     public function test_update_set(string $table, array $assignments, string $expected)
     {
@@ -75,8 +80,8 @@ class Kohana_Database_Query_Builder_UpdateTest extends Kohana_Unittest_Database_
      * @param array $assignments
      * @param array $whereCondition
      * @param string $expected
-     * @throws Database_Exception
-     * @throws Kohana_Exception
+     * @throws DatabaseException
+     * @throws KohanaException
      */
     public function test_update_set_where(string $table, array $assignments, array $whereCondition, string $expected)
     {

@@ -1,6 +1,11 @@
 <?php
 
-include_once(Kohana::find_file('tests/cache/arithmetic', 'CacheArithmeticMethods'));
+use Kohana\Foundation\Application;
+use Kohana\Cache\Cache;
+use Kohana\Cache\CacheException;
+use Kohana\Foundation\KohanaException;
+
+include_once(Application::find_file('tests/cache/arithmetic', 'CacheArithmeticMethods'));
 
 /**
  * @package    Kohana/Cache
@@ -24,8 +29,8 @@ class Kohana_ApcuTest extends Kohana_CacheArithmeticMethodsTest
      *  - Call the parent setup method, `parent::setUp()`
      *
      * @return  void
-     * @throws Cache_Exception
-     * @throws Kohana_Exception
+     * @throws CacheException
+     * @throws KohanaException
      */
     public function setUp(): void
     {
@@ -40,8 +45,8 @@ class Kohana_ApcuTest extends Kohana_CacheArithmeticMethodsTest
                 'set "apc.enabled=1" and "apc.enable_cli=1" in your php.ini file');
         }
 
-        if (!Kohana::$config->load('cache.apcu')) {
-            Kohana::$config->load('cache')
+        if (!Application::$config->load('cache.apcu')) {
+            Application::$config->load('cache')
                 ->set(
                     'apcu', [
                     'driver' => 'apcu',
@@ -71,7 +76,7 @@ class Kohana_ApcuTest extends Kohana_CacheArithmeticMethodsTest
      * @param array $data data
      * @param mixed $expected expected
      * @return  void
-     * @throws Cache_Exception
+     * @throws CacheException
      */
     public function test_set_get(array $data, $expected)
     {

@@ -1,5 +1,7 @@
 <?php
 
+use Kohana\Routing\Route;
+
 /**
  * A holding class for route callback tests
  *

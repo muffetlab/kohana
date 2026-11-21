@@ -1,5 +1,12 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Foundation\Application;
+use Kohana\Http\Request;
+use Kohana\Routing\Url;
+use Kohana\Foundation\KohanaException;
+use Kohana\Http\Exceptions\RequestException;
+
 /**
  * Tests URL
  *
@@ -14,7 +21,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_URLTest extends Unittest_TestCase
+class Kohana_URLTest extends TestCase
 {
     /**
      * Sets up the environment
@@ -24,7 +31,7 @@ class Kohana_URLTest extends Unittest_TestCase
     // @codingStandardsIgnoreEnd
     {
         parent::setUp();
-        Kohana::$config->load('url')->set('trusted_hosts', [
+        Application::$config->load('url')->set('trusted_hosts', [
             'example\.com',
             'example\.org'
         ]);
@@ -36,20 +43,19 @@ class Kohana_URLTest extends Unittest_TestCase
      */
     // @codingStandardsIgnoreStart
     protected $environmentDefault = [
-        'Kohana::$base_url' => '/kohana/',
-        'Kohana::$index_file' => 'index.php',
+        'Kohana\Foundation\Application::$base_url' => '/kohana/',
+        'Kohana\Foundation\Application::$index_file' => 'index.php',
         'HTTP_HOST' => 'example.com',
         '_GET' => [],
     ];
 
     // @codingStandardsIgnoreEnd
-
     /**
      * Provides test data for test_base()
      *
      * @return array
-     * @throws Kohana_Exception
-     * @throws Request_Exception
+     * @throws KohanaException
+     * @throws RequestException
      */
     public function provider_base(): array
     {
@@ -98,7 +104,7 @@ class Kohana_URLTest extends Unittest_TestCase
                 'cli://example.com/kohana/index.php/',
                 [
                     'HTTPS' => false,
-                    'Request::$initial' => Request::factory('/')->protocol('cli')
+                    'Kohana\Http\Request::$initial' => Request::factory('/')->protocol('cli')
                 ]
             ],
             // Change base URL
@@ -107,7 +113,7 @@ class Kohana_URLTest extends Unittest_TestCase
                 false,
                 'https://example.com/kohana/',
                 [
-                    'Kohana::$base_url' => 'omglol://example.com/kohana/'
+                    'Kohana\Foundation\Application::$base_url' => 'omglol://example.com/kohana/'
                 ]
             ],
             // Use port in base URL, issue #3307
@@ -116,7 +122,7 @@ class Kohana_URLTest extends Unittest_TestCase
                 false,
                 'http://example.com:8080/',
                 [
-                    'Kohana::$base_url' => 'example.com:8080/'
+                    'Kohana\Foundation\Application::$base_url' => 'example.com:8080/'
                 ]
             ],
             // Use protocol from base URL if none specified
@@ -125,7 +131,7 @@ class Kohana_URLTest extends Unittest_TestCase
                 false,
                 'http://www.example.com/',
                 [
-                    'Kohana::$base_url' => 'http://www.example.com/'
+                    'Kohana\Foundation\Application::$base_url' => 'http://www.example.com/'
                 ]
             ],
             // Use HTTP_HOST before SERVER_NAME
@@ -160,7 +166,7 @@ class Kohana_URLTest extends Unittest_TestCase
      * @param bool $index Parameter for Url::base()
      * @param string $expected Expected URL
      * @param array $enviroment Array of environment vars to change @see Kohana_URLTest::setEnvironment()
-     * @throws Kohana_Exception
+     * @throws KohanaException
      * @throws ReflectionException
      */
     public function test_base($protocol, bool $index, string $expected, array $enviroment = [])
@@ -168,7 +174,7 @@ class Kohana_URLTest extends Unittest_TestCase
         $this->setEnvironment($enviroment);
 
         $this->assertSame(
-            $expected, URL::base($protocol, $index)
+            $expected, Url::base($protocol, $index)
         );
     }
 
@@ -273,7 +279,7 @@ class Kohana_URLTest extends Unittest_TestCase
      * @param mixed $protocol Protocol to use
      * @param string $expected Expected result
      * @param array $enviroment Array of environment vars to set
-     * @throws Kohana_Exception
+     * @throws KohanaException
      * @throws ReflectionException
      */
     public function test_site(string $uri, $protocol, string $expected, array $enviroment = [])
@@ -281,7 +287,7 @@ class Kohana_URLTest extends Unittest_TestCase
         $this->setEnvironment($enviroment);
 
         $this->assertSame(
-            $expected, URL::site($uri, $protocol)
+            $expected, Url::site($uri, $protocol)
         );
     }
 
@@ -321,7 +327,7 @@ class Kohana_URLTest extends Unittest_TestCase
      */
     public function test_site_url_encode_uri($expected, $uri)
     {
-        $this->assertSame($expected, URL::site($uri, false));
+        $this->assertSame($expected, Url::site($uri, false));
     }
 
     /**
@@ -416,7 +422,7 @@ class Kohana_URLTest extends Unittest_TestCase
     public function test_title(string $expected, string $title, string $separator, $ascii_only = false)
     {
         $this->assertSame(
-            $expected, URL::title($title, $separator, $ascii_only)
+            $expected, Url::title($title, $separator, $ascii_only)
         );
     }
 
@@ -502,7 +508,7 @@ class Kohana_URLTest extends Unittest_TestCase
      * @param string $expected Expected result
      * @param array|null $params Query string
      * @param bool $use_get Combine with GET parameters
-     * @throws Kohana_Exception
+     * @throws KohanaException
      * @throws ReflectionException
      */
     public function test_query(array $enviroment, string $expected, ?array $params, bool $use_get = true)
@@ -510,7 +516,7 @@ class Kohana_URLTest extends Unittest_TestCase
         $this->setEnvironment($enviroment);
 
         $this->assertSame(
-            $expected, URL::query($params, $use_get)
+            $expected, Url::query($params, $use_get)
         );
     }
 
@@ -556,12 +562,12 @@ class Kohana_URLTest extends Unittest_TestCase
      * @param string $host the given host
      * @param array $trusted_hosts list of trusted hosts
      * @param bool $expected true if host is trusted, false otherwise
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_is_trusted_host(string $host, array $trusted_hosts, bool $expected)
     {
         $this->assertSame(
-            $expected, URL::is_trusted_host($host, $trusted_hosts)
+            $expected, Url::is_trusted_host($host, $trusted_hosts)
         );
     }
 
@@ -572,13 +578,13 @@ class Kohana_URLTest extends Unittest_TestCase
      */
     public function test_if_invalid_host_throws_exception()
     {
-        $this->expectException(Kohana_Exception::class);
+        $this->expectException(KohanaException::class);
         $this->expectExceptionMessage('Invalid host <invalid>');
 
         // set the global HTTP_HOST to <invalid>
         $_SERVER['HTTP_HOST'] = '<invalid>';
         // trigger exception
-        URL::base('https');
+        Url::base('https');
     }
 
     /**
@@ -588,13 +594,13 @@ class Kohana_URLTest extends Unittest_TestCase
      */
     public function test_if_untrusted_host_throws_exception()
     {
-        $this->expectException(Kohana_Exception::class);
+        $this->expectException(KohanaException::class);
         $this->expectExceptionMessage('Untrusted host untrusted.com');
 
         // set the global HTTP_HOST to a valid but untrusted host
         $_SERVER['HTTP_HOST'] = 'untrusted.com';
         // trigger exception
-        URL::base('https');
+        Url::base('https');
     }
 
 }

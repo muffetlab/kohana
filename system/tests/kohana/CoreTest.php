@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Foundation\Application;
+use Kohana\Foundation\KohanaException;
+
 /**
  * Tests Kohana Core
  *
@@ -14,7 +18,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_CoreTest extends Unittest_TestCase
+class Kohana_CoreTest extends TestCase
 {
     protected $old_modules = [];
 
@@ -22,27 +26,27 @@ class Kohana_CoreTest extends Unittest_TestCase
      * Captures the module list as it was before this test
      *
      * @return void
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     // @codingStandardsIgnoreStart
     public function setUp(): void
     // @codingStandardsIgnoreEnd
     {
         parent::setUp();
-        $this->old_modules = Kohana::modules();
+        $this->old_modules = Application::modules();
     }
 
     /**
      * Restores the module list
      *
      * @return void
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     // @codingStandardsIgnoreStart
     public function tearDown(): void
     // @codingStandardsIgnoreEnd
     {
-        Kohana::modules($this->old_modules);
+        Application::modules($this->old_modules);
     }
 
     /**
@@ -69,14 +73,14 @@ class Kohana_CoreTest extends Unittest_TestCase
      * @covers       Kohana::sanitize
      * @param string $value Input for Kohana::sanitize
      * @param string $result Output for Kohana::sanitize
-     * @throws Kohana_Exception
+     * @throws KohanaException
      * @throws ReflectionException
      */
     public function test_sanitize(string $value, string $result)
     {
-        $this->setEnvironment(['Kohana::$magic_quotes' => true]);
+        $this->setEnvironment(['Kohana\Foundation\Application::$magic_quotes' => true]);
 
-        $this->assertSame($result, Kohana::sanitize($value));
+        $this->assertSame($result, Application::sanitize($value));
     }
 
     /**
@@ -89,7 +93,7 @@ class Kohana_CoreTest extends Unittest_TestCase
     public function test_find_file_no_extension()
     {
         // ".php" is manually appended to the _file name_, not passed as the extension
-        $path = Kohana::find_file('classes', $file = 'Kohana/Core.php', false);
+        $path = Application::find_file('src', $file = 'Foundation/Application.php', false);
 
         $this->assertIsString($path);
 
@@ -106,9 +110,9 @@ class Kohana_CoreTest extends Unittest_TestCase
      */
     public function test_find_file_returns_false_or_array_on_failure()
     {
-        $this->assertFalse(Kohana::find_file('configy', 'zebra'));
+        $this->assertFalse(Application::find_file('configy', 'zebra'));
 
-        $this->assertSame([], Kohana::find_file('configy', 'zebra', null, true));
+        $this->assertSame([], Application::find_file('configy', 'zebra', null, true));
     }
 
     /**
@@ -119,12 +123,12 @@ class Kohana_CoreTest extends Unittest_TestCase
      */
     public function test_list_files_returns_array_on_success_and_failure()
     {
-        $files = Kohana::list_files('config');
+        $files = Application::list_files('config');
 
         $this->assertIsArray($files);
         $this->assertGreaterThan(3, count($files));
 
-        $this->assertSame([], Kohana::list_files('geshmuck'));
+        $this->assertSame([], Application::list_files('geshmuck'));
     }
 
     /**
@@ -139,7 +143,7 @@ class Kohana_CoreTest extends Unittest_TestCase
         $GLOBALS['name'] = ['', '', ''];
         $GLOBALS['_POST'] = [];
 
-        Kohana::globals();
+        Application::globals();
 
         $this->assertFalse(isset($GLOBALS['hackers']));
         $this->assertFalse(isset($GLOBALS['name']));
@@ -173,8 +177,8 @@ class Kohana_CoreTest extends Unittest_TestCase
      */
     public function test_cache(string $key, $value, int $lifetime)
     {
-        Kohana::cache($key, $value, $lifetime);
-        $this->assertEquals($value, Kohana::cache($key));
+        Application::cache($key, $value, $lifetime);
+        $this->assertEquals($value, Application::cache($key));
     }
 
     /**
@@ -244,17 +248,17 @@ class Kohana_CoreTest extends Unittest_TestCase
      * @param string|null $key to pass to Kohana::message
      * @param string $default to pass to Kohana::message
      * @param mixed $expected Output for Kohana::message
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_message(string $file, ?string $key, string $default, $expected)
     {
         $test_path = realpath(__DIR__ . '/../test_data/message_tests');
-        Kohana::modules([
+        Application::modules([
             'top' => "$test_path/top_module",
             'bottom' => "$test_path/bottom_module"
         ]);
 
-        $this->assertEquals($expected, Kohana::message($file, $key, $default));
+        $this->assertEquals($expected, Application::message($file, $key, $default));
     }
 
     /**
@@ -285,7 +289,7 @@ class Kohana_CoreTest extends Unittest_TestCase
         $error_level = error_reporting();
         error_reporting(E_ALL);
         try {
-            Kohana::error_handler($code, $error, $file, $line);
+            Application::error_handler($code, $error, $file, $line);
         } catch (Exception $e) {
             $this->assertEquals($code, $e->getCode());
             $this->assertEquals($error, $e->getMessage());
@@ -321,18 +325,18 @@ class Kohana_CoreTest extends Unittest_TestCase
      * @test
      * @dataProvider provider_modules_detects_invalid_modules
      * @param array $source Input for Kohana::modules
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_modules_detects_invalid_modules(array $source)
     {
-        $this->expectException(Kohana_Exception::class);
+        $this->expectException(KohanaException::class);
 
-        $modules = Kohana::modules();
+        $modules = Application::modules();
 
-        Kohana::modules($source);
+        Application::modules($source);
 
         // Restore modules
-        Kohana::modules($modules);
+        Application::modules($modules);
     }
 
     /**
@@ -361,21 +365,21 @@ class Kohana_CoreTest extends Unittest_TestCase
      * @dataProvider provider_modules_sets_and_returns_valid_modules
      * @param array $source Input for Kohana::modules
      * @param array $expected Output for Kohana::modules
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_modules_sets_and_returns_valid_modules(array $source, array $expected)
     {
-        $modules = Kohana::modules();
+        $modules = Application::modules();
 
         try {
-            $this->assertEquals($expected, Kohana::modules($source));
+            $this->assertEquals($expected, Application::modules($source));
         } catch (Exception $e) {
-            Kohana::modules($modules);
+            Application::modules($modules);
 
             throw $e;
         }
 
-        Kohana::modules($modules);
+        Application::modules($modules);
     }
 
     /**
@@ -388,7 +392,7 @@ class Kohana_CoreTest extends Unittest_TestCase
      */
     public function test_modules_returns_array_of_modules()
     {
-        $modules = Kohana::modules();
+        $modules = Application::modules();
 
         $this->assertIsArray($modules);
 
@@ -404,8 +408,8 @@ class Kohana_CoreTest extends Unittest_TestCase
      */
     public function test_include_paths()
     {
-        $include_paths = Kohana::include_paths();
-        $modules = Kohana::modules();
+        $include_paths = Application::include_paths();
+        $modules = Application::modules();
 
         $this->assertIsArray($include_paths);
 

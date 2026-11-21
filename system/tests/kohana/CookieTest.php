@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Cookie\Cookie;
+use Kohana\Foundation\KohanaException;
+
 /**
  * Tests the cookie class
  *
@@ -15,7 +19,7 @@
  * @copyright  (c) 2008-2014 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_CookieTest extends Unittest_TestCase
+class Kohana_CookieTest extends TestCase
 {
     const UNIX_TIMESTAMP = 1411040141;
     const COOKIE_EXPIRATION = 60;
@@ -31,7 +35,7 @@ class Kohana_CookieTest extends Unittest_TestCase
         Kohana_CookieTest_TestableCookie::$_mock_cookies_set = [];
 
         $this->setEnvironment([
-            'Cookie::$salt' => 'some-random-salt',
+            'Kohana\Cookie\Cookie::$salt' => 'some-random-salt',
             'HTTP_USER_AGENT' => 'cli'
         ]);
     }
@@ -44,10 +48,10 @@ class Kohana_CookieTest extends Unittest_TestCase
     public function test_set_creates_cookie_with_configured_cookie_options()
     {
         $this->setEnvironment([
-            'Cookie::$path' => '/path',
-            'Cookie::$domain' => 'my.domain',
-            'Cookie::$secure' => true,
-            'Cookie::$httponly' => false,
+            'Kohana\Cookie\Cookie::$path' => '/path',
+            'Kohana\Cookie\Cookie::$domain' => 'my.domain',
+            'Kohana\Cookie\Cookie::$secure' => true,
+            'Kohana\Cookie\Cookie::$httponly' => false,
         ]);
 
         Kohana_CookieTest_TestableCookie::set('cookie', 'value');
@@ -78,7 +82,7 @@ class Kohana_CookieTest extends Unittest_TestCase
      * @param int|null $expiration
      * @param int $expect_expiry
      *
-     * @throws Kohana_Exception
+     * @throws KohanaException
      * @throws ReflectionException
      * @dataProvider provider_set_calculates_expiry_from_lifetime
      * @covers       Cookie::set
@@ -86,7 +90,7 @@ class Kohana_CookieTest extends Unittest_TestCase
     public function test_set_calculates_expiry_from_lifetime(?int $expiration, int $expect_expiry)
     {
         $this->setEnvironment([
-            'Cookie::$expiration' => self::COOKIE_EXPIRATION
+            'Kohana\Cookie\Cookie::$expiration' => self::COOKIE_EXPIRATION
         ]);
         Kohana_CookieTest_TestableCookie::set('foo', 'bar', $expiration);
         $this->assertSetCookieWith(['expire' => $expect_expiry]);
@@ -133,7 +137,7 @@ class Kohana_CookieTest extends Unittest_TestCase
      *
      * @dataProvider provider_get_returns_default_without_deleting_if_cookie_unsigned
      * @covers       Cookie::get
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_get_returns_default_without_deleting_if_cookie_unsigned(string $unsigned_value)
     {
@@ -182,7 +186,7 @@ class Kohana_CookieTest extends Unittest_TestCase
      */
     public function test_salt_throws_with_no_configured_salt()
     {
-        $this->expectException(Kohana_Exception::class);
+        $this->expectException(KohanaException::class);
 
         Cookie::$salt = null;
         Cookie::salt('key', 'value');
@@ -239,7 +243,7 @@ class Kohana_CookieTest extends Unittest_TestCase
      *
      * @dataProvider provider_salt_creates_different_hash_for_different_data
      * @covers       Cookie::salt
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_salt_creates_different_hash_for_different_data(array $first_args, array $changed_args)
     {

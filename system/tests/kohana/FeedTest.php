@@ -1,5 +1,12 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Foundation\Application;
+use Kohana\Support\Feed;
+use Kohana\Http\Exceptions\Http404Exception;
+use Kohana\Foundation\KohanaException;
+use Kohana\Http\Exceptions\RequestException;
+
 /**
  * Test for feed helper
  *
@@ -14,7 +21,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_FeedTest extends Unittest_TestCase
+class Kohana_FeedTest extends TestCase
 {
     /**
      * Sets up the environment
@@ -24,7 +31,7 @@ class Kohana_FeedTest extends Unittest_TestCase
     // @codingStandardsIgnoreEnd
     {
         parent::setUp();
-        Kohana::$config->load('url')->set('trusted_hosts', ['localhost']);
+        Application::$config->load('url')->set('trusted_hosts', ['localhost']);
     }
 
     /**
@@ -60,9 +67,9 @@ class Kohana_FeedTest extends Unittest_TestCase
      * @covers       feed::parse
      * @param string $source URL to test
      * @param $expected_titles
-     * @throws HTTP_Exception_404
-     * @throws Kohana_Exception
-     * @throws Request_Exception
+     * @throws Http404Exception
+     * @throws KohanaException
+     * @throws RequestException
      */
     public function test_parse(string $source, $expected_titles)
     {
@@ -133,7 +140,7 @@ class Kohana_FeedTest extends Unittest_TestCase
      * @param array $enviroment Server environment data.
      * @param array $matcher_item XML matcher structure for the main item.
      * @param array $matchers_image Array of XML matcher structures for image elements.
-     * @throws Kohana_Exception
+     * @throws KohanaException
      * @throws ReflectionException
      */
     public function test_create(array $info, array $items, array $enviroment, array $matcher_item, array $matchers_image)

@@ -1,5 +1,10 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Foundation\Application;
+use Kohana\Html\Html;
+use Kohana\Foundation\KohanaException;
+
 /**
  * Tests HTML
  *
@@ -14,7 +19,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_HTMLTest extends Unittest_TestCase
+class Kohana_HTMLTest extends TestCase
 {
     /**
      * Sets up the environment
@@ -24,7 +29,7 @@ class Kohana_HTMLTest extends Unittest_TestCase
     // @codingStandardsIgnoreEnd
     {
         parent::setUp();
-        Kohana::$config->load('url')->set('trusted_hosts', [
+        Application::$config->load('url')->set('trusted_hosts', [
             'www\.kohanaframework\.org'
         ]);
     }
@@ -35,9 +40,9 @@ class Kohana_HTMLTest extends Unittest_TestCase
      */
     // @codingStandardsIgnoreStart
     protected $environmentDefault = [
-        'Kohana::$base_url' => '/kohana/',
-        'Kohana::$index_file' => 'index.php',
-        'HTML::$strict' => true,
+        'Kohana\Foundation\Application::$base_url' => '/kohana/',
+        'Kohana\Foundation\Application::$index_file' => 'index.php',
+        'Kohana\Html\Html::$strict' => true,
         'HTTP_HOST' => 'www.kohanaframework.org',
     ];
 
@@ -72,7 +77,7 @@ class Kohana_HTMLTest extends Unittest_TestCase
             ],
             [
                 ['id' => 'disabled_field', 'disabled'],
-                ['HTML::$strict' => false],
+                ['Kohana\Html\Html::$strict' => false],
                 ' id="disabled_field" disabled',
             ],
         ];
@@ -86,7 +91,7 @@ class Kohana_HTMLTest extends Unittest_TestCase
      * @param array $attributes Attributes to use
      * @param array $options Environment options to use
      * @param string $expected Expected output
-     * @throws Kohana_Exception
+     * @throws KohanaException
      * @throws ReflectionException
      */
     public function test_attributes(array $attributes, array $options, string $expected)
@@ -94,7 +99,7 @@ class Kohana_HTMLTest extends Unittest_TestCase
         $this->setEnvironment($options);
 
         $this->assertSame(
-            $expected, HTML::attributes($attributes)
+            $expected, Html::attributes($attributes)
         );
     }
 
@@ -148,12 +153,12 @@ class Kohana_HTMLTest extends Unittest_TestCase
      * @param array|null $attributes HTML attributes for the anchor
      * @param string|null $protocol Protocol to use
      * @param bool $index Should the index file be included in URL?
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_script(string $expected, string $file, ?array $attributes = null, ?string $protocol = null, bool $index = false)
     {
         $this->assertSame(
-            $expected, HTML::script($file, $attributes, $protocol, $index)
+            $expected, Html::script($file, $attributes, $protocol, $index)
         );
     }
 
@@ -228,12 +233,12 @@ class Kohana_HTMLTest extends Unittest_TestCase
      * @param array|null $attributes Any extra attributes for the link
      * @param string|null $protocol Protocol to use
      * @param bool $index Whether the index file should be added to the link
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_style(string $expected, string $file, ?array $attributes = null, ?string $protocol = null, bool $index = false)
     {
         $this->assertSame(
-            $expected, HTML::style($file, $attributes, $protocol, $index)
+            $expected, Html::style($file, $attributes, $protocol, $index)
         );
     }
 
@@ -340,7 +345,7 @@ class Kohana_HTMLTest extends Unittest_TestCase
         // $this->setEnvironment($options);
 
         $this->assertSame(
-            $expected, HTML::anchor($uri, $title, $attributes, $protocol, $index)
+            $expected, Html::anchor($uri, $title, $attributes, $protocol, $index)
         );
     }
 
@@ -395,7 +400,7 @@ class Kohana_HTMLTest extends Unittest_TestCase
     public function test_file_anchor($expected, array $attributes, $file, $title = null, $protocol = null, $index = false)
     {
         $this->assertSame(
-            $expected, HTML::file_anchor($file, $title, $attributes, $protocol, $index)
+            $expected, Html::file_anchor($file, $title, $attributes, $protocol, $index)
         );
     }
 

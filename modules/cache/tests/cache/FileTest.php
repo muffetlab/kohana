@@ -1,6 +1,11 @@
 <?php
 
-include_once(Kohana::find_file('tests/cache', 'CacheBasicMethodsTest'));
+use Kohana\Foundation\Application;
+use Kohana\Cache\Cache;
+use Kohana\Cache\CacheException;
+use Kohana\Foundation\KohanaException;
+
+include_once(Application::find_file('tests/cache', 'CacheBasicMethodsTest'));
 
 /**
  * @package    Kohana/Cache
@@ -24,15 +29,15 @@ class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest
      *  - Call the parent setup method, `parent::setUp()`
      *
      * @return  void
-     * @throws Cache_Exception
-     * @throws Kohana_Exception
+     * @throws CacheException
+     * @throws KohanaException
      */
     public function setUp(): void
     {
         parent::setUp();
 
-        if (!Kohana::$config->load('cache.file')) {
-            Kohana::$config->load('cache')
+        if (!Application::$config->load('cache.file')) {
+            Application::$config->load('cache')
                 ->set('file', [
                     'driver' => 'file',
                     'cache_dir' => APPPATH . 'cache',
@@ -54,12 +59,12 @@ class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest
      * Tests that ignored files are not removed from file cache
      *
      * @return  void
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_ignore_delete_file()
     {
         $cache = $this->cache();
-        $config = Kohana::$config->load('cache')->file;
+        $config = Application::$config->load('cache')->file;
         $file = $config['cache_dir'] . '/file_we_want_to_keep.cache';
 
         // Let's pollute the cache folder
@@ -101,7 +106,7 @@ class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest
      * @dataProvider provider_utf8
      *
      * @return  void
-     * @throws Cache_Exception
+     * @throws CacheException
      */
     public function test_utf8($input, $expected)
     {

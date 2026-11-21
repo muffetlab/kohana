@@ -1,19 +1,16 @@
 <?php
 
+use Kohana\Translation\Translator;
+use Kohana\Http\Http;
+use Kohana\Foundation\Application;
+use Kohana\Log\Writers\FileWriter;
+use Kohana\Config\FileReader;
+use Kohana\Routing\Route;
+
 // Register the Composer autoloader
 require DOCROOT . '../vendor/autoload.php';
 
 // -- Environment setup --------------------------------------------------------
-// Load the core Kohana class
-require SYSPATH . 'classes/Kohana/Core.php';
-
-if (is_file(APPPATH . 'classes/Kohana.php')) {
-    // Application extends the core
-    require APPPATH . 'classes/Kohana.php';
-} else {
-    // Load empty core extension
-    require SYSPATH . 'classes/Kohana.php';
-}
 
 /**
  * Set the default time zone.
@@ -37,7 +34,7 @@ setlocale(LC_ALL, 'en_US.utf-8');
  * @link https://kohana.top/guide/using.autoloading
  * @link https://www.php.net/function.spl-autoload-register
  */
-spl_autoload_register(['Kohana', 'auto_load']);
+spl_autoload_register([Application::class, 'auto_load']);
 
 /**
  * Optionally, you can enable a compatibility autoloader for use with
@@ -45,7 +42,7 @@ spl_autoload_register(['Kohana', 'auto_load']);
  *
  * It is recommended to not enable this unless absolutely necessary.
  */
-//spl_autoload_register(['Kohana', 'auto_load_lowercase']);
+//spl_autoload_register([Application::class, 'auto_load_lowercase']);
 
 /**
  * Enable the Kohana autoloader for unserialization.
@@ -67,11 +64,11 @@ mb_substitute_character('none');
 /**
  * Set the default language
  */
-I18n::lang('en-us');
+Translator::lang('en-us');
 
 if (isset($_SERVER['SERVER_PROTOCOL'])) {
     // Replace the default protocol.
-    HTTP::$protocol = $_SERVER['SERVER_PROTOCOL'];
+    Http::$protocol = $_SERVER['SERVER_PROTOCOL'];
 }
 
 /**
@@ -81,7 +78,7 @@ if (isset($_SERVER['SERVER_PROTOCOL'])) {
  * saying "Couldn't find constant Kohana::<INVALID_ENV_NAME>"
  */
 if (isset($_SERVER['KOHANA_ENV'])) {
-    Kohana::$environment = constant('Kohana::' . strtoupper($_SERVER['KOHANA_ENV']));
+    Application::$environment = constant(Application::class . '::' . strtoupper($_SERVER['KOHANA_ENV']));
 }
 
 /**
@@ -99,24 +96,24 @@ if (isset($_SERVER['KOHANA_ENV'])) {
  * - boolean  caching     enable or disable internal caching                 false
  * - boolean  expose      set the X-Powered-By header                        false
  */
-Kohana::init([
+Application::init([
     'base_url' => '/kohana/',
 ]);
 
 /**
  * Attach the file writer to logging. Multiple writers are supported.
  */
-Kohana::$log->attach(new Log_File(APPPATH . 'logs'));
+Application::$log->attach(new FileWriter(APPPATH . 'logs'));
 
 /**
  * Attach a file reader to config. Multiple readers are supported.
  */
-Kohana::$config->attach(new Config_File);
+Application::$config->attach(new FileReader);
 
 /**
  * Enable modules. Modules are referenced by a relative or absolute path.
  */
-Kohana::modules([
+Application::modules([
 //    'auth' => MODPATH . 'auth', // Basic authentication
 //    'cache' => MODPATH . 'cache', // Caching with multiple backends
 //    'database' => MODPATH . 'database', // Database access

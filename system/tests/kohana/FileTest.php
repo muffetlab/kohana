@@ -1,5 +1,10 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Foundation\Application;
+use Kohana\Filesystem\File;
+use Kohana\Foundation\KohanaException;
+
 /**
  * Tests Kohana File helper
  *
@@ -14,7 +19,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_FileTest extends Unittest_TestCase
+class Kohana_FileTest extends TestCase
 {
     /**
      * Provides test data for test_sanitize()
@@ -26,7 +31,7 @@ class Kohana_FileTest extends Unittest_TestCase
         return [
             // $value, $result
             [
-                Kohana::find_file('tests', 'test_data/github', 'png'),
+                Application::find_file('tests', 'test_data/github', 'png'),
                 'image/png'
             ],
         ];
@@ -39,7 +44,7 @@ class Kohana_FileTest extends Unittest_TestCase
      * @dataProvider provider_mime
      * @param mixed $input Input for File::mime
      * @param string $expected Output for File::mime
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_mime($input, string $expected)
     {
@@ -56,7 +61,7 @@ class Kohana_FileTest extends Unittest_TestCase
     {
         return [
             // $value, $result
-            [Kohana::find_file('tests', 'test_data/github', 'png'), .01, 1],
+            [Application::find_file('tests', 'test_data/github', 'png'), .01, 1],
         ];
     }
 
@@ -74,7 +79,7 @@ class Kohana_FileTest extends Unittest_TestCase
         $this->assertSame($expected, File::split($input, $peices));
         $this->assertSame($expected, File::join($input));
 
-        foreach (glob(Kohana::find_file('tests', 'test_data/github', 'png') . '.*') as $file) {
+        foreach (glob(Application::find_file('tests', 'test_data/github', 'png') . '.*') as $file) {
             unlink($file);
         }
     }

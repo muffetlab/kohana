@@ -1,5 +1,7 @@
 <?php
 
+use Kohana\Support\Utf8;
+
 /**
  * UTF8::strrev
  *
@@ -11,7 +13,7 @@
  */
 function _strrev($str): string
 {
-    if (UTF8::is_ascii($str))
+    if (Utf8::is_ascii($str))
         return strrev($str);
 
     preg_match_all('/./us', $str, $matches);

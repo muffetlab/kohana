@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Support\Str;
+
 /**
  * Tests the kohana text class (Kohana_Text)
  *
@@ -10,7 +13,7 @@
  * @package    Kohana
  * @category   Tests
  */
-class Kohana_TextTest extends Unittest_TestCase
+class Kohana_TextTest extends TestCase
 {
     /**
      * Sets up the test environment
@@ -21,7 +24,7 @@ class Kohana_TextTest extends Unittest_TestCase
     {
         parent::setUp();
 
-        Text::alternate();
+        Str::alternate();
     }
 
     /**
@@ -33,7 +36,7 @@ class Kohana_TextTest extends Unittest_TestCase
      */
     function test_auto_para_returns_empty_string_on_empty_input()
     {
-        $this->assertSame('', Text::auto_p(''));
+        $this->assertSame('', Str::auto_p(''));
     }
 
     /**
@@ -58,7 +61,7 @@ class Kohana_TextTest extends Unittest_TestCase
      */
     function test_auto_para_does_not_enclose_html_tags_in_paragraphs($text)
     {
-        $output = Text::auto_p($text);
+        $output = Str::auto_p($text);
 
         $this->assertSelectEquals('p', null, false, $output);
     }
@@ -74,7 +77,7 @@ class Kohana_TextTest extends Unittest_TestCase
     {
         $text = 'Pick a pinch of purple pepper';
 
-        $this->assertSame('<p>' . $text . '</p>', Text::auto_p($text));
+        $this->assertSame('<p>' . $text . '</p>', Str::auto_p($text));
     }
 
     /**
@@ -86,7 +89,7 @@ class Kohana_TextTest extends Unittest_TestCase
     public function test_auto_para_replaces_multiple_newlines_with_paragraph()
     {
         $this->assertSame(
-            "<p>My name is john</p>\n\n<p>I'm a developer</p>", Text::auto_p("My name is john\n\n\n\nI'm a developer")
+            "<p>My name is john</p>\n\n<p>I'm a developer</p>", Str::auto_p("My name is john\n\n\n\nI'm a developer")
         );
     }
 
@@ -112,7 +115,7 @@ class Kohana_TextTest extends Unittest_TestCase
      */
     function test_limit_words($expected, $str, $limit, $end_char)
     {
-        $this->assertSame($expected, Text::limit_words($str, $limit, $end_char));
+        $this->assertSame($expected, Str::limit_words($str, $limit, $end_char));
     }
 
     /**
@@ -198,7 +201,7 @@ class Kohana_TextTest extends Unittest_TestCase
      */
     function test_limit_chars($expected, $str, $limit, $end_char, $preserve_words)
     {
-        $this->assertSame($expected, Text::limit_chars($str, $limit, $end_char, $preserve_words));
+        $this->assertSame($expected, Str::limit_chars($str, $limit, $end_char, $preserve_words));
     }
 
     /**
@@ -210,11 +213,11 @@ class Kohana_TextTest extends Unittest_TestCase
     {
         list($val_a, $val_b, $val_c) = ['good', 'bad', 'ugly'];
 
-        $this->assertSame('good', Text::alternate($val_a, $val_b, $val_c));
-        $this->assertSame('bad', Text::alternate($val_a, $val_b, $val_c));
-        $this->assertSame('ugly', Text::alternate($val_a, $val_b, $val_c));
+        $this->assertSame('good', Str::alternate($val_a, $val_b, $val_c));
+        $this->assertSame('bad', Str::alternate($val_a, $val_b, $val_c));
+        $this->assertSame('ugly', Str::alternate($val_a, $val_b, $val_c));
 
-        $this->assertSame('good', Text::alternate($val_a, $val_b, $val_c));
+        $this->assertSame('good', Str::alternate($val_a, $val_b, $val_c));
     }
 
     /**
@@ -227,11 +230,11 @@ class Kohana_TextTest extends Unittest_TestCase
     {
         list($val_a, $val_b, $val_c) = ['yes', 'no', 'maybe'];
 
-        $this->assertSame('yes', Text::alternate($val_a, $val_b, $val_c));
+        $this->assertSame('yes', Str::alternate($val_a, $val_b, $val_c));
 
-        $this->assertSame('', Text::alternate());
+        $this->assertSame('', Str::alternate());
 
-        $this->assertSame('yes', Text::alternate($val_a, $val_b, $val_c));
+        $this->assertSame('yes', Str::alternate($val_a, $val_b, $val_c));
     }
 
     /**
@@ -255,7 +258,7 @@ class Kohana_TextTest extends Unittest_TestCase
      */
     public function test_ucfirst($expected, $string, $delimiter)
     {
-        $this->assertSame($expected, Text::ucfirst($string, $delimiter));
+        $this->assertSame($expected, Str::ucfirst($string, $delimiter));
     }
 
     /**
@@ -279,7 +282,7 @@ class Kohana_TextTest extends Unittest_TestCase
      */
     function test_reduce_slashes($expected, $str)
     {
-        $this->assertSame($expected, Text::reduce_slashes($str));
+        $this->assertSame($expected, Str::reduce_slashes($str));
     }
 
     /**
@@ -331,7 +334,7 @@ class Kohana_TextTest extends Unittest_TestCase
      */
     function test_censor($expected, $str, $badwords, $replacement, $replace_partial_words)
     {
-        $this->assertSame($expected, Text::censor($str, $badwords, $replacement, $replace_partial_words));
+        $this->assertSame($expected, Str::censor($str, $badwords, $replacement, $replace_partial_words));
     }
 
     /**
@@ -396,7 +399,7 @@ class Kohana_TextTest extends Unittest_TestCase
                 break;
         }
 
-        $this->assertMatchesRegularExpression('/^[' . $pool . ']{' . $length . '}$/u', Text::random($type, $length));
+        $this->assertMatchesRegularExpression('/^[' . $pool . ']{' . $length . '}$/u', Str::random($type, $length));
     }
 
     /**
@@ -421,7 +424,7 @@ class Kohana_TextTest extends Unittest_TestCase
      */
     function test_similar($expected, $words)
     {
-        $this->assertSame($expected, Text::similar($words));
+        $this->assertSame($expected, Str::similar($words));
     }
 
     /**
@@ -450,7 +453,7 @@ class Kohana_TextTest extends Unittest_TestCase
      */
     function test_bytes($expected, $bytes, $force_unit, $format, $si)
     {
-        $this->assertSame($expected, Text::bytes($bytes, $force_unit, $format, $si));
+        $this->assertSame($expected, Str::bytes($bytes, $force_unit, $format, $si));
     }
 
     /**
@@ -556,7 +559,7 @@ class Kohana_TextTest extends Unittest_TestCase
      */
     function test_widont($expected, $string)
     {
-        $this->assertSame($expected, Text::widont($string));
+        $this->assertSame($expected, Str::widont($string));
     }
 
     /**
@@ -579,7 +582,7 @@ class Kohana_TextTest extends Unittest_TestCase
 						<li>vicevoorzitter@xxxx.com</li>
 					</ul>';
 
-        $this->assertFalse(strpos('vice', Text::auto_link_emails($original)));
+        $this->assertFalse(strpos('vice', Str::auto_link_emails($original)));
     }
 
     /**
@@ -609,7 +612,7 @@ class Kohana_TextTest extends Unittest_TestCase
      */
     public function test_number($expected, $number)
     {
-        $this->assertSame($expected, Text::number($number));
+        $this->assertSame($expected, Str::number($number));
     }
 
     /**
@@ -702,7 +705,7 @@ class Kohana_TextTest extends Unittest_TestCase
      */
     public function test_auto_link_urls($expected, $text)
     {
-        $this->assertSame($expected, Text::auto_link_urls($text));
+        $this->assertSame($expected, Str::auto_link_urls($text));
     }
 
     /**
@@ -739,7 +742,7 @@ class Kohana_TextTest extends Unittest_TestCase
     public function test_auto_link_emails($expected, $text)
     {
         // Use html_entity_decode because emails will be randomly encoded by HTML::mailto
-        $this->assertSame($expected, html_entity_decode(Text::auto_link_emails($text)));
+        $this->assertSame($expected, html_entity_decode(Str::auto_link_emails($text)));
     }
 
     /**
@@ -770,14 +773,14 @@ class Kohana_TextTest extends Unittest_TestCase
      */
     public function test_auto_link($text, $urls = [], $emails = [])
     {
-        $linked_text = Text::auto_link($text);
+        $linked_text = Str::auto_link($text);
 
         if ($urls === false) {
             $this->assertStringNotContainsString('http://', $linked_text);
         } elseif (count($urls)) {
             foreach ($urls as $url) {
                 // Assert that all the URLs have been caught by text auto_link_urls()
-                $this->assertStringContainsString(Text::auto_link_urls($url), $linked_text);
+                $this->assertStringContainsString(Str::auto_link_urls($url), $linked_text);
             }
         }
 
@@ -832,7 +835,7 @@ class Kohana_TextTest extends Unittest_TestCase
      */
     public function test_user_agent_returns_correct_browser($userAgent, $expectedData)
     {
-        $browser = Text::user_agent($userAgent, 'browser');
+        $browser = Str::user_agent($userAgent, 'browser');
 
         $this->assertEquals($expectedData['browser'], $browser);
     }
@@ -845,7 +848,7 @@ class Kohana_TextTest extends Unittest_TestCase
      */
     public function test_user_agent_returns_correct_version($userAgent, $expectedData)
     {
-        $version = Text::user_agent($userAgent, 'version');
+        $version = Str::user_agent($userAgent, 'version');
 
         $this->assertEquals($expectedData['version'], $version);
     }
@@ -856,7 +859,7 @@ class Kohana_TextTest extends Unittest_TestCase
      */
     public function test_user_agent_recognizes_robots()
     {
-        $bot = Text::user_agent('Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)', 'robot');
+        $bot = Str::user_agent('Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)', 'robot');
 
         $this->assertEquals('Googlebot', $bot);
     }
@@ -869,7 +872,7 @@ class Kohana_TextTest extends Unittest_TestCase
      */
     public function test_user_agent_returns_correct_platform($userAgent, $expectedData)
     {
-        $platform = Text::user_agent($userAgent, 'platform');
+        $platform = Str::user_agent($userAgent, 'platform');
 
         $this->assertEquals($expectedData['platform'], $platform);
     }
@@ -880,7 +883,7 @@ class Kohana_TextTest extends Unittest_TestCase
      */
     public function test_user_agent_accepts_array()
     {
-        $agent_info = Text::user_agent('Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2049.0 Safari/537.36', [
+        $agent_info = Str::user_agent('Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2049.0 Safari/537.36', [
                 'browser',
                 'version',
                 'platform'

@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Translation\Translator;
+
 /**
  * Tests Kohana i18n class
  *
@@ -14,7 +17,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_I18nTest extends Unittest_TestCase
+class Kohana_I18nTest extends TestCase
 {
     /**
      * Default values for the environment, see setEnvironment
@@ -22,7 +25,7 @@ class Kohana_I18nTest extends Unittest_TestCase
      */
     // @codingStandardsIgnoreStart
     protected $environmentDefault = [
-        'I18n::$lang' => 'en-us',
+        'Kohana\Translation\Translator::$lang' => 'en-us',
     ];
 
     // @codingStandardsIgnoreEnd
@@ -50,8 +53,8 @@ class Kohana_I18nTest extends Unittest_TestCase
      */
     public function test_lang(?string $input, string $expected)
     {
-        $this->assertSame($expected, I18n::lang($input));
-        $this->assertSame($expected, I18n::lang());
+        $this->assertSame($expected, Translator::lang($input));
+        $this->assertSame($expected, Translator::lang());
     }
 
     /**
@@ -70,7 +73,7 @@ class Kohana_I18nTest extends Unittest_TestCase
     }
 
     /**
-     * Tests i18n::get()
+     * Tests \Kohana\Translation\Translator::get()
      *
      * @test
      * @dataProvider provider_get
@@ -80,12 +83,12 @@ class Kohana_I18nTest extends Unittest_TestCase
      */
     public function test_get(string $lang, string $input, string $expected)
     {
-        I18n::lang($lang);
-        $this->assertSame($expected, I18n::get($input));
+        Translator::lang($lang);
+        $this->assertSame($expected, Translator::get($input));
 
         // Test immediate translation, issue #3085
-        I18n::lang('en-us');
-        $this->assertSame($expected, I18n::get($input, $lang));
+        Translator::lang('en-us');
+        $this->assertSame($expected, Translator::get($input, $lang));
     }
 
 }

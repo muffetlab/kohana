@@ -1,5 +1,12 @@
 <?php
 
+use Kohana\Cache\FileStore;
+use PHPUnit\Framework\TestCase;
+use Kohana\Foundation\Application;
+use Kohana\Cache\Cache;
+use Kohana\Cache\CacheException;
+use Kohana\Foundation\KohanaException;
+
 /**
  * @package    Kohana/Cache
  * @group      kohana
@@ -9,7 +16,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_CacheTest extends PHPUnit\Framework\TestCase
+class Kohana_CacheTest extends TestCase
 {
     const BAD_GROUP_DEFINITION = 1010;
     const EXPECT_SELF = 1001;
@@ -18,14 +25,14 @@ class Kohana_CacheTest extends PHPUnit\Framework\TestCase
      * Data provider for test_instance
      *
      * @return  array
-     * @throws Cache_Exception
-     * @throws Kohana_Exception
+     * @throws CacheException
+     * @throws KohanaException
      */
     public function provider_instance(): array
     {
         $base = [];
 
-        if (Kohana::$config->load('cache.file')) {
+        if (Application::$config->load('cache.file')) {
             $base = [
                 // Test default group
                 [
@@ -54,18 +61,18 @@ class Kohana_CacheTest extends PHPUnit\Framework\TestCase
      * @param $group
      * @param $expected
      * @return  void
-     * @throws Cache_Exception
-     * @throws Kohana_Exception
+     * @throws CacheException
+     * @throws KohanaException
      */
     public function test_instance($group, $expected)
     {
         if ($group === Kohana_CacheTest::BAD_GROUP_DEFINITION) {
-            $this->expectException('Cache_Exception');
+            $this->expectException(CacheException::class);
         }
 
         try {
             $cache = Cache::instance($group);
-        } catch (Cache_Exception $e) {
+        } catch (CacheException $e) {
             $this->assertSame($expected, $e->getMessage());
             throw $e;
         }
@@ -81,10 +88,10 @@ class Kohana_CacheTest extends PHPUnit\Framework\TestCase
      */
     public function test_cloning_fails()
     {
-        $this->expectException(Cache_Exception::class);
+        $this->expectException(CacheException::class);
         $this->expectExceptionMessage('Cloning of Kohana_Cache objects is forbidden');
 
-        $cache = $this->getMockBuilder('Cache')
+        $cache = $this->getMockBuilder(Cache::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -149,7 +156,7 @@ class Kohana_CacheTest extends PHPUnit\Framework\TestCase
      */
     public function test_config($key, $value, $expected_result, array $expected_config)
     {
-        $cache = $this->getMockBuilder('Cache_File')
+        $cache = $this->getMockBuilder(FileStore::class)
             ->setMethods(['__construct'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -211,7 +218,7 @@ class Kohana_CacheTest extends PHPUnit\Framework\TestCase
      */
     public function test_sanitize_id(string $id, string $expected)
     {
-        $cache = $this->createMock('Cache');
+        $cache = $this->createMock(Cache::class);
 
         $cache_reflection = new ReflectionClass($cache);
         $sanitize_id = $cache_reflection->getMethod('_sanitize_id');

@@ -1,5 +1,9 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
+use Kohana\Cache\Cache;
+use Kohana\Cache\CacheException;
+
 /**
  * @package    Kohana/Cache
  * @group      kohana
@@ -9,7 +13,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-abstract class Kohana_CacheBasicMethodsTest extends PHPUnit\Framework\TestCase
+abstract class Kohana_CacheBasicMethodsTest extends TestCase
 {
     /**
      * @var     Cache driver for this test
@@ -245,7 +249,7 @@ TESTTEXT;
      * @param array $data data
      * @param mixed $expected expected
      * @return  void
-     * @throws Cache_Exception
+     * @throws CacheException
      */
     public function test_set_get(array $data, $expected)
     {
@@ -274,7 +278,7 @@ TESTTEXT;
      *  - The cache returns a false value if no value exists to delete
      *
      * @return  void
-     * @throws Cache_Exception
+     * @throws CacheException
      */
     public function test_delete()
     {
@@ -299,7 +303,7 @@ TESTTEXT;
      * Tests [Cache::delete_all()] works as specified
      *
      * @return  void
-     * @throws Cache_Exception
+     * @throws CacheException
      * @uses    Kohana_CacheBasicMethodsTest::provider_set_get()
      */
     public function test_delete_all()

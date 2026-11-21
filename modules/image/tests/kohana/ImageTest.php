@@ -1,5 +1,10 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
+use Kohana\Image\Image;
+use Kohana\Foundation\Application;
+use Kohana\Foundation\KohanaException;
+
 /**
  * @package    Kohana/Image
  * @group      kohana
@@ -9,7 +14,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://https://kohana.top/license
  */
-class Kohana_ImageTest extends PHPUnit\Framework\TestCase
+class Kohana_ImageTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -22,14 +27,14 @@ class Kohana_ImageTest extends PHPUnit\Framework\TestCase
      * Tests the Image::save() method for files that don't have extensions
      *
      * @return  void
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_save_without_extension()
     {
         $image = Image::factory(MODPATH . 'image/tests/test_data/test_image');
-        $this->assertTrue($image->save(Kohana::$cache_dir . '/test_image'));
+        $this->assertTrue($image->save(Application::$cache_dir . '/test_image'));
 
-        unlink(Kohana::$cache_dir . '/test_image');
+        unlink(Application::$cache_dir . '/test_image');
     }
 
 }

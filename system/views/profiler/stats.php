@@ -1,15 +1,15 @@
 <style>
-<?php include Kohana::find_file('views', 'profiler/style', 'css') ?>
+<?php include \Kohana\Foundation\Application::find_file('views', 'profiler/style', 'css') ?>
 </style>
 
 <?php
-$group_stats = Profiler::group_stats();
+$group_stats = \Kohana\Foundation\Profiler::group_stats();
 $group_cols = ['min', 'max', 'average', 'total'];
 $application_cols = ['min', 'max', 'average', 'current'];
 ?>
 
 <div class="kohana">
-    <?php foreach (Profiler::groups() as $group => $benchmarks): ?>
+    <?php foreach (\Kohana\Foundation\Profiler::groups() as $group => $benchmarks): ?>
         <table class="profiler">
             <tr class="group">
                 <th class="name" rowspan="2"><?php echo __(ucfirst($group)) ?></th>
@@ -26,8 +26,8 @@ $application_cols = ['min', 'max', 'average', 'current'];
             </tr>
             <?php foreach ($benchmarks as $name => $tokens): ?>
                 <tr class="mark time">
-                    <?php $stats = Profiler::stats($tokens) ?>
-                    <th class="name" rowspan="2" scope="rowgroup"><?php echo HTML::chars($name), ' (', count($tokens), ')' ?></th>
+                    <?php $stats = \Kohana\Foundation\Profiler::stats($tokens) ?>
+                    <th class="name" rowspan="2" scope="rowgroup"><?php echo \Kohana\Html\Html::chars($name), ' (', count($tokens), ')' ?></th>
                     <?php foreach ($group_cols as $key): ?>
                         <td class="<?php echo $key ?>">
                             <div>
@@ -56,7 +56,7 @@ $application_cols = ['min', 'max', 'average', 'current'];
     <?php endforeach ?>
 
     <table class="profiler">
-        <?php $stats = Profiler::application() ?>
+        <?php $stats = \Kohana\Foundation\Profiler::application() ?>
         <tr class="final mark time">
             <th class="name" rowspan="2" scope="rowgroup"><?php echo __('Application Execution') . ' (' . $stats['count'] . ')' ?></th>
             <?php foreach ($application_cols as $key): ?>

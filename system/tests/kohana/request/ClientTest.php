@@ -1,5 +1,16 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Routing\Route;
+use Kohana\Http\Request;
+use Kohana\Http\Client\RecursionException;
+use Kohana\Http\Response;
+use Kohana\Http\Client\Client;
+use Kohana\Routing\Controller;
+use Kohana\Support\Arr;
+use Kohana\Foundation\KohanaException;
+use Kohana\Http\Exceptions\RequestException;
+
 /**
  * Unit tests for generic Request_Client class
  *
@@ -14,7 +25,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_Request_ClientTest extends Unittest_TestCase
+class Kohana_Request_ClientTest extends TestCase
 {
     protected $_initial_request;
 
@@ -29,7 +40,7 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
     // @codingStandardsIgnoreStart - PHPUnit does not follow standards
     /**
      * Sets up a new route to ensure that we have a matching route for our
-     * Controller_RequestClientDummy class.
+     * RequestClientDummyController class.
      */
     public static function setUpBeforeClass(): void
     {
@@ -38,7 +49,7 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
 
         // Set a new Route to the ClientTest controller as the first route
         // This requires reflection as the API for editing defined routes is limited
-        $route_class = new ReflectionClass('Route');
+        $route_class = new ReflectionClass(Route::class);
         $routes_prop = $route_class->getProperty('_routes');
 
         self::$_original_routes = $routes_prop->getValue(null);
@@ -60,7 +71,7 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
     {
         // @codingStandardsIgnoreEnd
         // Reset routes
-        $route_class = new ReflectionClass('Route');
+        $route_class = new ReflectionClass(Route::class);
         $routes_prop = $route_class->getProperty('_routes');
         $routes_prop->setValue(null, self::$_original_routes);
 
@@ -85,7 +96,7 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
     }
 
     /**
-     * Generates an internal URI to the [Controller_RequestClientDummy] shunt
+     * Generates an internal URI to the [RequestClientDummyController] shunt
      * controller - the URI contains an encoded form of the required server
      * response.
      *
@@ -101,7 +112,7 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
             'header' => $headers,
             'body' => $body
         ];
-        return "/requestclientdummy/fake" . '/' . urlencode(http_build_query($data));
+        return "/RequestClientDummy/fake" . '/' . urlencode(http_build_query($data));
     }
 
     /**
@@ -156,8 +167,8 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
      * @param bool $follow Option value to set
      * @param string $request_url URL to request initially (contains data to set up redirect etc.)
      * @param string $expect_body Body text expected in the eventual result
-     * @throws Kohana_Exception
-     * @throws Request_Exception
+     * @throws KohanaException
+     * @throws RequestException
      */
     public function test_follows_redirects(bool $follow, string $request_url, string $expect_body)
     {
@@ -240,8 +251,8 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
      * @param bool|null $strict_redirect Option value to set
      * @param string $orig_method Request method for the original request
      * @param string $expect_method Request method expected for the follow request
-     * @throws Kohana_Exception
-     * @throws Request_Exception
+     * @throws KohanaException
+     * @throws RequestException
      */
     public function test_follows_with_strict_method($status_code, $strict_redirect, $orig_method, $expect_method)
     {
@@ -283,8 +294,8 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
      * @param string $original_method Request method to use for the original request
      * @param string $status Redirect status that will be issued
      * @param string|null $expect_body Expected value of body() in the second request
-     * @throws Kohana_Exception
-     * @throws Request_Exception
+     * @throws KohanaException
+     * @throws RequestException
      */
     public function test_follows_with_body_if_not_get(string $original_method, string $status, ?string $expect_body)
     {
@@ -387,8 +398,8 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
      * @param array $callbacks Array of header callbacks
      * @param $uri
      * @param string $expect_body Response body content to expect
-     * @throws Kohana_Exception
-     * @throws Request_Exception
+     * @throws KohanaException
+     * @throws RequestException
      */
     public function test_triggers_header_callbacks(array $callbacks, $uri, string $expect_body)
     {
@@ -427,7 +438,7 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
                     ]
                 ])
                 ->execute();
-        } catch (Request_Client_Recursion_Exception $e) {
+        } catch (RecursionException $e) {
             // Verify that two requests were executed
             $this->assertEquals(2, $this->requests_executed);
             return;
@@ -442,9 +453,9 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
      *
      * @param Request $request
      * @param Response $response
-     * @param Request_Client $client
+     * @param Client $client
      */
-    public function callback_assert_params(Request $request, Response $response, Request_Client $client)
+    public function callback_assert_params(Request $request, Response $response, Client $client)
     {
         $this->assertEquals('foo', $client->callback_params('constructor_param'));
         $this->assertEquals('bar', $client->callback_params('setter_param'));
@@ -466,7 +477,7 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
                 'follow' => true,
                 'header_callbacks' => [
                     'x-cb' => [$this, 'callback_assert_params'],
-                    'location' => 'Request_Client::on_header_location',
+                    'location' => 'Kohana\Http\Client\Client::on_header_location',
                 ],
                 'callback_params' => [
                     'constructor_param' => 'foo'
@@ -489,26 +500,3 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
  * Dummy controller class that acts as a shunt - passing back request information
  * in the response to allow inspection.
  */
-class Controller_RequestClientDummy extends Controller
-{
-    /**
-     * Takes a urlencoded 'data' parameter from the route and uses it to craft a
-     * response. Redirect chains can be tested by passing another encoded URI
-     * as a location header with an appropriate status code.
-     */
-    public function action_fake()
-    {
-        parse_str(urldecode($this->request->param('data')), $data);
-        $this->response->status(Arr::get($data, 'status', 200));
-        $this->response->headers(Arr::get($data, 'header', []));
-        $this->response->body(json_encode([
-            'body' => Arr::get($data, 'body', 'ok'),
-            'rq_headers' => $this->request->headers(),
-            'rq_body' => $this->request->body(),
-            'rq_method' => $this->request->method(),
-        ]));
-    }
-
-}
-
-// End Controller_RequestClientDummy

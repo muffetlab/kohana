@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Log\Writers\Writer;
+use Kohana\Testing\TestCase;
+use Kohana\Log\Logger;
+
 /**
  * Tests Kohana Logging API
  *
@@ -14,7 +18,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_LogTest extends Unittest_TestCase
+class Kohana_LogTest extends TestCase
 {
     /**
      * Tests that when a new logger is created the list of messages is initially
@@ -25,7 +29,7 @@ class Kohana_LogTest extends Unittest_TestCase
      */
     public function test_messages_is_initially_empty()
     {
-        $logger = new Log;
+        $logger = new Logger;
 
         $reflection = new ReflectionClass($logger);
         $property = $reflection->getProperty('_messages');
@@ -42,7 +46,7 @@ class Kohana_LogTest extends Unittest_TestCase
      */
     public function test_writers_is_initially_empty()
     {
-        $logger = new Log;
+        $logger = new Logger;
 
         $reflection = new ReflectionClass($logger);
         $property = $reflection->getProperty('_writers');
@@ -60,8 +64,8 @@ class Kohana_LogTest extends Unittest_TestCase
      */
     public function test_attach_attaches_log_writer_and_returns_this()
     {
-        $logger = new Log;
-        $writer = $this->getMockForAbstractClass('Log_Writer');
+        $logger = new Logger;
+        $writer = $this->getMockForAbstractClass(Writer::class);
 
         $this->assertSame($logger, $logger->attach($writer));
 
@@ -84,10 +88,10 @@ class Kohana_LogTest extends Unittest_TestCase
      */
     public function test_attach_attaches_log_writer_min_max_and_returns_this()
     {
-        $logger = new Log;
-        $writer = $this->getMockForAbstractClass('Log_Writer');
+        $logger = new Logger;
+        $writer = $this->getMockForAbstractClass(Writer::class);
 
-        $this->assertSame($logger, $logger->attach($writer, Log::NOTICE, Log::CRITICAL));
+        $this->assertSame($logger, $logger->attach($writer, Logger::NOTICE, Logger::CRITICAL));
 
 
         $reflection = new ReflectionClass($logger);
@@ -96,7 +100,7 @@ class Kohana_LogTest extends Unittest_TestCase
         $this->assertSame([
             spl_object_hash($writer) => [
                 'object' => $writer,
-                'levels' => [Log::CRITICAL, Log::ERROR, Log::WARNING, Log::NOTICE]
+                'levels' => [Logger::CRITICAL, Logger::ERROR, Logger::WARNING, Logger::NOTICE]
             ]
         ], $property->getValue($logger));
     }
@@ -109,8 +113,8 @@ class Kohana_LogTest extends Unittest_TestCase
      */
     public function test_detach_removes_log_writer_and_returns_this()
     {
-        $logger = new Log;
-        $writer = $this->getMockForAbstractClass('Log_Writer');
+        $logger = new Logger;
+        $writer = $this->getMockForAbstractClass(Writer::class);
 
         $logger->attach($writer);
 

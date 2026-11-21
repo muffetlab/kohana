@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Console\Command;
+use Kohana\Console\Cli;
+use Kohana\Http\Request;
+
 /**
  * Set the PHP error reporting level. If you set this in php.ini, you remove this.
  * @link https://www.php.net/errorfunc.configuration#ini.error-reporting
@@ -51,10 +55,10 @@ require APPPATH . 'bootstrap.php';
 
 if (PHP_SAPI === 'cli') {
     // Try and load minion
-    class_exists('Minion_Task') or die('Please enable the Minion module for CLI support.');
-    set_exception_handler(['Minion_Exception', 'handler']);
+    isset(\Kohana\Foundation\Application::modules()['minion']) or die('Please enable the Minion module for CLI support.');
+    set_exception_handler([\Kohana\Console\ConsoleException::class, 'handler']);
 
-    Minion_Task::factory(Minion_CLI::options())->execute();
+    Command::factory(Cli::options())->execute();
 } else {
     /**
      * Execute the main request. A source of the URI can be passed, e.g., $_SERVER['PATH_INFO'].

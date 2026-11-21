@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Foundation\Debug;
+
 /**
  * Tests Kohana Core
  *
@@ -14,7 +17,7 @@
  * @copyright  (c) 2008-2014 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_DebugTest extends Unittest_TestCase
+class Kohana_DebugTest extends TestCase
 {
     /**
      * Provides test data for test_debug()

@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Foundation\KohanaException;
+use Kohana\Testing\TestCase;
+use Kohana\Validation\Validator;
+
 /**
  * Tests the Validation lib that's shipped with Kohana
  *
@@ -14,7 +18,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_ValidationTest extends Unittest_TestCase
+class Kohana_ValidationTest extends TestCase
 {
     /**
      * Tests Validation::factory()
@@ -32,9 +36,9 @@ class Kohana_ValidationTest extends Unittest_TestCase
             'why the hell' => 'amIDoingThis',
         ];
 
-        $instance = Validation::factory($values);
+        $instance = Validator::factory($values);
 
-        $this->assertTrue($instance instanceof Validation);
+        $this->assertTrue($instance instanceof Validator);
 
         $this->assertSame(
             $values, $instance->data()
@@ -51,7 +55,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
      */
     public function test_copy_copies_all_attributes_except_data()
     {
-        $validation = new Validation([
+        $validation = new Validator([
             'foo' => 'bar',
             'fud' => 'fear, uncertainty, doubt',
             'num' => 9
@@ -85,7 +89,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
      */
     public function test_initially_there_are_no_labels()
     {
-        $validation = new Validation([]);
+        $validation = new Validator([]);
 
         $reflection = new ReflectionClass($validation);
         $property = $reflection->getProperty('_labels');
@@ -104,7 +108,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
      */
     public function test_label_adds_and_overwrites_label_and_returns_this()
     {
-        $validation = new Validation([]);
+        $validation = new Validator([]);
 
         $this->assertSame($validation, $validation->label('email', 'Email Address'));
 
@@ -130,7 +134,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
      */
     public function test_labels_adds_and_overwrites_multiple_labels_and_returns_this()
     {
-        $validation = new Validation([]);
+        $validation = new Validator([]);
         $initial_data = ['kung fu' => 'fighting', 'fast' => 'cheetah'];
 
         $this->assertSame($validation, $validation->labels($initial_data));
@@ -157,7 +161,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
      */
     public function test_bind_adds_and_overwrites_multiple_variables_and_returns_this()
     {
-        $validation = new Validation([]);
+        $validation = new Validator([]);
         $bound = [':foo' => 'some value'];
 
         // Test binding an array of values
@@ -185,8 +189,8 @@ class Kohana_ValidationTest extends Unittest_TestCase
             'kung fu' => 'fighting',
             'fast' => 'cheetah',
         ];
-        $validation = new Validation($data);
-        $validation->bind(':class', 'Valid')
+        $validation = new Validator($data);
+        $validation->bind(':class', \Kohana\Validation\Rules::class)
             // Use the bound value in a callback
             ->rule('fast', [':class', 'max_length'], [':value', 2]);
 
@@ -231,9 +235,9 @@ class Kohana_ValidationTest extends Unittest_TestCase
                     'foo' => [
                         ['not_empty', null],
                         // Tests the array syntax for callbacks
-                        [['Valid', 'exact_length'], [':value', 3]],
+                        [[\Kohana\Validation\Rules::class, 'exact_length'], [':value', 3]],
                         // Tests the Class::method syntax for callbacks
-                        ['Valid::exact_length', [':value', 3]],
+                        ['Kohana\Validation\Rules::exact_length', [':value', 3]],
                         // Tests the lambda function syntax for callbacks
                         [function ($value) {
                             return $value === 'bar';
@@ -265,7 +269,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
             // Test array rules use method as error name
             [
                 ['foo' => 'test'],
-                ['foo' => [[['Valid', 'min_length'], [':value', 10]]]],
+                ['foo' => [[[\Kohana\Validation\Rules::class, 'min_length'], [':value', 10]]]],
                 [],
                 false,
                 ['foo' => 'foo must be at least 10 characters long']
@@ -292,7 +296,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
      */
     public function test_check(array $array, array $rules, array $labels, bool $expected, array $expected_errors)
     {
-        $validation = new Validation($array);
+        $validation = new Validator($array);
 
         foreach ($labels as $field => $label) {
             $validation->label($field, $label);
@@ -308,7 +312,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
         $this->assertSame($expected, $status);
         $this->assertSame($expected_errors, $errors);
 
-        $validation = new validation($array);
+        $validation = new Validator($array);
         foreach ($rules as $field => $fieldRules) {
             $validation->rules($field, $fieldRules);
         }
@@ -325,7 +329,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
      */
     public function test_check_stops_when_error_added_by_callback()
     {
-        $validation = new Validation(['foo' => 'foo']);
+        $validation = new Validator(['foo' => 'foo']);
 
         $validation
             ->rule('foo', [$this, '_validation_callback'], [':validation'])
@@ -342,7 +346,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
         $this->assertSame($errors, $expected);
     }
 
-    public function _validation_callback(Validation $object)
+    public function _validation_callback(Validator $object)
     {
         // Simply add the error
         $object->error('foo', '_validation_callback');
@@ -391,7 +395,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
      */
     public function test_errors(array $array, array $rules, array $expected)
     {
-        $validation = Validation::factory($array);
+        $validation = Validator::factory($array);
 
         foreach ($rules as $field => $field_rules) {
             $validation->rules($field, $field_rules);
@@ -439,10 +443,10 @@ class Kohana_ValidationTest extends Unittest_TestCase
      */
     public function test_translated_errors(array $data, array $rules, array $translated_expected, array $untranslated_expected)
     {
-        $validation = Validation::factory($data);
+        $validation = Validator::factory($data);
 
-        $current = i18n::lang();
-        i18n::lang('es');
+        $current = \Kohana\Translation\Translator::lang();
+        \Kohana\Translation\Translator::lang('es');
 
         foreach ($rules as $field => $field_rules) {
             $validation->rules($field, $field_rules);
@@ -455,7 +459,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
         $result_3 = $validation->errors('Validation', false);
 
         // Restore the current language
-        i18n::lang($current);
+        \Kohana\Translation\Translator::lang($current);
 
         $this->assertSame($translated_expected, $result_1);
         $this->assertSame($translated_expected, $result_2);
@@ -470,12 +474,12 @@ class Kohana_ValidationTest extends Unittest_TestCase
      */
     public function test_parameter_labels()
     {
-        $validation = Validation::factory(['foo' => 'bar'])
+        $validation = Validator::factory(['foo' => 'bar'])
             ->rule('foo', 'equals', [':value', 'something'])
             ->label('something', 'Spanish');
 
-        $current = i18n::lang();
-        i18n::lang('es');
+        $current = \Kohana\Translation\Translator::lang();
+        \Kohana\Translation\Translator::lang('es');
 
         $validation->check();
 
@@ -487,7 +491,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
         $result_3 = $validation->errors('Validation', false);
 
         // Restore the current language
-        i18n::lang($current);
+        \Kohana\Translation\Translator::lang($current);
 
         $this->assertSame($translated_expected, $result_1);
         $this->assertSame($translated_expected, $result_2);
@@ -502,7 +506,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
      */
     public function test_arrays_in_parameters()
     {
-        $validation = Validation::factory(['foo' => 'bar'])
+        $validation = Validator::factory(['foo' => 'bar'])
             ->rule('foo', 'equals', [':value', ['one', 'two']]);
 
         $validation->check();
@@ -520,7 +524,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
      */
     public function test_data_stays_unaltered()
     {
-        $validation = Validation::factory(['foo' => 'bar'])
+        $validation = Validator::factory(['foo' => 'bar'])
             ->rule('something', 'not_empty');
 
         $before = $validation->data();
@@ -541,7 +545,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
      */
     public function test_object_parameters_not_in_messages()
     {
-        $validation = Validation::factory(['foo' => 'foo'])
+        $validation = Validator::factory(['foo' => 'foo'])
             ->rule('bar', 'matches', [':validation', ':field', 'foo']);
 
         $validation->check();
@@ -561,7 +565,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
     {
         $data = ['one' => 'hello', 'two' => 'world', 'ten' => ''];
 
-        $validation = Validation::factory($data);
+        $validation = Validator::factory($data);
 
         $this->assertSame($data, $validation->data());
     }
@@ -572,7 +576,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
     {
         $array = ['one' => 'Hello', 'two' => 'World', 'ten' => null];
 
-        $validation = Validation::factory($array);
+        $validation = Validator::factory($array);
 
         $this->assertTrue(isset($validation['one']));
         $this->assertFalse(isset($validation['ten']));
@@ -583,9 +587,9 @@ class Kohana_ValidationTest extends Unittest_TestCase
     public function test_offsetSet_throws_exception()
     // @codingStandardsIgnoreEnd
     {
-        $this->expectException('Kohana_Exception');
+        $this->expectException(KohanaException::class);
 
-        $validation = Validation::factory([]);
+        $validation = Validator::factory([]);
 
         // Validation is read-only
         $validation['field'] = 'something';
@@ -597,7 +601,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
     {
         $array = ['one' => 'Hello', 'two' => 'World', 'ten' => null];
 
-        $validation = Validation::factory($array);
+        $validation = Validator::factory($array);
 
         $this->assertSame($array['one'], $validation['one']);
         $this->assertSame($array['two'], $validation['two']);
@@ -608,9 +612,9 @@ class Kohana_ValidationTest extends Unittest_TestCase
     public function test_offsetUnset()
     // @codingStandardsIgnoreEnd
     {
-        $this->expectException('Kohana_Exception');
+        $this->expectException(KohanaException::class);
 
-        $validation = Validation::factory(['one' => 'Hello, World!']);
+        $validation = Validator::factory(['one' => 'Hello, World!']);
 
         // Validation is read-only
         unset($validation['one']);
@@ -626,7 +630,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
     {
         $array = ['email' => 'not an email address'];
 
-        $validation = Validation::factory($array)
+        $validation = Validator::factory($array)
             ->rule('email', 'not_empty')
             ->rule('email', 'email');
 
@@ -665,7 +669,7 @@ class Kohana_ValidationTest extends Unittest_TestCase
      */
     public function test_rule_label_regex($data, $field, $rules, $expected)
     {
-        $validation = Validation::factory($data)->rules($field, $rules);
+        $validation = Validator::factory($data)->rules($field, $rules);
 
         $validation->check();
 

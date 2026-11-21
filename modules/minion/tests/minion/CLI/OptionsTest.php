@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Console\Cli;
+
 /**
  * Tests Minion_CLI::options().
  *
@@ -11,7 +14,7 @@
  * @copyright  (c) 2026 Kohana Group
  * @license    https://kohana.top/license
  */
-class Minion_CLI_OptionsTest extends Kohana_Unittest_TestCase
+class Minion_CLI_OptionsTest extends TestCase
 {
     /**
      * @var array Backup of $_SERVER['argv']
@@ -127,7 +130,7 @@ class Minion_CLI_OptionsTest extends Kohana_Unittest_TestCase
     public function testNoArgumentsReturnsAllOptions(array $argv, array $expected)
     {
         $this->setArgv($argv);
-        $this->assertSame($expected, Minion_CLI::options());
+        $this->assertSame($expected, Cli::options());
     }
 
     /**
@@ -139,7 +142,7 @@ class Minion_CLI_OptionsTest extends Kohana_Unittest_TestCase
     public function testNoArgumentsNoArgsReturnsEmptyArray()
     {
         $this->setArgv([]);
-        $this->assertSame([], Minion_CLI::options());
+        $this->assertSame([], Cli::options());
     }
 
     /**
@@ -152,7 +155,7 @@ class Minion_CLI_OptionsTest extends Kohana_Unittest_TestCase
     {
         $this->setArgv([]);
         // argv is ['index.php'], loop starts at i=1, so nothing is parsed
-        $this->assertSame([], Minion_CLI::options());
+        $this->assertSame([], Cli::options());
     }
 
     /**
@@ -197,7 +200,7 @@ class Minion_CLI_OptionsTest extends Kohana_Unittest_TestCase
     public function testSingleRequestedOption(array $argv, string $requested, ?string $expected)
     {
         $this->setArgv($argv);
-        $this->assertSame($expected, Minion_CLI::options($requested));
+        $this->assertSame($expected, Cli::options($requested));
     }
 
     /**
@@ -209,7 +212,7 @@ class Minion_CLI_OptionsTest extends Kohana_Unittest_TestCase
     public function testMultipleRequestedOptions()
     {
         $this->setArgv(['--task=db:upgrade', '--force=1', '--verbose']);
-        $this->assertSame(['force' => '1', 'verbose' => null], Minion_CLI::options('force', 'verbose'));
+        $this->assertSame(['force' => '1', 'verbose' => null], Cli::options('force', 'verbose'));
     }
 
     /**
@@ -221,7 +224,7 @@ class Minion_CLI_OptionsTest extends Kohana_Unittest_TestCase
     public function testUnrequestedOptionsFilteredOut()
     {
         $this->setArgv(['--task=db:upgrade', '--force=1', 'positional']);
-        $result = Minion_CLI::options('task', 'missing');
+        $result = Cli::options('task', 'missing');
         $this->assertSame(['task' => 'db:upgrade'], $result);
     }
 
@@ -234,7 +237,7 @@ class Minion_CLI_OptionsTest extends Kohana_Unittest_TestCase
     public function testNoArgumentsIncludesPositionalArgs()
     {
         $this->setArgv(['migrate', '--task=db:upgrade']);
-        $this->assertSame([0 => 'migrate', 'task' => 'db:upgrade'], Minion_CLI::options());
+        $this->assertSame([0 => 'migrate', 'task' => 'db:upgrade'], Cli::options());
     }
 
     /**
@@ -246,6 +249,6 @@ class Minion_CLI_OptionsTest extends Kohana_Unittest_TestCase
     public function testRequestedOptionsExcludesPositionalArgs()
     {
         $this->setArgv(['migrate', '--task=db:upgrade']);
-        $this->assertSame('db:upgrade', Minion_CLI::options('task'));
+        $this->assertSame('db:upgrade', Cli::options('task'));
     }
 }

@@ -1,6 +1,11 @@
 <?php
 
-include_once(Kohana::find_file('tests/cache', 'CacheBasicMethodsTest'));
+use Kohana\Foundation\Application;
+use Kohana\Cache\Cache;
+use Kohana\Cache\CacheException;
+use Kohana\Foundation\KohanaException;
+
+include_once(Application::find_file('tests/cache', 'CacheBasicMethodsTest'));
 
 /**
  * @package    Kohana/Cache
@@ -24,8 +29,8 @@ class Kohana_SqliteTest extends Kohana_CacheBasicMethodsTest
      *  - Call the parent setup method, `parent::setUp()`
      *
      * @return  void
-     * @throws Cache_Exception
-     * @throws Kohana_Exception
+     * @throws CacheException
+     * @throws KohanaException
      */
     public function setUp(): void
     {
@@ -35,8 +40,8 @@ class Kohana_SqliteTest extends Kohana_CacheBasicMethodsTest
             $this->markTestSkipped('SQLite PDO PHP Extension is not available');
         }
 
-        if (!Kohana::$config->load('cache.sqlite')) {
-            Kohana::$config->load('cache')
+        if (!Application::$config->load('cache.sqlite')) {
+            Application::$config->load('cache')
                 ->set('sqlite', [
                     'driver' => 'sqlite',
                     'default_expire' => 3600,

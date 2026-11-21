@@ -1,5 +1,11 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Foundation\Application;
+use Kohana\View\View;
+use Kohana\View\ViewException;
+use Kohana\Foundation\KohanaException;
+
 /**
  * Tests the View class
  *
@@ -13,7 +19,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_ViewTest extends Unittest_TestCase
+class Kohana_ViewTest extends TestCase
 {
     protected static $old_modules = [];
 
@@ -21,31 +27,31 @@ class Kohana_ViewTest extends Unittest_TestCase
      * Setups the filesystem for test view files
      *
      * @return void
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     // @codingStandardsIgnoreStart
     public static function setupBeforeClass(): void
     // @codingStandardsIgnoreEnd
     {
-        self::$old_modules = Kohana::modules();
+        self::$old_modules = Application::modules();
 
         $new_modules = self::$old_modules + [
             'test_views' => realpath(__DIR__ . '/../test_data/')
         ];
-        Kohana::modules($new_modules);
+        Application::modules($new_modules);
     }
 
     /**
      * Restores the module list
      *
      * @return void
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     // @codingStandardsIgnoreStart
     public static function teardownAfterClass(): void
     // @codingStandardsIgnoreEnd
     {
-        Kohana::modules(self::$old_modules);
+        Application::modules(self::$old_modules);
     }
 
     /**
@@ -88,7 +94,7 @@ class Kohana_ViewTest extends Unittest_TestCase
         try {
             new View($path);
             $this->assertSame(false, $expects_exception);
-        } catch (View_Exception $e) {
+        } catch (ViewException $e) {
             $this->assertSame(true, $expects_exception);
         }
     }
@@ -99,7 +105,7 @@ class Kohana_ViewTest extends Unittest_TestCase
      * @test
      * @dataProvider provider_set
      * @return void
-     * @throws View_Exception
+     * @throws ViewException
      */
     public function test_set($data_key, $value, $test_key, $expected)
     {
@@ -113,7 +119,7 @@ class Kohana_ViewTest extends Unittest_TestCase
      * @test
      * @dataProvider provider_set
      * @return void
-     * @throws View_Exception
+     * @throws ViewException
      */
     public function test_set_global($data_key, $value, $test_key, $expected)
     {

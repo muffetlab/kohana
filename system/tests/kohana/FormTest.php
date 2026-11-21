@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Html\Form;
+use Kohana\Foundation\KohanaException;
+
 /**
  * Tests Kohana Form helper
  *
@@ -14,7 +18,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_FormTest extends Unittest_TestCase
+class Kohana_FormTest extends TestCase
 {
     /**
      * Defaults for this test
@@ -22,9 +26,9 @@ class Kohana_FormTest extends Unittest_TestCase
      */
     // @codingStandardsIgnoreStart
     protected $environmentDefault = [
-        'Kohana::$base_url' => '/',
+        'Kohana\Foundation\Application::$base_url' => '/',
         'HTTP_HOST' => 'kohanaframework.org',
-        'Kohana::$index_file' => '',
+        'Kohana\Foundation\Application::$index_file' => '',
     ];
 
     // @codingStandardsIgnoreEnd
@@ -62,7 +66,7 @@ class Kohana_FormTest extends Unittest_TestCase
      * @dataProvider provider_open
      * @param array $input Input for Form::open
      * @param array $expected Output for Form::open
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_open(array $input, array $expected)
     {
@@ -402,7 +406,7 @@ class Kohana_FormTest extends Unittest_TestCase
      * @param string $value The value attribute for the image input.
      * @param array $attributes Additional HTML attributes for the image input.
      * @param string $expected The expected output from Form::image().
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_image(string $name, string $value, array $attributes, string $expected)
     {

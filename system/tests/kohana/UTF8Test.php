@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Support\Utf8;
+use Kohana\Support\Utf8Exception;
+
 /**
  * Tests Kohana_UTF8 class
  *
@@ -13,7 +17,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_UTF8Test extends Unittest_TestCase
+class Kohana_UTF8Test extends TestCase
 {
     /**
      * Provides test data for test_clean()
@@ -38,7 +42,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_clean($input, $expected)
     {
-        $this->assertSame($expected, UTF8::clean($input));
+        $this->assertSame($expected, Utf8::clean($input));
     }
 
     /**
@@ -63,7 +67,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_is_ascii($input, $expected)
     {
-        $this->assertSame($expected, UTF8::is_ascii($input));
+        $this->assertSame($expected, Utf8::is_ascii($input));
     }
 
     /**
@@ -88,7 +92,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_strip_ascii_ctrl($input, $expected)
     {
-        $this->assertSame($expected, UTF8::strip_ascii_ctrl($input));
+        $this->assertSame($expected, Utf8::strip_ascii_ctrl($input));
     }
 
     /**
@@ -110,7 +114,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_strip_non_ascii($input, $expected)
     {
-        $this->assertSame($expected, UTF8::strip_non_ascii($input));
+        $this->assertSame($expected, Utf8::strip_non_ascii($input));
     }
 
     /**
@@ -136,7 +140,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_transliterate_to_ascii($input, $case, $expected)
     {
-        $this->assertSame($expected, UTF8::transliterate_to_ascii($input, $case));
+        $this->assertSame($expected, Utf8::transliterate_to_ascii($input, $case));
     }
 
     /**
@@ -158,7 +162,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_strlen($input, $expected)
     {
-        $this->assertSame($expected, UTF8::strlen($input));
+        $this->assertSame($expected, Utf8::strlen($input));
     }
 
     /**
@@ -180,7 +184,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_strpos($input, $str, $offset, $expected)
     {
-        $this->assertSame($expected, UTF8::strpos($input, $str, $offset));
+        $this->assertSame($expected, Utf8::strpos($input, $str, $offset));
     }
 
     /**
@@ -202,7 +206,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_strrpos($input, $str, $offset, $expected)
     {
-        $this->assertSame($expected, UTF8::strrpos($input, $str, $offset));
+        $this->assertSame($expected, Utf8::strrpos($input, $str, $offset));
     }
 
     /**
@@ -226,7 +230,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_substr($input, $offset, $length, $expected)
     {
-        $this->assertSame($expected, UTF8::substr($input, $offset, $length));
+        $this->assertSame($expected, Utf8::substr($input, $offset, $length));
     }
 
     /**
@@ -248,7 +252,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_substr_replace($input, $replacement, $offset, $length, $expected)
     {
-        $this->assertSame($expected, UTF8::substr_replace($input, $replacement, $offset, $length));
+        $this->assertSame($expected, Utf8::substr_replace($input, $replacement, $offset, $length));
     }
 
     /**
@@ -270,7 +274,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_strtolower($input, $expected)
     {
-        $this->assertSame($expected, UTF8::strtolower($input));
+        $this->assertSame($expected, Utf8::strtolower($input));
     }
 
     /**
@@ -292,7 +296,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_strtoupper($input, $expected)
     {
-        $this->assertSame($expected, UTF8::strtoupper($input));
+        $this->assertSame($expected, Utf8::strtoupper($input));
     }
 
     /**
@@ -313,7 +317,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_ucfirst($input, $expected)
     {
-        $this->assertSame($expected, UTF8::ucfirst($input));
+        $this->assertSame($expected, Utf8::ucfirst($input));
     }
 
     /**
@@ -335,7 +339,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_ucwords($input, $expected)
     {
-        $this->assertSame($expected, UTF8::ucwords($input));
+        $this->assertSame($expected, Utf8::ucwords($input));
     }
 
     /**
@@ -360,7 +364,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_strcasecmp($input, $input2, $expected)
     {
-        $this->assertSame($expected, UTF8::strcasecmp($input, $input2));
+        $this->assertSame($expected, Utf8::strcasecmp($input, $input2));
     }
 
     /**
@@ -384,7 +388,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_str_ireplace($search, $replace, $subject, $expected)
     {
-        $this->assertSame($expected, UTF8::str_ireplace($search, $replace, $subject));
+        $this->assertSame($expected, Utf8::str_ireplace($search, $replace, $subject));
     }
 
     /**
@@ -407,7 +411,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_stristr($input, $input2, $expected)
     {
-        $this->assertSame($expected, UTF8::stristr($input, $input2));
+        $this->assertSame($expected, Utf8::stristr($input, $input2));
     }
 
     /**
@@ -431,7 +435,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_strspn($input, $mask, $offset, $length, $expected)
     {
-        $this->assertSame($expected, UTF8::strspn($input, $mask, $offset, $length));
+        $this->assertSame($expected, Utf8::strspn($input, $mask, $offset, $length));
     }
 
     /**
@@ -454,7 +458,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_strcspn($input, $mask, $offset, $length, $expected)
     {
-        $this->assertSame($expected, UTF8::strcspn($input, $mask, $offset, $length));
+        $this->assertSame($expected, Utf8::strcspn($input, $mask, $offset, $length));
     }
 
     /**
@@ -477,7 +481,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_str_pad($input, $length, $pad, $type, $expected)
     {
-        $this->assertSame($expected, UTF8::str_pad($input, $length, $pad, $type));
+        $this->assertSame($expected, Utf8::str_pad($input, $length, $pad, $type));
     }
 
     /**
@@ -487,9 +491,9 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_str_pad_error()
     {
-        $this->expectException(UTF8_Exception::class);
+        $this->expectException(Utf8Exception::class);
 
-        UTF8::str_pad('Cocoñùт', 10, 'š', 15);
+        Utf8::str_pad('Cocoñùт', 10, 'š', 15);
     }
 
     /**
@@ -512,7 +516,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_str_split($input, $split_length, $expected)
     {
-        $this->assertSame($expected, UTF8::str_split($input, $split_length));
+        $this->assertSame($expected, Utf8::str_split($input, $split_length));
     }
 
     /**
@@ -533,7 +537,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_strrev($input, $expected)
     {
-        $this->assertSame($expected, UTF8::strrev($input));
+        $this->assertSame($expected, Utf8::strrev($input));
     }
 
     /**
@@ -556,7 +560,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_trim($input, $input2, $expected)
     {
-        $this->assertSame($expected, UTF8::trim($input, $input2));
+        $this->assertSame($expected, Utf8::trim($input, $input2));
     }
 
     /**
@@ -580,7 +584,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_ltrim($input, $charlist, $expected)
     {
-        $this->assertSame($expected, UTF8::ltrim($input, $charlist));
+        $this->assertSame($expected, Utf8::ltrim($input, $charlist));
     }
 
     /**
@@ -604,7 +608,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_rtrim($input, $input2, $expected)
     {
-        $this->assertSame($expected, UTF8::rtrim($input, $input2));
+        $this->assertSame($expected, Utf8::rtrim($input, $input2));
     }
 
     /**
@@ -627,7 +631,7 @@ class Kohana_UTF8Test extends Unittest_TestCase
      */
     public function test_ord($input, $expected)
     {
-        $this->assertSame($expected, UTF8::ord($input));
+        $this->assertSame($expected, Utf8::ord($input));
     }
 
 }

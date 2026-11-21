@@ -1,5 +1,10 @@
 <?php
 
+use Kohana\View\View;
+use Kohana\Testing\TestCase;
+use Kohana\Http\Response;
+use Kohana\Cookie\Cookie;
+
 /**
  * Unit tests for response class
  *
@@ -13,7 +18,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_ResponseTest extends Unittest_TestCase
+class Kohana_ResponseTest extends TestCase
 {
     /**
      * Provider for test_body
@@ -22,7 +27,7 @@ class Kohana_ResponseTest extends Unittest_TestCase
      */
     public function provider_body(): array
     {
-        $view = $this->createMock('View');
+        $view = $this->createMock(View::class);
 
         $view->expects($this->any())
             ->method('__toString')

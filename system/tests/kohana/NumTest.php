@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Support\Number;
+use Kohana\Foundation\KohanaException;
+
 /**
  * Tests Num
  *
@@ -13,7 +17,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_NumTest extends Unittest_TestCase
+class Kohana_NumTest extends TestCase
 {
     protected $default_locale;
 
@@ -65,11 +69,11 @@ class Kohana_NumTest extends Unittest_TestCase
      * @dataProvider provider_bytes
      * @param float $expected Expected Value
      * @param string $size Input value
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_bytes($expected, $size)
     {
-        $this->assertSame($expected, Num::bytes($size));
+        $this->assertSame($expected, Number::bytes($size));
     }
 
     /**
@@ -97,7 +101,7 @@ class Kohana_NumTest extends Unittest_TestCase
      */
     public function test_ordinal(int $number, string $expected)
     {
-        $this->assertSame($expected, Num::ordinal($number));
+        $this->assertSame($expected, Number::ordinal($number));
     }
 
     /**
@@ -128,7 +132,7 @@ class Kohana_NumTest extends Unittest_TestCase
      */
     public function test_format(float $number, int $places, bool $monetary, string $expected)
     {
-        $this->assertSame($expected, Num::format($number, $places, $monetary));
+        $this->assertSame($expected, Number::format($number, $places, $monetary));
     }
 
     /**
@@ -158,8 +162,8 @@ class Kohana_NumTest extends Unittest_TestCase
      */
     function test_round($input, int $precision, $expected)
     {
-        foreach ([Num::ROUND_HALF_UP, Num::ROUND_HALF_DOWN, Num::ROUND_HALF_EVEN, Num::ROUND_HALF_ODD] as $i => $mode) {
-            $this->assertSame($expected[$i], Num::round($input, $precision, $mode, false));
+        foreach ([Number::ROUND_HALF_UP, Number::ROUND_HALF_DOWN, Number::ROUND_HALF_EVEN, Number::ROUND_HALF_ODD] as $i => $mode) {
+            $this->assertSame($expected[$i], Number::round($input, $precision, $mode, false));
         }
     }
 

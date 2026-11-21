@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Database\Connection;
+use Kohana\Database\DB;
+
 /**
  * Runs real queries against both drivers (PDO and MySQLi).
  *
@@ -7,24 +11,24 @@
  * @group kohana.database
  * @group kohana.database.driver
  */
-class Kohana_Database_DriverTest extends Unittest_TestCase
+class Kohana_Database_DriverTest extends TestCase
 {
     public function provider_connections(): array
     {
         return [['default'], ['mysqli']];
     }
 
-    protected function db(string $name): Database
+    protected function db(string $name): Connection
     {
         try {
-            $db = Database::instance($name);
+            $db = Connection::instance($name);
             $db->connect();
         } catch (Exception $e) {
             $this->markTestSkipped('Database connection failed: ' . $e->getMessage());
         }
 
-        $db->query(Database::UPDATE, 'DROP TABLE IF EXISTS driver_test');
-        $db->query(Database::UPDATE, 'CREATE TABLE driver_test (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50) NOT NULL, score INT NULL)');
+        $db->query(Connection::UPDATE, 'DROP TABLE IF EXISTS driver_test');
+        $db->query(Connection::UPDATE, 'CREATE TABLE driver_test (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50) NOT NULL, score INT NULL)');
 
         return $db;
     }

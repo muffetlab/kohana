@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Foundation\KohanaException;
+
 /**
  * Tests Kohana Exception Class
  *
@@ -13,7 +16,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_ExceptionTest extends Unittest_TestCase
+class Kohana_ExceptionTest extends TestCase
 {
     /**
      * Provides test data for test_constructor()
@@ -55,13 +58,13 @@ class Kohana_ExceptionTest extends Unittest_TestCase
     {
         switch (count($arguments)) {
             case 1:
-                $exception = new Kohana_Exception(reset($arguments));
+                $exception = new KohanaException(reset($arguments));
                 break;
             case 2:
-                $exception = new Kohana_Exception(reset($arguments), next($arguments));
+                $exception = new KohanaException(reset($arguments), next($arguments));
                 break;
             default:
-                $exception = new Kohana_Exception(reset($arguments), next($arguments), next($arguments));
+                $exception = new KohanaException(reset($arguments), next($arguments), next($arguments));
         }
 
         $this->assertSame($expected_code, $exception->getCode());
@@ -76,7 +79,7 @@ class Kohana_ExceptionTest extends Unittest_TestCase
     public function provider_text(): array
     {
         return [
-            [new Kohana_Exception('foobar'), $this->dirSeparator('Kohana_Exception [ 0 ]: foobar ~ SYSPATH/tests/kohana/ExceptionTest.php [ ' . __LINE__ . ' ]')],
+            [new KohanaException('foobar'), $this->dirSeparator('Kohana\Foundation\KohanaException [ 0 ]: foobar ~ SYSPATH/tests/kohana/ExceptionTest.php [ ' . __LINE__ . ' ]')],
         ];
     }
 
@@ -91,7 +94,7 @@ class Kohana_ExceptionTest extends Unittest_TestCase
      */
     public function test_text(Exception $exception, string $expected)
     {
-        $this->assertEquals($expected, Kohana_Exception::text($exception));
+        $this->assertEquals($expected, KohanaException::text($exception));
     }
 
 }

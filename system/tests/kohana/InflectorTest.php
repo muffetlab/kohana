@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Support\Inflector;
+use Kohana\Foundation\KohanaException;
+
 /**
  * Tests Kohana inflector class
  *
@@ -14,7 +18,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_InflectorTest extends Unittest_TestCase
+class Kohana_InflectorTest extends TestCase
 {
     /**
      * Provides test data for test_lang()
@@ -40,7 +44,7 @@ class Kohana_InflectorTest extends Unittest_TestCase
      * @dataProvider provider_uncountable
      * @param string $input Input for Inflector::uncountable
      * @param bool $expected Output for Inflector::uncountable
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_uncountable(string $input, bool $expected)
     {
@@ -78,7 +82,7 @@ class Kohana_InflectorTest extends Unittest_TestCase
      * @param string $input Input for Inflector::singular
      * @param int|float $count Optional count to determine inflection logic
      * @param string $expected Output for Inflector::mime
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_singular(string $input, $count, string $expected)
     {
@@ -116,7 +120,7 @@ class Kohana_InflectorTest extends Unittest_TestCase
      * @param string $input Input for Inflector::plural
      * @param int|float $count Optional count to determine inflection logic
      * @param string $expected Output for Inflector::plural
-     * @throws Kohana_Exception
+     * @throws KohanaException
      */
     public function test_plural(string $input, $count, string $expected)
     {

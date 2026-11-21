@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="modules/unittest/bootstrap_all_modules.php" colors="true">
+    <testsuites>
+        <testsuite name="Kohana">
+            <directory suffix="Test.php">system/tests</directory>
+            <directory suffix="Test.php">modules/cache/tests</directory>
+            <directory suffix="Test.php">modules/database/tests</directory>
+            <directory suffix="Test.php">modules/image/tests</directory>
+            <directory suffix="Test.php">modules/minion/tests</directory>
+            <directory suffix="Test.php">modules/orm/tests</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <ini name="error_reporting" value="-1"/>
+    </php>
+</phpunit>

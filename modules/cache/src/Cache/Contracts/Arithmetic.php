@@ -1,0 +1,38 @@
+<?php
+
+namespace Kohana\Cache\Contracts;
+
+/**
+ * Kohana Cache Arithmetic Interface, for basic cache integer based
+ * arithmetic, addition and subtraction
+ * 
+ * @package    Kohana/Cache
+ * @category   Base
+ * @author     Kohana Team
+ * @copyright  (c) 2009-2012 Kohana Team
+ * @license    https://kohana.top/license
+ * @since      3.2.0
+ */
+interface Arithmetic
+{
+    /**
+     * Increments a given value by the step value supplied.
+     * Useful for shared counters and other persistent integer based
+     * tracking.
+     *
+     * @param string $id id of cache entry to increment
+     * @param int $step step value to increment by
+     * @return int|false
+     */
+    public function increment(string $id, int $step = 1);
+    /**
+     * Decrements a given value by the step value supplied.
+     * Useful for shared counters and other persistent integer based
+     * tracking.
+     *
+     * @param string $id id of cache entry to decrement
+     * @param int $step step value to decrement by
+     * @return int|false
+     */
+    public function decrement(string $id, int $step = 1);
+}

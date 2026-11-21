@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Support\Date;
+
 /**
  * Tests Date class
  *
@@ -14,7 +17,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_DateTest extends Unittest_TestCase
+class Kohana_DateTest extends TestCase
 {
     protected $_original_timezone = null;
     protected $default_locale;

@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Testing\TestCase;
+use Kohana\Foundation\Model;
+
 /**
  * This test only really exists for code coverage.
  *
@@ -14,7 +17,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-class Kohana_ModelTest extends Unittest_TestCase
+class Kohana_ModelTest extends TestCase
 {
     /**
      * Test the model's factory.
@@ -28,10 +31,5 @@ class Kohana_ModelTest extends Unittest_TestCase
 
         $this->assertTrue($foobar instanceof Model);
     }
-
-}
-
-class Model_Foobar extends Model
-{
 
 }
