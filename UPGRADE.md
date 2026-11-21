@@ -247,3 +247,11 @@ The framework's tests moved from `system/tests` and `modules/*/tests` to a root 
 - `getMockForAbstractClass()`, `setMethods()`, `$this->returnValue()` and `$this->at()` are gone. `Kohana\Testing\TestCase::mockAbstract($class, $constructorArgs, $extraMethods)` replaces `getMockForAbstractClass()`. Use `onlyMethods()`, `willReturn()` and `willReturnCallback()` for the rest.
 - PHPUnit cannot mock a class that has a method named `method()`, such as `Kohana\Http\Request`. Use a real `new Request($uri)`; its setters (`directory()`, `controller()`, `action()`) make it easy to configure.
 - `Kohana\Testing\TestCase` extends PHPUnit's `TestCase` directly. `assertSelectEquals()` is still available through `phpunit/phpunit-dom-assertions`.
+
+## 17. New: PostgreSQL driver
+
+The database module has a PostgreSQL driver, `Kohana\Database\PgsqlConnection` (type `'pgsql'`, needs `ext-pdo_pgsql`). It supports `listTables()` and `listColumns()`, so ORM works on PostgreSQL. See [`docs/database/config.md`](docs/database/config.md#postgresql) for the options.
+
+If you used the generic `PDO` type with a `pgsql:` DSN, switch to `'type' => 'pgsql'`. You can drop the `'identifier' => '"'` option and any `$tableColumns` you declared on your models only because `PDO` could not list columns.
+
+An unknown `type` now throws `DatabaseException('Unknown database type ...')` instead of a PHP warning.

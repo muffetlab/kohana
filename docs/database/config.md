@@ -18,7 +18,7 @@ INSTANCE_NAME
 :  Connections can be named anything you want, but you should always have at least one connection called "default".
 
 DATABASE_TYPE
-:  One of the installed database drivers. Kohana comes with "PDO" and "MySQLi" drivers. Drivers must extend the Database class. This parameter is case-sensitive.
+:  One of the installed database drivers. Kohana comes with "PDO", "MySQLi" and "pgsql" (PostgreSQL) drivers. A custom driver is given by its fully qualified class name and must extend `Kohana\Database\Connection`.
 
 CONNECTION_ARRAY
 :  Specific driver options for connecting to your database. (Driver options are explained [below](#connection-settings).)
@@ -59,7 +59,7 @@ The example file below shows 2 MySQL connections, one local and one remote.
         ],
     ];
 
-[!!] Note that the 'type' parameter is case-sensitive (e.g., 'PDO', 'MySQLi').
+[!!] The 'type' parameter is one of 'PDO', 'MySQLi' or 'pgsql' (case does not matter), or the fully qualified class name of your own driver.
 
 ## Connections and Instances
 
@@ -123,3 +123,39 @@ The `flags` option can be used to specify connection options. See [MySQLi::real_
 
 SSL parameters should be specified as `key` => `value` pairs.
 Available keys: client_key_path, client_cert_path, ca_cert_path, ca_dir_path, cipher
+### PostgreSQL
+
+The `pgsql` type uses [PDO PostgreSQL](https://www.php.net/manual/en/ref.pdo-pgsql.php) (`ext-pdo_pgsql`). Give either a `dsn` or the separate options in the `connection` array:
+
+| Type      | Option     | Description                | Default value |
+|-----------|------------|----------------------------|---------------|
+| `string`  | hostname   | Hostname of the database   | none (socket) |
+| `integer` | port       | Port number                | `5432`        |
+| `string`  | database   | Database name              | none          |
+| `string`  | username   | Database username          | empty         |
+| `string`  | password   | Database password          | empty         |
+| `string`  | sslmode    | `disable`, `require`, ...  | none          |
+| `string`  | dsn        | Full PDO DSN; overrides the options above | none |
+| `boolean` | persistent | Persistent connections     | `false`       |
+
+Two more options sit next to `connection`:
+
+| Type     | Option  | Description                                  |
+|----------|---------|----------------------------------------------|
+| `string` | charset | Client encoding, for example `UTF8`          |
+| `string` | schema  | Sets `search_path` after connecting          |
+
+    'pgsql' => [
+        'type' => 'pgsql',
+        'connection' => [
+            'hostname' => '127.0.0.1',
+            'port' => 5432,
+            'database' => 'kohana',
+            'username' => 'postgres',
+            'password' => '',
+        ],
+        'table_prefix' => '',
+        'charset' => 'UTF8',
+    ],
+
+Unlike the generic `PDO` type, the PostgreSQL driver supports `listTables()` and `listColumns()`, so ORM models work without declaring their columns. Identifiers are quoted with double quotes. Tables without a `SERIAL` or identity column return `null` as the insert ID.
