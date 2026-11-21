@@ -32,19 +32,16 @@ class ConsoleException extends KohanaException
             KohanaException::log($e);
 
             if ($e instanceof self) {
-                echo $e->formatForCli();
+                echo rtrim($e->formatForCli()), PHP_EOL;
             } else {
-                echo KohanaException::text($e);
+                echo KohanaException::text($e), PHP_EOL;
             }
 
+            // exit() prints strings (PDO's SQLSTATE codes are strings) and only accepts 0-255;
+            // never exit "0" after an exception
             $exit_code = $e->getCode();
 
-            // Never exit "0" after an exception.
-            if ($exit_code === 0) {
-                $exit_code = 1;
-            }
-
-            exit($exit_code);
+            exit(is_int($exit_code) && $exit_code > 0 && $exit_code <= 255 ? $exit_code : 1);
         } catch (\Exception $e) {
             // Clean the output buffer if one exists
             ob_get_level() and ob_clean();
