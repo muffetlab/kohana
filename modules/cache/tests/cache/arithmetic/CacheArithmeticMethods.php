@@ -3,7 +3,7 @@
 include_once(Kohana::find_file('tests/cache', 'CacheBasicMethodsTest'));
 
 /**
- * @package    Kohana/Cache/Memcache
+ * @package    Kohana/Cache
  * @group      kohana
  * @group      kohana.cache
  * @category   Test

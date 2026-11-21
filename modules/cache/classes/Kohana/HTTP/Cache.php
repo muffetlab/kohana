@@ -25,10 +25,10 @@ class Kohana_HTTP_Cache
      * injector for the Cache library.
      *
      *      // Create HTTP_Cache with named cache engine
-     *      $http_cache = HTTP_Cache::factory('memcache', ['allow_private_cache' => false]);
+     *      $http_cache = HTTP_Cache::factory('memcached', ['allow_private_cache' => false]);
      *
      *      // Create HTTP_Cache with supplied cache engine
-     *      $http_cache = HTTP_Cache::factory(Cache::instance('memcache'), ['allow_private_cache' => false]);
+     *      $http_cache = HTTP_Cache::factory(Cache::instance('memcached'), ['allow_private_cache' => false]);
      *
      * @param mixed $cache cache engine to use
      * @param array $options options to set to this class

@@ -10,7 +10,6 @@
  * *  [APCu](https://www.php.net/manual/en/book.apcu.php)
  * *  File
  * *  [Memcached](https://www.php.net/manual/en/book.memcached.php)
- * *  [Memcache](https://www.php.net/manual/en/book.memcache.php)
  * *  [SQLite](https://www.php.net/manual/en/ref.pdo-sqlite.php)
  *
  * ### Introduction to caching
