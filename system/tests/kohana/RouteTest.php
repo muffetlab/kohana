@@ -73,7 +73,6 @@ class Kohana_RouteTest extends Unittest_TestCase
     {
         $reflection = new ReflectionClass('Route');
         $property = $reflection->getProperty('_routes');
-        $property->setAccessible(true);
 
         $this->assertSame($property->getValue(), Route::all());
     }
@@ -191,13 +190,9 @@ class Kohana_RouteTest extends Unittest_TestCase
 
         $reflection = new ReflectionClass($route);
         $uriProperty = $reflection->getProperty('_uri');
-        $uriProperty->setAccessible(true);
         $regexProperty = $reflection->getProperty('_regex');
-        $regexProperty->setAccessible(true);
         $defaultsProperty = $reflection->getProperty('_defaults');
-        $defaultsProperty->setAccessible(true);
         $routeRegexProperty = $reflection->getProperty('_route_regex');
-        $routeRegexProperty->setAccessible(true);
 
         $this->assertSame('', $uriProperty->getValue($route));
         $this->assertSame([], $regexProperty->getValue($route));
@@ -237,14 +232,12 @@ class Kohana_RouteTest extends Unittest_TestCase
 
         $reflection = new ReflectionClass($route);
         $property = $reflection->getProperty('_regex');
-        $property->setAccessible(true);
         $this->assertSame([], $property->getValue($route));
 
         $route = new Route($uri2, null);
 
         $reflection = new ReflectionClass($route);
         $property = $reflection->getProperty('_regex');
-        $property->setAccessible(true);
 
         $this->assertSame([], $property->getValue($route));
     }
@@ -265,13 +258,11 @@ class Kohana_RouteTest extends Unittest_TestCase
 
         $reflection = new ReflectionClass($route);
         $property = $reflection->getProperty('_regex');
-        $property->setAccessible(true);
 
         $this->assertSame($regex, $property->getValue($route));
 
         $reflection = new ReflectionClass($route);
         $property = $reflection->getProperty('_route_regex');
-        $property->setAccessible(true);
 
         $this->assertStringContainsString($regex['id'], $property->getValue($route));
     }

@@ -16,6 +16,8 @@
  */
 class Kohana_RequestTest extends Unittest_TestCase
 {
+    protected $_initial_request;
+
     protected $_inital_request;
 
     // @codingStandardsIgnoreStart

@@ -49,7 +49,6 @@ class Kohana_ConfigTest extends Unittest_TestCase
 
         $reflection = new ReflectionClass($config);
         $property = $reflection->getProperty('_sources');
-        $property->setAccessible(true);
 
         $this->assertContains($reader, $property->getValue($config));
     }
@@ -75,7 +74,6 @@ class Kohana_ConfigTest extends Unittest_TestCase
         // the order of the readers
         $reflection = new ReflectionClass($config);
         $property = $reflection->getProperty('_sources');
-        $property->setAccessible(true);
 
         $this->assertSame([$reader2, $reader1], $property->getValue($config));
     }
@@ -98,7 +96,6 @@ class Kohana_ConfigTest extends Unittest_TestCase
 
         $reflection = new ReflectionClass($config);
         $property = $reflection->getProperty('_sources');
-        $property->setAccessible(true);
 
         $this->assertSame([$reader1, $reader2], $property->getValue($config));
     }
@@ -128,7 +125,6 @@ class Kohana_ConfigTest extends Unittest_TestCase
 
         $reflection = new ReflectionClass($config);
         $property = $reflection->getProperty('_sources');
-        $property->setAccessible(true);
 
         $this->assertNotContains($reader1, $property->getValue($config));
         $this->assertContains($reader2, $property->getValue($config));

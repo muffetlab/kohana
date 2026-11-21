@@ -83,7 +83,6 @@ class Kohana_SessionTest extends Unittest_TestCase
         foreach ($expected as $var => $value) {
             $reflection = new ReflectionClass($session);
             $property = $reflection->getProperty('_' . $var);
-            $property->setAccessible(true);
 
             $this->assertSame($value, $property->getValue($session));
         }
@@ -178,7 +177,6 @@ class Kohana_SessionTest extends Unittest_TestCase
 
         $reflection = new ReflectionClass($session);
         $property = $reflection->getProperty('_encrypted');
-        $property->setAccessible(true);
 
         $this->assertSame(false, $property->getValue($session));
     }
@@ -195,7 +193,6 @@ class Kohana_SessionTest extends Unittest_TestCase
 
         $reflection = new ReflectionClass($session);
         $property = $reflection->getProperty('_destroyed');
-        $property->setAccessible(true);
 
         $this->assertSame(false, $property->getValue($session));
     }

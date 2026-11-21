@@ -68,7 +68,6 @@ class Kohana_ValidationTest extends Unittest_TestCase
         foreach (['_rules', '_bound', '_labels', '_empty_rules', '_errors'] as $attribute) {
             $reflection = new ReflectionClass($validation);
             $property = $reflection->getProperty($attribute);
-            $property->setAccessible(true);
 
             // This is just an easy way to check that the attributes are identical
             // Without hardcoding the expected values
@@ -90,7 +89,6 @@ class Kohana_ValidationTest extends Unittest_TestCase
 
         $reflection = new ReflectionClass($validation);
         $property = $reflection->getProperty('_labels');
-        $property->setAccessible(true);
 
         $this->assertSame([], $property->getValue($validation));
     }
@@ -112,7 +110,6 @@ class Kohana_ValidationTest extends Unittest_TestCase
 
         $reflection = new ReflectionClass($validation);
         $property = $reflection->getProperty('_labels');
-        $property->setAccessible(true);
 
         $this->assertSame(['email' => 'Email Address'], $property->getValue($validation));
 
@@ -140,7 +137,6 @@ class Kohana_ValidationTest extends Unittest_TestCase
 
         $reflection = new ReflectionClass($validation);
         $property = $reflection->getProperty('_labels');
-        $property->setAccessible(true);
 
         $this->assertSame($initial_data, $property->getValue($validation));
 
@@ -169,7 +165,6 @@ class Kohana_ValidationTest extends Unittest_TestCase
 
         $reflection = new ReflectionClass($validation);
         $property = $reflection->getProperty('_bound');
-        $property->setAccessible(true);
 
         $this->assertSame($bound, $property->getValue($validation));
 
@@ -408,7 +403,6 @@ class Kohana_ValidationTest extends Unittest_TestCase
         // Should be able to get raw errors array
         $reflection = new ReflectionClass($validation);
         $property = $reflection->getProperty('_errors');
-        $property->setAccessible(true);
         $this->assertSame($validation->errors(), $property->getValue($validation));
     }
 

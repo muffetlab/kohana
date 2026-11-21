@@ -15,6 +15,8 @@
  */
 class Kohana_HTTPTest extends Unittest_TestCase
 {
+    protected $_initial_request;
+
     protected $_inital_request;
 
     /**

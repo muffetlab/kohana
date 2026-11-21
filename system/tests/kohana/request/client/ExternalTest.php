@@ -133,7 +133,7 @@ class Kohana_Request_Client_ExternalTest extends Unittest_TestCase
                 $post,
                 [
                     'content-type' => 'application/x-www-form-urlencoded; charset=' . Kohana::$charset,
-                    'body' => http_build_query($post, null, '&')
+                    'body' => http_build_query($post, '', '&')
                 ]
             ],
         ];

@@ -16,6 +16,8 @@
  */
 class Kohana_Request_ClientTest extends Unittest_TestCase
 {
+    protected $_initial_request;
+
     protected $_inital_request;
     protected static $_original_routes;
 
@@ -38,7 +40,6 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
         // This requires reflection as the API for editing defined routes is limited
         $route_class = new ReflectionClass('Route');
         $routes_prop = $route_class->getProperty('_routes');
-        $routes_prop->setAccessible(true);
 
         self::$_original_routes = $routes_prop->getValue(null);
 
@@ -48,7 +49,7 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
                 ])
             ] + self::$_original_routes;
 
-        $routes_prop->setValue('Route', $routes);
+        $routes_prop->setValue(null, $routes);
     }
 
     // @codingStandardsIgnoreStart - PHPUnit does not follow standards
@@ -61,8 +62,7 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
         // Reset routes
         $route_class = new ReflectionClass('Route');
         $routes_prop = $route_class->getProperty('_routes');
-        $routes_prop->setAccessible(true);
-        $routes_prop->setValue('Route', self::$_original_routes);
+        $routes_prop->setValue(null, self::$_original_routes);
 
         parent::tearDownAfterClass();
     }
