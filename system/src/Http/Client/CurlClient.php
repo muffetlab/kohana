@@ -26,8 +26,8 @@ class CurlClient extends ExternalClient
      * @param Request $request response to send
      * @param Response $response
      * @return  Response
-     * @throws Kohana_Exception
-     * @throws Request_Exception
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \Kohana\Http\Exceptions\RequestException
      */
     public function sendMessage(Request $request, Response $response): Response
     {
@@ -58,7 +58,7 @@ class CurlClient extends ExternalClient
 
         // Process cookies
         if ($cookies = $request->cookie()) {
-            $options[CURLOPT_COOKIE] = http_build_query($cookies, null, '; ');
+            $options[CURLOPT_COOKIE] = http_build_query($cookies, '', '; ');
         }
 
         // Get any existing response headers
@@ -75,7 +75,7 @@ class CurlClient extends ExternalClient
         $uri = $request->uri();
 
         if ($query = $request->query()) {
-            $uri .= '?' . http_build_query($query, null, '&');
+            $uri .= '?' . http_build_query($query, '', '&');
         }
 
         // Open a new remote connection

@@ -41,7 +41,7 @@ class Security
      *
      * @param bool $new force a new token to be generated?
      * @return  string
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      * @uses    Session::instance
      */
     public static function token(bool $new = false): string
@@ -59,7 +59,7 @@ class Security
                 $token = base64_encode(openssl_random_pseudo_bytes(32));
             } else {
                 // Otherwise, fall back to a hashed uniqid
-                $token = sha1(uniqid(null, true));
+                $token = sha1(uniqid('', true));
             }
 
             // Store the new token
@@ -79,8 +79,8 @@ class Security
      *
      * @param string $token token to check
      * @return bool
-     * @throws Kohana_Exception
-     * @uses    Security::token
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Security\Security::token
      */
     public static function check(string $token): bool
     {

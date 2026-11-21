@@ -22,7 +22,7 @@ use Kohana\Support\Arr;
 abstract class Client
 {
     /**
-     * @var HTTP_Cache Caching library for request caching
+     * @var \Kohana\Http\Cache Caching library for request caching
      */
     protected $cache;
 
@@ -98,9 +98,9 @@ abstract class Client
      *
      * @param   Request   $request
      * @return  Response
-     * @throws  Kohana_Exception
-     * @uses    [Kohana::$profiling]
-     * @uses    [Profiler]
+     * @throws  \Kohana\Foundation\KohanaException
+     * @uses    [\Kohana\Foundation\Application::$profiling]
+     * @uses    [\Kohana\Foundation\Profiler]
      */
     public function execute(Request $request): Response
     {
@@ -165,8 +165,8 @@ abstract class Client
      * Getter and setter for the internal caching engine,
      * used to cache responses if available and valid.
      *
-     * @param HTTP_Cache|null $cache engine to use for caching
-     * @return HTTP_Cache|Kohana_Request_Client
+     * @param \Kohana\Http\Cache|null $cache engine to use for caching
+     * @return \Kohana\Http\Cache|\Kohana\Http\Client\Client
      */
     public function cache(?Cache $cache = null)
     {
@@ -183,7 +183,7 @@ abstract class Client
      * setting.
      *
      * @param bool|null $follow Boolean indicating if redirects should be followed
-     * @return bool|Kohana_Request_Client
+     * @return bool|\Kohana\Http\Client\Client
      */
     public function follow(?bool $follow = null)
     {
@@ -201,7 +201,7 @@ abstract class Client
      * headers array.
      *
      * @param array|null $follow_headers Array of headers to be re-used when following a Location header
-     * @return array|Kohana_Request_Client
+     * @return array|\Kohana\Http\Client\Client
      */
     public function followHeaders(?array $follow_headers = null)
     {
@@ -225,7 +225,7 @@ abstract class Client
      * false to force the client to switch to GET following a 302 response.
      *
      * @param bool|null $strict_redirect Boolean indicating if 302 redirects should be followed with the original method
-     * @return bool|Kohana_Request_Client
+     * @return bool|\Kohana\Http\Client\Client
      */
     public function strictRedirect(?bool $strict_redirect = null)
     {
@@ -257,7 +257,7 @@ abstract class Client
      *     ];
      *
      * @param array|null $header_callbacks Array of callbacks to trigger on presence of given headers
-     * @return array|Kohana_Request_Client|string[]
+     * @return array|\Kohana\Http\Client\Client|string[]
      */
     public function headerCallbacks(?array $header_callbacks = null)
     {
@@ -279,7 +279,7 @@ abstract class Client
      * param before execution is aborted with a Request_Client_Recursion_Exception.
      *
      * @param int|null $depth Maximum number of callback requests to execute before aborting
-     * @return int|Kohana_Request_Client
+     * @return int|\Kohana\Http\Client\Client
      */
     public function maxCallbackDepth(?int $depth = null)
     {
@@ -297,7 +297,7 @@ abstract class Client
      * how many recursions have been executed within the current request execution.
      *
      * @param int|null $depth Current recursion depth
-     * @return int|Kohana_Request_Client
+     * @return int|\Kohana\Http\Client\Client
      */
     public function callbackDepth(?int $depth = null)
     {
@@ -330,7 +330,7 @@ abstract class Client
      *
      * @param string|array $param
      * @param mixed $value
-     * @return Request_Client|mixed
+     * @return \Kohana\Http\Client\Client|mixed
      */
     public function callbackParams($param = null, $value = null)
     {
@@ -359,7 +359,7 @@ abstract class Client
      * Assigns the properties of the current Request_Client to another
      * Request_Client instance - used when setting up a subsequent request.
      *
-     * @param Request_Client $client
+     * @param \Kohana\Http\Client\Client $client
      */
     public function assignClientProperties(self $client)
     {
@@ -380,10 +380,10 @@ abstract class Client
      *
      * @param Request $request
      * @param Response $response
-     * @param Request_Client $client
+     * @param \Kohana\Http\Client\Client $client
      * @return null
-     * @throws Kohana_Exception
-     * @throws Request_Exception
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \Kohana\Http\Exceptions\RequestException
      */
     public static function onHeaderLocation(Request $request, Response $response, self $client)
     {

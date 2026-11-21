@@ -244,8 +244,8 @@ class Rules
      * @param string $number credit card number
      * @param string|array $type card type, or an array of card types
      * @return bool
-     * @throws Kohana_Exception
-     * @uses    Valid::luhn
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Validation\Rules::luhn
      */
     public static function creditCard(string $number, $type = null): bool
     {
@@ -455,7 +455,7 @@ class Rules
         list($decimal) = array_values(localeconv());
 
         // A lookahead is used to make sure the string contains at least one digit (before or after the decimal point)
-        return (bool) preg_match('/^-?+(?=.*[0-9])[0-9]*+' . preg_quote($decimal) . '?+[0-9]*+$/D', (string) $str);
+        return (bool) preg_match('/^-?+(?=.*[0-9])[0-9]*+' . preg_quote($decimal, '/') . '?+[0-9]*+$/D', (string) $str);
     }
 
     /**
@@ -505,7 +505,7 @@ class Rules
         // Get the decimal point for the current locale
         list($decimal) = array_values(localeconv());
 
-        return (bool) preg_match('/^[+-]?[0-9]' . $digits . preg_quote($decimal) . '[0-9]{' . $places . '}$/D', $str);
+        return (bool) preg_match('/^[+-]?[0-9]' . $digits . preg_quote($decimal, '/') . '[0-9]{' . $places . '}$/D', $str);
     }
 
     /**

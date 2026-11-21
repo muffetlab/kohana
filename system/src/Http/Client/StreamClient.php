@@ -31,7 +31,7 @@ class StreamClient extends ExternalClient
      * @param Request $request request to send
      * @param Response $response response to send
      * @return  Response
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      * @uses    [PHP cURL](https://www.php.net/manual/en/book.curl.php)
      */
     public function sendMessage(Request $request, Response $response): Response
@@ -41,7 +41,7 @@ class StreamClient extends ExternalClient
 
         // Process cookies
         if ($cookies = $request->cookie()) {
-            $request->headers('cookie', http_build_query($cookies, null, '; '));
+            $request->headers('cookie', http_build_query($cookies, '', '; '));
         }
 
         // Get the message body
@@ -73,7 +73,7 @@ class StreamClient extends ExternalClient
         $uri = $request->uri();
 
         if ($query = $request->query()) {
-            $uri .= '?' . http_build_query($query, null, '&');
+            $uri .= '?' . http_build_query($query, '', '&');
         }
 
         $stream = fopen($uri, $mode, false, $context);

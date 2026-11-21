@@ -35,8 +35,8 @@ class InternalClient extends Client
      * @param Request $request
      * @param Response $response
      * @return  Response
-     * @throws Kohana_Exception
-     * @uses    [Kohana::$profiling]
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    [\Kohana\Foundation\Application::$profiling]
      * @uses    [Profiler]
      */
     public function executeRequest(Request $request, Response $response): Response

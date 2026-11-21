@@ -120,7 +120,7 @@ class DatabaseSession extends Session
 
         do {
             // Create a new session id
-            $id = str_replace('.', '-', uniqid(null, true));
+            $id = str_replace('.', '-', uniqid('', true));
 
             // Get the id from the database
             $result = $query->execute($this->db);

@@ -60,8 +60,8 @@ abstract class ExternalClient extends Client
      *
      * @param   array   $params parameters to pass to the client
      * @param string|null $client External client to use
-     * @return  Request_Client_External
-     * @throws  Request_Exception
+     * @return  \Kohana\Http\Client\ExternalClient
+     * @throws  \Kohana\Http\Exceptions\RequestException
      */
     public static function factory(array $params = [], ?string $client = null): self
     {
@@ -102,7 +102,7 @@ abstract class ExternalClient extends Client
      * @param   Request   $request   A request object
      * @param   Response  $response  A response object
      * @return  Response
-     * @uses    [Kohana::$profiling]
+     * @uses    [\Kohana\Foundation\Application::$profiling]
      * @uses    [Profiler]
      */
     public function executeRequest(Request $request, Response $response): Response
@@ -169,7 +169,7 @@ abstract class ExternalClient extends Client
      *
      * @param   mixed    $key    Option name, or array of options
      * @param   mixed    $value  Option value
-     * @return  mixed|array|Request_Client_External
+     * @return  mixed|array|\Kohana\Http\Client\ExternalClient
      */
     public function options($key = null, $value = null)
     {

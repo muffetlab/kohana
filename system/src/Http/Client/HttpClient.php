@@ -30,7 +30,7 @@ class HttpClient extends ExternalClient
      * allows for dependency injection.
      *
      * @param   array    $params Params
-     * @throws  Request_Exception
+     * @throws  \Kohana\Http\Exceptions\RequestException
      */
     public function __construct(array $params = [])
     {
@@ -56,8 +56,8 @@ class HttpClient extends ExternalClient
      * @param Request $request response to send
      * @param Response $response
      * @return  Response
-     * @throws Kohana_Exception
-     * @throws Request_Exception
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \Kohana\Http\Exceptions\RequestException
      */
     public function sendMessage(Request $request, Response $response): Response
     {
