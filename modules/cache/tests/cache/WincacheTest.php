@@ -33,7 +33,7 @@ if (isset($_ENV['TRAVIS'])) {
          * @throws Cache_Exception
          * @throws Kohana_Exception
          */
-        public function setUp()
+        public function setUp(): void
         {
             parent::setUp();
 

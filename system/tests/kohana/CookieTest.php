@@ -24,7 +24,7 @@ class Kohana_CookieTest extends Unittest_TestCase
      * Sets up the environment
      */
     // @codingStandardsIgnoreStart
-    public function setUp()
+    public function setUp(): void
     // @codingStandardsIgnoreEnd
     {
         parent::setUp();

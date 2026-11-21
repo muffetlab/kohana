@@ -46,7 +46,7 @@ abstract class Kohana_Unittest_Database_TestCase extends PHPUnit\Framework\TestC
      * @throws Kohana_Exception
      * @throws ReflectionException
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->_helpers = new Kohana_Unittest_Helpers;
 
@@ -65,7 +65,7 @@ abstract class Kohana_Unittest_Database_TestCase extends PHPUnit\Framework\TestC
      * @throws Kohana_Exception
      * @throws ReflectionException
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->_helpers->restore_environment();
 

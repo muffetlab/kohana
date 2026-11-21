@@ -26,7 +26,7 @@ class Minion_CLI_OptionsTest extends Kohana_Unittest_TestCase
     /**
      * Back up CLI arguments before each test.
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -37,7 +37,7 @@ class Minion_CLI_OptionsTest extends Kohana_Unittest_TestCase
     /**
      * Restore CLI arguments after each test.
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         if ($this->argvBackup !== null) {
             $_SERVER['argv'] = $this->argvBackup;

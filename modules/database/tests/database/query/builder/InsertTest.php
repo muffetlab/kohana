@@ -13,7 +13,7 @@
  */
 class Kohana_Database_Query_Builder_InsertTest extends Kohana_Unittest_Database_TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -19,7 +19,7 @@ class Kohana_RequestTest extends Unittest_TestCase
     protected $_inital_request;
 
     // @codingStandardsIgnoreStart
-    public function setUp()
+    public function setUp(): void
     // @codingStandardsIgnoreEnd
     {
         parent::setUp();
@@ -29,7 +29,7 @@ class Kohana_RequestTest extends Unittest_TestCase
     }
 
     // @codingStandardsIgnoreStart
-    public function tearDown()
+    public function tearDown(): void
     // @codingStandardsIgnoreEnd
     {
         Request::$initial = $this->_initial_request;

@@ -25,7 +25,7 @@ class Kohana_CoreTest extends Unittest_TestCase
      * @throws Kohana_Exception
      */
     // @codingStandardsIgnoreStart
-    public function setUp()
+    public function setUp(): void
     // @codingStandardsIgnoreEnd
     {
         parent::setUp();
@@ -39,7 +39,7 @@ class Kohana_CoreTest extends Unittest_TestCase
      * @throws Kohana_Exception
      */
     // @codingStandardsIgnoreStart
-    public function tearDown()
+    public function tearDown(): void
     // @codingStandardsIgnoreEnd
     {
         Kohana::modules($this->old_modules);

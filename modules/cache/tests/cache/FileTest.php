@@ -27,7 +27,7 @@ class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest
      * @throws Cache_Exception
      * @throws Kohana_Exception
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

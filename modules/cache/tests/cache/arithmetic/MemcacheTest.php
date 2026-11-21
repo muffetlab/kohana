@@ -27,7 +27,7 @@ class Kohana_CacheArithmeticMemcacheTest extends Kohana_CacheArithmeticMethodsTe
      * @throws Cache_Exception
      * @throws Kohana_Exception
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

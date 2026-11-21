@@ -20,7 +20,7 @@ class Kohana_HTMLTest extends Unittest_TestCase
      * Sets up the environment
      */
     // @codingStandardsIgnoreStart
-    public function setUp()
+    public function setUp(): void
     // @codingStandardsIgnoreEnd
     {
         parent::setUp();
