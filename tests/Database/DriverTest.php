@@ -5,9 +5,10 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Kohana\Testing\TestCase;
 use Kohana\Database\Connection;
 use Kohana\Database\DB;
+use Kohana\Database\PgsqlConnection;
 
 /**
- * Runs real queries against both drivers (PDO and MySQLi).
+ * Runs real queries against every driver (PDO MySQL, MySQLi, PostgreSQL).
  */
 #[Group('kohana')]
 #[Group('kohana.database')]
@@ -16,7 +17,7 @@ class Kohana_Database_DriverTest extends TestCase
 {
     public static function provider_connections(): array
     {
-        return [['default'], ['mysqli']];
+        return [['default'], ['mysqli'], ['pgsql']];
     }
 
     protected function db(string $name): Connection
@@ -29,7 +30,8 @@ class Kohana_Database_DriverTest extends TestCase
         }
 
         $db->query(Connection::UPDATE, 'DROP TABLE IF EXISTS driver_test');
-        $db->query(Connection::UPDATE, 'CREATE TABLE driver_test (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50) NOT NULL, score INT NULL)');
+        $id = $db instanceof PgsqlConnection ? 'id SERIAL PRIMARY KEY' : 'id INT AUTO_INCREMENT PRIMARY KEY';
+        $db->query(Connection::UPDATE, "CREATE TABLE driver_test ($id, name VARCHAR(50) NOT NULL, score INT NULL)");
 
         return $db;
     }
@@ -85,8 +87,8 @@ class Kohana_Database_DriverTest extends TestCase
         $db->commit();
         $this->assertSame("o'reilly", DB::select('name')->from('driver_test')->execute($db)->get('name'));
 
-        if ($name === 'mysqli') {
-            // The PDO driver does not implement schema introspection
+        if ($name !== 'default') {
+            // The generic PDO driver does not implement schema introspection
             $this->assertContains('driver_test', $db->listTables());
             $this->assertArrayHasKey('score', $db->listColumns('driver_test'));
         }

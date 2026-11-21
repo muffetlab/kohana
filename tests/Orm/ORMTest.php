@@ -3,6 +3,7 @@
 use PHPUnit\Framework\Attributes\Group;
 use Kohana\Testing\TestCase;
 use Kohana\Database\Connection;
+use Kohana\Database\PgsqlConnection;
 use Kohana\Orm\Model;
 use Kohana\Orm\ValidationException;
 
@@ -13,21 +14,43 @@ use Kohana\Orm\ValidationException;
 #[Group('kohana.orm')]
 class Kohana_ORMTest extends TestCase
 {
+    /**
+     * @var string Database group the models use
+     */
+    protected static $connection = 'default';
+
+    private string $previousDefault;
+
     public function setUp(): void
     {
         parent::setUp();
 
         try {
-            $db = Connection::instance();
+            $db = Connection::instance(static::$connection);
             $db->connect();
         } catch (Exception $e) {
             $this->markTestSkipped('Database connection failed: ' . $e->getMessage());
         }
 
+        // Models without a $dbGroup use the default connection
+        $this->previousDefault = Connection::$default;
+        Connection::$default = static::$connection;
+
+        $id = $db instanceof PgsqlConnection ? 'id SERIAL PRIMARY KEY' : 'id INT AUTO_INCREMENT PRIMARY KEY';
+
         $db->query(Connection::UPDATE, 'DROP TABLE IF EXISTS orm_posts');
         $db->query(Connection::UPDATE, 'DROP TABLE IF EXISTS orm_authors');
-        $db->query(Connection::UPDATE, 'CREATE TABLE orm_authors (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50) NOT NULL)');
-        $db->query(Connection::UPDATE, 'CREATE TABLE orm_posts (id INT AUTO_INCREMENT PRIMARY KEY, orm_author_id INT NOT NULL, title VARCHAR(100) NOT NULL)');
+        $db->query(Connection::UPDATE, "CREATE TABLE orm_authors ($id, name VARCHAR(50) NOT NULL)");
+        $db->query(Connection::UPDATE, "CREATE TABLE orm_posts ($id, orm_author_id INT NOT NULL, title VARCHAR(100) NOT NULL)");
+    }
+
+    public function tearDown(): void
+    {
+        if (isset($this->previousDefault)) {
+            Connection::$default = $this->previousDefault;
+        }
+
+        parent::tearDown();
     }
 
     public function test_create_find_update_delete()
