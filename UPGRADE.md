@@ -277,3 +277,15 @@ Kohana 3's Auth module stored passwords as `hash_hmac('sha256', $password, $hash
 4. If you called `Auth::hash($password) === $stored` yourself, use `Auth::instance()->verify($password, $stored)`; a new hash is different every time.
 
 `FileAuth::checkPassword()` also works now. It used to compare the plain text password with the stored hash and always returned `false`.
+
+## 20. PHP 5 leftovers removed
+
+`register_globals`, `magic_quotes_gpc` and `safe_mode` were removed from PHP in 5.4. Their handling is gone:
+
+| Removed | Replacement |
+|---|---|
+| `Application::$magicQuotes` | None. `Application::sanitize()` no longer strips slashes; it only normalizes newlines. |
+| `Application::$safeMode` | None. |
+| `Application::globals()` | None. |
+
+**Action:** Remove any reference to these from your code.
