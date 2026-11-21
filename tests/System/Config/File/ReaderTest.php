@@ -1,9 +1,9 @@
 <?php
 
+use Kohana\Config\FileReader;
+use Kohana\Testing\TestCase;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Kohana\Testing\TestCase;
-use Kohana\Config\FileReader;
 
 /**
  * Tests the Config file reader that's shipped with kohana
@@ -27,7 +27,7 @@ class Kohana_Config_File_ReaderTest extends TestCase
     #[Test]
     public function test_default_search_dir_is_config()
     {
-        $reader = new FileReader;
+        $reader = new FileReader();
 
         $reflection = new ReflectionClass($reader);
         $property = $reflection->getProperty('directory');
@@ -69,7 +69,7 @@ class Kohana_Config_File_ReaderTest extends TestCase
     #[Test]
     public function test_load_returns_empty_array_if_conf_dnx()
     {
-        $config = new FileReader;
+        $config = new FileReader();
 
         $this->assertSame([], $config->load('gafloogle'));
     }
@@ -81,7 +81,7 @@ class Kohana_Config_File_ReaderTest extends TestCase
     #[Test]
     public function test_loads_config_from_files()
     {
-        $config = new FileReader;
+        $config = new FileReader();
 
         $values = $config->load('inflector');
 

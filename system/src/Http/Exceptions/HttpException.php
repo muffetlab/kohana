@@ -56,8 +56,9 @@ abstract class HttpException extends KohanaException
      */
     public function request(?Request $request = null)
     {
-        if ($request === null)
+        if ($request === null) {
             return $this->request;
+        }
 
         $this->request = $request;
 

@@ -29,7 +29,7 @@ class Role extends Model
             ],
             'description' => [
                 ['max_length', [':value', 255]],
-            ]
+            ],
         ];
     }
 

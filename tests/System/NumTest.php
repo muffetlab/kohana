@@ -1,12 +1,12 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\RequiresOperatingSystem;
-use Kohana\Testing\TestCase;
-use Kohana\Support\Number;
 use Kohana\Foundation\KohanaException;
+use Kohana\Support\Number;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RequiresOperatingSystem;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests Num
@@ -142,7 +142,7 @@ class Kohana_NumTest extends TestCase
      * Provides data for test_round()
      * @return array
      */
-    static function provider_round(): array
+    public static function provider_round(): array
     {
         return [
             [5.5, 0, [6.0, 5.0, 6.0, 5.0]],
@@ -163,7 +163,7 @@ class Kohana_NumTest extends TestCase
      */
     #[DataProvider('provider_round')]
     #[Test]
-    function test_round($input, int $precision, $expected)
+    public function test_round($input, int $precision, $expected)
     {
         foreach ([Number::ROUND_HALF_UP, Number::ROUND_HALF_DOWN, Number::ROUND_HALF_EVEN, Number::ROUND_HALF_ODD] as $i => $mode) {
             $this->assertSame($expected[$i], Number::round($input, $precision, $mode, false));

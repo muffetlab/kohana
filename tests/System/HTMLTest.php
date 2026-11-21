@@ -1,12 +1,12 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\Testing\TestCase;
 use Kohana\Foundation\Application;
-use Kohana\Html\Html;
 use Kohana\Foundation\KohanaException;
+use Kohana\Html\Html;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests HTML
@@ -33,7 +33,7 @@ class Kohana_HTMLTest extends TestCase
     {
         parent::setUp();
         Application::$config->load('url')->set('trusted_hosts', [
-            'www\.kohanaframework\.org'
+            'www\.kohanaframework\.org',
         ]);
     }
 
@@ -61,17 +61,17 @@ class Kohana_HTMLTest extends TestCase
             [
                 ['name' => 'field', 'random' => 'not_quite', 'id' => 'unique_field'],
                 [],
-                ' id="unique_field" name="field" random="not_quite"'
+                ' id="unique_field" name="field" random="not_quite"',
             ],
             [
                 ['invalid' => null],
                 [],
-                ''
+                '',
             ],
             [
                 [],
                 [],
-                ''
+                '',
             ],
             [
                 ['name' => 'field', 'checked'],
@@ -102,7 +102,8 @@ class Kohana_HTMLTest extends TestCase
         $this->setEnvironment($options);
 
         $this->assertSame(
-            $expected, Html::attributes($attributes)
+            $expected,
+            Html::attributes($attributes)
         );
     }
 
@@ -123,21 +124,21 @@ class Kohana_HTMLTest extends TestCase
                 'my/script.js',
                 null,
                 'http',
-                true
+                true,
             ],
             [
                 '<script type="text/javascript" src="https://www.kohanaframework.org/kohana/my/script.js"></script>',
                 'my/script.js',
                 null,
                 'https',
-                false
+                false,
             ],
             [
                 '<script type="text/javascript" src="https://www.kohanaframework.org/kohana/my/script.js"></script>',
                 '/my/script.js', // Test absolute paths
                 null,
                 'https',
-                false
+                false,
             ],
             [
                 '<script type="text/javascript" src="//google.com/script.js"></script>',
@@ -161,7 +162,8 @@ class Kohana_HTMLTest extends TestCase
     public function test_script(string $expected, string $file, ?array $attributes = null, ?string $protocol = null, bool $index = false)
     {
         $this->assertSame(
-            $expected, Html::script($file, $attributes, $protocol, $index)
+            $expected,
+            Html::script($file, $attributes, $protocol, $index)
         );
     }
 
@@ -178,35 +180,35 @@ class Kohana_HTMLTest extends TestCase
                 'http://google.com/style.css',
                 [],
                 null,
-                false
+                false,
             ],
             [
                 '<link type="text/css" href="/kohana/my/style.css" rel="stylesheet" />',
                 'my/style.css',
                 [],
                 null,
-                false
+                false,
             ],
             [
                 '<link type="text/css" href="https://www.kohanaframework.org/kohana/my/style.css" rel="stylesheet" />',
                 'my/style.css',
                 [],
                 'https',
-                false
+                false,
             ],
             [
                 '<link type="text/css" href="https://www.kohanaframework.org/kohana/index.php/my/style.css" rel="stylesheet" />',
                 'my/style.css',
                 [],
                 'https',
-                true
+                true,
             ],
             [
                 '<link type="text/css" href="https://www.kohanaframework.org/kohana/index.php/my/style.css" rel="stylesheet" />',
                 '/my/style.css',
                 [],
                 'https',
-                true
+                true,
             ],
             [
                 // #4283: http://dev.kohanaframework.org/issues/4283
@@ -214,14 +216,14 @@ class Kohana_HTMLTest extends TestCase
                 'my/style.css',
                 ['rel' => 'stylesheet/less'],
                 'https',
-                true
+                true,
             ],
             [
                 '<link type="text/css" href="//google.com/style.css" rel="stylesheet" />',
                 '//google.com/style.css',
                 [],
                 null,
-                false
+                false,
             ],
         ];
     }
@@ -241,7 +243,8 @@ class Kohana_HTMLTest extends TestCase
     public function test_style(string $expected, string $file, ?array $attributes = null, ?string $protocol = null, bool $index = false)
     {
         $this->assertSame(
-            $expected, Html::style($file, $attributes, $protocol, $index)
+            $expected,
+            Html::style($file, $attributes, $protocol, $index)
         );
     }
 
@@ -347,7 +350,8 @@ class Kohana_HTMLTest extends TestCase
         // $this->setEnvironment($options);
 
         $this->assertSame(
-            $expected, Html::anchor($uri, $title, $attributes, $protocol, $index)
+            $expected,
+            Html::anchor($uri, $title, $attributes, $protocol, $index)
         );
     }
 
@@ -371,7 +375,7 @@ class Kohana_HTMLTest extends TestCase
                 'mypic.png',
                 'My picture file',
                 'https',
-                true
+                true,
             ],
             [
                 '<a href="ftp://www.kohanaframework.org/kohana/mypic.png">My picture file</a>',
@@ -379,7 +383,7 @@ class Kohana_HTMLTest extends TestCase
                 'mypic.png',
                 'My picture file',
                 'ftp',
-                false
+                false,
             ],
             [
                 '<a href="ftp://www.kohanaframework.org/kohana/mypic.png">My picture file</a>',
@@ -387,7 +391,7 @@ class Kohana_HTMLTest extends TestCase
                 '/mypic.png',
                 'My picture file',
                 'ftp',
-                false
+                false,
             ],
         ];
     }
@@ -400,7 +404,8 @@ class Kohana_HTMLTest extends TestCase
     public function test_file_anchor($expected, array $attributes, $file, $title = null, $protocol = null, $index = false)
     {
         $this->assertSame(
-            $expected, Html::fileAnchor($file, $title, $attributes, $protocol, $index)
+            $expected,
+            Html::fileAnchor($file, $title, $attributes, $protocol, $index)
         );
     }
 

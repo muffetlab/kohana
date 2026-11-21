@@ -2,9 +2,9 @@
 
 namespace Kohana\Http\Client;
 
+use Kohana\Http\Exceptions\RequestException;
 use Kohana\Http\Request;
 use Kohana\Http\Response;
-use Kohana\Http\Exceptions\RequestException;
 
 /**
  * [Request_Client_External] Curl driver performs external requests using the

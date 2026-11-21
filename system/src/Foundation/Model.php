@@ -26,7 +26,7 @@ abstract class Model
         // Add the model prefix
         $class = str_contains($name, '\\') ? $name : 'App\\Models\\' . str_replace('_', '', ucwords($name, '_'));
 
-        return new $class;
+        return new $class();
     }
 
 }

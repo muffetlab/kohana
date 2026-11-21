@@ -1,11 +1,11 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\RequiresOperatingSystem;
+use Kohana\Log\Logger;
 use Kohana\Log\Writers\Writer;
 use Kohana\Testing\TestCase;
-use Kohana\Log\Logger;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RequiresOperatingSystem;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests Kohana Logging API
@@ -29,7 +29,7 @@ class Kohana_LogTest extends TestCase
     #[Test]
     public function test_messages_is_initially_empty()
     {
-        $logger = new Logger;
+        $logger = new Logger();
 
         $reflection = new ReflectionClass($logger);
         $property = $reflection->getProperty('messages');
@@ -44,7 +44,7 @@ class Kohana_LogTest extends TestCase
     #[Test]
     public function test_writers_is_initially_empty()
     {
-        $logger = new Logger;
+        $logger = new Logger();
 
         $reflection = new ReflectionClass($logger);
         $property = $reflection->getProperty('writers');
@@ -60,7 +60,7 @@ class Kohana_LogTest extends TestCase
     #[Test]
     public function test_attach_attaches_log_writer_and_returns_this()
     {
-        $logger = new Logger;
+        $logger = new Logger();
         $writer = $this->mockAbstract(Writer::class);
 
         $this->assertSame($logger, $logger->attach($writer));
@@ -69,7 +69,7 @@ class Kohana_LogTest extends TestCase
         $property = $reflection->getProperty('writers');
 
         $this->assertSame([
-            spl_object_hash($writer) => ['object' => $writer, 'levels' => []]
+            spl_object_hash($writer) => ['object' => $writer, 'levels' => []],
         ], $property->getValue($logger));
     }
 
@@ -82,7 +82,7 @@ class Kohana_LogTest extends TestCase
     #[Test]
     public function test_attach_attaches_log_writer_min_max_and_returns_this()
     {
-        $logger = new Logger;
+        $logger = new Logger();
         $writer = $this->mockAbstract(Writer::class);
 
         $this->assertSame($logger, $logger->attach($writer, Logger::NOTICE, Logger::CRITICAL));
@@ -94,8 +94,8 @@ class Kohana_LogTest extends TestCase
         $this->assertSame([
             spl_object_hash($writer) => [
                 'object' => $writer,
-                'levels' => [Logger::CRITICAL, Logger::ERROR, Logger::WARNING, Logger::NOTICE]
-            ]
+                'levels' => [Logger::CRITICAL, Logger::ERROR, Logger::WARNING, Logger::NOTICE],
+            ],
         ], $property->getValue($logger));
     }
 
@@ -105,7 +105,7 @@ class Kohana_LogTest extends TestCase
     #[Test]
     public function test_detach_removes_log_writer_and_returns_this()
     {
-        $logger = new Logger;
+        $logger = new Logger();
         $writer = $this->mockAbstract(Writer::class);
 
         $logger->attach($writer);

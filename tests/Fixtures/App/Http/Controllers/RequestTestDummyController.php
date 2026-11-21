@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use Kohana\Routing\Controller;
-use Kohana\Support\Arr;
 
 class RequestTestDummyController extends Controller
 {
     // hard coded dummy response
-    protected $dummy_response = "this is a dummy response";
+    protected $dummy_response = 'this is a dummy response';
 
     public function foobar()
     {
@@ -21,4 +20,3 @@ class RequestTestDummyController extends Controller
     }
 
 }
-

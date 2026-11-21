@@ -2,9 +2,9 @@
 
 namespace Kohana\Html;
 
+use Kohana\Foundation\Application;
 use Kohana\Http\Request;
 use Kohana\Routing\Url;
-use Kohana\Foundation\Application;
 
 /**
  * Form helper class. Unless otherwise noted, all generated HTML will be made

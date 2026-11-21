@@ -1,11 +1,11 @@
 <?php
 
+use Kohana\Support\Str;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Ticket;
-use Kohana\Testing\TestCase;
-use Kohana\Support\Str;
 
 /**
  * Tests the kohana text class (Kohana_Text)
@@ -23,7 +23,7 @@ class Kohana_TextTest extends TestCase
      * Sets up the test environment
      */
     // @codingStandardsIgnoreStart
-    function setUp(): void
+    public function setUp(): void
     // @codingStandardsIgnoreEnd
     {
         parent::setUp();
@@ -36,7 +36,7 @@ class Kohana_TextTest extends TestCase
      * an empty input was provided
      */
     #[Test]
-    function test_auto_para_returns_empty_string_on_empty_input()
+    public function test_auto_para_returns_empty_string_on_empty_input()
     {
         $this->assertSame('', Str::autoP(''));
     }
@@ -45,7 +45,7 @@ class Kohana_TextTest extends TestCase
      *
      * @return array Test Data
      */
-    static function provider_auto_para_does_not_enclose_html_tags_in_paragraphs(): array
+    public static function provider_auto_para_does_not_enclose_html_tags_in_paragraphs(): array
     {
         return [
             ['<div>Pick a plum of peppers</div>'],
@@ -59,7 +59,7 @@ class Kohana_TextTest extends TestCase
      */
     #[DataProvider('provider_auto_para_does_not_enclose_html_tags_in_paragraphs')]
     #[Test]
-    function test_auto_para_does_not_enclose_html_tags_in_paragraphs($text)
+    public function test_auto_para_does_not_enclose_html_tags_in_paragraphs($text)
     {
         $output = Str::autoP($text);
 
@@ -71,7 +71,7 @@ class Kohana_TextTest extends TestCase
      * with paragraph tags
      */
     #[Test]
-    function test_auto_para_encloses_slot_in_paragraph()
+    public function test_auto_para_encloses_slot_in_paragraph()
     {
         $text = 'Pick a pinch of purple pepper';
 
@@ -85,7 +85,8 @@ class Kohana_TextTest extends TestCase
     public function test_auto_para_replaces_multiple_newlines_with_paragraph()
     {
         $this->assertSame(
-            "<p>My name is john</p>\n\n<p>I'm a developer</p>", Str::autoP("My name is john\n\n\n\nI'm a developer")
+            "<p>My name is john</p>\n\n<p>I'm a developer</p>",
+            Str::autoP("My name is john\n\n\n\nI'm a developer")
         );
     }
 
@@ -94,7 +95,7 @@ class Kohana_TextTest extends TestCase
      *
      * @return array Array of test data
      */
-    static function provider_limit_words(): array
+    public static function provider_limit_words(): array
     {
         return [
             ['', '', 100, null],
@@ -106,7 +107,7 @@ class Kohana_TextTest extends TestCase
 
     #[DataProvider('provider_limit_words')]
     #[Test]
-    function test_limit_words($expected, $str, $limit, $end_char)
+    public function test_limit_words($expected, $str, $limit, $end_char)
     {
         $this->assertSame($expected, Str::limitWords($str, $limit, $end_char));
     }
@@ -116,7 +117,7 @@ class Kohana_TextTest extends TestCase
      *
      * @return array Test data
      */
-    static function provider_limit_chars(): array
+    public static function provider_limit_chars(): array
     {
         return [
             [
@@ -124,35 +125,35 @@ class Kohana_TextTest extends TestCase
                 '',
                 100,
                 null,
-                false
+                false,
             ],
             [
                 '…',
                 'BOO!',
                 -42,
                 null,
-                false
+                false,
             ],
             [
                 'making php bet…',
                 'making php better for the sane',
                 14,
                 null,
-                false
+                false,
             ],
             [
                 'Garçon! Un café s.v.p.',
                 'Garçon! Un café s.v.p.',
                 50,
                 '__',
-                false
+                false,
             ],
             [
                 'Garçon!__',
                 'Garçon! Un café s.v.p.',
                 8,
                 '__',
-                false
+                false,
             ],
             // @issue 3238
             [
@@ -160,28 +161,28 @@ class Kohana_TextTest extends TestCase
                 'making php better for the sane',
                 14,
                 null,
-                true
+                true,
             ],
             [
                 'Garçon!__',
                 'Garçon! Un café s.v.p.',
                 9,
                 '__',
-                true
+                true,
             ],
             [
                 'Garçon!__',
                 'Garçon! Un café s.v.p.',
                 7,
                 '__',
-                true
+                true,
             ],
             [
                 '__',
                 'Garçon! Un café s.v.p.',
                 5,
                 '__',
-                true
+                true,
             ],
         ];
     }
@@ -191,7 +192,7 @@ class Kohana_TextTest extends TestCase
      */
     #[DataProvider('provider_limit_chars')]
     #[Test]
-    function test_limit_chars($expected, $str, $limit, $end_char, $preserve_words)
+    public function test_limit_chars($expected, $str, $limit, $end_char, $preserve_words)
     {
         $this->assertSame($expected, Str::limitChars($str, $limit, $end_char, $preserve_words));
     }
@@ -200,7 +201,7 @@ class Kohana_TextTest extends TestCase
      * Test Text::alternate()
      */
     #[Test]
-    function test_alternate_alternates_between_parameters()
+    public function test_alternate_alternates_between_parameters()
     {
         list($val_a, $val_b, $val_c) = ['good', 'bad', 'ugly'];
 
@@ -215,7 +216,7 @@ class Kohana_TextTest extends TestCase
      * Tests Text::alternate()
      */
     #[Test]
-    function test_alternate_resets_when_called_with_no_params_and_returns_empty_string()
+    public function test_alternate_resets_when_called_with_no_params_and_returns_empty_string()
     {
         list($val_a, $val_b, $val_c) = ['yes', 'no', 'maybe'];
 
@@ -254,7 +255,7 @@ class Kohana_TextTest extends TestCase
      *
      * @returns array Array of test data
      */
-    static function provider_reduce_slashes(): array
+    public static function provider_reduce_slashes(): array
     {
         return [
             ['/', '//'],
@@ -267,7 +268,7 @@ class Kohana_TextTest extends TestCase
      */
     #[DataProvider('provider_reduce_slashes')]
     #[Test]
-    function test_reduce_slashes($expected, $str)
+    public function test_reduce_slashes($expected, $str)
     {
         $this->assertSame($expected, Str::reduceSlashes($str));
     }
@@ -277,23 +278,23 @@ class Kohana_TextTest extends TestCase
      *
      * @return array Test data
      */
-    static function provider_censor(): array
+    public static function provider_censor(): array
     {
         return [
             // If the replacement is 1 character long it should be repeated for the length of the removed word
             [
-                "A donkey is also an ***",
+                'A donkey is also an ***',
                 'A donkey is also an ass',
                 ['ass'],
                 '*',
-                true
+                true,
             ],
             [
                 "Cake### isn't nearly as good as kohana###",
                 "CakePHP isn't nearly as good as kohanaphp",
                 ['php'],
                 '#',
-                true
+                true,
             ],
             // If it's > 1 then it's just replaced straight out
             [
@@ -301,14 +302,14 @@ class Kohana_TextTest extends TestCase
                 "If you're born out of wedlock you're a child",
                 ['child'],
                 '--expletive--',
-                true
+                true,
             ],
             [
                 'class',
                 'class',
                 ['ass'],
                 '*',
-                false
+                false,
             ],
         ];
     }
@@ -318,7 +319,7 @@ class Kohana_TextTest extends TestCase
      */
     #[DataProvider('provider_censor')]
     #[Test]
-    function test_censor($expected, $str, $badwords, $replacement, $replace_partial_words)
+    public function test_censor($expected, $str, $badwords, $replacement, $replace_partial_words)
     {
         $this->assertSame($expected, Str::censor($str, $badwords, $replacement, $replace_partial_words));
     }
@@ -328,7 +329,7 @@ class Kohana_TextTest extends TestCase
      *
      * @return array Test Data
      */
-    static function provider_random(): array
+    public static function provider_random(): array
     {
         return [
             ['alnum', 8],
@@ -355,7 +356,7 @@ class Kohana_TextTest extends TestCase
      */
     #[DataProvider('provider_random')]
     #[Test]
-    function test_random($type, $length)
+    public function test_random($type, $length)
     {
         if ($type === null) {
             $type = 'alnum';
@@ -392,7 +393,7 @@ class Kohana_TextTest extends TestCase
      *
      * @return array
      */
-    static function provider_similar(): array
+    public static function provider_similar(): array
     {
         return [
             // TODO: add some more cases
@@ -405,7 +406,7 @@ class Kohana_TextTest extends TestCase
      */
     #[DataProvider('provider_similar')]
     #[Test]
-    function test_similar($expected, $words)
+    public function test_similar($expected, $words)
     {
         $this->assertSame($expected, Str::similar($words));
     }
@@ -433,7 +434,7 @@ class Kohana_TextTest extends TestCase
      */
     #[DataProvider('provider_bytes')]
     #[Test]
-    function test_bytes($expected, $bytes, $force_unit, $format, $si)
+    public function test_bytes($expected, $bytes, $force_unit, $format, $si)
     {
         $this->assertSame($expected, Str::bytes($bytes, $force_unit, $format, $si));
     }
@@ -443,76 +444,76 @@ class Kohana_TextTest extends TestCase
      *
      * @return array Test data
      */
-    static function provider_widont(): array
+    public static function provider_widont(): array
     {
         return [
             // A very simple widont test
             [
                 'A very simple&nbsp;test',
-                'A very simple test'
+                'A very simple test',
             ],
             // Single word items shouldn't be changed
             [
                 'Test',
-                'Test'
+                'Test',
             ],
             // Single word after single space shouldn't be changed either
             [
                 ' Test',
-                ' Test'
+                ' Test',
             ],
             // Single word with HTML all around
             [
                 '<ul><li><p>Test</p></li><ul>',
-                '<ul><li><p>Test</p></li><ul>'
+                '<ul><li><p>Test</p></li><ul>',
             ],
             // Single word after single space with HTML all around
             [
                 '<ul><li><p> Test</p></li><ul>',
-                '<ul><li><p> Test</p></li><ul>'
+                '<ul><li><p> Test</p></li><ul>',
             ],
             // Widont with more than one paragraph
             [
                 '<p>In a couple of&nbsp;paragraphs</p><p>paragraph&nbsp;two</p>',
-                '<p>In a couple of paragraphs</p><p>paragraph two</p>'
+                '<p>In a couple of paragraphs</p><p>paragraph two</p>',
             ],
             // a link inside a heading
             [
                 '<h1><a href="#">In a link inside a&nbsp;heading </a></h1>',
-                '<h1><a href="#">In a link inside a heading </a></h1>'
+                '<h1><a href="#">In a link inside a heading </a></h1>',
             ],
             // a link followed by text
             [
                 '<h1><a href="#">In a link</a> followed by other&nbsp;text</h1>',
-                '<h1><a href="#">In a link</a> followed by other text</h1>'
+                '<h1><a href="#">In a link</a> followed by other text</h1>',
             ],
             // empty HTML, with no text inside
             [
                 '<h1><a href="#"></a></h1>',
-                '<h1><a href="#"></a></h1>'
+                '<h1><a href="#"></a></h1>',
             ],
             // apparently, we don't love DIVs
             [
                 '<div>Divs get no love!</div>',
-                '<div>Divs get no love!</div>'
+                '<div>Divs get no love!</div>',
             ],
             // we don't love PREs, either
             [
                 '<pre>Neither do PREs</pre>',
-                '<pre>Neither do PREs</pre>'
+                '<pre>Neither do PREs</pre>',
             ],
             // but we love DIVs with paragraphs
             [
                 '<div><p>But divs with paragraphs&nbsp;do!</p></div>',
-                '<div><p>But divs with paragraphs do!</p></div>'
+                '<div><p>But divs with paragraphs do!</p></div>',
             ],
             [
                 'No gain, no&nbsp;pain',
-                'No gain, no pain'
+                'No gain, no pain',
             ],
             [
                 "spaces?what'rethey?",
-                "spaces?what'rethey?"
+                "spaces?what'rethey?",
             ],
             /*
              * // @issue 3499, with HTML at the end
@@ -528,7 +529,7 @@ class Kohana_TextTest extends TestCase
              */
             [
                 '',
-                ''
+                '',
             ],
         ];
     }
@@ -538,7 +539,7 @@ class Kohana_TextTest extends TestCase
      */
     #[DataProvider('provider_widont')]
     #[Test]
-    function test_widont($expected, $string)
+    public function test_widont($expected, $string)
     {
         $this->assertSame($expected, Str::widont($string));
     }
@@ -554,7 +555,7 @@ class Kohana_TextTest extends TestCase
      */
     #[Ticket('2772')]
     #[Test]
-    function test_auto_link_emails_respects_word_boundaries()
+    public function test_auto_link_emails_respects_word_boundaries()
     {
         $original = '<ul>
 						<li>voorzitter@xxxx.com</li>
@@ -604,30 +605,30 @@ class Kohana_TextTest extends TestCase
             // First we try with the really obvious URL
             [
                 'Some random text <a href="http://www.google.com">http://www.google.com</a>',
-                'Some random text http://www.google.com'
+                'Some random text http://www.google.com',
             ],
             // Then we try with varying URLs
             [
                 'Some random <a href="http://www.google.com">www.google.com</a>',
-                'Some random www.google.com'
+                'Some random www.google.com',
             ],
             [
                 'Some random google.com',
-                'Some random google.com'
+                'Some random google.com',
             ],
             // Check that it doesn't link URLs in a href
             [
                 'Look at me <a href="http://google.com">Awesome stuff</a>',
-                'Look at me <a href="http://google.com">Awesome stuff</a>'
+                'Look at me <a href="http://google.com">Awesome stuff</a>',
             ],
             [
                 'Look at me <a href="http://www.google.com">http://www.google.com</a>',
-                'Look at me <a href="http://www.google.com">http://www.google.com</a>'
+                'Look at me <a href="http://www.google.com">http://www.google.com</a>',
             ],
             // Punctuation at the end of the URL
             [
                 'Wow <a href="http://www.google.com">http://www.google.com</a>!',
-                'Wow http://www.google.com!'
+                'Wow http://www.google.com!',
             ],
             [
                 'Zomg <a href="http://www.google.com">www.google.com</a>!',
@@ -635,42 +636,42 @@ class Kohana_TextTest extends TestCase
             ],
             [
                 'Well this, <a href="http://www.google.com">www.google.com</a>, is cool',
-                'Well this, www.google.com, is cool'
+                'Well this, www.google.com, is cool',
             ],
             // @issue 3190
             [
                 '<a href="http://www.google.com/">www.google.com</a>',
-                '<a href="http://www.google.com/">www.google.com</a>'
+                '<a href="http://www.google.com/">www.google.com</a>',
             ],
             [
                 '<a href="http://www.google.com/">www.google.com</a> <a href="http://www.google.com/">http://www.google.com/</a>',
-                '<a href="http://www.google.com/">www.google.com</a> http://www.google.com/'
+                '<a href="http://www.google.com/">www.google.com</a> http://www.google.com/',
             ],
             // @issue 3436
             [
                 '<strong><a href="http://www.google.com/">http://www.google.com/</a></strong>',
-                '<strong>http://www.google.com/</strong>'
+                '<strong>http://www.google.com/</strong>',
             ],
             // @issue 4208, URLs with a path
             [
                 'Foobar <a href="http://www.google.com/analytics">www.google.com/analytics</a> cake',
-                'Foobar www.google.com/analytics cake'
+                'Foobar www.google.com/analytics cake',
             ],
             [
                 'Look at this <a href="http://www.google.com/analytics">www.google.com/analytics</a>!',
-                'Look at this www.google.com/analytics!'
+                'Look at this www.google.com/analytics!',
             ],
             [
                 'Path <a href="http://www.google.com/analytics">http://www.google.com/analytics</a> works?',
-                'Path http://www.google.com/analytics works?'
+                'Path http://www.google.com/analytics works?',
             ],
             [
                 'Path <a href="http://www.google.com/analytics">http://www.google.com/analytics</a>',
-                'Path http://www.google.com/analytics'
+                'Path http://www.google.com/analytics',
             ],
             [
                 'Path <a href="http://www.google.com/analytics">www.google.com/analytics</a>',
-                'Path www.google.com/analytics'
+                'Path www.google.com/analytics',
             ],
         ];
     }
@@ -696,16 +697,16 @@ class Kohana_TextTest extends TestCase
             // @issue 3162
             [
                 '<span class="broken"><a href="mailto:info@test.com">info@test.com</a></span>',
-                '<span class="broken">info@test.com</span>'
+                '<span class="broken">info@test.com</span>',
             ],
             [
                 '<a href="mailto:info@test.com">info@test.com</a>',
-                '<a href="mailto:info@test.com">info@test.com</a>'
+                '<a href="mailto:info@test.com">info@test.com</a>',
             ],
             // @issue 3189
             [
                 '<a href="mailto:email@address.com">email@address.com</a> <a href="mailto:email@address.com">email@address.com</a>',
-                '<a href="mailto:email@address.com">email@address.com</a> email@address.com'
+                '<a href="mailto:email@address.com">email@address.com</a> email@address.com',
             ],
         ];
     }
@@ -736,7 +737,7 @@ class Kohana_TextTest extends TestCase
             [
                 'Hi my.domain.com@domain.com you came from',
                 false,
-                ['my.domain.com@domain.com']
+                ['my.domain.com@domain.com'],
             ],
         ];
     }
@@ -768,36 +769,36 @@ class Kohana_TextTest extends TestCase
     {
         return [
             [
-                "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2049.0 Safari/537.36",
+                'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2049.0 Safari/537.36',
                 [
                     'browser' => 'Chrome',
                     'version' => '37.0.2049.0',
-                    'platform' => "Windows 8.1"
-                ]
+                    'platform' => 'Windows 8.1',
+                ],
             ],
             [
-                "Mozilla/5.0 (Macintosh; U; Mac OS X 10_6_1; en-US) AppleWebKit/530.5 (KHTML, like Gecko) Chrome/ Safari/530.5",
+                'Mozilla/5.0 (Macintosh; U; Mac OS X 10_6_1; en-US) AppleWebKit/530.5 (KHTML, like Gecko) Chrome/ Safari/530.5',
                 [
                     'browser' => 'Chrome',
                     'version' => '530.5',
-                    'platform' => "Mac OS X"
-                ]
+                    'platform' => 'Mac OS X',
+                ],
             ],
             [
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.13+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2",
+                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.13+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2',
                 [
                     'browser' => 'Safari',
                     'version' => '534.57.2',
-                    'platform' => 'Mac OS X'
-                ]
+                    'platform' => 'Mac OS X',
+                ],
             ],
             [
-                "Lynx/2.8.8dev.3 libwww-FM/2.14 SSL-MM/1.4.1",
+                'Lynx/2.8.8dev.3 libwww-FM/2.14 SSL-MM/1.4.1',
                 [
                     'browser' => 'Lynx',
                     'version' => '2.8.8dev.3',
-                    'platform' => false
-                ]
+                    'platform' => false,
+                ],
             ],
         ];
     }
@@ -858,7 +859,7 @@ class Kohana_TextTest extends TestCase
         $agent_info = Str::userAgent('Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2049.0 Safari/537.36', [
                 'browser',
                 'version',
-                'platform'
+                'platform',
         ]);
 
         $this->assertArrayHasKey('browser', $agent_info);

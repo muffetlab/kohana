@@ -1,11 +1,11 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use Kohana\Foundation\Application;
 use Kohana\Cache\Cache;
 use Kohana\Cache\CacheException;
+use Kohana\Foundation\Application;
 use Kohana\Foundation\KohanaException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 include_once __DIR__ . '/CacheArithmeticMethods.php';
 
@@ -50,11 +50,12 @@ class Kohana_ApcuTest extends Kohana_CacheArithmeticMethodsTest
         if (!Application::$config->load('cache.apcu')) {
             Application::$config->load('cache')
                 ->set(
-                    'apcu', [
+                    'apcu',
+                    [
                     'driver' => 'apcu',
                     'default_expire' => 3600,
                     ]
-            );
+                );
         }
 
         $this->cache(Cache::instance('apcu'));

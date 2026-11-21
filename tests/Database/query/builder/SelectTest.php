@@ -1,12 +1,12 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\Testing\DatabaseTestCase;
-use Kohana\Database\DB;
 use Kohana\Database\DatabaseException;
+use Kohana\Database\DB;
 use Kohana\Foundation\KohanaException;
+use Kohana\Testing\DatabaseTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @package    Kohana/Database
@@ -83,17 +83,17 @@ class Kohana_Database_Query_Builder_SelectTest extends DatabaseTestCase
             [
                 [],
                 ['users'],
-                'SELECT * FROM users'
+                'SELECT * FROM users',
             ],
             [
                 ['username', 'password'],
                 [['users', 'u']],
-                'SELECT username, password FROM users AS u'
+                'SELECT username, password FROM users AS u',
             ],
             [
                 [['u.username', 'uu'], ['r.name', 'rn']],
                 [['users', 'u'], ['roles', 'r']],
-                'SELECT u.username AS uu, r.name AS rn FROM users AS u, roles AS r'
+                'SELECT u.username AS uu, r.name AS rn FROM users AS u, roles AS r',
             ],
         ];
     }
@@ -130,7 +130,7 @@ class Kohana_Database_Query_Builder_SelectTest extends DatabaseTestCase
                     ['where', ['username', '=', 'john']],
                 ],
                 [['limit', [10]], ['offset', [20]]],
-                'SELECT * FROM users WHERE username = \'john\' LIMIT 10 OFFSET 20'
+                'SELECT * FROM users WHERE username = \'john\' LIMIT 10 OFFSET 20',
             ],
             [
                 [['users', 'u']],
@@ -139,7 +139,7 @@ class Kohana_Database_Query_Builder_SelectTest extends DatabaseTestCase
                     ['where', ['u.username', 'IN', ['john', 'mark', 'matt']]],
                 ],
                 [['limit', [10]], ['limit', [20]], ['offset', [20]], ['offset', [40]]],
-                'SELECT * FROM users AS u WHERE u.logins < 1 AND u.username IN (\'john\', \'mark\', \'matt\') LIMIT 20 OFFSET 40'
+                'SELECT * FROM users AS u WHERE u.logins < 1 AND u.username IN (\'john\', \'mark\', \'matt\') LIMIT 20 OFFSET 40',
             ],
             [
                 ['users'],
@@ -151,7 +151,7 @@ class Kohana_Database_Query_Builder_SelectTest extends DatabaseTestCase
                     ['andWhere', ['logins', '>', 10]],
                 ],
                 [['orderBy', ['logins', 'DESC']]],
-                'SELECT * FROM users WHERE (username = \'john\' OR username = \'jane\') AND logins > 10 ORDER BY logins DESC'
+                'SELECT * FROM users WHERE (username = \'john\' OR username = \'jane\') AND logins > 10 ORDER BY logins DESC',
             ],
         ];
     }
@@ -201,15 +201,15 @@ class Kohana_Database_Query_Builder_SelectTest extends DatabaseTestCase
                 [
                     ['bam', [['baz', '=', 'bam']]],
                 ],
-                'SELECT * FROM foobar JOIN bam ON (baz = bam)'
+                'SELECT * FROM foobar JOIN bam ON (baz = bam)',
             ],
             [
                 ['col1', 'col2', 'col3'],
                 [['foo', 'bar']],
                 [
-                    ['gah', [['bar.col1', '=', 'gah.col2']]]
+                    ['gah', [['bar.col1', '=', 'gah.col2']]],
                 ],
-                'SELECT col1, col2, col3 FROM foo AS bar JOIN gah ON (bar.col1 = gah.col2)'
+                'SELECT col1, col2, col3 FROM foo AS bar JOIN gah ON (bar.col1 = gah.col2)',
             ],
             [
                 [],
@@ -217,8 +217,8 @@ class Kohana_Database_Query_Builder_SelectTest extends DatabaseTestCase
                 [
                     ['foo', [['col1', '=', 'foo'], ['col2', '=', 5], ['col3', '=', 1]]],
                 ],
-                'SELECT * FROM gah JOIN foo ON (col1 = foo AND col2 = 5 AND col3 = 1)'
-            ]
+                'SELECT * FROM gah JOIN foo ON (col1 = foo AND col2 = 5 AND col3 = 1)',
+            ],
 
         ];
     }

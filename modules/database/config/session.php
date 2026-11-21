@@ -21,7 +21,7 @@ return [
              */
             'session_id' => 'session_id',
             'last_active' => 'last_active',
-            'contents' => 'contents'
+            'contents' => 'contents',
         ],
     ],
 ];

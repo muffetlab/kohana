@@ -2,8 +2,8 @@
 
 namespace Kohana\Http;
 
-use Kohana\Foundation\KohanaException;
 use Kohana\Foundation\Debug;
+use Kohana\Foundation\KohanaException;
 use Kohana\Support\Number;
 
 /**
@@ -144,8 +144,9 @@ class Upload
      */
     public static function type(array $file, array $allowed): bool
     {
-        if ($file['error'] !== UPLOAD_ERR_OK)
+        if ($file['error'] !== UPLOAD_ERR_OK) {
             return true;
+        }
 
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
 

@@ -1,11 +1,11 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\Testing\TestCase;
-use Kohana\Support\Arr;
 use Kohana\Foundation\KohanaException;
+use Kohana\Support\Arr;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests the Arr lib that's shipped with kohana
@@ -35,32 +35,32 @@ class Kohana_ArrTest extends TestCase
             // That a function with no parameters returns an empty array for parameters
             [
                 'function',
-                ['function', []]
+                ['function', []],
             ],
             // That a function with empty parentheses returns an empty array for parameters
             [
                 'function()',
-                ['function', []]
+                ['function', []],
             ],
             // That we can get an array of parameters values
             [
                 'function(1,2,3)',
-                ['function', ['1', '2', '3']]
+                ['function', ['1', '2', '3']],
             ],
             // That it's not just using the callback "function"
             [
                 'different_name(harry,jerry)',
-                ['different_name', ['harry', 'jerry']]
+                ['different_name', ['harry', 'jerry']],
             ],
             // That static callbacks are parsed into arrays
             [
                 'kohana::appify(this)',
-                [['kohana', 'appify'], ['this']]
+                [['kohana', 'appify'], ['this']],
             ],
             // Spaces are preserved in parameters
             [
                 'deal::make(me, my mate )',
-                [['deal', 'make'], ['me', ' my mate ']]
+                [['deal', 'make'], ['me', ' my mate ']],
             ],
         ];
     }
@@ -92,34 +92,34 @@ class Kohana_ArrTest extends TestCase
             [
                 [
                     'kohana' => 'awesome',
-                    'blueflame' => 'was'
+                    'blueflame' => 'was',
                 ],
                 ['kohana', 'cakephp', 'symfony'],
                 null,
                 [
                     'kohana' => 'awesome',
                     'cakephp' => null,
-                    'symfony' => null
-                ]
+                    'symfony' => null,
+                ],
             ],
             // I realise no one should EVER code like this in real life,
             // but unit testing is very, very boring
             [
                 [
                     'chocolate cake' => 'in stock',
-                    'carrot cake' => 'in stock'
+                    'carrot cake' => 'in stock',
                 ],
                 ['carrot cake', 'humble pie'],
                 'not in stock',
                 [
                     'carrot cake' => 'in stock',
-                    'humble pie' => 'not in stock'
-                ]
+                    'humble pie' => 'not in stock',
+                ],
             ],
             [
                 // Source Array
                 [
-                    'level1' => ['level2a' => 'value 1', 'level2b' => 'value 2']
+                    'level1' => ['level2a' => 'value 1', 'level2b' => 'value 2'],
                 ],
                 // Paths to extract
                 ['level1.level2a', 'level1.level2b'],
@@ -127,14 +127,14 @@ class Kohana_ArrTest extends TestCase
                 null,
                 // Expected Result
                 [
-                    'level1' => ['level2a' => 'value 1', 'level2b' => 'value 2']
-                ]
+                    'level1' => ['level2a' => 'value 1', 'level2b' => 'value 2'],
+                ],
             ],
             [
                 // Source Array
                 [
                     'level1a' => ['level2a' => 'value 1'],
-                    'level1b' => ['level2b' => 'value 2']
+                    'level1b' => ['level2b' => 'value 2'],
                 ],
                 // Paths to extract
                 ['level1a', 'level1b.level2b'],
@@ -143,14 +143,14 @@ class Kohana_ArrTest extends TestCase
                 // Expected Result
                 [
                     'level1a' => ['level2a' => 'value 1'],
-                    'level1b' => ['level2b' => 'value 2']
-                ]
+                    'level1b' => ['level2b' => 'value 2'],
+                ],
             ],
             [
                 // Source Array
                 [
                     'level1a' => ['level2a' => 'value 1'],
-                    'level1b' => ['level2b' => 'value 2']
+                    'level1b' => ['level2b' => 'value 2'],
                 ],
                 // Paths to extract
                 ['level1a', 'level1b.level2b', 'level1c', 'level1d.notfound'],
@@ -161,8 +161,8 @@ class Kohana_ArrTest extends TestCase
                     'level1a' => ['level2a' => 'value 1'],
                     'level1b' => ['level2b' => 'value 2'],
                     'level1c' => 'default',
-                    'level1d' => ['notfound' => 'default']
-                ]
+                    'level1d' => ['notfound' => 'default'],
+                ],
             ],
         ];
     }
@@ -201,7 +201,7 @@ class Kohana_ArrTest extends TestCase
                     ['id' => 25, 'name' => 'Fred'],
                 ],
                 'id',
-                [20, 25]
+                [20, 25],
             ],
         ];
     }
@@ -253,7 +253,8 @@ class Kohana_ArrTest extends TestCase
     public function test_get(array $array, $key, $default, $expected)
     {
         $this->assertSame(
-            $expected, Arr::get($array, $key, $default)
+            $expected,
+            Arr::get($array, $key, $default)
         );
     }
 
@@ -267,11 +268,11 @@ class Kohana_ArrTest extends TestCase
         return [
             [
                 ['one', 'two', 'three'],
-                false
+                false,
             ],
             [
                 ['one' => 'o clock', 'two' => 'o clock', 'three' => 'o clock'],
-                true
+                true,
             ],
         ];
     }
@@ -287,7 +288,8 @@ class Kohana_ArrTest extends TestCase
     public function test_is_assoc(array $array, bool $expected)
     {
         $this->assertSame(
-            $expected, Arr::isAssoc($array)
+            $expected,
+            Arr::isAssoc($array)
         );
     }
 
@@ -303,7 +305,7 @@ class Kohana_ArrTest extends TestCase
             [new ArrayObject($a), true],
             [new ArrayIterator($a), true],
             ['not an array', false],
-            [new stdClass, false],
+            [new stdClass(), false],
         ];
     }
 
@@ -318,7 +320,8 @@ class Kohana_ArrTest extends TestCase
     public function test_is_array($array, bool $expected)
     {
         $this->assertSame(
-            $expected, Arr::isArray($array)
+            $expected,
+            Arr::isArray($array)
         );
     }
 
@@ -329,114 +332,114 @@ class Kohana_ArrTest extends TestCase
             [
                 ['name' => 'mary', 'children' => ['fred', 'paul', 'sally', 'jane']],
                 ['name' => 'john', 'children' => ['fred', 'paul', 'sally', 'jane']],
-                ['name' => 'mary', 'children' => ['jane']]
+                ['name' => 'mary', 'children' => ['jane']],
             ],
             // See how it merges sub-arrays with numerical indexes
             [
                 [['test1'], ['test2'], ['test3']],
                 [['test1'], ['test2']],
-                [['test2'], ['test3']]
+                [['test2'], ['test3']],
             ],
             [
                 [[['test1']], [['test2']], [['test3']]],
                 [[['test1']], [['test2']]],
-                [[['test2']], [['test3']]]
+                [[['test2']], [['test3']]],
             ],
             [
                 ['a' => ['test1', 'test2'], 'b' => ['test2', 'test3']],
                 ['a' => ['test1'], 'b' => ['test2']],
-                ['a' => ['test2'], 'b' => ['test3']]
+                ['a' => ['test2'], 'b' => ['test3']],
             ],
             [
                 ['digits' => [0, 1, 2, 3]],
                 ['digits' => [0, 1]],
-                ['digits' => [2, 3]]
+                ['digits' => [2, 3]],
             ],
             // See how it manages merging items with numerical indexes
             [
                 [0, 1, 2, 3],
                 [0, 1],
-                [2, 3]
+                [2, 3],
             ],
             // Try and get it to merge assoc. arrays recursively
             [
                 ['foo' => 'bar', ['temp' => 'life']],
                 ['foo' => 'bin', ['temp' => 'name']],
-                ['foo' => 'bar', ['temp' => 'life']]
+                ['foo' => 'bar', ['temp' => 'life']],
             ],
             // Bug #3139
             [
                 ['foo' => ['bar']],
                 ['foo' => 'bar'],
-                ['foo' => ['bar']]
+                ['foo' => ['bar']],
             ],
             [
                 ['foo' => 'bar'],
                 ['foo' => ['bar']],
-                ['foo' => 'bar']
+                ['foo' => 'bar'],
             ],
             // data set #9
             // Associative, Associative
             [
                 ['a' => 'K', 'b' => 'K', 'c' => 'L'],
                 ['a' => 'J', 'b' => 'K'],
-                ['a' => 'K', 'c' => 'L']
+                ['a' => 'K', 'c' => 'L'],
             ],
             // Associative, Indexed
             [
                 ['a' => 'J', 'b' => 'K', 'L'],
                 ['a' => 'J', 'b' => 'K'],
-                ['K', 'L']
+                ['K', 'L'],
             ],
             // Associative, Mixed
             [
                 ['a' => 'J', 'b' => 'K', 'K', 'c' => 'L'],
                 ['a' => 'J', 'b' => 'K'],
-                ['K', 'c' => 'L']
+                ['K', 'c' => 'L'],
             ],
             // data set #12
             // Indexed, Associative
             [
                 ['J', 'K', 'a' => 'K', 'c' => 'L'],
                 ['J', 'K'],
-                ['a' => 'K', 'c' => 'L']
+                ['a' => 'K', 'c' => 'L'],
             ],
             // Indexed, Indexed
             [
                 ['J', 'K', 'L'],
                 ['J', 'K'],
-                ['K', 'L']
+                ['K', 'L'],
             ],
             // Indexed, Mixed
             [
                 ['K', 'K', 'c' => 'L'],
                 ['J', 'K'],
-                ['K', 'c' => 'L']
+                ['K', 'c' => 'L'],
             ],
             // data set #15
             // Mixed, Associative
             [
                 ['a' => 'K', 'K', 'c' => 'L'],
                 ['a' => 'J', 'K'],
-                ['a' => 'K', 'c' => 'L']
+                ['a' => 'K', 'c' => 'L'],
             ],
             // Mixed, Indexed
             [
                 ['a' => 'J', 'K', 'L'],
                 ['a' => 'J', 'K'],
-                ['J', 'L']
+                ['J', 'L'],
             ],
             // Mixed, Mixed
             [
                 ['a' => 'K', 'L'],
                 ['a' => 'J', 'K'],
-                ['a' => 'K', 'L']
+                ['a' => 'K', 'L'],
             ],
             // Bug #3141
             [
                 ['servers' => [['1.1.1.1', 4730], ['2.2.2.2', 4730]]],
                 ['servers' => [['1.1.1.1', 4730]]],
-                ['servers' => [['2.2.2.2', 4730]]]
+                ['servers' => [['2.2.2.2', 4730]]],
             ],
         ];
     }
@@ -446,7 +449,8 @@ class Kohana_ArrTest extends TestCase
     public function test_merge($expected, $array1, $array2)
     {
         $this->assertSame(
-            $expected, Arr::merge($array1, $array2)
+            $expected,
+            Arr::merge($array1, $array2)
         );
     }
 
@@ -466,8 +470,8 @@ class Kohana_ArrTest extends TestCase
                     'name' => 'john',
                     'interests' => [
                         'hocky' => ['length' => 2],
-                        'football' => []
-                    ]
+                        'football' => [],
+                    ],
                 ],
                 3 => 'frank', // Issue #3194
                 4 => new ArrayObject(['name' => 'frank']),
@@ -481,17 +485,17 @@ class Kohana_ArrTest extends TestCase
             [
                 $array['foobar'],
                 $array,
-                'foobar'
+                'foobar',
             ],
             [
                 $array['kohana'],
                 $array,
-                'kohana'
+                'kohana',
             ],
             [
                 $array['foobar']['definition'],
                 $array,
-                'foobar.definition'
+                'foobar.definition',
             ],
             // Custom delimiters
             [
@@ -499,75 +503,75 @@ class Kohana_ArrTest extends TestCase
                 $array,
                 'foobar/definition',
                 null,
-                '/'
+                '/',
             ],
             // We should be able to use null as a default, returned if the key DNX
             [
                 null,
                 $array,
                 'foobar.alternatives',
-                null
+                null,
             ],
             [
                 null,
                 $array,
                 'kohana.alternatives',
-                null
+                null,
             ],
             // Try using a string as a default
             [
                 'nothing',
                 $array,
                 'kohana.alternatives',
-                'nothing'
+                'nothing',
             ],
             // Make sure you can use arrays as defaults
             [
                 ['far', 'wide'],
                 $array,
                 'cheese.origins',
-                ['far', 'wide']
+                ['far', 'wide'],
             ],
             // Ensures path() casts ints to actual integers for keys
             [
                 $array['users'][1]['name'],
                 $array,
-                'users.1.name'
+                'users.1.name',
             ],
             // Test that a wildcard returns the entire array at that "level"
             [
                 $array['users'],
                 $array,
-                'users.*'
+                'users.*',
             ],
             // Now we check that keys after a wildcard will be processed
             [
                 [0 => [0 => 2]],
                 $array,
-                'users.*.interests.*.length'
+                'users.*.interests.*.length',
             ],
             // See what happens when it can't dig any deeper from a wildcard
             [
                 null,
                 $array,
-                'users.*.fans'
+                'users.*.fans',
             ],
             // Starting wildcards, issue #3269
             [
                 ['matt', 'john', 'frank'],
                 $array['users'],
-                '*.name'
+                '*.name',
             ],
             // Path as array, issue #3260
             [
                 $array['users'][2]['name'],
                 $array,
-                ['users', 2, 'name']
+                ['users', 2, 'name'],
             ],
             [
                 $array['object']['iterator'],
                 $array,
-                'object.iterator'
+                'object.iterator',
             ],
         ];
     }
@@ -586,7 +590,8 @@ class Kohana_ArrTest extends TestCase
     public function test_path($expected, array $array, $path, $default = null, ?string $delimiter = null)
     {
         $this->assertSame(
-            $expected, Arr::path($array, $path, $default, $delimiter)
+            $expected,
+            Arr::path($array, $path, $default, $delimiter)
         );
     }
 
@@ -603,19 +608,19 @@ class Kohana_ArrTest extends TestCase
                 ['foo' => 'bar'],
                 [],
                 'foo',
-                'bar'
+                'bar',
             ],
             [
                 ['kohana' => ['is' => 'awesome']],
                 [],
                 'kohana.is',
-                'awesome'
+                'awesome',
             ],
             [
                 ['kohana' => ['is' => 'cool', 'and' => 'slow']],
                 ['kohana' => ['is' => 'cool']],
                 'kohana.and',
-                'slow'
+                'slow',
             ],
             // Custom delimiters
             [
@@ -623,21 +628,21 @@ class Kohana_ArrTest extends TestCase
                 [],
                 'kohana/is',
                 'awesome',
-                '/'
+                '/',
             ],
             // Ensures set_path() casts ints to actual integers for keys
             [
                 ['foo' => ['bar']],
                 ['foo' => ['test']],
                 'foo.0',
-                'bar'
+                'bar',
             ],
             // Tests if it allows arrays
             [
                 ['kohana' => ['is' => 'awesome']],
                 [],
                 ['kohana', 'is'],
-                'awesome'
+                'awesome',
             ],
         ];
     }
@@ -747,16 +752,16 @@ class Kohana_ArrTest extends TestCase
                     'name' => 'Henry',
                     'mood' => 'tired',
                     'food' => 'waffles',
-                    'sport' => 'checkers'
+                    'sport' => 'checkers',
                 ],
                 [
                     'name' => 'John',
                     'mood' => 'bored',
                     'food' => 'bacon',
-                    'sport' => 'checkers'
+                    'sport' => 'checkers',
                 ],
                 ['name' => 'Matt', 'mood' => 'tired', 'food' => 'waffles'],
-                ['name' => 'Henry', 'age' => 18]
+                ['name' => 'Henry', 'age' => 18],
             ],
         ];
     }
@@ -766,7 +771,8 @@ class Kohana_ArrTest extends TestCase
     public function test_overwrite($expected, $arr1, $arr2, $arr3 = [], $arr4 = [])
     {
         $this->assertSame(
-            $expected, Arr::overwrite($arr1, $arr2, $arr3, $arr4)
+            $expected,
+            Arr::overwrite($arr1, $arr2, $arr3, $arr4)
         );
     }
 
@@ -782,37 +788,37 @@ class Kohana_ArrTest extends TestCase
                 'strip_tags',
                 ['<p>foobar</p>'],
                 null,
-                ['foobar']
+                ['foobar'],
             ],
             [
                 'strip_tags',
                 [['<p>foobar</p>'], ['<p>foobar</p>']],
                 null,
-                [['foobar'], ['foobar']]
+                [['foobar'], ['foobar']],
             ],
             [
                 'strip_tags',
                 ['foo' => '<p>foobar</p>', 'bar' => '<p>foobar</p>'],
                 null,
-                ['foo' => 'foobar', 'bar' => 'foobar']
+                ['foo' => 'foobar', 'bar' => 'foobar'],
             ],
             [
                 'strip_tags',
                 ['foo' => '<p>foobar</p>', 'bar' => '<p>foobar</p>'],
                 ['foo'],
-                ['foo' => 'foobar', 'bar' => '<p>foobar</p>']
+                ['foo' => 'foobar', 'bar' => '<p>foobar</p>'],
             ],
             [
                 ['strip_tags', 'trim',],
                 ['foo' => '<p>foobar </p>', 'bar' => '<p>foobar</p>'],
                 null,
-                ['foo' => 'foobar', 'bar' => 'foobar']
+                ['foo' => 'foobar', 'bar' => 'foobar'],
             ],
             [
                 'strip_tags',
                 [['foo' => '<p>foobar</p>', 'bar' => '<p>foobar</p>']],
                 ['foo'],
-                [['foo' => 'foobar', 'bar' => '<p>foobar</p>']]
+                [['foo' => 'foobar', 'bar' => '<p>foobar</p>']],
             ],
         ];
     }
@@ -822,7 +828,8 @@ class Kohana_ArrTest extends TestCase
     public function test_map($method, $source, $keys, $expected)
     {
         $this->assertSame(
-            $expected, Arr::map($method, $source, $keys)
+            $expected,
+            Arr::map($method, $source, $keys)
         );
     }
 
@@ -836,7 +843,7 @@ class Kohana_ArrTest extends TestCase
         return [
             [
                 ['set' => ['one' => 'something'], 'two' => 'other'],
-                ['one' => 'something', 'two' => 'other']
+                ['one' => 'something', 'two' => 'other'],
             ],
         ];
     }
@@ -846,7 +853,8 @@ class Kohana_ArrTest extends TestCase
     public function test_flatten($source, $expected)
     {
         $this->assertSame(
-            $expected, Arr::flatten($source)
+            $expected,
+            Arr::flatten($source)
         );
     }
 

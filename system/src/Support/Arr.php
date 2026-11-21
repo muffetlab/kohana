@@ -229,8 +229,9 @@ class Arr
      */
     public static function range(int $step = 10, int $max = 100): array
     {
-        if ($step < 1)
+        if ($step < 1) {
             return [];
+        }
 
         $array = [];
         for ($i = $step; $i <= $max; $i += $step) {

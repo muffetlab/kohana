@@ -2,12 +2,12 @@
 
 namespace Kohana\Orm;
 
-use Kohana\Support\Arr;
-use Kohana\Support\Inflector;
 use Kohana\Database\Connection;
-use Kohana\Validation\Validator;
 use Kohana\Database\DB;
 use Kohana\Foundation\KohanaException;
+use Kohana\Support\Arr;
+use Kohana\Support\Inflector;
+use Kohana\Validation\Validator;
 
 /**
  * [Object Relational Mapping][ref-orm] (ORM) is a method of abstracting database
@@ -445,12 +445,13 @@ class Model extends \Kohana\Foundation\Model
         $this->object = $this->changes = $this->related = $this->originalValues = [];
 
         // Only reload the object if we have one to reload
-        if ($this->loaded)
+        if ($this->loaded) {
             return $this->clear()
                     ->where($this->objectName . '.' . $this->primaryKey, '=', $primary_key)
                     ->find();
-        else
+        } else {
             return $this->clear();
+        }
     }
 
     /**
@@ -461,10 +462,10 @@ class Model extends \Kohana\Foundation\Model
      */
     public function __isset(string $column)
     {
-        return isset($this->object[$column]) OR
-            isset($this->related[$column]) OR
-            isset($this->hasOne[$column]) OR
-            isset($this->belongsTo[$column]) OR
+        return isset($this->object[$column]) or
+            isset($this->related[$column]) or
+            isset($this->hasOne[$column]) or
+            isset($this->belongsTo[$column]) or
             isset($this->hasMany[$column]);
     }
 
@@ -704,16 +705,17 @@ class Model extends \Kohana\Foundation\Model
         foreach ($columns as $key => $column) {
             if (is_string($key)) {
                 // isset() fails when the value is null (we want it to pass)
-                if (!array_key_exists($key, $values))
+                if (!array_key_exists($key, $values)) {
                     continue;
+                }
 
                 // Try to set values to a related model
                 $this->{$key}->values($values[$key], $column);
-            }
-            else {
+            } else {
                 // isset() fails when the value is null (we want it to pass)
-                if (!array_key_exists($column, $values))
+                if (!array_key_exists($column, $values)) {
                     continue;
+                }
 
                 // Update the column, respects __set()
                 $this->$column = $values[$column];
@@ -863,8 +865,9 @@ class Model extends \Kohana\Foundation\Model
      */
     public function find()
     {
-        if ($this->loaded)
+        if ($this->loaded) {
             throw new KohanaException('Method find() cannot be called on loaded objects');
+        }
 
         if (!empty($this->loadWith)) {
             foreach ($this->loadWith as $alias) {
@@ -886,8 +889,9 @@ class Model extends \Kohana\Foundation\Model
      */
     public function findAll()
     {
-        if ($this->loaded)
+        if ($this->loaded) {
             throw new KohanaException('Method find_all() cannot be called on loaded objects');
+        }
 
         if (!empty($this->loadWith)) {
             foreach ($this->loadWith as $alias) {
@@ -989,7 +993,7 @@ class Model extends \Kohana\Foundation\Model
                 $this->object[$column] = $value;
             } else {
                 // Column belongs to a related model
-                list ($prefix, $column) = explode(':', $column, 2);
+                list($prefix, $column) = explode(':', $column, 2);
 
                 $related[$prefix][$column] = $value;
             }
@@ -1133,8 +1137,9 @@ class Model extends \Kohana\Foundation\Model
      */
     public function create(?Validator $validation = null): self
     {
-        if ($this->loaded)
+        if ($this->loaded) {
             throw new KohanaException('Cannot create :model model because it is already loaded.', [':model' => $this->objectName]);
+        }
 
         // Require model validation before saving
         if (!$this->valid || $validation) {
@@ -1189,8 +1194,9 @@ class Model extends \Kohana\Foundation\Model
      */
     public function update(?Validator $validation = null): self
     {
-        if (!$this->loaded)
+        if (!$this->loaded) {
             throw new KohanaException('Cannot update :model model because it is not loaded.', [':model' => $this->objectName]);
+        }
 
         // Run validation if the model isn't valid, or we have additional validation rules.
         if (!$this->valid || $validation) {
@@ -1264,8 +1270,9 @@ class Model extends \Kohana\Foundation\Model
      */
     public function delete(): self
     {
-        if (!$this->loaded)
+        if (!$this->loaded) {
             throw new KohanaException('Cannot delete :model model because it is not loaded.', [':model' => $this->objectName]);
+        }
 
         // Use primary key value
         $id = $this->pk();
@@ -1364,8 +1371,9 @@ class Model extends \Kohana\Foundation\Model
         $far_keys = (array) $far_keys;
 
         // Nothing to check if the model isn't loaded, or we don't have any far_keys
-        if (!$far_keys || !$this->loaded)
+        if (!$far_keys || !$this->loaded) {
             return 0;
+        }
 
         // Rows found need to match the rows searched
         return (int) DB::select([DB::expr('COUNT(*)'), 'records_found'])

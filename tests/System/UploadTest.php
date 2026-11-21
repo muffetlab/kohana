@@ -1,11 +1,11 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\Testing\TestCase;
-use Kohana\Http\Upload;
 use Kohana\Foundation\KohanaException;
+use Kohana\Http\Upload;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests Kohana upload class
@@ -38,11 +38,11 @@ class Kohana_UploadTest extends TestCase
                 [
                     '_FILES' => [
                         'unit_test' => [
-                            'error' => UPLOAD_ERR_INI_SIZE
-                        ]
-                    ]
+                            'error' => UPLOAD_ERR_INI_SIZE,
+                        ],
+                    ],
                 ],
-                false
+                false,
             ],
             [
                 'unit_test',
@@ -50,11 +50,11 @@ class Kohana_UploadTest extends TestCase
                 [
                     '_FILES' => [
                         'unit_test' => [
-                            'error' => UPLOAD_ERR_NO_FILE
-                        ]
-                    ]
+                            'error' => UPLOAD_ERR_NO_FILE,
+                        ],
+                    ],
                 ],
-                true
+                true,
             ],
             [
                 'unit_test',
@@ -67,10 +67,10 @@ class Kohana_UploadTest extends TestCase
                             'type' => 'image/png',
                             'tmp_name' => KOHANA_FIXTURES . '/github.png',
                             'size' => filesize(KOHANA_FIXTURES . '/github.png'),
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
-                true
+                true,
             ],
             [
                 'unit_test',
@@ -82,10 +82,10 @@ class Kohana_UploadTest extends TestCase
                             'type' => 'image/png',
                             'tmp_name' => KOHANA_FIXTURES . '/github.png',
                             'size' => filesize(KOHANA_FIXTURES . '/github.png'),
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
-                false
+                false,
             ],
         ];
     }
@@ -125,8 +125,8 @@ class Kohana_UploadTest extends TestCase
                     'type' => 'image/png',
                     'tmp_name' => KOHANA_FIXTURES . '/github.png',
                     'size' => filesize(KOHANA_FIXTURES . '/github.png'),
-                ]
-            ]
+                ],
+            ],
         ]);
 
         Upload::size($_FILES['unit_test'], '1DooDah');
@@ -148,7 +148,7 @@ class Kohana_UploadTest extends TestCase
                     'type' => 'image/png',
                     'tmp_name' => KOHANA_FIXTURES . '/github.png',
                     'size' => filesize(KOHANA_FIXTURES . '/github.png'),
-                ]
+                ],
             ],
             [
                 false,
@@ -157,7 +157,7 @@ class Kohana_UploadTest extends TestCase
                     'type' => 'image/png',
                     'tmp_name' => KOHANA_FIXTURES . '/github.png',
                     'size' => filesize(KOHANA_FIXTURES . '/github.png'),
-                ]
+                ],
             ],
             [
                 false,
@@ -166,7 +166,7 @@ class Kohana_UploadTest extends TestCase
                     'type' => 'image/png',
                     'tmp_name' => KOHANA_FIXTURES . '/github.png',
                     'size' => filesize(KOHANA_FIXTURES . '/github.png'),
-                ]
+                ],
             ],
             [
                 false,
@@ -175,7 +175,7 @@ class Kohana_UploadTest extends TestCase
                     'error' => UPLOAD_ERR_OK,
                     'tmp_name' => KOHANA_FIXTURES . '/github.png',
                     'size' => filesize(KOHANA_FIXTURES . '/github.png'),
-                ]
+                ],
             ],
             [
                 false,
@@ -184,7 +184,7 @@ class Kohana_UploadTest extends TestCase
                     'name' => 'Unit_Test File',
                     'type' => 'image/png',
                     'size' => filesize(KOHANA_FIXTURES . '/github.png'),
-                ]
+                ],
             ],
             [
                 false,
@@ -193,7 +193,7 @@ class Kohana_UploadTest extends TestCase
                     'name' => 'Unit_Test File',
                     'type' => 'image/png',
                     'tmp_name' => KOHANA_FIXTURES . '/github.png',
-                ]
+                ],
             ],
         ];
     }
@@ -228,8 +228,8 @@ class Kohana_UploadTest extends TestCase
                     'type' => 'image/png',
                     'tmp_name' => KOHANA_FIXTURES . '/github.png',
                     'size' => filesize(KOHANA_FIXTURES . '/github.png'),
-                ]
-            ]
+                ],
+            ],
         ]);
 
         $this->assertTrue(Upload::type($_FILES['unit_test'], ['jpg', 'png', 'gif']));

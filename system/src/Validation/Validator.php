@@ -2,10 +2,10 @@
 
 namespace Kohana\Validation;
 
-use Kohana\Foundation\KohanaException;
-use Kohana\Support\Arr;
 use Kohana\Foundation\Application;
+use Kohana\Foundation\KohanaException;
 use Kohana\Foundation\Profiler;
+use Kohana\Support\Arr;
 
 /**
  * Array and variable validation.

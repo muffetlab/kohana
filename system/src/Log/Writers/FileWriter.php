@@ -2,9 +2,9 @@
 
 namespace Kohana\Log\Writers;
 
-use Kohana\Foundation\KohanaException;
-use Kohana\Foundation\Debug;
 use Kohana\Foundation\Application;
+use Kohana\Foundation\Debug;
+use Kohana\Foundation\KohanaException;
 
 /**
  * File log writer. Writes out messages and stores them in a YYYY/MM directory.

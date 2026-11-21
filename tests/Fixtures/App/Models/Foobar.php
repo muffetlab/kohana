@@ -6,5 +6,4 @@ use Kohana\Foundation\Model;
 
 class Foobar extends Model
 {
-
 }

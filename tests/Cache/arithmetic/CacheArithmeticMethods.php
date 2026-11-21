@@ -1,8 +1,8 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Kohana\Cache\Cache;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 include_once __DIR__ . '/../CacheBasicMethods.php';
 
@@ -41,33 +41,33 @@ abstract class Kohana_CacheArithmeticMethodsTest extends Kohana_CacheBasicMethod
                 0,
                 [
                     'id' => 'increment_test_1',
-                    'step' => 1
+                    'step' => 1,
                 ],
-                1
+                1,
             ],
             [
                 1,
                 [
                     'id' => 'increment_test_2',
-                    'step' => 1
+                    'step' => 1,
                 ],
-                2
+                2,
             ],
             [
                 5,
                 [
                     'id' => 'increment_test_3',
-                    'step' => 5
+                    'step' => 5,
                 ],
-                10
+                10,
             ],
             [
                 null,
                 [
                     'id' => 'increment_test_4',
-                    'step' => 1
+                    'step' => 1,
                 ],
-                false
+                false,
             ],
         ];
     }
@@ -90,8 +90,10 @@ abstract class Kohana_CacheArithmeticMethodsTest extends Kohana_CacheBasicMethod
         }
 
         $this->assertSame(
-            $expected, $cache->increment(
-                $inc_args['id'], $inc_args['step']
+            $expected,
+            $cache->increment(
+                $inc_args['id'],
+                $inc_args['step']
             )
         );
     }
@@ -108,33 +110,33 @@ abstract class Kohana_CacheArithmeticMethodsTest extends Kohana_CacheBasicMethod
                 10,
                 [
                     'id' => 'decrement_test_1',
-                    'step' => 1
+                    'step' => 1,
                 ],
-                9
+                9,
             ],
             [
                 10,
                 [
                     'id' => 'decrement_test_2',
-                    'step' => 2
+                    'step' => 2,
                 ],
-                8
+                8,
             ],
             [
                 50,
                 [
                     'id' => 'decrement_test_3',
-                    'step' => 5
+                    'step' => 5,
                 ],
-                45
+                45,
             ],
             [
                 null,
                 [
                     'id' => 'decrement_test_4',
-                    'step' => 1
+                    'step' => 1,
                 ],
-                false
+                false,
             ],
         ];
     }
@@ -158,8 +160,10 @@ abstract class Kohana_CacheArithmeticMethodsTest extends Kohana_CacheBasicMethod
         }
 
         $this->assertSame(
-            $expected, $cache->decrement(
-                $dec_args['id'], $dec_args['step']
+            $expected,
+            $cache->decrement(
+                $dec_args['id'],
+                $dec_args['step']
             )
         );
     }

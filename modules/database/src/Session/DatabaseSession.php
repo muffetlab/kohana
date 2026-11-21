@@ -2,8 +2,8 @@
 
 namespace Kohana\Session;
 
-use Kohana\Database\Connection;
 use Kohana\Cookie\Cookie;
+use Kohana\Database\Connection;
 use Kohana\Database\DB;
 use Kohana\Support\Date;
 
@@ -36,7 +36,7 @@ class DatabaseSession extends Session
     protected $columns = [
         'session_id' => 'session_id',
         'last_active' => 'last_active',
-        'contents' => 'contents'
+        'contents' => 'contents',
     ];
     // Garbage collection requests
     protected $gc = 500;

@@ -2,10 +2,10 @@
 
 namespace Kohana\Http;
 
-use Kohana\Http\Client\Client;
-use Kohana\Foundation\KohanaException;
-use Kohana\Support\Arr;
 use Kohana\Cache\Contracts\Arithmetic;
+use Kohana\Foundation\KohanaException;
+use Kohana\Http\Client\Client;
+use Kohana\Support\Arr;
 
 /**
  * HTTP Caching adaptor class that provides caching services to the
@@ -21,11 +21,11 @@ use Kohana\Cache\Contracts\Arithmetic;
  */
 class Cache
 {
-    const CACHE_STATUS_KEY = 'x-cache-status';
-    const CACHE_STATUS_SAVED = 'SAVED';
-    const CACHE_STATUS_HIT = 'HIT';
-    const CACHE_STATUS_MISS = 'MISS';
-    const CACHE_HIT_KEY = 'x-cache-hits';
+    public const CACHE_STATUS_KEY = 'x-cache-status';
+    public const CACHE_STATUS_SAVED = 'SAVED';
+    public const CACHE_STATUS_HIT = 'HIT';
+    public const CACHE_STATUS_MISS = 'MISS';
+    public const CACHE_HIT_KEY = 'x-cache-hits';
 
     /**
      * Factory method for HTTP_Cache that provides a convenient dependency
@@ -137,14 +137,15 @@ class Cache
      */
     public function execute(Client $client, Request $request, Response $response)
     {
-        if (!$this->cache instanceof \Kohana\Cache\Cache)
+        if (!$this->cache instanceof \Kohana\Cache\Cache) {
             return $client->executeRequest($request, $response);
+        }
 
         // If this is a destructive request, by-pass cache completely
         if (in_array($request->method(), [
                 \Kohana\Http\Contracts\Request::POST,
                 \Kohana\Http\Contracts\Request::PUT,
-                \Kohana\Http\Contracts\Request::DELETE
+                \Kohana\Http\Contracts\Request::DELETE,
             ])) {
             // Kill existing caches for this request
             $this->invalidateCache($request);
@@ -153,7 +154,7 @@ class Cache
 
             $cache_control = HeaderBag::createCacheControl([
                     'no-cache',
-                    'must-revalidate'
+                    'must-revalidate',
             ]);
 
             // Ensure client respects destructive action
@@ -164,8 +165,9 @@ class Cache
         $cache_key = $this->createCacheKey($request, $this->cacheKeyCallback);
 
         // Try and return cached version
-        if (($cached_response = $this->cacheResponse($cache_key, $request)) instanceof Response)
+        if (($cached_response = $this->cacheResponse($cache_key, $request)) instanceof Response) {
             return $cached_response;
+        }
 
         // Start request time
         $this->requestTime = time();
@@ -208,8 +210,9 @@ class Cache
      */
     public function cache(?\Kohana\Cache\Cache $cache = null)
     {
-        if ($cache === null)
+        if ($cache === null) {
             return $this->cache;
+        }
 
         $this->cache = $cache;
         return $this;
@@ -226,8 +229,9 @@ class Cache
      */
     public function allowPrivateCache(?bool $setting = null)
     {
-        if ($setting === null)
+        if ($setting === null) {
             return $this->allowPrivateCache;
+        }
 
         $this->allowPrivateCache = $setting;
         return $this;
@@ -261,11 +265,13 @@ class Cache
      */
     public function cacheKeyCallback(?callable $callback = null)
     {
-        if ($callback === null)
+        if ($callback === null) {
             return $this->cacheKeyCallback;
+        }
 
-        if (!is_callable($callback))
+        if (!is_callable($callback)) {
             throw new KohanaException('cache_key_callback must be callable!');
+        }
 
         $this->cacheKeyCallback = $callback;
         return $this;
@@ -284,10 +290,11 @@ class Cache
      */
     public function createCacheKey(Request $request, $callback = false): string
     {
-        if (is_callable($callback))
+        if (is_callable($callback)) {
             return call_user_func($callback, $request);
-        else
+        } else {
             return static::basicCacheKeyGenerator($request);
+        }
     }
 
     /**
@@ -307,27 +314,31 @@ class Cache
             $cache_control = HeaderBag::parseCacheControl($cache_control);
 
             // If the no-cache or no-store directive is set, return
-            if (array_intersect($cache_control, ['no-cache', 'no-store']))
+            if (array_intersect($cache_control, ['no-cache', 'no-store'])) {
                 return false;
+            }
 
             // Check for private cache and get out of here if invalid
             if (!$this->allowPrivateCache && in_array('private', $cache_control)) {
-                if (!isset($cache_control['s-maxage']))
+                if (!isset($cache_control['s-maxage'])) {
                     return false;
+                }
 
                 // If there is an s-maxage directive we can use that
                 $cache_control['max-age'] = $cache_control['s-maxage'];
             }
 
             // Check that max-age has been set and if it is valid for caching
-            if (isset($cache_control['max-age']) && $cache_control['max-age'] < 1)
+            if (isset($cache_control['max-age']) && $cache_control['max-age'] < 1) {
                 return false;
+            }
         }
 
         if (($expires = Arr::get($headers, 'expires')) && !isset($cache_control['max-age'])) {
             // Can't cache things that have expired already
-            if (strtotime($expires) <= time())
+            if (strtotime($expires) <= time()) {
                 return false;
+            }
         }
 
         return true;
@@ -348,23 +359,26 @@ class Cache
      */
     public function cacheResponse(string $key, Request $request, ?Response $response = null)
     {
-        if (!$this->cache instanceof \Kohana\Cache\Cache)
+        if (!$this->cache instanceof \Kohana\Cache\Cache) {
             return false;
+        }
 
         // Check for Pragma: no-cache
         if ($pragma = $request->headers('pragma')) {
-            if ($pragma === 'no-cache')
+            if ($pragma === 'no-cache') {
                 return false;
-            elseif (is_array($pragma) && in_array('no-cache', $pragma))
+            } elseif (is_array($pragma) && in_array('no-cache', $pragma)) {
                 return false;
+            }
         }
 
         // If there is no response, lookup an existing cached response
         if ($response === null) {
             $response = $this->cache->get($key);
 
-            if (!$response instanceof Response)
+            if (!$response instanceof Response) {
                 return false;
+            }
 
             // Do cache hit arithmetic, using fast arithmetic if available
             if ($this->cache instanceof Arithmetic) {
@@ -380,8 +394,9 @@ class Cache
 
             return $response;
         } else {
-            if (($ttl = $this->cacheLifetime($response)) === false)
+            if (($ttl = $this->cacheLifetime($response)) === false) {
                 return false;
+            }
 
             $response->headers(static::CACHE_STATUS_KEY, static::CACHE_STATUS_SAVED);
 
@@ -402,8 +417,9 @@ class Cache
     public function cacheLifetime(Response $response)
     {
         // Get out of here if this cannot be cached
-        if (!$this->setCache($response))
+        if (!$this->setCache($response)) {
             return false;
+        }
 
         // Calculate apparent age
         if ($date = $response->headers('date')) {
@@ -450,11 +466,13 @@ class Cache
         }
 
         // If we have a TTL at this point, return
-        if ($ttl !== null)
+        if ($ttl !== null) {
             return $ttl;
+        }
 
-        if ($expires = $response->headers('expires'))
+        if ($expires = $response->headers('expires')) {
             return strtotime($expires) - $current_age;
+        }
 
         return false;
     }
@@ -469,8 +487,9 @@ class Cache
      */
     public function requestExecutionTime()
     {
-        if ($this->requestTime === null || $this->responseTime === null)
+        if ($this->requestTime === null || $this->responseTime === null) {
             return false;
+        }
 
         return $this->responseTime - $this->requestTime;
     }

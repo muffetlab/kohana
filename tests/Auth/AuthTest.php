@@ -1,10 +1,10 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
 use Kohana\Auth\Auth;
 use Kohana\Auth\FileAuth;
 use Kohana\Session\Session;
 use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\Group;
 
 trait CreatesAuth
 {

@@ -13,8 +13,9 @@ use Kohana\Support\Utf8;
  */
 function _strcasecmp($str1, $str2): int
 {
-    if (Utf8::isAscii($str1) && Utf8::isAscii($str2))
+    if (Utf8::isAscii($str1) && Utf8::isAscii($str2)) {
         return strcasecmp($str1, $str2);
+    }
 
     $str1 = Utf8::strtolower($str1);
     $str2 = Utf8::strtolower($str2);

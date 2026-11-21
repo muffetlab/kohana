@@ -2,8 +2,8 @@
 
 namespace Kohana\View;
 
-use Kohana\Foundation\KohanaException;
 use Kohana\Foundation\Application;
+use Kohana\Foundation\KohanaException;
 
 /**
  * Acts as an object wrapper for HTML pages with embedded PHP, called "views".

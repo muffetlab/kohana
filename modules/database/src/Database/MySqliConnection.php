@@ -2,9 +2,9 @@
 
 namespace Kohana\Database;
 
-use Kohana\Support\Arr;
 use Kohana\Foundation\Application;
 use Kohana\Foundation\Profiler;
+use Kohana\Support\Arr;
 
 /**
  * MySQLi database connection.
@@ -28,8 +28,9 @@ class MySqliConnection extends Connection
 
     public function connect()
     {
-        if ($this->connection)
+        if ($this->connection) {
             return;
+        }
 
         if (static::$setNames === null) {
             // Determine if we can use mysqli_set_charset(), which is only
@@ -56,7 +57,11 @@ class MySqliConnection extends Connection
             if (is_array($ssl)) {
                 $this->connection = mysqli_init();
                 $this->connection->ssl_set(
-                    Arr::get($ssl, 'client_key_path'), Arr::get($ssl, 'client_cert_path'), Arr::get($ssl, 'ca_cert_path'), Arr::get($ssl, 'ca_dir_path'), Arr::get($ssl, 'cipher')
+                    Arr::get($ssl, 'client_key_path'),
+                    Arr::get($ssl, 'client_cert_path'),
+                    Arr::get($ssl, 'ca_cert_path'),
+                    Arr::get($ssl, 'ca_dir_path'),
+                    Arr::get($ssl, 'cipher')
                 );
                 $this->connection->real_connect($hostname, $username, $password, $database, $port, $socket, MYSQLI_CLIENT_SSL | $flags);
             } else {
@@ -164,7 +169,7 @@ class MySqliConnection extends Connection
 
             throw new DatabaseException(':error [ :query ]', [
             ':error' => $this->connection->error,
-            ':query' => $sql
+            ':query' => $sql,
             ], $this->connection->errno);
         }
 
@@ -237,8 +242,9 @@ class MySqliConnection extends Connection
 
         $type = str_replace(' zerofill', '', $type);
 
-        if (isset($types[$type]))
+        if (isset($types[$type])) {
             return $types[$type];
+        }
 
         return parent::datatype($type);
     }

@@ -18,14 +18,14 @@ use Kohana\Log\Writers\Writer;
 class Logger
 {
     // Log message levels - Windows users see PHP Bug #18090
-    const EMERGENCY = LOG_EMERG;    // 0
-    const ALERT = LOG_ALERT;    // 1
-    const CRITICAL = LOG_CRIT;     // 2
-    const ERROR = LOG_ERR;      // 3
-    const WARNING = LOG_WARNING;  // 4
-    const NOTICE = LOG_NOTICE;   // 5
-    const INFO = LOG_INFO;     // 6
-    const DEBUG = LOG_DEBUG;    // 7
+    public const EMERGENCY = LOG_EMERG;    // 0
+    public const ALERT = LOG_ALERT;    // 1
+    public const CRITICAL = LOG_CRIT;     // 2
+    public const ERROR = LOG_ERR;      // 3
+    public const WARNING = LOG_WARNING;  // 4
+    public const NOTICE = LOG_NOTICE;   // 5
+    public const INFO = LOG_INFO;     // 6
+    public const DEBUG = LOG_DEBUG;    // 7
 
     /**
      * @var bool immediately write when logs are added
@@ -48,7 +48,7 @@ class Logger
     {
         if (static::$instance === null) {
             // Create a new instance
-            static::$instance = new static;
+            static::$instance = new static();
 
             // Write the logs at shutdown
             register_shutdown_function([static::$instance, 'write']);
@@ -86,7 +86,7 @@ class Logger
 
         $this->writers["$writer"] = [
             'object' => $writer,
-            'levels' => $levels
+            'levels' => $levels,
         ];
 
         return $this;

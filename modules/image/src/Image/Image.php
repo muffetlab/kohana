@@ -3,8 +3,8 @@
 namespace Kohana\Image;
 
 use Kohana\Foundation\Application;
-use Kohana\Foundation\KohanaException;
 use Kohana\Foundation\Debug;
+use Kohana\Foundation\KohanaException;
 use Kohana\Log\Logger;
 
 /**
@@ -19,15 +19,15 @@ use Kohana\Log\Logger;
 abstract class Image
 {
     // Resizing constraints
-    const NONE = 0x01;
-    const WIDTH = 0x02;
-    const HEIGHT = 0x03;
-    const AUTO = 0x04;
-    const INVERSE = 0x05;
-    const PRECISE = 0x06;
+    public const NONE = 0x01;
+    public const WIDTH = 0x02;
+    public const HEIGHT = 0x03;
+    public const AUTO = 0x04;
+    public const INVERSE = 0x05;
+    public const PRECISE = 0x06;
     // Flipping directions
-    const HORIZONTAL = 0x11;
-    const VERTICAL = 0x12;
+    public const HORIZONTAL = 0x11;
+    public const VERTICAL = 0x12;
 
     // Status of the driver check
     protected static $checked = false;
@@ -516,7 +516,7 @@ abstract class Image
         }
 
         // Convert the hex into RGB values
-        list ($r, $g, $b) = array_map('hexdec', str_split($color, 2));
+        list($r, $g, $b) = array_map('hexdec', str_split($color, 2));
 
         // The opacity must be in the range of 0 to 100
         $opacity = min(max($opacity, 0), 100);

@@ -3,10 +3,10 @@
 namespace Kohana\Routing;
 
 use Kohana\Foundation\Application;
-use Kohana\Http\Request;
 use Kohana\Foundation\KohanaException;
-use Kohana\Support\Utf8;
+use Kohana\Http\Request;
 use Kohana\Support\Arr;
+use Kohana\Support\Utf8;
 
 /**
  * URL helper class.

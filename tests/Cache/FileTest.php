@@ -1,12 +1,12 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\Foundation\Application;
 use Kohana\Cache\Cache;
 use Kohana\Cache\CacheException;
+use Kohana\Foundation\Application;
 use Kohana\Foundation\KohanaException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 include_once __DIR__ . '/CacheBasicMethods.php';
 
@@ -41,7 +41,9 @@ class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest
 
         if (!Application::$config->load('cache.file')) {
             Application::$config->load('cache')
-                ->set('file', [
+                ->set(
+                    'file',
+                    [
                     'driver' => 'file',
                     'cache_dir' => APPPATH . 'cache',
                     'default_expire' => 3600,
@@ -49,10 +51,10 @@ class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest
                         'file_we_want_to_keep.cache',
                         '.gitignore',
                         '.git',
-                        '.svn'
+                        '.svn',
+                    ],
                     ]
-                    ]
-            );
+                );
         }
 
         $this->cache(Cache::instance('file'));
@@ -90,16 +92,16 @@ class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest
         return [
             [
                 'This is â ütf-8 Ӝ☃ string',
-                'This is â ütf-8 Ӝ☃ string'
+                'This is â ütf-8 Ӝ☃ string',
             ],
             [
                 '㆓㆕㆙㆛',
-                '㆓㆕㆙㆛'
+                '㆓㆕㆙㆛',
             ],
             [
                 'அஆஇஈஊ',
-                'அஆஇஈஊ'
-            ]
+                'அஆஇஈஊ',
+            ],
         ];
     }
 

@@ -2,8 +2,8 @@
 
 namespace Kohana\Routing;
 
-use Kohana\Foundation\KohanaException;
 use Kohana\Foundation\Application;
+use Kohana\Foundation\KohanaException;
 use Kohana\Http\Request;
 use Kohana\Support\Arr;
 
@@ -44,13 +44,13 @@ use Kohana\Support\Arr;
 class Route
 {
     // Matches a URI group and captures the contents
-    const REGEX_GROUP = '\(((?:(?>[^()]+)|(?R))*)\)';
+    public const REGEX_GROUP = '\(((?:(?>[^()]+)|(?R))*)\)';
     // Defines the pattern of a <segment>
-    const REGEX_KEY = '<([a-zA-Z0-9_]++)>';
+    public const REGEX_KEY = '<([a-zA-Z0-9_]++)>';
     // What can be part of a <segment> value
-    const REGEX_SEGMENT = '[^/.,;?\n]++';
+    public const REGEX_SEGMENT = '[^/.,;?\n]++';
     // What must be escaped in the route regex
-    const REGEX_ESCAPE = '[.\\+*?[^\\]${}=!|]';
+    public const REGEX_ESCAPE = '[.\\+*?[^\\]${}=!|]';
 
     /**
      * @var  string  default protocol for all routes
@@ -206,10 +206,11 @@ class Route
         $route = static::get($name);
 
         // Create a URI with the route and convert it to a URL
-        if ($route->isExternal())
+        if ($route->isExternal()) {
             return $route->uri($params);
-        else
+        } else {
             return Url::site($route->uri($params), $protocol);
+        }
     }
 
     /**
@@ -397,8 +398,9 @@ class Route
         // Get the URI from the Request
         $uri = trim($request->uri(), '/');
 
-        if (!preg_match($this->routeRegex, $uri, $matches))
+        if (!preg_match($this->routeRegex, $uri, $matches)) {
             return false;
+        }
 
         $params = [];
         foreach ($matches as $key => $value) {
@@ -512,13 +514,13 @@ class Route
                     }
 
                     // Add default parameter to this result
-                    if (isset($defaults[$param]))
+                    if (isset($defaults[$param])) {
                         return $defaults[$param];
+                    }
 
                     // This portion is missing a parameter
                     $missing[] = $param;
-                }
-                else {
+                } else {
                     // Group, unwrapped
                     $result = $compile($matches[2], false);
 

@@ -2,11 +2,11 @@
 
 namespace Kohana\Http\Client;
 
+use Kohana\Foundation\Application;
+use Kohana\Foundation\Profiler;
 use Kohana\Http\Exceptions\RequestException;
 use Kohana\Http\Request;
 use Kohana\Http\Response;
-use Kohana\Foundation\Application;
-use Kohana\Foundation\Profiler;
 use Kohana\Support\Arr;
 
 /**
@@ -173,8 +173,9 @@ abstract class ExternalClient extends Client
      */
     public function options($key = null, $value = null)
     {
-        if ($key === null)
+        if ($key === null) {
             return $this->options;
+        }
 
         if (is_array($key)) {
             $this->options = $key;

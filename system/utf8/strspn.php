@@ -13,11 +13,13 @@ use Kohana\Support\Utf8;
  */
 function _strspn($str, $mask, $offset = null, $length = null): int
 {
-    if ($str === '' || $mask === '')
+    if ($str === '' || $mask === '') {
         return 0;
+    }
 
-    if (Utf8::isAscii($str) && Utf8::isAscii($mask))
+    if (Utf8::isAscii($str) && Utf8::isAscii($mask)) {
         return $offset === null ? strspn($str, $mask) : ($length === null ? strspn($str, $mask, $offset) : strspn($str, $mask, $offset, $length));
+    }
 
     if ($offset !== null || $length !== null) {
         $str = Utf8::substr($str, $offset, $length);

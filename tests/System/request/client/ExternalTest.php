@@ -1,18 +1,18 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use Kohana\Foundation\Application;
+use Kohana\Foundation\KohanaException;
 use Kohana\Http\Client\CurlClient;
+use Kohana\Http\Client\ExternalClient;
 use Kohana\Http\Client\HttpClient;
-use PHPUnit\Framework\Attributes\DataProvider;
+use Kohana\Http\Client\StreamClient;
+use Kohana\Http\Exceptions\RequestException;
+use Kohana\Http\Request;
 use Kohana\Http\Response;
 use Kohana\Testing\TestCase;
-use Kohana\Http\Client\ExternalClient;
-use Kohana\Http\Client\StreamClient;
-use Kohana\Foundation\Application;
-use Kohana\Http\Request;
-use Kohana\Http\Exceptions\RequestException;
-use Kohana\Foundation\KohanaException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Unit tests for external request client
@@ -83,22 +83,22 @@ class Kohana_Request_Client_ExternalTest extends TestCase
             [
                 null,
                 null,
-                []
+                [],
             ],
             [
                 ['foo' => 'bar', 'stfu' => 'snafu'],
                 null,
-                ['foo' => 'bar', 'stfu' => 'snafu']
+                ['foo' => 'bar', 'stfu' => 'snafu'],
             ],
             [
                 'foo',
                 'bar',
-                ['foo' => 'bar']
+                ['foo' => 'bar'],
             ],
             [
                 ['foo' => 'bar'],
                 'foo',
-                ['foo' => 'bar']
+                ['foo' => 'bar'],
             ],
         ];
     }
@@ -116,7 +116,7 @@ class Kohana_Request_Client_ExternalTest extends TestCase
     public function test_options($key, $value, array $expected)
     {
         // Create a mock external client
-        $client = new StreamClient;
+        $client = new StreamClient();
 
         $client->options($key, $value);
         $this->assertSame($expected, $client->options());
@@ -139,8 +139,8 @@ class Kohana_Request_Client_ExternalTest extends TestCase
                 [],
                 [
                     'content-type' => 'application/json',
-                    'body' => $json
-                ]
+                    'body' => $json,
+                ],
             ],
             [
                 'application/json',
@@ -148,8 +148,8 @@ class Kohana_Request_Client_ExternalTest extends TestCase
                 $post,
                 [
                     'content-type' => 'application/x-www-form-urlencoded; charset=' . Application::$charset,
-                    'body' => http_build_query($post, '', '&')
-                ]
+                    'body' => http_build_query($post, '', '&'),
+                ],
             ],
         ];
     }

@@ -1,12 +1,12 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Kohana\Config\Contracts\Reader;
 use Kohana\Config\Contracts\Writer;
-use Kohana\Testing\TestCase;
 use Kohana\Config\Repository;
 use Kohana\Foundation\KohanaException;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests the Config lib that's shipped with kohana
@@ -34,7 +34,7 @@ class Kohana_ConfigTest extends TestCase
         $this->expectException(KohanaException::class);
         $this->expectExceptionMessageIsOrContains('No configuration sources attached');
 
-        $config = new Repository;
+        $config = new Repository();
         $config->load('');
     }
 
@@ -45,7 +45,7 @@ class Kohana_ConfigTest extends TestCase
     #[Test]
     public function test_attach_adds_reader_and_returns_this()
     {
-        $config = new Repository;
+        $config = new Repository();
         $reader = $this->createStub(Reader::class);
 
         $this->assertSame($config, $config->attach($reader));
@@ -63,7 +63,7 @@ class Kohana_ConfigTest extends TestCase
     #[Test]
     public function test_attach_adds_reader_to_front_of_queue()
     {
-        $config = new Repository;
+        $config = new Repository();
 
         $reader1 = $this->createStub(Reader::class);
         $reader2 = $this->createStub(Reader::class);
@@ -86,7 +86,7 @@ class Kohana_ConfigTest extends TestCase
     #[Test]
     public function test_attach_can_add_reader_to_end_of_queue()
     {
-        $config = new Repository;
+        $config = new Repository();
         $reader1 = $this->createStub(Reader::class);
         $reader2 = $this->createStub(Reader::class);
 
@@ -105,7 +105,7 @@ class Kohana_ConfigTest extends TestCase
     #[Test]
     public function test_detach_removes_reader_and_returns_this()
     {
-        $config = new Repository;
+        $config = new Repository();
 
         // Due to the way phpunit mock generator works if you try and mock a class
         // that has already been used then it just re-uses the first's name
@@ -137,7 +137,7 @@ class Kohana_ConfigTest extends TestCase
     #[Test]
     public function test_detach_returns_this_even_when_reader_dnx()
     {
-        $config = new Repository;
+        $config = new Repository();
         $reader = $this->createStub(Reader::class);
 
         $this->assertSame($config, $config->detach($reader));
@@ -150,7 +150,7 @@ class Kohana_ConfigTest extends TestCase
     #[Test]
     public function test_load_can_get_var_from_dot_path()
     {
-        $config = new Repository;
+        $config = new Repository();
 
         $reader = $this->createMock(Reader::class);
 
@@ -173,7 +173,7 @@ class Kohana_ConfigTest extends TestCase
     #[Test]
     public function test_load_can_get_var_from_dot_path_for_loaded_group()
     {
-        $config = new Repository;
+        $config = new Repository();
 
         $reader = $this->createMock(Reader::class);
 
@@ -199,7 +199,7 @@ class Kohana_ConfigTest extends TestCase
         $this->expectException(KohanaException::class);
 
         // The following code should throw an exception and phpunit will catch / handle it
-        $config = new Repository;
+        $config = new Repository();
 
         $config->load('random');
     }
@@ -212,7 +212,7 @@ class Kohana_ConfigTest extends TestCase
     {
         $this->expectException(KohanaException::class);
 
-        $config = new Repository;
+        $config = new Repository();
 
         $reader = $this->createStub(Reader::class);
 
@@ -228,7 +228,7 @@ class Kohana_ConfigTest extends TestCase
     #[Test]
     public function test_write_config_passes_changed_config_to_all_writers()
     {
-        $config = new Repository;
+        $config = new Repository();
 
         $reader1 = $this->createStub(Reader::class);
         $writer1 = $this->createMock(Writer::class);
@@ -269,7 +269,7 @@ class Kohana_ConfigTest extends TestCase
             ->willReturn([
                     'foo' => 'bar',
                     'kohana' => 'awesome',
-                    'life' => ['normal', 'fated']
+                    'life' => ['normal', 'fated'],
         ]);
 
         $reader2->expects($this->once())
@@ -278,10 +278,10 @@ class Kohana_ConfigTest extends TestCase
             ->willReturn([
                     'kohana' => 'sweet',
                     'music' => 'tasteful',
-                    'life' => ['extraordinary', 'destined']
+                    'life' => ['extraordinary', 'destined'],
         ]);
 
-        $config = new Repository;
+        $config = new Repository();
 
         // Attach $reader1 at the "top" and reader2 at the "bottom"
         $config->attach($reader1)->attach($reader2, false);
@@ -308,7 +308,7 @@ class Kohana_ConfigTest extends TestCase
             ->with('something')
             ->willReturn([]);
 
-        $config = new Repository;
+        $config = new Repository();
 
         $config->attach($reader);
 
@@ -325,7 +325,7 @@ class Kohana_ConfigTest extends TestCase
     #[Test]
     public function test_copy_copies_merged_config_to_all_writers()
     {
-        $config = new Repository;
+        $config = new Repository();
 
         $reader1 = $this->createMock(Reader::class);
         $reader2 = $this->createMock(Reader::class);
@@ -335,7 +335,7 @@ class Kohana_ConfigTest extends TestCase
             ->with('something')
             ->willReturn([
                     'pie' => 'good',
-                    'kohana' => 'awesome'
+                    'kohana' => 'awesome',
         ]);
 
         $reader2->expects($this->once())

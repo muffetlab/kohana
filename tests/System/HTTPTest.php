@@ -1,17 +1,17 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
+use Kohana\Foundation\Application;
+use Kohana\Foundation\KohanaException;
 use Kohana\Http\Exceptions\Http301Exception;
 use Kohana\Http\Exceptions\Http302Exception;
 use Kohana\Http\Exceptions\Http303Exception;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\Testing\TestCase;
-use Kohana\Foundation\Application;
-use Kohana\Http\Request;
-use Kohana\Http\Http;
 use Kohana\Http\Exceptions\RedirectHttpException;
-use Kohana\Foundation\KohanaException;
+use Kohana\Http\Http;
+use Kohana\Http\Request;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests HTTP
@@ -41,7 +41,7 @@ class Kohana_HTTPTest extends TestCase
     {
         parent::setUp();
         Application::$config->load('url')->set('trusted_hosts', [
-            'www\.example\.com'
+            'www\.example\.com',
         ]);
         $this->_initial_request = Request::$initial;
         Request::$initial = new Request('/');
@@ -83,19 +83,19 @@ class Kohana_HTTPTest extends TestCase
                 'http://www.example.org/',
                 301,
                 Http301Exception::class,
-                'http://www.example.org/'
+                'http://www.example.org/',
             ],
             [
                 '/page_one',
                 302,
                 Http302Exception::class,
-                'http://www.example.com/kohana/index.php/page_one'
+                'http://www.example.com/kohana/index.php/page_one',
             ],
             [
                 'page_two',
                 303,
                 Http303Exception::class,
-                'http://www.example.com/kohana/index.php/page_two'
+                'http://www.example.com/kohana/index.php/page_two',
             ],
         ];
     }
@@ -147,7 +147,7 @@ class Kohana_HTTPTest extends TestCase
                     'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
                     'accept-encoding' => 'gzip, deflate, sdch',
                     'accept-language' => 'en-US,en;q=0.8,fr;q=0.6,hy;q=0.4',
-                ]
+                ],
             ],
             [
                 [
@@ -155,7 +155,7 @@ class Kohana_HTTPTest extends TestCase
                 ],
                 [
                     'weird-http-header' => 'A weird value for a weird header',
-                ]
+                ],
             ],
         ];
     }

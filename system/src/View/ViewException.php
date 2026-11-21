@@ -13,5 +13,4 @@ use Kohana\Foundation\KohanaException;
  */
 class ViewException extends KohanaException
 {
-    
 }

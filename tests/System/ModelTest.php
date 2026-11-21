@@ -1,9 +1,9 @@
 <?php
 
+use Kohana\Foundation\Model;
+use Kohana\Testing\TestCase;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Kohana\Testing\TestCase;
-use Kohana\Foundation\Model;
 
 /**
  * This test only really exists for code coverage.

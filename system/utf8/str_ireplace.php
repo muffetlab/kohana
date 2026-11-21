@@ -13,8 +13,9 @@ use Kohana\Support\Utf8;
  */
 function _str_ireplace($search, $replace, $str, &$count = null)
 {
-    if (Utf8::isAscii($search) && Utf8::isAscii($replace) && Utf8::isAscii($str))
+    if (Utf8::isAscii($search) && Utf8::isAscii($replace) && Utf8::isAscii($str)) {
         return str_ireplace($search, $replace, $str, $count);
+    }
 
     if (is_array($str)) {
         foreach ($str as $key => $val) {

@@ -4,7 +4,6 @@ namespace Kohana\Auth;
 
 use Kohana\Foundation\Application;
 use Kohana\Session\Session;
-use Kohana\Foundation\KohanaException;
 
 /**
  * User authorization library. Handles user login and logout, as well as secure
@@ -89,8 +88,9 @@ abstract class Auth
      */
     public function login(string $username, string $password, bool $remember = false): bool
     {
-        if (empty($password))
+        if (empty($password)) {
             return false;
+        }
 
         return $this->attemptLogin($username, $password, $remember);
     }

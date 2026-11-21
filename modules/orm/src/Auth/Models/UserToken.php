@@ -2,10 +2,10 @@
 
 namespace Kohana\Auth\Models;
 
-use Kohana\Orm\Model;
 use Kohana\Database\DB;
-use Kohana\Validation\Validator;
+use Kohana\Orm\Model;
 use Kohana\Support\Str;
+use Kohana\Validation\Validator;
 
 /**
  * Default auth user toke

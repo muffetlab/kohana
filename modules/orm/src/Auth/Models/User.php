@@ -2,9 +2,9 @@
 
 namespace Kohana\Auth\Models;
 
-use Kohana\Orm\Model;
 use Kohana\Auth\Auth;
 use Kohana\Database\DB;
+use Kohana\Orm\Model;
 use Kohana\Validation\Rules;
 use Kohana\Validation\Validator;
 
@@ -66,8 +66,8 @@ class User extends Model
     {
         return [
             'password' => [
-                [[Auth::instance(), 'hash']]
-            ]
+                [[Auth::instance(), 'hash']],
+            ],
         ];
     }
 
@@ -153,7 +153,7 @@ class User extends Model
                 ->rule('password', 'min_length', [':value', 8])
                 ->rule('password_confirm', 'matches', [
                     ':validation',
-                    ':field', 'password'
+                    ':field', 'password',
         ]);
     }
 

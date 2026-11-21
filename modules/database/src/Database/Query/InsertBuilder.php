@@ -55,8 +55,9 @@ class InsertBuilder extends Builder
      */
     public function table(string $table): self
     {
-        if (!is_string($table))
+        if (!is_string($table)) {
             throw new KohanaException('INSERT INTO syntax does not allow table aliasing');
+        }
 
         $this->table = $table;
 

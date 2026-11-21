@@ -45,8 +45,9 @@ class MySqliResult extends Result
 
     public function current(): mixed
     {
-        if ($this->currentRow !== $this->internalRow && !$this->seek($this->currentRow))
+        if ($this->currentRow !== $this->internalRow && !$this->seek($this->currentRow)) {
             return null;
+        }
 
         // Increment internal row for optimization assuming rows are fetched in order
         $this->internalRow++;

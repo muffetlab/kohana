@@ -1,20 +1,20 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
+use Kohana\Cache\CacheException;
 use Kohana\Cache\FileStore;
-use Kohana\Testing\TestCase;
-use Kohana\Routing\Route;
+use Kohana\Foundation\KohanaException;
+use Kohana\Http\Cache;
+use Kohana\Http\Client\InternalClient;
+use Kohana\Http\Exceptions\RequestException;
+use Kohana\Http\HeaderBag;
 use Kohana\Http\Request;
 use Kohana\Http\Response;
-use Kohana\Http\Cache;
-use Kohana\Http\HeaderBag;
-use Kohana\Http\Client\InternalClient;
-use Kohana\Foundation\KohanaException;
-use Kohana\Http\Exceptions\RequestException;
-use Kohana\Cache\CacheException;
+use Kohana\Routing\Route;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Unit tests for request client cache logic
@@ -43,7 +43,7 @@ class Kohana_Request_Client_CacheTest extends TestCase
         Route::set('welcome', 'welcome/index')
             ->defaults([
                 'controller' => 'welcome',
-                'action' => 'index'
+                'action' => 'index',
         ]);
 
         parent::setUp();
@@ -60,7 +60,7 @@ class Kohana_Request_Client_CacheTest extends TestCase
     public function test_cache_not_called_with_no_cache()
     {
         $request = new Request('welcome/index');
-        $response = new Response;
+        $response = new Response();
 
         $client_mock = $this->createMock(InternalClient::class);
 
@@ -169,7 +169,7 @@ class Kohana_Request_Client_CacheTest extends TestCase
         $response->headers([
             'cache-control' => 'max-age=' . $lifetime,
             Cache::CACHE_STATUS_KEY =>
-            Cache::CACHE_STATUS_HIT
+            Cache::CACHE_STATUS_HIT,
         ]);
 
         $key = $request->client()->cache()->createCacheKey($request);
@@ -205,37 +205,37 @@ class Kohana_Request_Client_CacheTest extends TestCase
             [
                 new HeaderBag(['cache-control' => 'max-age=100']),
                 ['max-age' => '100'],
-                true
+                true,
             ],
             [
                 new HeaderBag(['cache-control' => 'private']),
                 ['private' => null],
-                false
+                false,
             ],
             [
                 new HeaderBag(['cache-control' => 'private, max-age=100']),
                 ['private' => null, 'max-age' => '100'],
-                false
+                false,
             ],
             [
                 new HeaderBag(['cache-control' => 'private, s-maxage=100']),
                 ['private' => null, 's-maxage' => '100'],
-                true
+                true,
             ],
             [
                 new HeaderBag(['expires' => date('m/d/Y', strtotime('-1 day'))]),
                 [],
-                false
+                false,
             ],
             [
                 new HeaderBag(['expires' => date('m/d/Y', strtotime('+1 day'))]),
                 [],
-                true
+                true,
             ],
             [
                 new HeaderBag([]),
                 [],
-                true
+                true,
             ],
         ];
     }
@@ -258,8 +258,8 @@ class Kohana_Request_Client_CacheTest extends TestCase
             ->method('headers')
             ->willReturn($headers);
 
-        $request = new InternalClient;
-        $request->cache(new Cache);
+        $request = new InternalClient();
+        $request->cache(new Cache());
         $this->assertEquals($request->cache()->setCache($response), $expected);
     }
 

@@ -160,12 +160,13 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
         $row = $this->current();
 
         if ($this->asObject) {
-            if (isset($row->$name))
+            if (isset($row->$name)) {
                 return $row->$name;
-        }
-        else {
-            if (isset($row[$name]))
+            }
+        } else {
+            if (isset($row[$name])) {
                 return $row[$name];
+            }
         }
 
         return $default;
@@ -209,8 +210,9 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      */
     public function offsetGet($offset): mixed
     {
-        if (!$this->seek($offset))
+        if (!$this->seek($offset)) {
             return null;
+        }
 
         return $this->current();
     }

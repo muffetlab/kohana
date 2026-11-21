@@ -3,18 +3,18 @@
 namespace Kohana\Http;
 
 use Kohana\Cookie\Cookie;
-use Kohana\Foundation\KohanaException;
 use Kohana\Foundation\Application;
-use Kohana\Support\Str;
-use Kohana\Support\Number;
-use Kohana\Support\Arr;
-use Kohana\Routing\Route;
-use Kohana\Http\Client\InternalClient;
-use Kohana\Http\Client\ExternalClient;
-use Kohana\Routing\Url;
+use Kohana\Foundation\KohanaException;
 use Kohana\Http\Client\Client;
+use Kohana\Http\Client\ExternalClient;
+use Kohana\Http\Client\InternalClient;
 use Kohana\Http\Exceptions\HttpException;
 use Kohana\Http\Exceptions\RequestException;
+use Kohana\Routing\Route;
+use Kohana\Routing\Url;
+use Kohana\Support\Arr;
+use Kohana\Support\Number;
+use Kohana\Support\Str;
 
 /**
  * Request. Uses the [Route] class to determine what
@@ -79,7 +79,7 @@ class Request implements \Kohana\Http\Contracts\Request
             $protocol = Http::$protocol;
 
             // Use the server request method, or default to GET.
-            $method = $_SERVER['REQUEST_METHOD'] ?? \Kohana\Http\Contracts\Request::GET;
+            $method = $_SERVER['REQUEST_METHOD'] ?? static::GET;
 
             if (
                 !empty($_SERVER['HTTPS']) && filter_var($_SERVER['HTTPS'], FILTER_VALIDATE_BOOLEAN)
@@ -133,7 +133,7 @@ class Request implements \Kohana\Http\Contracts\Request
                 static::$clientIp = $_SERVER['REMOTE_ADDR'];
             }
 
-            if ($method !== \Kohana\Http\Contracts\Request::GET) {
+            if ($method !== static::GET) {
                 // Ensure the raw body is saved for future use
                 $body = file_get_contents('php://input');
             }
@@ -317,8 +317,9 @@ class Request implements \Kohana\Http\Contracts\Request
     public static function postMaxSizeExceeded(): bool
     {
         // Make sure the request method is POST
-        if (static::$initial->method() !== \Kohana\Http\Contracts\Request::POST)
+        if (static::$initial->method() !== static::POST) {
             return false;
+        }
 
         // Get the post_max_size in bytes
         $max_bytes = Number::bytes(ini_get('post_max_size'));
@@ -385,11 +386,12 @@ class Request implements \Kohana\Http\Contracts\Request
 
                 foreach ($parts as $part) {
                     // Prevent undefined $value notice below
-                    if (strpos($part, '=') === false)
+                    if (strpos($part, '=') === false) {
                         continue;
+                    }
 
                     // Separate the key and value
-                    list ($key, $value) = explode('=', trim($part));
+                    list($key, $value) = explode('=', trim($part));
 
                     if ($key === 'q') {
                         // There is a quality for this type
@@ -745,9 +747,9 @@ class Request implements \Kohana\Http\Contracts\Request
      */
     public function client(?Client $client = null)
     {
-        if ($client === null)
+        if ($client === null) {
             return $this->client;
-        else {
+        } else {
             $this->client = $client;
             return $this;
         }
@@ -906,10 +908,11 @@ class Request implements \Kohana\Http\Contracts\Request
     public function protocol(?string $protocol = null)
     {
         if ($protocol === null) {
-            if ($this->protocol)
+            if ($this->protocol) {
                 return $this->protocol;
-            else
+            } else {
                 return $this->protocol = Http::$protocol;
+            }
         }
 
         // Act as a setter
@@ -926,8 +929,9 @@ class Request implements \Kohana\Http\Contracts\Request
      */
     public function secure(?bool $secure = null)
     {
-        if ($secure === null)
+        if ($secure === null) {
             return $this->secure;
+        }
 
         // Act as a setter
         $this->secure = $secure;

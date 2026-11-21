@@ -5,7 +5,7 @@ namespace Kohana\Cache\Contracts;
 /**
  * Kohana Cache Arithmetic Interface, for basic cache integer based
  * arithmetic, addition and subtraction
- * 
+ *
  * @package    Kohana/Cache
  * @category   Base
  * @author     Kohana Team

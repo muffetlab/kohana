@@ -1,11 +1,11 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\Testing\TestCase;
-use Kohana\Html\Form;
 use Kohana\Foundation\KohanaException;
+use Kohana\Html\Form;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests Kohana Form helper
@@ -45,19 +45,19 @@ class Kohana_FormTest extends TestCase
         return [
             [
                 ['', null],
-                ['action' => '']
+                ['action' => ''],
             ],
             [
                 [null, null],
-                ['action' => '']
+                ['action' => ''],
             ],
             [
                 ['foo', null],
-                ['action' => '/foo']
+                ['action' => '/foo'],
             ],
             [
                 ['foo', ['method' => 'get']],
-                ['action' => '/foo', 'method' => 'get']
+                ['action' => '/foo', 'method' => 'get'],
             ],
         ];
     }
@@ -151,7 +151,7 @@ class Kohana_FormTest extends TestCase
 
         $tag = Form::$type($name, $value, $attributes);
 
-        $this->assertSelectEquals($selector,null, true, $tag);
+        $this->assertSelectEquals($selector, null, true, $tag);
     }
 
     /**
@@ -233,7 +233,7 @@ class Kohana_FormTest extends TestCase
 
         $tag = Form::$type($name, $value, $checked, $attributes);
 
-        $this->assertSelectEquals($selector,null, true, $tag);
+        $this->assertSelectEquals($selector, null, true, $tag);
     }
 
     /**
@@ -293,38 +293,38 @@ class Kohana_FormTest extends TestCase
                 'foo',
                 null,
                 null,
-                "<select name=\"foo\"></select>"
+                '<select name="foo"></select>',
             ],
             [
                 'foo',
                 ['bar' => 'bar'],
                 null,
-                "<select name=\"foo\">\n<option value=\"bar\">bar</option>\n</select>"
+                "<select name=\"foo\">\n<option value=\"bar\">bar</option>\n</select>",
             ],
             [
                 'foo',
                 ['bar' => 'bar'],
                 'bar',
-                "<select name=\"foo\">\n<option value=\"bar\" selected=\"selected\">bar</option>\n</select>"
+                "<select name=\"foo\">\n<option value=\"bar\" selected=\"selected\">bar</option>\n</select>",
             ],
             [
                 'foo',
                 ['bar' => ['foo' => 'bar']],
                 null,
-                "<select name=\"foo\">\n<optgroup label=\"bar\">\n<option value=\"foo\">bar</option>\n</optgroup>\n</select>"
+                "<select name=\"foo\">\n<optgroup label=\"bar\">\n<option value=\"foo\">bar</option>\n</optgroup>\n</select>",
             ],
             [
                 'foo',
                 ['bar' => ['foo' => 'bar']],
                 'foo',
-                "<select name=\"foo\">\n<optgroup label=\"bar\">\n<option value=\"foo\" selected=\"selected\">bar</option>\n</optgroup>\n</select>"
+                "<select name=\"foo\">\n<optgroup label=\"bar\">\n<option value=\"foo\" selected=\"selected\">bar</option>\n</optgroup>\n</select>",
             ],
             // #2286
             [
                 'foo',
                 ['bar' => 'bar', 'unit' => 'test', 'foo' => 'foo'],
                 ['bar', 'foo'],
-                "<select name=\"foo\" multiple=\"multiple\">\n<option value=\"bar\" selected=\"selected\">bar</option>\n<option value=\"unit\">test</option>\n<option value=\"foo\" selected=\"selected\">foo</option>\n</select>"
+                "<select name=\"foo\" multiple=\"multiple\">\n<option value=\"bar\" selected=\"selected\">bar</option>\n<option value=\"unit\">test</option>\n<option value=\"foo\" selected=\"selected\">foo</option>\n</select>",
             ],
         ];
     }
@@ -370,7 +370,7 @@ class Kohana_FormTest extends TestCase
         $matcher = [
             'name' => $name,
             'type' => 'submit',
-            'value' => $value
+            'value' => $value,
         ];
 
         $selector = 'input';
@@ -394,7 +394,7 @@ class Kohana_FormTest extends TestCase
                 'foo',
                 'bar',
                 ['src' => 'media/img/login.png'],
-                '<input type="image" name="foo" value="bar" src="/media/img/login.png" />'
+                '<input type="image" name="foo" value="bar" src="/media/img/login.png" />',
             ],
         ];
     }
@@ -420,7 +420,7 @@ class Kohana_FormTest extends TestCase
      *
      * @return array
      */
-    static function provider_label(): array
+    public static function provider_label(): array
     {
         return [
             // $value, $result
@@ -429,39 +429,39 @@ class Kohana_FormTest extends TestCase
                 'email',
                 null,
                 null,
-                '<label for="email">Email</label>'
+                '<label for="email">Email</label>',
             ],
             [
                 'email_address',
                 null,
                 null,
-                '<label for="email_address">Email Address</label>'
+                '<label for="email_address">Email Address</label>',
             ],
             [
                 'email-address',
                 null,
                 null,
-                '<label for="email-address">Email Address</label>'
+                '<label for="email-address">Email Address</label>',
             ],
             // For and text values provided
             [
                 'name',
                 'First name',
                 null,
-                '<label for="name">First name</label>'
+                '<label for="name">First name</label>',
             ],
             // with attributes
             [
                 'lastname',
                 'Last name',
                 ['class' => 'text'],
-                '<label class="text" for="lastname">Last name</label>'
+                '<label class="text" for="lastname">Last name</label>',
             ],
             [
                 'lastname',
                 'Last name',
                 ['class' => 'text', 'id' => 'txt_lastname'],
-                '<label id="txt_lastname" class="text" for="lastname">Last name</label>'
+                '<label id="txt_lastname" class="text" for="lastname">Last name</label>',
             ],
         ];
     }
@@ -476,7 +476,7 @@ class Kohana_FormTest extends TestCase
      */
     #[DataProvider('provider_label')]
     #[Test]
-    function test_label(string $for, ?string $text, ?array $attributes, string $expected)
+    public function test_label(string $for, ?string $text, ?array $attributes, string $expected)
     {
         $this->assertSame($expected, Form::label($for, $text, $attributes));
     }

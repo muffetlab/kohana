@@ -2,10 +2,10 @@
 
 namespace Kohana\Database;
 
+use Kohana\Database\Query\Expression;
+use Kohana\Database\Query\Query;
 use Kohana\Foundation\Application;
 use Kohana\Foundation\KohanaException;
-use Kohana\Database\Query\Query;
-use Kohana\Database\Query\Expression;
 
 /**
  * Database connection wrapper/helper.
@@ -27,10 +27,10 @@ use Kohana\Database\Query\Expression;
 abstract class Connection
 {
     // Query types
-    const SELECT = 1;
-    const INSERT = 2;
-    const UPDATE = 3;
-    const DELETE = 4;
+    public const SELECT = 1;
+    public const INSERT = 2;
+    public const UPDATE = 3;
+    public const DELETE = 4;
 
     /**
      * @var  string  default instance name
@@ -328,8 +328,9 @@ abstract class Connection
             'varbinary' => ['type' => 'string', 'binary' => true],
         ];
 
-        if (isset($types[$type]))
+        if (isset($types[$type])) {
             return $types[$type];
+        }
 
         return [];
     }

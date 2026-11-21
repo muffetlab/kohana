@@ -2,10 +2,10 @@
 
 namespace Kohana\Http;
 
-use Kohana\Support\Str;
+use Kohana\Cookie\Cookie;
 use Kohana\Foundation\Application;
 use Kohana\Http\Contracts\Response;
-use Kohana\Cookie\Cookie;
+use Kohana\Support\Str;
 
 /**
  * The Kohana_HTTP_Header class provides an Object-Orientated interface
@@ -23,7 +23,7 @@ use Kohana\Cookie\Cookie;
 class HeaderBag extends \ArrayObject
 {
     // Default Accept-* quality value if none supplied
-    const DEFAULT_QUALITY = 1;
+    public const DEFAULT_QUALITY = 1;
 
     /**
      * Parses an Accept(-*) header and detects the quality
@@ -75,8 +75,9 @@ class HeaderBag extends \ArrayObject
         $accepts = explode(',', (string) $accepts);
 
         // If there is no accept, let's accept everything
-        if ($accepts === null)
+        if ($accepts === null) {
             return ['*' => ['*' => (float) static::DEFAULT_QUALITY]];
+        }
 
         // Parse the Accept header qualities
         $accepts = static::acceptQuality($accepts);
@@ -90,8 +91,9 @@ class HeaderBag extends \ArrayObject
             $parts = explode('/', $key, 2);
 
             // Invalid content type—bail
-            if (!isset($parts[1]))
+            if (!isset($parts[1])) {
                 continue;
+            }
 
             // Set the parsed output
             $parsed_accept[$parts[0]][$parts[1]] = $accepts[$key];
@@ -224,8 +226,9 @@ class HeaderBag extends \ArrayObject
     {
         $directives = explode(',', strtolower($cache_control));
 
-        if ($directives === false)
+        if ($directives === false) {
             return false;
+        }
 
         $output = [];
 
@@ -459,8 +462,9 @@ class HeaderBag extends \ArrayObject
         if (strpos($type, '/') === false) {
             $mime = Application::$config->load('mimes.' . $type);
 
-            if ($mime === null)
+            if ($mime === null) {
                 return false;
+            }
 
             $quality = false;
 
@@ -830,8 +834,9 @@ class HeaderBag extends \ArrayObject
     protected function sendHeadersToPhp(array $headers, bool $replace): self
     {
         // If the headers have been sent, get out
-        if (headers_sent())
+        if (headers_sent()) {
             return $this;
+        }
 
         foreach ($headers as $key => $line) {
             if ($key === 'Set-Cookie' && is_array($line)) {

@@ -1,13 +1,13 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use Kohana\Cache\FileStore;
-use Kohana\Testing\TestCase;
-use Kohana\Foundation\Application;
 use Kohana\Cache\Cache;
 use Kohana\Cache\CacheException;
+use Kohana\Cache\FileStore;
+use Kohana\Foundation\Application;
 use Kohana\Foundation\KohanaException;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * @package    Kohana/Cache
@@ -20,8 +20,8 @@ use Kohana\Foundation\KohanaException;
 #[Group('kohana.cache')]
 class Kohana_CacheTest extends TestCase
 {
-    const BAD_GROUP_DEFINITION = 1010;
-    const EXPECT_SELF = 1001;
+    public const BAD_GROUP_DEFINITION = 1010;
+    public const EXPECT_SELF = 1001;
 
     /**
      * Data provider for test_instance
@@ -39,12 +39,12 @@ class Kohana_CacheTest extends TestCase
                 // Test default group
                 [
                     null,
-                    Cache::instance('file')
+                    Cache::instance('file'),
                 ],
                 // Test defined group
                 [
                     'file',
-                    Cache::instance('file')
+                    Cache::instance('file'),
                 ],
             ];
         }
@@ -125,21 +125,21 @@ class Kohana_CacheTest extends TestCase
                 'bar',
                 Kohana_CacheTest::EXPECT_SELF,
                 [
-                    'foo' => 'bar'
-                ]
+                    'foo' => 'bar',
+                ],
             ],
             [
                 'server',
                 null,
                 null,
-                []
+                [],
             ],
             [
                 null,
                 null,
                 [],
-                []
-            ]
+                [],
+            ],
         ];
     }
 
@@ -179,11 +179,11 @@ class Kohana_CacheTest extends TestCase
         return [
             [
                 'foo',
-                'foo'
+                'foo',
             ],
             [
                 'foo+-!@',
-                'foo+-!@'
+                'foo+-!@',
             ],
             [
                 'foo/bar',
@@ -191,16 +191,16 @@ class Kohana_CacheTest extends TestCase
             ],
             [
                 'foo\\bar',
-                'foo_bar'
+                'foo_bar',
             ],
             [
                 'foo bar',
-                'foo_bar'
+                'foo_bar',
             ],
             [
                 'foo\\bar snafu/stfu',
-                'foo_bar_snafu_stfu'
-            ]
+                'foo_bar_snafu_stfu',
+            ],
         ];
     }
 

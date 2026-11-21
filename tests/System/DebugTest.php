@@ -1,10 +1,10 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\Testing\TestCase;
 use Kohana\Foundation\Debug;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests Kohana Core
@@ -33,7 +33,7 @@ class Kohana_DebugTest extends TestCase
             // $thing, $expected
             [
                 ['foobar'],
-                "<pre class=\"debug\"><small>array</small><span>(1)</span> <span>(\n    0 => <small>string</small><span>(6)</span> \"foobar\"\n)</span></pre>"
+                "<pre class=\"debug\"><small>array</small><span>(1)</span> <span>(\n    0 => <small>string</small><span>(6)</span> \"foobar\"\n)</span></pre>",
             ],
         ];
     }
@@ -61,11 +61,11 @@ class Kohana_DebugTest extends TestCase
         return [
             [
                 SYSPATH . 'classes' . DIRECTORY_SEPARATOR . 'Kohana.php',
-                'SYSPATH' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Kohana.php'
+                'SYSPATH' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Kohana.php',
             ],
             [
                 MODPATH . static::dirSeparator('unittest/classes/kohana/unittest/runner.php'),
-                static::dirSeparator('MODPATH/unittest/classes/kohana/unittest/runner.php')
+                static::dirSeparator('MODPATH/unittest/classes/kohana/unittest/runner.php'),
             ],
         ];
     }
@@ -95,43 +95,43 @@ class Kohana_DebugTest extends TestCase
                 'foobar',
                 128,
                 10,
-                '<small>string</small><span>(6)</span> "foobar"'
+                '<small>string</small><span>(6)</span> "foobar"',
             ],
             [
                 'foobar',
                 2,
                 10,
-                '<small>string</small><span>(6)</span> "fo&nbsp;&hellip;"'
+                '<small>string</small><span>(6)</span> "fo&nbsp;&hellip;"',
             ],
             [
                 null,
                 128,
                 10,
-                '<small>NULL</small>'
+                '<small>NULL</small>',
             ],
             [
                 true,
                 128,
                 10,
-                '<small>bool</small> TRUE'
+                '<small>bool</small> TRUE',
             ],
             [
                 ['foobar'],
                 128,
                 10,
-                "<small>array</small><span>(1)</span> <span>(\n    0 => <small>string</small><span>(6)</span> \"foobar\"\n)</span>"
+                "<small>array</small><span>(1)</span> <span>(\n    0 => <small>string</small><span>(6)</span> \"foobar\"\n)</span>",
             ],
             [
-                new StdClass,
+                new StdClass(),
                 128,
                 10,
-                "<small>object</small> <span>stdClass(0)</span> <code>{\n}</code>"
+                "<small>object</small> <span>stdClass(0)</span> <code>{\n}</code>",
             ],
             [
                 "fo\x6F\xFF\x00bar\x8F\xC2\xB110",
                 128,
                 10,
-                '<small>string</small><span>(10)</span> "foobar±10"'
+                '<small>string</small><span>(10)</span> "foobar±10"',
             ],
             [
                 ['level1' => ['level2' => ['level3' => ['level4' => ['value' => 'something']]]]],
@@ -147,7 +147,7 @@ class Kohana_DebugTest extends TestCase
             )</span>
         )</span>
     )</span>
-)</span>'
+)</span>',
             ],
         ];
     }

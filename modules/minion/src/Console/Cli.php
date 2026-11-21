@@ -87,7 +87,7 @@ class Cli
 
             if (strpos($opt, '=')) {
                 // Separate the name and value
-                list ($opt, $value) = explode('=', $opt, 2);
+                list($opt, $value) = explode('=', $opt, 2);
             } else {
                 $value = null;
             }
@@ -290,10 +290,10 @@ class Cli
             throw new KohanaException('Invalid CLI background color: ' . $background);
         }
 
-        $string = "\033[" . static::$foregroundColors[$foreground] . "m";
+        $string = "\033[" . static::$foregroundColors[$foreground] . 'm';
 
         if ($background !== null) {
-            $string .= "\033[" . static::$backgroundColors[$background] . "m";
+            $string .= "\033[" . static::$backgroundColors[$background] . 'm';
         }
 
         $string .= $text . "\033[0m";

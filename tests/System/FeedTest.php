@@ -1,14 +1,14 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\Testing\TestCase;
 use Kohana\Foundation\Application;
-use Kohana\Support\Feed;
-use Kohana\Http\Exceptions\Http404Exception;
 use Kohana\Foundation\KohanaException;
+use Kohana\Http\Exceptions\Http404Exception;
 use Kohana\Http\Exceptions\RequestException;
+use Kohana\Support\Feed;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Test for feed helper
@@ -50,14 +50,14 @@ class Kohana_FeedTest extends TestCase
                 realpath(KOHANA_FIXTURES . '/feeds/activity.atom'),
                 [
                     'Proposals (Political/Workflow) #4839 (New)',
-                    'Proposals (Political/Workflow) #4782'
-                ]
+                    'Proposals (Political/Workflow) #4782',
+                ],
             ],
             [
                 realpath(KOHANA_FIXTURES . '/feeds/example.rss20'),
                 [
-                    'Example entry'
-                ]
+                    'Example entry',
+                ],
             ],
         ];
     }
@@ -95,8 +95,8 @@ class Kohana_FeedTest extends TestCase
             'image' => [
                 'link' => 'https://kohana.top/image.png',
                 'url' => 'https://kohana.top/',
-                'title' => 'title'
-            ]
+                'title' => 'title',
+            ],
         ];
 
         return [
@@ -108,8 +108,8 @@ class Kohana_FeedTest extends TestCase
                 [
                     static::matcher_composer($info, 'image', 'link'),
                     static::matcher_composer($info, 'image', 'url'),
-                    static::matcher_composer($info, 'image', 'title')
-                ]
+                    static::matcher_composer($info, 'image', 'title'),
+                ],
             ],
         ];
     }
@@ -126,7 +126,7 @@ class Kohana_FeedTest extends TestCase
     {
         return [
             'channel > ' . $tag . ' > ' . $child,
-            $data[$tag][$child]
+            $data[$tag][$child],
         ];
     }
 

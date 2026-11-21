@@ -1,10 +1,10 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use Kohana\Foundation\Application;
 use Kohana\Cache\Cache;
 use Kohana\Cache\CacheException;
+use Kohana\Foundation\Application;
 use Kohana\Foundation\KohanaException;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * @package    Kohana/Cache/Memcached
@@ -50,7 +50,7 @@ class Kohana_CacheArithmeticMemcachedTest extends Kohana_CacheArithmeticMethodsT
                         'port' => 11211,
                         'weight' => 1,
                     ],
-                ]
+                ],
             ]);
             Application::$config->load('cache.memcached');
         }

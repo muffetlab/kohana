@@ -1,12 +1,12 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use Kohana\Encryption\OpensslEncrypter;
-use Kohana\Testing\TestCase;
-use Kohana\Foundation\KohanaException;
 use Kohana\Encryption\Encrypter;
+use Kohana\Encryption\OpensslEncrypter;
 use Kohana\Foundation\Application;
+use Kohana\Foundation\KohanaException;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the Encrypt_Openssl class.
@@ -483,23 +483,23 @@ class Kohana_Encrypt_OpensslTest extends TestCase
                 [
                     'driver' => 'openssl',
                     'key' => 'trwQwVXX96TIJoKxyBHB9AJkwAOHixuV1ENZmIWyanI0j1zNgSVvqywy044Agaj',
-                ]
+                ],
             ],
             [
                 'blowfish',
                 [
                     'driver' => 'openssl',
                     'key' => '7bZJJkmNrelj5NaKoY6h6rMSRSmeUlJuTeOd5HHka5XknyMX4uGSfeVolTz4IYy',
-                    'method' => 'BF-ECB'
-                ]
+                    'method' => 'BF-ECB',
+                ],
             ],
             [
                 'tripledes',
                 [
                     'driver' => 'openssl',
                     'key' => 'a9hcSLRvA3LkFc7EJgxXIKQuz1ec91J7P6WNq1IaxMZp4CTj5m31gZLARLxI1jD',
-                    'method' => 'DES-EDE3-CBC'
-                ]
+                    'method' => 'DES-EDE3-CBC',
+                ],
             ],
         ];
     }

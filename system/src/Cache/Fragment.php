@@ -2,8 +2,8 @@
 
 namespace Kohana\Cache;
 
-use Kohana\Translation\Translator;
 use Kohana\Foundation\Application;
+use Kohana\Translation\Translator;
 
 /**
  * View fragment caching. This is primarily used to cache small parts of a view

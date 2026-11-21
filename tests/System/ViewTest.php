@@ -1,13 +1,13 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\Testing\TestCase;
 use Kohana\Foundation\Application;
+use Kohana\Foundation\KohanaException;
+use Kohana\Testing\TestCase;
 use Kohana\View\View;
 use Kohana\View\ViewException;
-use Kohana\Foundation\KohanaException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests the View class
@@ -39,7 +39,7 @@ class Kohana_ViewTest extends TestCase
         self::$old_modules = Application::modules();
 
         $new_modules = self::$old_modules + [
-            'test_views' => realpath(KOHANA_FIXTURES . '/')
+            'test_views' => realpath(KOHANA_FIXTURES . '/'),
         ];
         Application::modules($new_modules);
     }

@@ -1,14 +1,14 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\Validation\Rules;
-use PHPUnit\Framework\Attributes\DataProvider;
-use Kohana\Translation\Translator;
-use PHPUnit\Framework\Attributes\Ticket;
 use Kohana\Foundation\KohanaException;
 use Kohana\Testing\TestCase;
+use Kohana\Translation\Translator;
+use Kohana\Validation\Rules;
 use Kohana\Validation\Validator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\Ticket;
 
 /**
  * Tests the Validation lib that's shipped with Kohana
@@ -46,7 +46,8 @@ class Kohana_ValidationTest extends TestCase
         $this->assertTrue($instance instanceof Validator);
 
         $this->assertSame(
-            $values, $instance->data()
+            $values,
+            $instance->data()
         );
     }
 
@@ -61,7 +62,7 @@ class Kohana_ValidationTest extends TestCase
         $validation = new Validator([
             'foo' => 'bar',
             'fud' => 'fear, uncertainty, doubt',
-            'num' => 9
+            'num' => 9,
         ]);
 
         $validation->rule('num', 'is_int')->rule('foo', 'is_string');
@@ -143,7 +144,7 @@ class Kohana_ValidationTest extends TestCase
         $this->assertSame($initial_data, $property->getValue($validation));
 
         $this->assertSame($validation, $validation->labels([
-                'fast' => 'lightning'
+                'fast' => 'lightning',
         ]));
 
         $this->assertSame(['fast' => 'lightning', 'kung fu' => 'fighting'], $property->getValue($validation));
@@ -206,20 +207,20 @@ class Kohana_ValidationTest extends TestCase
                 ['foo' => [['not_empty', null]]],
                 [],
                 true,
-                []
+                [],
             ],
             [
                 ['unit' => 'test'],
                 [
                     'foo' => [['not_empty', null]],
-                    'unit' => [['min_length', [':value', 6]]]
+                    'unit' => [['min_length', [':value', 6]]],
                 ],
                 [],
                 false,
                 [
                     'foo' => 'foo must not be empty',
-                    'unit' => 'unit must be at least 6 characters long'
-                ]
+                    'unit' => 'unit must be at least 6 characters long',
+                ],
             ],
             [
                 ['foo' => 'bar'],
@@ -237,12 +238,12 @@ class Kohana_ValidationTest extends TestCase
                             return $value === 'bar';
                         }, [':value']],
                         // Tests using a function as a rule
-                        ['is_string', [':value']]
+                        ['is_string', [':value']],
                     ],
                 ],
                 [],
                 false,
-                ['foo' => 'foo must be at least 4 characters long']
+                ['foo' => 'foo must be at least 4 characters long'],
             ],
             // Switch things around and make :value an array
             [
@@ -250,7 +251,7 @@ class Kohana_ValidationTest extends TestCase
                 ['foo' => [['in_array', ['kohana', ':value']]]],
                 [],
                 false,
-                ['foo' => 'foo must be one of the available options']
+                ['foo' => 'foo must be one of the available options'],
             ],
             // Test wildcard rules with no other rules
             [
@@ -258,7 +259,7 @@ class Kohana_ValidationTest extends TestCase
                 [true => [['is_string', [':value']]]],
                 ['foo' => 'foo'],
                 false,
-                ['foo' => '1.foo.is_string']
+                ['foo' => '1.foo.is_string'],
             ],
             // Test array rules use method as error name
             [
@@ -266,7 +267,7 @@ class Kohana_ValidationTest extends TestCase
                 ['foo' => [[[Rules::class, 'minLength'], [':value', 10]]]],
                 [],
                 false,
-                ['foo' => 'foo must be at least 10 characters long']
+                ['foo' => 'foo must be at least 10 characters long'],
             ],
         ];
     }
@@ -292,8 +293,9 @@ class Kohana_ValidationTest extends TestCase
         }
 
         foreach ($rules as $field => $field_rules) {
-            foreach ($field_rules as $rule)
+            foreach ($field_rules as $rule) {
                 $validation->rule($field, $rule[0], $rule[1]);
+            }
         }
 
         $status = $validation->check();
@@ -352,19 +354,19 @@ class Kohana_ValidationTest extends TestCase
             [
                 ['username' => 'frank'],
                 ['username' => [['not_empty', null]]],
-                []
+                [],
             ],
             // Error from message file
             [
                 ['username' => ''],
                 ['username' => [['not_empty', null]]],
-                ['username' => 'username must not be empty']
+                ['username' => 'username must not be empty'],
             ],
             // No error message exists, display the path expected
             [
                 ['username' => 'John'],
                 ['username' => [['strpos', [':value', 'Kohana']]]],
-                ['username' => 'Validation.username.strpos']
+                ['username' => 'Validation.username.strpos'],
             ],
         ];
     }
@@ -410,7 +412,7 @@ class Kohana_ValidationTest extends TestCase
                 ['Spanish' => [['not_empty', null]]],
                 // Errors are not translated yet so only the label will translate
                 ['Spanish' => 'Español must not be empty'],
-                ['Spanish' => 'Spanish must not be empty']
+                ['Spanish' => 'Spanish must not be empty'],
             ],
         ];
     }
@@ -627,7 +629,7 @@ class Kohana_ValidationTest extends TestCase
                 ['email1' => ''],
                 'email1',
                 [['not_empty']],
-                ['email1' => 'email1 must not be empty']
+                ['email1' => 'email1 must not be empty'],
             ],
         ];
     }

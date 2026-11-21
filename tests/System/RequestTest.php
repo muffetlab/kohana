@@ -1,23 +1,23 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 use App\Http\Controllers\RequestTestDummyController;
-use Kohana\Http\Client\CurlClient;
-use Kohana\Testing\TestCase;
 use Kohana\Foundation\Application;
-use Kohana\Http\Request;
-use Kohana\Routing\Route;
-use Kohana\Support\Number;
+use Kohana\Foundation\KohanaException;
+use Kohana\Http\Client\Client;
+use Kohana\Http\Client\CurlClient;
 use Kohana\Http\Client\ExternalClient;
 use Kohana\Http\Client\InternalClient;
 use Kohana\Http\Client\StreamClient;
-use Kohana\Http\Client\Client;
-use Kohana\Http\Response;
-use Kohana\Foundation\KohanaException;
 use Kohana\Http\Exceptions\RequestException;
+use Kohana\Http\Request;
+use Kohana\Http\Response;
+use Kohana\Routing\Route;
+use Kohana\Support\Number;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Unit tests for request class
@@ -171,7 +171,7 @@ class Kohana_RequestTest extends TestCase
         $route = new Route('(<uri>)', ['uri' => '.+']);
         $route->defaults([
             'controller' => 'RequestTestDummy',
-            'action' => 'foobar'
+            'action' => 'foobar',
         ]);
         $request = Request::factory('RequestTestDummy', [], true, [$route]);
 
@@ -261,7 +261,7 @@ class Kohana_RequestTest extends TestCase
             'Kohana\Foundation\Application::$baseUrl' => '/kohana/',
             '_SERVER' => [
                 'HTTP_HOST' => 'localhost',
-                'argc' => $_SERVER['argc']
+                'argc' => $_SERVER['argc'],
             ],
             'Kohana\Foundation\Application::$indexFile' => false,
         ]);
@@ -413,13 +413,13 @@ class Kohana_RequestTest extends TestCase
                 [
                     CURLOPT_PROXYPORT => 8080,
                     CURLOPT_PROXYTYPE => CURLPROXY_HTTP,
-                    CURLOPT_VERBOSE => true
+                    CURLOPT_VERBOSE => true,
                 ],
                 [
                     CURLOPT_PROXYPORT => 8080,
                     CURLOPT_PROXYTYPE => CURLPROXY_HTTP,
-                    CURLOPT_VERBOSE => true
-                ]
+                    CURLOPT_VERBOSE => true,
+                ],
             ],
         ];
     }
@@ -467,12 +467,12 @@ class Kohana_RequestTest extends TestCase
             [
                 $request->headers([
                     'x-powered-by' => $x_powered_by,
-                    'content-type' => $content_type
+                    'content-type' => $content_type,
                 ]),
                 [
                     'x-powered-by' => $x_powered_by,
-                    'content-type' => $content_type
-                ]
+                    'content-type' => $content_type,
+                ],
             ],
         ];
     }
@@ -504,16 +504,16 @@ class Kohana_RequestTest extends TestCase
             [
                 [
                     'content-type' => 'application/x-www-form-urlencoded',
-                    'x-test-header' => 'foo'
+                    'x-test-header' => 'foo',
                 ],
-                "Content-Type: application/x-www-form-urlencoded\r\nX-Test-Header: foo\r\n\r\n"
+                "Content-Type: application/x-www-form-urlencoded\r\nX-Test-Header: foo\r\n\r\n",
             ],
             [
                 [
                     'content-type' => 'application/json',
-                    'x-powered-by' => 'kohana'
+                    'x-powered-by' => 'kohana',
                 ],
-                "Content-Type: application/json\r\nX-Powered-By: kohana\r\n\r\n"
+                "Content-Type: application/json\r\nX-Powered-By: kohana\r\n\r\n",
             ],
         ];
     }
@@ -548,8 +548,8 @@ class Kohana_RequestTest extends TestCase
                 ['foo' => 'bar', 'sna' => 'fu'],
                 [
                     'foo' => 'bar',
-                    'sna' => 'fu'
-                ]
+                    'sna' => 'fu',
+                ],
             ],
             [
                 'foo/bar?john=wayne&peggy=sue',
@@ -558,8 +558,8 @@ class Kohana_RequestTest extends TestCase
                     'john' => 'wayne',
                     'peggy' => 'sue',
                     'foo' => 'bar',
-                    'sna' => 'fu'
-                ]
+                    'sna' => 'fu',
+                ],
             ],
             [
                 'http://host.tld/foo/bar?john=wayne&peggy=sue',
@@ -568,8 +568,8 @@ class Kohana_RequestTest extends TestCase
                     'john' => 'wayne',
                     'peggy' => 'sue',
                     'foo' => 'bar',
-                    'sna' => 'fu'
-                ]
+                    'sna' => 'fu',
+                ],
             ],
         ];
     }
@@ -629,19 +629,19 @@ class Kohana_RequestTest extends TestCase
      */
     public static function provider_client(): array
     {
-        $internal_client = new InternalClient;
-        $external_client = new StreamClient;
+        $internal_client = new InternalClient();
+        $external_client = new StreamClient();
 
         return [
             [
                 new Request('https://kohana.top'),
                 $internal_client,
-                $internal_client
+                $internal_client,
             ],
             [
                 new Request('foo/bar'),
                 $external_client,
-                $external_client
+                $external_client,
             ],
         ];
     }
@@ -670,7 +670,7 @@ class Kohana_RequestTest extends TestCase
     {
         $request = Request::factory('http://example.com/', [
                 'follow' => true,
-                'strict_redirect' => false
+                'strict_redirect' => false,
         ]);
 
         $client = $request->client();
@@ -685,7 +685,7 @@ class Kohana_RequestTest extends TestCase
     public function test_content_length_after_render()
     {
         $request = Request::factory('https://example.org/post')
-            ->client(new Kohana_RequestTest_Header_Spying_Request_Client_External)
+            ->client(new Kohana_RequestTest_Header_Spying_Request_Client_External())
             ->method(Request::POST)
             ->post(['aaa' => 'bbb']);
 
@@ -705,7 +705,7 @@ class Kohana_RequestTest extends TestCase
     public function test_content_length_after_changing_post()
     {
         $request = Request::factory('https://example.org/post')
-            ->client(new Kohana_RequestTest_Header_Spying_Request_Client_External)
+            ->client(new Kohana_RequestTest_Header_Spying_Request_Client_External())
             ->method(Request::POST)
             ->post(['aaa' => 'bbb']);
 

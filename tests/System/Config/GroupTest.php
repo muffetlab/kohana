@@ -1,9 +1,9 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\Testing\TestCase;
-use Kohana\Config\Repository;
 use Kohana\Config\Group;
+use Kohana\Config\Repository;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests the Config group lib
@@ -27,7 +27,7 @@ class Kohana_Config_GroupTest extends TestCase
      */
     public function get_mock_config(): Repository
     {
-        return new Repository;
+        return new Repository();
     }
 
     /**
@@ -156,7 +156,7 @@ class Kohana_Config_GroupTest extends TestCase
 
         $this->assertSame([
             'var' => 'LOLCAT',
-            'lolcat' => 'IN UR CODE'
+            'lolcat' => 'IN UR CODE',
             ], $config->asArray());
 
         // And if we remove an item it should be removed from the exported array

@@ -3,8 +3,8 @@
 namespace Kohana\Database;
 
 use Kohana\Foundation\Application;
-use Kohana\Foundation\Profiler;
 use Kohana\Foundation\KohanaException;
+use Kohana\Foundation\Profiler;
 
 /**
  * PDO database connection.
@@ -32,8 +32,9 @@ class PdoConnection extends Connection
 
     public function connect()
     {
-        if ($this->connection)
+        if ($this->connection) {
             return;
+        }
 
         // Extract the connection parameters, adding required variables
         extract($this->config['connection'] + [
@@ -87,7 +88,10 @@ class PdoConnection extends Connection
         $this->connection or $this->connect();
 
         return $this->connection->sqliteCreateAggregate(
-                $name, $step, $final, $arguments
+            $name,
+            $step,
+            $final,
+            $arguments
         );
     }
 
@@ -110,7 +114,9 @@ class PdoConnection extends Connection
         $this->connection or $this->connect();
 
         return $this->connection->sqliteCreateFunction(
-                $name, $callback, $arguments
+            $name,
+            $callback,
+            $arguments
         );
     }
 
@@ -162,7 +168,7 @@ class PdoConnection extends Connection
             // Convert the exception in a database exception
             throw new DatabaseException(':error [ :query ]', [
             ':error' => $e->getMessage(),
-            ':query' => $sql
+            ':query' => $sql,
             ], $e->getCode());
         }
 

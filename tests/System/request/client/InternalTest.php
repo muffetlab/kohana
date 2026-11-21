@@ -1,15 +1,14 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
+use Kohana\Foundation\Application;
+use Kohana\Foundation\KohanaException;
+use Kohana\Http\Client\InternalClient;
+use Kohana\Http\Request;
+use Kohana\Testing\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Kohana\Http\Request;
-use Kohana\Http\Response;
-use Kohana\Testing\TestCase;
-use Kohana\Foundation\Application;
-use Kohana\Http\Client\InternalClient;
-use Kohana\Foundation\KohanaException;
 
 /**
  * Unit tests for internal request client
@@ -60,21 +59,21 @@ class Kohana_Request_Client_InternalTest extends TestCase
                 'Welcome',
                 'missing_action',
                 'Welcome/missing_action',
-                404
+                404,
             ],
             [
                 'kohana3',
                 'missing_controller',
                 'index',
                 'kohana3/missing_controller/index',
-                404
+                404,
             ],
             [
                 '',
                 'Kohana\Routing\TemplateController',
                 'missing_action',
                 'kohana3/Template/missing_action',
-                500
+                500,
             ],
         ];
     }
@@ -95,7 +94,7 @@ class Kohana_Request_Client_InternalTest extends TestCase
         $request->directory($directory);
         $request->controller($controller);
         $request->action($action);
-        $internal_client = new InternalClient;
+        $internal_client = new InternalClient();
 
         $response = $internal_client->execute($request);
 

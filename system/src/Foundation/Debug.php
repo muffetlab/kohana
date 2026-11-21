@@ -125,7 +125,7 @@ class Debug
 
             if ($marker === null) {
                 // Make a unique marker - force it to be alphanumeric so that it is always treated as a string array key
-                $marker = uniqid("\x00") . "x";
+                $marker = uniqid("\x00") . 'x';
             }
 
             if (empty($var)) {
@@ -133,12 +133,13 @@ class Debug
             } elseif (isset($var[$marker])) {
                 $output[] = "(\n$space$s*RECURSION*\n$space)";
             } elseif ($level < $limit) {
-                $output[] = "<span>(";
+                $output[] = '<span>(';
 
                 $var[$marker] = true;
                 foreach ($var as $key => &$val) {
-                    if ($key === $marker)
+                    if ($key === $marker) {
                         continue;
+                    }
                     if (!is_int($key)) {
                         $key = '"' . htmlspecialchars($key, ENT_NOQUOTES, Application::$charset) . '"';
                     }
@@ -175,7 +176,7 @@ class Debug
             } elseif (isset($objects[$hash])) {
                 $output[] = "{\n$space$s*RECURSION*\n$space}";
             } elseif ($level < $limit) {
-                $output[] = "<code>{";
+                $output[] = '<code>{';
 
                 $objects[$hash] = true;
                 foreach ($array as $key => &$val) {
@@ -265,8 +266,9 @@ class Debug
         $source = '';
         while (($row = fgets($file)) !== false) {
             // Increment the line number
-            if (++$line > $range['end'])
+            if (++$line > $range['end']) {
                 break;
+            }
 
             if ($line >= $range['start']) {
                 // Make the row safe for output

@@ -2,8 +2,8 @@
 
 namespace Kohana\Cache;
 
-use Kohana\Cache\Contracts\Tagging;
 use Kohana\Cache\Contracts\GarbageCollect;
+use Kohana\Cache\Contracts\Tagging;
 use Kohana\Support\Arr;
 
 /**

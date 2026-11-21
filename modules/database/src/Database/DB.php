@@ -2,12 +2,12 @@
 
 namespace Kohana\Database;
 
-use Kohana\Database\Query\Query;
-use Kohana\Database\Query\SelectBuilder;
-use Kohana\Database\Query\InsertBuilder;
-use Kohana\Database\Query\UpdateBuilder;
 use Kohana\Database\Query\DeleteBuilder;
 use Kohana\Database\Query\Expression;
+use Kohana\Database\Query\InsertBuilder;
+use Kohana\Database\Query\Query;
+use Kohana\Database\Query\SelectBuilder;
+use Kohana\Database\Query\UpdateBuilder;
 
 /**
  * Provides a shortcut to get Database related objects for [making queries](../database/query).

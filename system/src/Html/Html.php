@@ -20,8 +20,8 @@ class Html
     /**
      * @var  array  preferred order of attributes
      */
-    public static $attributeOrder = array
-        (
+    public static $attributeOrder =
+        [
         'action',
         'method',
         'type',
@@ -50,7 +50,7 @@ class Html
         'checked',
         'readonly',
         'disabled',
-    );
+    ];
 
     /**
      * @var bool use strict XHTML mode?
@@ -290,8 +290,9 @@ class Html
      */
     public static function attributes(?array $attributes = null): string
     {
-        if (empty($attributes))
+        if (empty($attributes)) {
             return '';
+        }
 
         $sorted = [];
         foreach (static::$attributeOrder as $key) {

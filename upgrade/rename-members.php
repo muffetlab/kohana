@@ -60,10 +60,12 @@ foreach ($targets as $file) {
     $old = $parser->parse($code);
     $tokens = $parser->getTokens();
     $stmts = (new NodeTraverser(new CloningVisitor()))->traverse($old);
-    $v = new class($methodMap, $propMap) extends NodeVisitorAbstract {
+    $v = new class ($methodMap, $propMap) extends NodeVisitorAbstract {
         public int $count = 0;
 
-        public function __construct(private array $m, private array $p) {}
+        public function __construct(private array $m, private array $p)
+        {
+        }
 
         private function method(string $name): ?string
         {

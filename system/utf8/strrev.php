@@ -13,8 +13,9 @@ use Kohana\Support\Utf8;
  */
 function _strrev($str): string
 {
-    if (Utf8::isAscii($str))
+    if (Utf8::isAscii($str)) {
         return strrev($str);
+    }
 
     preg_match_all('/./us', $str, $matches);
     return implode('', array_reverse($matches[0]));

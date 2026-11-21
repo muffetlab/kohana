@@ -14,15 +14,15 @@ namespace Kohana\Support;
 class Date
 {
     // Second amounts for various time increments
-    const YEAR = 31556926;
-    const MONTH = 2629744;
-    const WEEK = 604800;
-    const DAY = 86400;
-    const HOUR = 3600;
-    const MINUTE = 60;
+    public const YEAR = 31556926;
+    public const MONTH = 2629744;
+    public const WEEK = 604800;
+    public const DAY = 86400;
+    public const HOUR = 3600;
+    public const MINUTE = 60;
     // Available formats for Date::months()
-    const MONTHS_LONG = 'F';
-    const MONTHS_SHORT = 'M';
+    public const MONTHS_LONG = 'F';
+    public const MONTHS_SHORT = 'M';
 
     /**
      * Default timestamp format for formatted_time
@@ -69,8 +69,8 @@ class Date
         $zone_local = new \DateTimeZone($local);
 
         // Create date objects from timezones
-        $time_remote = new \DateTime($now ?? "now", $zone_remote);
-        $time_local = new \DateTime($now ?? "now", $zone_local);
+        $time_remote = new \DateTime($now ?? 'now', $zone_remote);
+        $time_local = new \DateTime($now ?? 'now', $zone_local);
 
         // Find the offset
         return $zone_remote->getOffset($time_remote) - $zone_local->getOffset($time_local);

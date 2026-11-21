@@ -2,13 +2,13 @@
 
 namespace Kohana\Http;
 
-use Kohana\Foundation\KohanaException;
-use Kohana\Support\Arr;
 use Kohana\Cookie\Cookie;
 use Kohana\Filesystem\File;
 use Kohana\Foundation\Application;
-use Kohana\Log\Logger;
+use Kohana\Foundation\KohanaException;
 use Kohana\Http\Exceptions\RequestException;
+use Kohana\Log\Logger;
+use Kohana\Support\Arr;
 
 /**
  * Response wrapper. Created as the result of any [Request] execution
@@ -90,7 +90,7 @@ class Response implements \Kohana\Http\Contracts\Response
         503 => 'Service Unavailable',
         504 => 'Gateway Timeout',
         505 => 'HTTP Version Not Supported',
-        509 => 'Bandwidth Limit Exceeded'
+        509 => 'Bandwidth Limit Exceeded',
     ];
 
     /**
@@ -126,7 +126,7 @@ class Response implements \Kohana\Http\Contracts\Response
      */
     public function __construct(array $config = [])
     {
-        $this->header = new HeaderBag;
+        $this->header = new HeaderBag();
 
         foreach ($config as $key => $value) {
             if (property_exists($this, $key)) {
@@ -156,8 +156,9 @@ class Response implements \Kohana\Http\Contracts\Response
      */
     public function body(?string $content = null)
     {
-        if ($content === null)
+        if ($content === null) {
             return $this->body;
+        }
 
         $this->body = $content;
         return $this;
@@ -276,10 +277,11 @@ class Response implements \Kohana\Http\Contracts\Response
     public function cookie($key = null, $value = null)
     {
         // Handle the get cookie calls
-        if ($key === null)
+        if ($key === null) {
             return $this->cookies;
-        elseif (!is_array($key) && !$value)
+        } elseif (!is_array($key) && !$value) {
             return Arr::get($this->cookies, $key);
+        }
 
         // Handle the set cookie calls
         if (is_array($key)) {
@@ -290,7 +292,7 @@ class Response implements \Kohana\Http\Contracts\Response
             if (!is_array($value)) {
                 $value = [
                     'value' => $value,
-                    'expiration' => Cookie::$expiration
+                    'expiration' => Cookie::$expiration,
                 ];
             } elseif (!isset($value['expiration'])) {
                 $value['expiration'] = Cookie::$expiration;
@@ -476,8 +478,9 @@ class Response implements \Kohana\Http\Contracts\Response
         fseek($file, $start);
 
         while (!feof($file) && ($pos = ftell($file)) <= $end) {
-            if (connection_aborted())
+            if (connection_aborted()) {
                 break;
+            }
 
             if ($pos + $block > $end) {
                 // Don't read past the buffer.

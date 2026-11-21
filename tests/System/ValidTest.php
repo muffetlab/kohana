@@ -1,12 +1,12 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
+use Kohana\Foundation\KohanaException;
+use Kohana\Support\Str;
 use Kohana\Testing\TestCase;
 use Kohana\Validation\Rules;
-use Kohana\Support\Str;
-use Kohana\Foundation\KohanaException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests the Valid class
@@ -57,7 +57,8 @@ class Kohana_ValidTest extends TestCase
     public function test_alpha(string $string, bool $expected, bool $utf8 = false)
     {
         $this->assertSame(
-            $expected, Rules::alpha($string, $utf8)
+            $expected,
+            Rules::alpha($string, $utf8)
         );
     }
 
@@ -94,7 +95,8 @@ class Kohana_ValidTest extends TestCase
     public function test_alpha_numeric(string $input, bool $expected, bool $utf8 = false)
     {
         $this->assertSame(
-            $expected, Rules::alphaNumeric($input, $utf8)
+            $expected,
+            Rules::alphaNumeric($input, $utf8)
         );
     }
 
@@ -129,12 +131,14 @@ class Kohana_ValidTest extends TestCase
     {
         if (!$contains_utf8) {
             $this->assertSame(
-                $expected, Rules::alphaDash($input)
+                $expected,
+                Rules::alphaDash($input)
             );
         }
 
         $this->assertSame(
-            $expected, Rules::alphaDash($input, true)
+            $expected,
+            Rules::alphaDash($input, true)
         );
     }
 
@@ -170,7 +174,8 @@ class Kohana_ValidTest extends TestCase
     public function test_date(string $date, bool $expected)
     {
         $this->assertSame(
-            $expected, Rules::date($date)
+            $expected,
+            Rules::date($date)
         );
     }
 
@@ -204,7 +209,9 @@ class Kohana_ValidTest extends TestCase
     public function test_decimal(string $decimal, int $places, ?int $digits, bool $expected)
     {
         $this->assertSame(
-            $expected, Rules::decimal($decimal, $places, $digits), 'Decimal: "' . $decimal . '" to ' . $places . ' places and ' . $digits . ' digits (preceding period)'
+            $expected,
+            Rules::decimal($decimal, $places, $digits),
+            'Decimal: "' . $decimal . '" to ' . $places . ' places and ' . $digits . ' digits (preceding period)'
         );
     }
 
@@ -240,12 +247,14 @@ class Kohana_ValidTest extends TestCase
     {
         if (!$contains_utf8) {
             $this->assertSame(
-                $expected, Rules::digit($input)
+                $expected,
+                Rules::digit($input)
             );
         }
 
         $this->assertSame(
-            $expected, Rules::digit($input, true)
+            $expected,
+            Rules::digit($input, true)
         );
     }
 
@@ -282,7 +291,8 @@ class Kohana_ValidTest extends TestCase
     public function test_color(string $color, bool $expected)
     {
         $this->assertSame(
-            $expected, Rules::color($color)
+            $expected,
+            Rules::color($color)
         );
     }
 
@@ -319,7 +329,8 @@ class Kohana_ValidTest extends TestCase
     public function test_credit_card(string $number, $type, bool $expected)
     {
         $this->assertSame(
-            $expected, Rules::creditCard($number, $type)
+            $expected,
+            Rules::creditCard($number, $type)
         );
     }
 
@@ -356,7 +367,8 @@ class Kohana_ValidTest extends TestCase
     public function test_luhn($number, bool $expected)
     {
         $this->assertSame(
-            $expected, Rules::luhn($number)
+            $expected,
+            Rules::luhn($number)
         );
     }
 
@@ -400,7 +412,8 @@ class Kohana_ValidTest extends TestCase
     public function test_email(string $email, bool $strict, bool $correct)
     {
         $this->assertSame(
-            $correct, Rules::email($email, $strict)
+            $correct,
+            Rules::email($email, $strict)
         );
     }
 
@@ -478,9 +491,9 @@ class Kohana_ValidTest extends TestCase
     public function test_exact_length(string $string, $length, bool $correct)
     {
         $this->assertSame(
-                $correct,
-                Rules::exactLength($string, $length),
-                'Reported string length is not correct'
+            $correct,
+            Rules::exactLength($string, $length),
+            'Reported string length is not correct'
         );
     }
 
@@ -548,7 +561,8 @@ class Kohana_ValidTest extends TestCase
     public function test_ip(string $input_ip, bool $allow_private, bool $expected_result)
     {
         $this->assertEquals(
-            $expected_result, Rules::ip($input_ip, $allow_private)
+            $expected_result,
+            Rules::ip($input_ip, $allow_private)
         );
     }
 
@@ -585,7 +599,8 @@ class Kohana_ValidTest extends TestCase
     public function test_max_length(string $string, int $maxlength, bool $correct)
     {
         $this->assertSame(
-            $correct, Rules::maxLength($string, $maxlength)
+            $correct,
+            Rules::maxLength($string, $maxlength)
         );
     }
 
@@ -619,7 +634,8 @@ class Kohana_ValidTest extends TestCase
     public function test_min_length(string $string, int $minlength, bool $correct)
     {
         $this->assertSame(
-            $correct, Rules::minLength($string, $minlength)
+            $correct,
+            Rules::minLength($string, $minlength)
         );
     }
 
@@ -631,10 +647,10 @@ class Kohana_ValidTest extends TestCase
     public static function provider_not_empty(): array
     {
         // Create a blank arrayObject
-        $ao = new ArrayObject;
+        $ao = new ArrayObject();
 
         // arrayObject with value
-        $ao1 = new ArrayObject;
+        $ao1 = new ArrayObject();
         $ao1['test'] = 'value';
 
         return [
@@ -707,7 +723,8 @@ class Kohana_ValidTest extends TestCase
     public function test_numeric($input, bool $expected)
     {
         $this->assertSame(
-            $expected, Rules::numeric($input)
+            $expected,
+            Rules::numeric($input)
         );
     }
 
@@ -744,7 +761,8 @@ class Kohana_ValidTest extends TestCase
     public function test_phone(string $phone, $lengths, bool $expected)
     {
         $this->assertSame(
-            $expected, Rules::phone($phone, $lengths)
+            $expected,
+            Rules::phone($phone, $lengths)
         );
     }
 
@@ -779,7 +797,8 @@ class Kohana_ValidTest extends TestCase
     public function test_regex($value, string $regex, bool $expected)
     {
         $this->AssertSame(
-            $expected, Rules::regex($value, $regex)
+            $expected,
+            Rules::regex($value, $regex)
         );
     }
 
@@ -825,7 +844,8 @@ class Kohana_ValidTest extends TestCase
     public function test_range(int $number, int $min, int $max, $step, bool $expected)
     {
         $this->AssertSame(
-            $expected, Rules::range($number, $min, $max, $step)
+            $expected,
+            Rules::range($number, $min, $max, $step)
         );
     }
 
@@ -882,7 +902,8 @@ class Kohana_ValidTest extends TestCase
     public function test_url(string $url, bool $expected)
     {
         $this->assertSame(
-            $expected, Rules::url($url)
+            $expected,
+            Rules::url($url)
         );
     }
 
@@ -917,7 +938,8 @@ class Kohana_ValidTest extends TestCase
     public function test_matches(array $data, string $field, string $match, bool $expected)
     {
         $this->AssertSame(
-            $expected, Rules::matches($data, $field, $match)
+            $expected,
+            Rules::matches($data, $field, $match)
         );
     }
 

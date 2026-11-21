@@ -13,6 +13,6 @@ use Kohana\Foundation\KohanaException;
  */
 class SessionException extends KohanaException
 {
-    const SESSION_CORRUPT = 1;
+    public const SESSION_CORRUPT = 1;
 
 }

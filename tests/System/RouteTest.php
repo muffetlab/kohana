@@ -14,15 +14,14 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    https://kohana.top/license
  */
-use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Ticket;
 use Kohana\Foundation\Application;
-use Kohana\Testing\TestCase;
 use Kohana\Foundation\KohanaException;
-use Kohana\Routing\Route;
 use Kohana\Http\Request;
-use PHPUnit\Framework\MockObject\MockObject;
+use Kohana\Routing\Route;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\Ticket;
 
 include KOHANA_FIXTURES . '/callback_routes.php';
 
@@ -38,7 +37,7 @@ class Kohana_RouteTest extends TestCase
         parent::setUp();
 
         Application::$config->load('url')->set('trusted_hosts', [
-            'kohana\.top'
+            'kohana\.top',
         ]);
 
         $this->cleanCacheDir();
@@ -191,7 +190,7 @@ class Kohana_RouteTest extends TestCase
         $this->assertSame([], $regexProperty->getValue($route));
         $this->assertSame([
             'action' => 'index',
-            'host' => false
+            'host' => false,
         ], $defaultsProperty->getValue($route));
         $this->assertSame(null, $routeRegexProperty->getValue($route));
     }
@@ -264,7 +263,7 @@ class Kohana_RouteTest extends TestCase
         return [
             [
                 'projects/(<project_id>/(<controller>(/<action>(/<id>))))',
-                'apple/pie'
+                'apple/pie',
             ],
         ];
     }
@@ -341,7 +340,7 @@ class Kohana_RouteTest extends TestCase
                 'index',
                 'unit/test/1',
                 ['controller' => 'unit', 'action' => 'test', 'id' => '1'],
-                'Welcome'
+                'Welcome',
             ],
             [
                 '(<controller>(/<action>(/<id>)))',
@@ -351,7 +350,7 @@ class Kohana_RouteTest extends TestCase
                 'index',
                 'unit/test/1',
                 ['controller' => 'unit', 'action' => 'test', 'id' => '1'],
-                ''
+                '',
             ],
         ];
     }
@@ -401,19 +400,19 @@ class Kohana_RouteTest extends TestCase
                 '(<controller>(/<action>(/<id>)))',
                 ['controller' => 'welcome', 'action' => 'index'],
                 ['id' => '1'],
-                'welcome/index/1'
+                'welcome/index/1',
             ],
             [
                 '<controller>(/<action>(/<id>))',
                 ['controller' => 'welcome', 'action' => 'index'],
                 ['action' => 'foo'],
-                'welcome/foo'
+                'welcome/foo',
             ],
             [
                 '<controller>(/<action>(/<id>))',
                 ['controller' => 'welcome', 'action' => 'index'],
                 ['action' => 'index'],
-                'welcome'
+                'welcome',
             ],
             /**
              * refs #4630
@@ -422,49 +421,49 @@ class Kohana_RouteTest extends TestCase
                 'api(/<version>)/const(/<id>)(/<custom>)',
                 ['version' => 1],
                 null,
-                'api/const'
+                'api/const',
             ],
             [
                 'api(/<version>)/const(/<id>)(/<custom>)',
                 ['version' => 1],
                 ['version' => 9],
-                'api/9/const'
+                'api/9/const',
             ],
             [
                 'api(/<version>)/const(/<id>)(/<custom>)',
                 ['version' => 1],
                 ['id' => 2],
-                'api/const/2'
+                'api/const/2',
             ],
             [
                 'api(/<version>)/const(/<id>)(/<custom>)',
                 ['version' => 1],
                 ['custom' => 'x'],
-                'api/const/x'
+                'api/const/x',
             ],
             [
                 '(<controller>(/<action>(/<id>)(/<type>)))',
                 ['controller' => 'test', 'action' => 'index', 'type' => 'html'],
                 ['type' => 'json'],
-                'test/index/json'
+                'test/index/json',
             ],
             [
                 '(<controller>(/<action>(/<id>)(/<type>)))',
                 ['controller' => 'test', 'action' => 'index', 'type' => 'html'],
                 ['id' => 123],
-                'test/index/123'
+                'test/index/123',
             ],
             [
                 '(<controller>(/<action>(/<id>)(/<type>)))',
                 ['controller' => 'test', 'action' => 'index', 'type' => 'html'],
                 ['id' => 123, 'type' => 'html'],
-                'test/index/123'
+                'test/index/123',
             ],
             [
                 '(<controller>(/<action>(/<id>)(/<type>)))',
                 ['controller' => 'test', 'action' => 'index', 'type' => 'html'],
                 ['id' => 123, 'type' => 'json'],
-                'test/index/123/json'
+                'test/index/123/json',
             ],
         ];
     }
@@ -496,7 +495,7 @@ class Kohana_RouteTest extends TestCase
         $route = new Route('(<controller>(/<action>(/<id>)))');
         $route->defaults([
             'controller' => 'welcome',
-            'action' => 'index'
+            'action' => 'index',
         ]);
 
         $this->assertSame('', $route->uri(['controller' => 'welcome']));
@@ -514,7 +513,7 @@ class Kohana_RouteTest extends TestCase
             [
                 'admin(/<controller>(/<action>(/<id>)))',
                 'admin',
-                'admin/users/add'
+                'admin/users/add',
             ],
         ];
     }
@@ -563,7 +562,7 @@ class Kohana_RouteTest extends TestCase
                 'info/about_us',
                 null,
                 'info/about_us',
-                ['some' => 'random', 'params' => 'to confuse']
+                ['some' => 'random', 'params' => 'to confuse'],
             ],
         ];
     }
@@ -594,7 +593,7 @@ class Kohana_RouteTest extends TestCase
             [
                 '<controller>(/<action)',
                 null,
-                ['action' => 'awesome-action']
+                ['action' => 'awesome-action'],
             ],
             /**
              * Optional params are required when they lead to a specified param
@@ -603,7 +602,7 @@ class Kohana_RouteTest extends TestCase
             [
                 '(<controller>(/<action>))',
                 null,
-                ['action' => 'awesome-action']
+                ['action' => 'awesome-action'],
             ],
         ];
     }
@@ -638,7 +637,7 @@ class Kohana_RouteTest extends TestCase
                 'users/edit',
                 ['controller' => 'users', 'action' => 'edit'],
                 'users/edit/god',
-                ['controller' => 'users', 'action' => 'edit', 'id' => 'god']
+                ['controller' => 'users', 'action' => 'edit', 'id' => 'god'],
             ],
         ];
     }
@@ -657,11 +656,13 @@ class Kohana_RouteTest extends TestCase
         $route = new Route($uri, $regex);
 
         $this->assertSame(
-            $uri_string1, $route->uri($uri_array1)
+            $uri_string1,
+            $route->uri($uri_array1)
         );
 
         $this->assertSame(
-            $uri_string2, $route->uri($uri_array2)
+            $uri_string2,
+            $route->uri($uri_array2)
         );
     }
 
@@ -673,16 +674,16 @@ class Kohana_RouteTest extends TestCase
     {
         return [
             [
-                '/'
+                '/',
             ],
             [
                 '/news/view/42',
-                ['controller' => 'news', 'action' => 'view', 'id' => 42]
+                ['controller' => 'news', 'action' => 'view', 'id' => 42],
             ],
             [
                 'https://kohana.top/news',
                 ['controller' => 'news'],
-                'https'
+                'https',
             ],
         ];
     }
@@ -740,7 +741,7 @@ class Kohana_RouteTest extends TestCase
         Route::set('internal', 'local/test/route')
             ->defaults([
                 'controller' => 'foo',
-                'action' => 'bar'
+                'action' => 'bar',
         ]);
 
         // Setup external route
@@ -748,7 +749,7 @@ class Kohana_RouteTest extends TestCase
             ->defaults([
                 'controller' => 'foo',
                 'action' => 'bar',
-                'host' => 'https://kohana.top'
+                'host' => 'https://kohana.top',
         ]);
 
         // Test internal route
@@ -771,26 +772,26 @@ class Kohana_RouteTest extends TestCase
                 [
                     'controller' => 'foo',
                     'action' => 'bar',
-                    'host' => 'kohana.top'
+                    'host' => 'kohana.top',
                 ],
-                'http://kohana.top/foo/bar'
+                'http://kohana.top/foo/bar',
             ],
             [
                 '<controller>/<action>',
                 [
                     'controller' => 'foo',
                     'action' => 'bar',
-                    'host' => 'https://kohana.top'
+                    'host' => 'https://kohana.top',
                 ],
-                'https://kohana.top/foo/bar'
+                'https://kohana.top/foo/bar',
             ],
             [
                 'foo/bar',
                 [
                     'controller' => 'foo',
-                    'host' => 'https://kohana.top'
+                    'host' => 'https://kohana.top',
                 ],
-                'https://kohana.top/foo/bar'
+                'https://kohana.top/foo/bar',
             ],
         ];
     }
@@ -820,14 +821,14 @@ class Kohana_RouteTest extends TestCase
                 ['controller' => 'Test', 'action' => 'same'],
                 ['Route_Holder', 'route_filter_modify_params_array'],
                 'test/different',
-                ['controller' => 'Test', 'action' => 'modified']
+                ['controller' => 'Test', 'action' => 'modified'],
             ],
             [
                 '<controller>/<action>',
                 ['controller' => 'test', 'action' => 'same'],
                 ['Route_Holder', 'route_filter_modify_params_false'],
                 'test/fail',
-                false
+                false,
             ],
         ];
     }
@@ -862,7 +863,7 @@ class Kohana_RouteTest extends TestCase
                 ['controller' => 'home', 'action' => 'index'],
                 'article_name',
                 'Article name with special chars \\ ##',
-                'blog/article/Article%20name%20with%20special%20chars%20\\%20%23%23'
+                'blog/article/Article%20name%20with%20special%20chars%20\\%20%23%23',
             ],
         ];
     }

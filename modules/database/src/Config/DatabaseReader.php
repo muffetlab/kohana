@@ -55,8 +55,9 @@ class DatabaseReader implements Reader
          *
          * @link http://dev.kohanaframework.org/issues/4316
          */
-        if ($group === 'database')
+        if ($group === 'database') {
             return false;
+        }
 
         $query = DB::select('config_key', 'config_value')
             ->from($this->tableName)

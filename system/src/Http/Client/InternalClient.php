@@ -2,12 +2,12 @@
 
 namespace Kohana\Http\Client;
 
-use Kohana\Http\Request;
-use Kohana\Http\Response;
 use Kohana\Foundation\Application;
+use Kohana\Foundation\KohanaException;
 use Kohana\Foundation\Profiler;
 use Kohana\Http\Exceptions\HttpException;
-use Kohana\Foundation\KohanaException;
+use Kohana\Http\Request;
+use Kohana\Http\Response;
 
 /**
  * Request Client for internal execution

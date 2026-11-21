@@ -56,8 +56,9 @@ abstract class ExpectedHttpException extends HttpException
     {
         $result = $this->response->headers($key, $value);
 
-        if (!$result instanceof Response)
+        if (!$result instanceof Response) {
             return $result;
+        }
 
         return $this;
     }

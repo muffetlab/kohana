@@ -2,8 +2,8 @@
 
 namespace Kohana\Validation;
 
-use Kohana\Support\Utf8;
 use Kohana\Foundation\Application;
+use Kohana\Support\Utf8;
 
 /**
  * Validation rules.
@@ -145,8 +145,9 @@ class Rules
      */
     public static function emailDomain(string $email): bool
     {
-        if (!static::notEmpty($email))
-            return false; // Empty fields cause issues with checkdnsrr()
+        if (!static::notEmpty($email)) {
+            return false;
+        } // Empty fields cause issues with checkdnsrr()
 
         // Check if the email domain has a valid MX record
         return checkdnsrr(preg_replace('/^[^@]++@/', '', $email));
@@ -162,7 +163,7 @@ class Rules
     {
         // Based on https://datatracker.ietf.org/doc/html/rfc1738#section-5
         if (!preg_match(
-                '~^
+            '~^
 
 			# scheme
 			[-a-z0-9+.]++://
@@ -193,17 +194,23 @@ class Rules
 			# path (optional)
 			(?:/.*)?
 
-			$~iDx', $url, $matches))
+			$~iDx',
+            $url,
+            $matches
+        )) {
             return false;
+        }
 
         // We matched an IP address
-        if (!isset($matches[1]))
+        if (!isset($matches[1])) {
             return true;
+        }
 
         // Check maximum length of the whole hostname
         // https://en.wikipedia.org/wiki/Domain_name#Domain_name_syntax
-        if (strlen($matches[1]) > 253)
+        if (strlen($matches[1]) > 253) {
             return false;
+        }
 
         // An extra check for the top level domain
         // It must start with a letter
@@ -243,8 +250,9 @@ class Rules
     public static function creditCard(string $number, $type = null): bool
     {
         // Remove all non-digit characters from the number
-        if (($number = preg_replace('/\D+/', '', $number)) === '')
+        if (($number = preg_replace('/\D+/', '', $number)) === '') {
             return false;
+        }
 
         if ($type === null) {
             // Use the default type
@@ -252,8 +260,9 @@ class Rules
         } elseif (is_array($type)) {
             foreach ($type as $t) {
                 // Test each type for validity
-                if (static::creditCard($number, $t))
+                if (static::creditCard($number, $t)) {
                     return true;
+                }
             }
 
             return false;
@@ -264,23 +273,27 @@ class Rules
         // Check card type
         $type = strtolower($type);
 
-        if (!isset($cards[$type]))
+        if (!isset($cards[$type])) {
             return false;
+        }
 
         // Check card number length
         $length = strlen($number);
 
         // Validate the card length by the card type
-        if (!in_array($length, preg_split('/\D+/', $cards[$type]['length'])))
+        if (!in_array($length, preg_split('/\D+/', $cards[$type]['length']))) {
             return false;
+        }
 
         // Check card number prefix
-        if (!preg_match('/^' . $cards[$type]['prefix'] . '/', $number))
+        if (!preg_match('/^' . $cards[$type]['prefix'] . '/', $number)) {
             return false;
+        }
 
         // No Luhn check required
-        if (!$cards[$type]['luhn'])
+        if (!$cards[$type]['luhn']) {
             return true;
+        }
 
         return static::luhn($number);
     }

@@ -1,18 +1,18 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
+use Kohana\Foundation\KohanaException;
+use Kohana\Http\Client\Client;
+use Kohana\Http\Client\RecursionException;
+use Kohana\Http\Exceptions\RequestException;
+use Kohana\Http\Request;
+use Kohana\Http\Response;
+use Kohana\Routing\Route;
+use Kohana\Testing\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Ticket;
 use PHPUnit\Framework\Attributes\Depends;
-use Kohana\Testing\TestCase;
-use Kohana\Routing\Route;
-use Kohana\Http\Request;
-use Kohana\Http\Client\RecursionException;
-use Kohana\Http\Response;
-use Kohana\Http\Client\Client;
-use Kohana\Foundation\KohanaException;
-use Kohana\Http\Exceptions\RequestException;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Ticket;
 
 /**
  * Unit tests for generic Request_Client class
@@ -60,8 +60,8 @@ class Kohana_Request_ClientTest extends TestCase
 
         $routes = [
             'ko_request_clienttest' => new Route('<controller>/<action>/<data>', [
-                'data' => '.+'
-                ])
+                'data' => '.+',
+                ]),
             ] + self::$_original_routes;
 
         $routes_prop->setValue(null, $routes);
@@ -114,9 +114,9 @@ class Kohana_Request_ClientTest extends TestCase
         $data = [
             'status' => $status,
             'header' => $headers,
-            'body' => $body
+            'body' => $body,
         ];
-        return "/RequestClientDummy/fake" . '/' . urlencode(http_build_query($data));
+        return '/RequestClientDummy/fake' . '/' . urlencode(http_build_query($data));
     }
 
     /**
@@ -144,12 +144,12 @@ class Kohana_Request_ClientTest extends TestCase
             [
                 true,
                 static::_dummy_uri(200, [], 'not-followed'),
-                'not-followed'
+                'not-followed',
             ],
             [
                 true,
                 static::_dummy_redirect_uri(200),
-                'not-followed'
+                'not-followed',
             ],
             [
                 true,
@@ -158,7 +158,7 @@ class Kohana_Request_ClientTest extends TestCase
             [
                 false,
                 static::_dummy_redirect_uri(302),
-                'not-followed'
+                'not-followed',
             ],
         ];
     }
@@ -190,12 +190,12 @@ class Kohana_Request_ClientTest extends TestCase
     {
         $response = Request::factory(static::_dummy_redirect_uri(301), [
                 'follow' => true,
-                'follow_headers' => ['Authorization', 'X-Follow-With-Value']
+                'follow_headers' => ['Authorization', 'X-Follow-With-Value'],
             ])
             ->headers([
                 'Authorization' => 'follow',
                 'X-Follow-With-Value' => 'follow',
-                'X-Not-In-Follow' => 'no-follow'
+                'X-Not-In-Follow' => 'no-follow',
             ])
             ->execute();
 
@@ -216,7 +216,7 @@ class Kohana_Request_ClientTest extends TestCase
     {
         $response = Request::factory(static::_dummy_redirect_uri(301), [
                 'follow' => true,
-                'follow_headers' => ['Authorization']
+                'follow_headers' => ['Authorization'],
             ])
             ->headers([])
             ->execute();
@@ -261,7 +261,7 @@ class Kohana_Request_ClientTest extends TestCase
     {
         $response = Request::factory(static::_dummy_redirect_uri($status_code), [
                 'follow' => true,
-                'strict_redirect' => $strict_redirect
+                'strict_redirect' => $strict_redirect,
             ])
             ->method($orig_method)
             ->execute();
@@ -303,7 +303,7 @@ class Kohana_Request_ClientTest extends TestCase
     public function test_follows_with_body_if_not_get(string $original_method, string $status, ?string $expect_body)
     {
         $response = Request::factory(static::_dummy_redirect_uri($status), [
-                'follow' => true
+                'follow' => true,
             ])
             ->method($original_method)
             ->body('foo-bar')
@@ -326,68 +326,68 @@ class Kohana_Request_ClientTest extends TestCase
             // Straightforward response manipulation
             [
                 [
-                    'X-test-1' => function($request, $response, $client) {
+                    'X-test-1' => function ($request, $response, $client) {
                         $response->body(json_encode(['body' => 'test1-body-changed']));
                         return $response;
-                    }
+                    },
                 ],
                 static::_dummy_uri(200, ['X-test-1' => 'foo'], 'test1-body'),
-                'test1-body-changed'
+                'test1-body-changed',
             ],
             // Subsequent request execution
             [
                 [
-                    'X-test-2' => function($request, $response, $client) {
+                    'X-test-2' => function ($request, $response, $client) {
                         return Request::factory($response->headers('X-test-2'));
-                    }
+                    },
                 ],
                 static::_dummy_uri(200, [
-                    'X-test-2' => static::_dummy_uri(200, [], 'test2-subsequent-body')
+                    'X-test-2' => static::_dummy_uri(200, [], 'test2-subsequent-body'),
                     ], 'test2-orig-body'),
-                'test2-subsequent-body'
+                'test2-subsequent-body',
             ],
             // No callbacks triggered
             [
                 [
                     'X-test-3' => function ($request, $response, $client) {
-                        throw new Exception("Unexpected execution of X-test-3 callback");
-                    }
+                        throw new Exception('Unexpected execution of X-test-3 callback');
+                    },
                 ],
                 static::_dummy_uri(200, ['X-test-1' => 'foo'], 'test3-body'),
-                'test3-body'
+                'test3-body',
             ],
             // Callbacks not triggered once a previous callback has created a new response
             [
                 [
-                    'X-test-1' => function($request, $response, $client) {
+                    'X-test-1' => function ($request, $response, $client) {
                         return Request::factory($response->headers('X-test-1'));
                     },
-                    'X-test-2' => function($request, $response, $client) {
+                    'X-test-2' => function ($request, $response, $client) {
                         return Request::factory($response->headers('X-test-2'));
-                    }
+                    },
                 ],
                 static::_dummy_uri(200, [
                     'X-test-1' => static::_dummy_uri(200, [], 'test1-subsequent-body'),
-                    'X-test-2' => static::_dummy_uri(200, [], 'test2-subsequent-body')
+                    'X-test-2' => static::_dummy_uri(200, [], 'test2-subsequent-body'),
                     ], 'test2-orig-body'),
-                'test1-subsequent-body'
+                'test1-subsequent-body',
             ],
             // Nested callbacks are supported if callback creates new request
             [
                 [
-                    'X-test-1' => function($request, $response, $client) {
+                    'X-test-1' => function ($request, $response, $client) {
                         return Request::factory($response->headers('X-test-1'));
                     },
-                    'X-test-2' => function($request, $response, $client) {
+                    'X-test-2' => function ($request, $response, $client) {
                         return Request::factory($response->headers('X-test-2'));
-                    }
+                    },
                 ],
                 static::_dummy_uri(200, [
                     'X-test-1' => static::_dummy_uri(200, [
-                        'X-test-2' => static::_dummy_uri(200, [], 'test2-subsequent-body')
-                        ], 'test1-subsequent-body')
+                        'X-test-2' => static::_dummy_uri(200, [], 'test2-subsequent-body'),
+                        ], 'test1-subsequent-body'),
                     ], 'test-orig-body'),
-                'test2-subsequent-body'
+                'test2-subsequent-body',
             ],
         ];
     }
@@ -433,12 +433,12 @@ class Kohana_Request_ClientTest extends TestCase
                             $client->callbackParams('testcase')->requests_executed++;
                             // Recurse into a new request
                             return Request::factory($request->uri());
-                        }
+                        },
                     ],
                     'max_callback_depth' => 2,
                     'callback_params' => [
-                        'testcase' => $this
-                    ]
+                        'testcase' => $this,
+                    ],
                 ])
                 ->execute();
         } catch (RecursionException $e) {
@@ -474,8 +474,8 @@ class Kohana_Request_ClientTest extends TestCase
         // Test with param in constructor
         $request = Request::factory(static::_dummy_uri(302, [
                     'Location' => static::_dummy_uri('200', [
-                        'X-cb' => '1'
-                        ], 'followed')
+                        'X-cb' => '1',
+                        ], 'followed'),
                     ], 'not-followed'), [
                 'follow' => true,
                 'header_callbacks' => [
@@ -483,8 +483,8 @@ class Kohana_Request_ClientTest extends TestCase
                     'location' => 'Kohana\Http\Client\Client::onHeaderLocation',
                 ],
                 'callback_params' => [
-                    'constructor_param' => 'foo'
-                ]
+                    'constructor_param' => 'foo',
+                ],
         ]);
 
         // Test passing param to setter

@@ -2,11 +2,11 @@
 
 namespace Kohana\Config;
 
+use Kohana\Config\Contracts\Reader;
 use Kohana\Config\Contracts\Source;
+use Kohana\Config\Contracts\Writer;
 use Kohana\Foundation\KohanaException;
 use Kohana\Support\Arr;
-use Kohana\Config\Contracts\Reader;
-use Kohana\Config\Contracts\Writer;
 
 /**
  * Wrapper for configuration arrays. Multiple configuration readers can be
@@ -97,7 +97,7 @@ class Repository
         }
 
         if ($group === '') {
-            throw new KohanaException("Need to specify a config group");
+            throw new KohanaException('Need to specify a config group');
         }
 
         if (strpos($group, '.') !== false) {

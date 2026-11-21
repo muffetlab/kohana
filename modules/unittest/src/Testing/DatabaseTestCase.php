@@ -2,9 +2,9 @@
 
 namespace Kohana\Testing;
 
-use PHPUnit\Framework\TestCase;
-use Kohana\Foundation\Application;
 use Kohana\Database\Connection;
+use Kohana\Foundation\Application;
+use PHPUnit\Framework\TestCase;
 
 /**
  * TestCase for testing a database
@@ -54,7 +54,7 @@ abstract class DatabaseTestCase extends TestCase
      */
     public function setUp(): void
     {
-        $this->helpers = new Helpers;
+        $this->helpers = new Helpers();
 
         $this->setEnvironment($this->environmentDefault);
 

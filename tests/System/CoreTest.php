@@ -1,11 +1,11 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\Testing\TestCase;
 use Kohana\Foundation\Application;
 use Kohana\Foundation\KohanaException;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests Kohana Core
@@ -167,37 +167,37 @@ class Kohana_CoreTest extends TestCase
                 'no_message_file',
                 'anything',
                 'default',
-                'default'
+                'default',
             ],
             [
                 'no_message_file',
                 null,
                 'anything',
-                []
+                [],
             ],
             [
                 'kohana_core_message_tests',
                 'bottom_only',
                 'anything',
-                'inherited bottom message'
+                'inherited bottom message',
             ],
             [
                 'kohana_core_message_tests',
                 'cfs_replaced',
                 'anything',
-                'overriding cfs_replaced message'
+                'overriding cfs_replaced message',
             ],
             [
                 'kohana_core_message_tests',
                 'top_only',
                 'anything',
-                'top only message'
+                'top only message',
             ],
             [
                 'kohana_core_message_tests',
                 'missing',
                 'default',
-                'default'
+                'default',
             ],
             [
                 'kohana_core_message_tests',
@@ -206,8 +206,8 @@ class Kohana_CoreTest extends TestCase
                 [
                     'bottom_only' => 'inherited bottom message',
                     'cfs_replaced' => 'overriding cfs_replaced message',
-                    'top_only' => 'top only message'
-                ]
+                    'top_only' => 'top only message',
+                ],
             ],
         ];
     }
@@ -228,7 +228,7 @@ class Kohana_CoreTest extends TestCase
         $test_path = realpath(KOHANA_FIXTURES . '/message_tests');
         Application::modules([
             'top' => "$test_path/top_module",
-            'bottom' => "$test_path/bottom_module"
+            'bottom' => "$test_path/bottom_module",
         ]);
 
         $this->assertEquals($expected, Application::message($file, $key, $default));
@@ -279,14 +279,14 @@ class Kohana_CoreTest extends TestCase
         return [
             [
                 [
-                    'unittest' => MODPATH . 'fo0bar'
-                ]
+                    'unittest' => MODPATH . 'fo0bar',
+                ],
             ],
             [
                 [
                     'unittest' => MODPATH . 'unittest',
-                    'fo0bar' => MODPATH . 'fo0bar'
-                ]
+                    'fo0bar' => MODPATH . 'fo0bar',
+                ],
             ],
         ];
     }
@@ -321,11 +321,11 @@ class Kohana_CoreTest extends TestCase
         return [
             [
                 [],
-                []
+                [],
             ],
             [
                 ['module' => __DIR__],
-                ['module' => static::dirSeparator(__DIR__ . '/')]
+                ['module' => static::dirSeparator(__DIR__ . '/')],
             ],
         ];
     }

@@ -35,8 +35,9 @@ class Http405Exception extends ExpectedHttpException
      */
     public function check(): bool
     {
-        if ($this->headers('allow') === null)
+        if ($this->headers('allow') === null) {
             throw new KohanaException('A list of allowed methods must be specified');
+        }
 
         return true;
     }

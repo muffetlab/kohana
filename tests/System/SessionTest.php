@@ -1,11 +1,11 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
+use Kohana\Session\Session;
+use Kohana\Testing\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\Ticket;
-use Kohana\Testing\TestCase;
-use Kohana\Session\Session;
 
 /**
  * Tests the session class
@@ -31,7 +31,7 @@ class Kohana_SessionTest extends TestCase
      */
     // @codingStandardsIgnoreStart
     public function getMockSession(array $config = []): Session
-        // @codingStandardsIgnoreEnd
+    // @codingStandardsIgnoreEnd
     {
         return $this->mockAbstract(Session::class, [$config]);
     }
@@ -52,24 +52,24 @@ class Kohana_SessionTest extends TestCase
                 [
                     'name' => 'awesomeness',
                     'lifetime' => 1231456421,
-                    'encrypted' => false
+                    'encrypted' => false,
                 ],
                 [
                     'name' => 'awesomeness',
                     'lifetime' => '1231456421',
-                    'encrypted' => false
-                ]
+                    'encrypted' => false,
+                ],
             ],
             // data set 1
             [
                 [
                     'name' => '123',
-                    'encrypted' => 'default'
+                    'encrypted' => 'default',
                 ],
                 [
                     'name' => 123,
-                    'encrypted' => true
-                ]
+                    'encrypted' => true,
+                ],
             ],
         ];
     }
@@ -292,7 +292,7 @@ class Kohana_SessionTest extends TestCase
             'a' => 'A',
             'b' => 'B',
             'c' => 'C',
-            'easy' => '123'
+            'easy' => '123',
         ];
 
         // Make a copy of $data for testing purposes
@@ -328,7 +328,7 @@ class Kohana_SessionTest extends TestCase
             [
                 [],
                 'wacka_wacka',
-                []
+                [],
             ],
             [
                 ['the it' => 'crowd'],
@@ -339,7 +339,7 @@ class Kohana_SessionTest extends TestCase
             [
                 ['dead' => 'arrival'],
                 'lolums',
-                'YToxOntzOjQ6ImRlYWQiO3M6NzoiYXJyaXZhbCI7fQ=='
+                'YToxOntzOjQ6ImRlYWQiO3M6NzoiYXJyaXZhbCI7fQ==',
             ],
         ];
     }

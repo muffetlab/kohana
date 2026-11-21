@@ -1,12 +1,12 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\Testing\TestCase;
+use Kohana\Foundation\KohanaException;
 use Kohana\Security\Security;
 use Kohana\Session\Session;
-use Kohana\Foundation\KohanaException;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests Kohana_Security
@@ -55,7 +55,7 @@ class Kohana_SecurityTest extends TestCase
             Security::$tokenName = 'token_' . $i;
             $array[] = [
                 Security::token(true),
-                Security::check(Security::token()), $i
+                Security::check(Security::token()), $i,
             ];
         }
         return $array;

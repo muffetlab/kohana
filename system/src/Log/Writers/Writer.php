@@ -78,7 +78,7 @@ abstract class Writer
      * @return  string
      * @throws Exception
      */
-    public function formatMessage(array $message, string $format = "time --- level: body in file:line"): string
+    public function formatMessage(array $message, string $format = 'time --- level: body in file:line'): string
     {
         $message['time'] = Date::formattedTime('@' . $message['time'], static::$timestamp, static::$timezone);
         $message['level'] = $this->logLevels[$message['level']];

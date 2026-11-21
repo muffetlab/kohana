@@ -2,8 +2,8 @@
 
 namespace Kohana\Support;
 
-use Kohana\Html\Html;
 use Kohana\Foundation\Application;
+use Kohana\Html\Html;
 
 /**
  * Text helper class. Provides simple methods for working with text.
@@ -67,11 +67,13 @@ class Str
     {
         $end_char = $end_char === null ? '…' : $end_char;
 
-        if (trim($str) === '')
+        if (trim($str) === '') {
             return $str;
+        }
 
-        if ($limit <= 0)
+        if ($limit <= 0) {
             return $end_char;
+        }
 
         preg_match('/^\s*+(?:\S++\s*+){1,' . $limit . '}/u', $str, $matches);
 
@@ -96,19 +98,23 @@ class Str
     {
         $end_char = $end_char === null ? '…' : $end_char;
 
-        if (trim($str) === '' || Utf8::strlen($str) <= $limit)
+        if (trim($str) === '' || Utf8::strlen($str) <= $limit) {
             return $str;
+        }
 
-        if ($limit <= 0)
+        if ($limit <= 0) {
             return $end_char;
+        }
 
-        if ($preserve_words === false)
+        if ($preserve_words === false) {
             return rtrim(Utf8::substr($str, 0, $limit)) . $end_char;
+        }
 
         // Don't preserve words. The limit is considered the top limit.
         // No strings with a length longer than $limit should be returned.
-        if (!preg_match('/^.{0,' . $limit . '}\s/us', $str, $matches))
+        if (!preg_match('/^.{0,' . $limit . '}\s/us', $str, $matches)) {
             return $end_char;
+        }
 
         return rtrim($matches[0]) . (strlen($matches[0]) === strlen($str) ? '' : $end_char);
     }
@@ -288,7 +294,7 @@ class Str
 
         // if $replacement is a single character: replace each of the characters of the bad word with $replacement
         if (Utf8::strlen($replacement) === 1) {
-            return preg_replace_callback($regex, function($matches) use ($replacement) {
+            return preg_replace_callback($regex, function ($matches) use ($replacement) {
                 return str_repeat($replacement, Utf8::strlen($matches[1]));
             }, $str);
         }
@@ -313,8 +319,9 @@ class Str
         for ($i = 0, $max = strlen($word); $i < $max; ++$i) {
             foreach ($words as $w) {
                 // Once a difference is found, break out of the loops
-                if (!isset($w[$i]) || $w[$i] !== $word[$i])
+                if (!isset($w[$i]) || $w[$i] !== $word[$i]) {
                     break 2;
+                }
             }
         }
 
@@ -411,8 +418,9 @@ class Str
     public static function autoP(string $str, bool $br = true): string
     {
         // Trim whitespace
-        if (($str = trim($str)) === '')
+        if (($str = trim($str)) === '') {
             return '';
+        }
 
         // Standardize newlines
         $str = str_replace(["\r\n", "\r"], "\n", $str);

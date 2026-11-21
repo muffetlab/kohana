@@ -1,7 +1,7 @@
 <?php
 
-use Kohana\Console\Command;
 use Kohana\Console\Cli;
+use Kohana\Console\Command;
 use Kohana\Http\Request;
 
 /**

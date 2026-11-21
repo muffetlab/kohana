@@ -13,8 +13,9 @@ use Kohana\Support\Utf8;
  */
 function _trim($str, $charlist = null): string
 {
-    if ($charlist === null)
+    if ($charlist === null) {
         return trim($str);
+    }
 
     return Utf8::ltrim(Utf8::rtrim($str, $charlist), $charlist);
 }

@@ -2,11 +2,11 @@
 
 namespace Kohana\Http;
 
-use Kohana\Http\Exceptions\HttpException;
-use Kohana\Http\Exceptions\RedirectHttpException;
-use Kohana\Foundation\KohanaException;
 use http\Env;
 use http\Header;
+use Kohana\Foundation\KohanaException;
+use Kohana\Http\Exceptions\HttpException;
+use Kohana\Http\Exceptions\RedirectHttpException;
 
 /**
  * Contains the most low-level helpers methods in Kohana:
@@ -42,8 +42,9 @@ abstract class Http
     {
         $e = HttpException::factory($code);
 
-        if (!$e instanceof RedirectHttpException)
+        if (!$e instanceof RedirectHttpException) {
             throw new KohanaException('Invalid redirect code \':code\'', [':code' => $code]);
+        }
 
         throw $e->location($uri);
     }
@@ -198,8 +199,9 @@ abstract class Http
      */
     public static function wwwFormUrlencode(array $params = []): string
     {
-        if (!$params)
+        if (!$params) {
             return '';
+        }
 
         $encoded = [];
 

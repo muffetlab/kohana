@@ -18,8 +18,9 @@ class Http305Exception extends ExpectedHttpException
      */
     public function location(?string $uri = null)
     {
-        if ($uri === null)
+        if ($uri === null) {
             return $this->headers('Location');
+        }
 
         $this->headers('Location', $uri);
 
@@ -34,11 +35,13 @@ class Http305Exception extends ExpectedHttpException
      */
     public function check(): bool
     {
-        if (($location = $this->headers('location')) === null)
+        if (($location = $this->headers('location')) === null) {
             throw new KohanaException('A \'location\' must be specified for a redirect');
+        }
 
-        if (strpos($location, '://') === false)
+        if (strpos($location, '://') === false) {
             throw new KohanaException('An absolute URI to the proxy server must be specified');
+        }
 
         return true;
     }

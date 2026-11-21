@@ -1,14 +1,14 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\Testing\TestCase;
 use Kohana\Foundation\Application;
-use Kohana\Http\Request;
-use Kohana\Routing\Url;
 use Kohana\Foundation\KohanaException;
 use Kohana\Http\Exceptions\RequestException;
+use Kohana\Http\Request;
+use Kohana\Routing\Url;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests URL
@@ -36,7 +36,7 @@ class Kohana_URLTest extends TestCase
         parent::setUp();
         Application::$config->load('url')->set('trusted_hosts', [
             'example\.com',
-            'example\.org'
+            'example\.org',
         ]);
     }
 
@@ -68,37 +68,37 @@ class Kohana_URLTest extends TestCase
             [
                 null,
                 false,
-                '/kohana/'
+                '/kohana/',
             ],
             [
                 'http',
                 false,
-                'http://example.com/kohana/'
+                'http://example.com/kohana/',
             ],
             [
                 null,
                 true,
-                '/kohana/index.php/'
+                '/kohana/index.php/',
             ],
             [
                 null,
                 true,
-                '/kohana/index.php/'
+                '/kohana/index.php/',
             ],
             [
                 'http',
                 true,
-                'http://example.com/kohana/index.php/'
+                'http://example.com/kohana/index.php/',
             ],
             [
                 'https',
                 true,
-                'https://example.com/kohana/index.php/'
+                'https://example.com/kohana/index.php/',
             ],
             [
                 'ftp',
                 true,
-                'ftp://example.com/kohana/index.php/'
+                'ftp://example.com/kohana/index.php/',
             ],
             // Test for automatic protocol detection, protocol = true
             [
@@ -107,8 +107,8 @@ class Kohana_URLTest extends TestCase
                 'cli://example.com/kohana/index.php/',
                 [
                     'HTTPS' => false,
-                    'Kohana\Http\Request::$initial' => Request::factory('/')->protocol('cli')
-                ]
+                    'Kohana\Http\Request::$initial' => Request::factory('/')->protocol('cli'),
+                ],
             ],
             // Change base URL
             [
@@ -116,8 +116,8 @@ class Kohana_URLTest extends TestCase
                 false,
                 'https://example.com/kohana/',
                 [
-                    'Kohana\Foundation\Application::$baseUrl' => 'omglol://example.com/kohana/'
-                ]
+                    'Kohana\Foundation\Application::$baseUrl' => 'omglol://example.com/kohana/',
+                ],
             ],
             // Use port in base URL, issue #3307
             [
@@ -125,8 +125,8 @@ class Kohana_URLTest extends TestCase
                 false,
                 'http://example.com:8080/',
                 [
-                    'Kohana\Foundation\Application::$baseUrl' => 'example.com:8080/'
-                ]
+                    'Kohana\Foundation\Application::$baseUrl' => 'example.com:8080/',
+                ],
             ],
             // Use protocol from base URL if none specified
             [
@@ -134,8 +134,8 @@ class Kohana_URLTest extends TestCase
                 false,
                 'http://www.example.com/',
                 [
-                    'Kohana\Foundation\Application::$baseUrl' => 'http://www.example.com/'
-                ]
+                    'Kohana\Foundation\Application::$baseUrl' => 'http://www.example.com/',
+                ],
             ],
             // Use HTTP_HOST before SERVER_NAME
             [
@@ -144,8 +144,8 @@ class Kohana_URLTest extends TestCase
                 'http://example.com/kohana/',
                 [
                     'HTTP_HOST' => 'example.com',
-                    'SERVER_NAME' => 'example.org'
-                ]
+                    'SERVER_NAME' => 'example.org',
+                ],
             ],
             // Use SERVER_NAME if HTTP_HOST DNX
             [
@@ -154,8 +154,8 @@ class Kohana_URLTest extends TestCase
                 'http://example.org/kohana/',
                 [
                     'HTTP_HOST' => null,
-                    'SERVER_NAME' => 'example.org'
-                ]
+                    'SERVER_NAME' => 'example.org',
+                ],
             ],
         ];
     }
@@ -177,7 +177,8 @@ class Kohana_URLTest extends TestCase
         $this->setEnvironment($enviroment);
 
         $this->assertSame(
-            $expected, Url::base($protocol, $index)
+            $expected,
+            Url::base($protocol, $index)
         );
     }
 
@@ -192,83 +193,83 @@ class Kohana_URLTest extends TestCase
             [
                 '',
                 null,
-                '/kohana/index.php/'
+                '/kohana/index.php/',
             ],
             [
                 '',
                 'http',
-                'http://example.com/kohana/index.php/'
+                'http://example.com/kohana/index.php/',
             ],
             [
                 'my/site',
                 null,
-                '/kohana/index.php/my/site'
+                '/kohana/index.php/my/site',
             ],
             [
                 'my/site',
                 'http',
-                'http://example.com/kohana/index.php/my/site'
+                'http://example.com/kohana/index.php/my/site',
             ],
             // @ticket #3110
             [
                 'my/site/page:5',
                 null,
-                '/kohana/index.php/my/site/page:5'
+                '/kohana/index.php/my/site/page:5',
             ],
             [
                 'my/site/page:5',
                 'http',
-                'http://example.com/kohana/index.php/my/site/page:5'
+                'http://example.com/kohana/index.php/my/site/page:5',
             ],
             [
                 'my/site?var=asd&kohana=awesome',
                 null,
-                '/kohana/index.php/my/site?var=asd&kohana=awesome'
+                '/kohana/index.php/my/site?var=asd&kohana=awesome',
             ],
             [
                 'my/site?var=asd&kohana=awesome',
                 'http',
-                'http://example.com/kohana/index.php/my/site?var=asd&kohana=awesome'
+                'http://example.com/kohana/index.php/my/site?var=asd&kohana=awesome',
             ],
             [
                 '?kohana=awesome&life=good',
                 null,
-                '/kohana/index.php/?kohana=awesome&life=good'
+                '/kohana/index.php/?kohana=awesome&life=good',
             ],
             [
                 '?kohana=awesome&life=good',
                 'http',
-                'http://example.com/kohana/index.php/?kohana=awesome&life=good'
+                'http://example.com/kohana/index.php/?kohana=awesome&life=good',
             ],
             [
                 '?kohana=awesome&life=good#fact',
                 null,
-                '/kohana/index.php/?kohana=awesome&life=good#fact'
+                '/kohana/index.php/?kohana=awesome&life=good#fact',
             ],
             [
                 '?kohana=awesome&life=good#fact',
                 'http',
-                'http://example.com/kohana/index.php/?kohana=awesome&life=good#fact'
+                'http://example.com/kohana/index.php/?kohana=awesome&life=good#fact',
             ],
             [
                 'some/long/route/goes/here?kohana=awesome&life=good#fact',
                 null,
-                '/kohana/index.php/some/long/route/goes/here?kohana=awesome&life=good#fact'
+                '/kohana/index.php/some/long/route/goes/here?kohana=awesome&life=good#fact',
             ],
             [
                 'some/long/route/goes/here?kohana=awesome&life=good#fact',
                 'http',
-                'http://example.com/kohana/index.php/some/long/route/goes/here?kohana=awesome&life=good#fact'
+                'http://example.com/kohana/index.php/some/long/route/goes/here?kohana=awesome&life=good#fact',
             ],
             [
                 '/route/goes/here?kohana=awesome&life=good#fact',
                 'https',
-                'https://example.com/kohana/index.php/route/goes/here?kohana=awesome&life=good#fact'
+                'https://example.com/kohana/index.php/route/goes/here?kohana=awesome&life=good#fact',
             ],
             [
                 '/route/goes/here?kohana=awesome&life=good#fact',
                 'ftp',
-                'ftp://example.com/kohana/index.php/route/goes/here?kohana=awesome&life=good#fact'
+                'ftp://example.com/kohana/index.php/route/goes/here?kohana=awesome&life=good#fact',
             ],
         ];
     }
@@ -290,7 +291,8 @@ class Kohana_URLTest extends TestCase
         $this->setEnvironment($enviroment);
 
         $this->assertSame(
-            $expected, Url::site($uri, $protocol)
+            $expected,
+            Url::site($uri, $protocol)
         );
     }
 
@@ -344,70 +346,70 @@ class Kohana_URLTest extends TestCase
             [
                 'we-shall-not-be-moved',
                 'WE SHALL NOT BE MOVED',
-                '-'
+                '-',
             ],
             // Excessive white space is removed and replaced with 1 char
             [
                 'thissssss-is-it',
                 'THISSSSSS         IS       IT  ',
-                '-'
+                '-',
             ],
             // separator is either - (dash) or _ (underscore) & others are converted to underscores
             [
                 'some-title',
                 'some title',
-                '-'
+                '-',
             ],
             [
                 'some_title',
                 'some title',
-                '_'
+                '_',
             ],
             [
                 'some!title',
                 'some title',
-                '!'
+                '!',
             ],
             [
                 'some:title',
                 'some title',
-                ':'
+                ':',
             ],
             // Numbers are preserved
             [
                 '99-ways-to-beat-apple',
                 '99 Ways to beat apple',
-                '-'
+                '-',
             ],
             // ... with lots of spaces & caps
             [
                 '99_ways_to_beat_apple',
                 '99    ways   TO beat      APPLE',
-                '_'
+                '_',
             ],
             [
                 '99-ways-to-beat-apple',
                 '99    ways   TO beat      APPLE',
-                '-'
+                '-',
             ],
             // Invalid characters are removed
             [
                 'each-gbp-is-now-worth-32-usd',
                 'Each GBP(£) is now worth 32 USD($)',
-                '-'
+                '-',
             ],
             // ... inc. separator
             [
                 'is-it-reusable-or-re-usable',
                 'Is it reusable or re-usable?',
-                '-'
+                '-',
             ],
             // Doing some crazy UTF8 tests
             [
                 'espana-wins',
                 'España-wins',
                 '-',
-                true
+                true,
             ],
         ];
     }
@@ -424,7 +426,8 @@ class Kohana_URLTest extends TestCase
     public function test_title(string $expected, string $title, string $separator, $ascii_only = false)
     {
         $this->assertSame(
-            $expected, Url::title($title, $separator, $ascii_only)
+            $expected,
+            Url::title($title, $separator, $ascii_only)
         );
     }
 
@@ -438,65 +441,65 @@ class Kohana_URLTest extends TestCase
             [
                 [],
                 '',
-                null
+                null,
             ],
             [
                 ['_GET' => ['test' => 'data']],
                 '?test=data',
-                null
+                null,
             ],
             [
                 [],
                 '?test=data',
-                ['test' => 'data']
+                ['test' => 'data'],
             ],
             [
                 ['_GET' => ['more' => 'data']],
                 '?more=data&test=data',
-                ['test' => 'data']
+                ['test' => 'data'],
             ],
             [
                 ['_GET' => ['sort' => 'down']],
                 '?test=data',
                 ['test' => 'data'],
-                false
+                false,
             ],
             // http://dev.kohanaframework.org/issues/3362
             [
                 [],
                 '',
-                ['key' => null]
+                ['key' => null],
             ],
             [
                 [],
                 '?key=0',
-                ['key' => false]
+                ['key' => false],
             ],
             [
                 [],
                 '?key=1',
-                ['key' => true]
+                ['key' => true],
             ],
             [
                 ['_GET' => ['sort' => 'down']],
                 '?sort=down&key=1',
-                ['key' => true]
+                ['key' => true],
             ],
             [
                 ['_GET' => ['sort' => 'down']],
                 '?sort=down&key=0',
-                ['key' => false]
+                ['key' => false],
             ],
             // @issue 4240
             [
                 ['_GET' => ['foo' => ['a' => 100]]],
                 '?foo%5Ba%5D=100&foo%5Bb%5D=bar',
-                ['foo' => ['b' => 'bar']]
+                ['foo' => ['b' => 'bar']],
             ],
             [
                 ['_GET' => ['a' => 'a']],
                 '?a=b',
-                ['a' => 'b']
+                ['a' => 'b'],
             ],
         ];
     }
@@ -518,7 +521,8 @@ class Kohana_URLTest extends TestCase
         $this->setEnvironment($enviroment);
 
         $this->assertSame(
-            $expected, Url::query($params, $use_get)
+            $expected,
+            Url::query($params, $use_get)
         );
     }
 
@@ -533,25 +537,25 @@ class Kohana_URLTest extends TestCase
             [
                 'givenhost',
                 ['list-of-trusted-hosts'],
-                false
+                false,
             ],
             // data set #1
             [
                 'givenhost',
                 ['givenhost', 'example\.com'],
-                true
+                true,
             ],
             // data set #2
             [
                 'www.kohanaframework.org',
                 ['.*\.kohanaframework\.org'],
-                true
+                true,
             ],
             // data set #3
             [
                 'kohanaframework.org',
                 ['.*\.kohanaframework\.org'],
-                false // because we are requesting a subdomain
+                false, // because we are requesting a subdomain
             ],
         ];
     }
@@ -569,7 +573,8 @@ class Kohana_URLTest extends TestCase
     public function test_is_trusted_host(string $host, array $trusted_hosts, bool $expected)
     {
         $this->assertSame(
-            $expected, Url::isTrustedHost($host, $trusted_hosts)
+            $expected,
+            Url::isTrustedHost($host, $trusted_hosts)
         );
     }
 

@@ -2,10 +2,10 @@
 
 namespace Kohana\Database\Query;
 
-use Kohana\Database\Connection;
-use Kohana\Foundation\KohanaException;
-use Kohana\Foundation\Application;
 use Kohana\Database\CachedResult;
+use Kohana\Database\Connection;
+use Kohana\Foundation\Application;
+use Kohana\Foundation\KohanaException;
 
 /**
  * Database query wrapper.  See [Parameterized Statements](database/query/parameterized) for usage and examples.

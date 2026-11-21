@@ -2,8 +2,8 @@
 
 namespace Kohana\Foundation;
 
-use Kohana\Log\Logger;
 use Kohana\Config\Repository;
+use Kohana\Log\Logger;
 use Kohana\Support\Arr;
 
 /**
@@ -23,28 +23,28 @@ use Kohana\Support\Arr;
 class Application
 {
     /** @var string Release version */
-    const VERSION = '3.5.1';
+    public const VERSION = '3.5.1';
 
     /** @var int Production environment type constant */
-    const PRODUCTION = 10;
+    public const PRODUCTION = 10;
 
     /** @var int Staging environment type constant */
-    const STAGING = 20;
+    public const STAGING = 20;
 
     /** @var int Testing environment type constant */
-    const TESTING = 30;
+    public const TESTING = 30;
 
     /** @var int Development environment type constant */
-    const DEVELOPMENT = 40;
+    public const DEVELOPMENT = 40;
 
     /** @var string Security check that is added to all generated PHP files */
-    const FILE_SECURITY = '<?php defined(\'SYSPATH\') or die(\'No direct script access.\');';
+    public const FILE_SECURITY = '<?php defined(\'SYSPATH\') or die(\'No direct script access.\');';
 
     /**
      * @var string Format of cache files: header, cache name, and data
      * @deprecated 3.4.4
      */
-    const FILE_CACHE = ":header \n\n// :name\n\n:data\n";
+    public const FILE_CACHE = ":header \n\n// :name\n\n:data\n";
 
     /**
      * @var  string  Current environment name
@@ -300,7 +300,7 @@ class Application
 
         // Load the config if one doesn't already exist
         if (!static::$config instanceof Repository) {
-            static::$config = new Repository;
+            static::$config = new Repository();
         }
     }
 

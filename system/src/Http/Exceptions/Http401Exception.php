@@ -18,8 +18,9 @@ class Http401Exception extends ExpectedHttpException
      */
     public function authenticate(?string $challenge = null)
     {
-        if ($challenge === null)
+        if ($challenge === null) {
             return $this->headers('www-authenticate');
+        }
 
         $this->headers('www-authenticate', $challenge);
 
@@ -34,8 +35,9 @@ class Http401Exception extends ExpectedHttpException
      */
     public function check(): bool
     {
-        if ($this->headers('www-authenticate') === null)
+        if ($this->headers('www-authenticate') === null) {
             throw new KohanaException('A \'www-authenticate\' header must be specified for a HTTP 401 Unauthorized');
+        }
 
         return true;
     }

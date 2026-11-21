@@ -1,12 +1,12 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\View\View;
-use Kohana\Testing\TestCase;
-use Kohana\Http\Response;
 use Kohana\Cookie\Cookie;
+use Kohana\Http\Response;
+use Kohana\Testing\TestCase;
+use Kohana\View\View;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Unit tests for response class
@@ -30,7 +30,7 @@ class Kohana_ResponseTest extends TestCase
      */
     public static function provider_body(): array
     {
-        $view = new class extends View {
+        $view = new class () extends View {
             public function __toString(): string
             {
                 return 'foo';
@@ -52,7 +52,7 @@ class Kohana_ResponseTest extends TestCase
     #[Test]
     public function test_body($source, $expected)
     {
-        $response = new Response;
+        $response = new Response();
         $response->body($source);
         $this->assertSame($response->body(), $expected);
 
@@ -69,7 +69,7 @@ class Kohana_ResponseTest extends TestCase
     {
         return [
             ['0', '0'],
-            ["0", '0'],
+            ['0', '0'],
             [0, '0'],
         ];
     }
@@ -85,7 +85,7 @@ class Kohana_ResponseTest extends TestCase
     #[Test]
     public function test_body_string_zero($string, $expected)
     {
-        $response = new Response;
+        $response = new Response();
         $response->body($string);
 
         $this->assertSame($expected, $response->body());
@@ -105,26 +105,26 @@ class Kohana_ResponseTest extends TestCase
                 [
                     'test1' => [
                         'value' => 'foo',
-                        'expiration' => Cookie::$expiration
+                        'expiration' => Cookie::$expiration,
                     ],
-                ]
+                ],
             ],
             [
                 [
                     'test2' => 'stfu',
-                    'test3' => ['value' => 'snafu', 'expiration' => 123456789]
+                    'test3' => ['value' => 'snafu', 'expiration' => 123456789],
                 ],
                 null,
                 [
                     'test2' => [
                         'value' => 'stfu',
-                        'expiration' => Cookie::$expiration
+                        'expiration' => Cookie::$expiration,
                     ],
                     'test3' => [
                         'value' => 'snafu',
-                        'expiration' => 123456789
-                    ]
-                ]
+                        'expiration' => 123456789,
+                    ],
+                ],
             ],
         ];
     }
@@ -143,7 +143,7 @@ class Kohana_ResponseTest extends TestCase
     public function test_cookie_set($key, ?string $value, array $expected)
     {
         // Set up the Response and apply cookie
-        $response = new Response;
+        $response = new Response();
         $response->cookie($key, $value);
 
         foreach ($expected as $_key => $_value) {
@@ -161,7 +161,7 @@ class Kohana_ResponseTest extends TestCase
      */
     public function test_cookie_get()
     {
-        $response = new Response;
+        $response = new Response();
 
         // Test for empty cookies
         $this->assertSame([], $response->cookie());
@@ -183,7 +183,7 @@ class Kohana_ResponseTest extends TestCase
     public function test_content_type_when_set()
     {
         $content_type = 'application/json';
-        $response = new Response;
+        $response = new Response();
         $response->headers('content-type', $content_type);
         $headers = $response->sendHeaders()->headers();
         $this->assertSame($content_type, (string) $headers['content-type']);

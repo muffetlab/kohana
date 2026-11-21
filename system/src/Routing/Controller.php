@@ -2,10 +2,10 @@
 
 namespace Kohana\Routing;
 
-use Kohana\Http\Request;
-use Kohana\Http\Response;
 use Kohana\Http\Exceptions\HttpException;
 use Kohana\Http\Http;
+use Kohana\Http\Request;
+use Kohana\Http\Response;
 
 /**
  * Abstract controller class. Controllers should only be created using a [Request].

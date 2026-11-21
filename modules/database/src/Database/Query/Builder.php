@@ -138,7 +138,7 @@ abstract class Builder extends Query
         $set = [];
         foreach ($values as $group) {
             // Split the set
-            list ($column, $value) = $group;
+            list($column, $value) = $group;
 
             // Quote the column name
             $column = $db->quoteColumn($column);
@@ -194,7 +194,7 @@ abstract class Builder extends Query
     {
         $sort = [];
         foreach ($columns as $group) {
-            list ($column, $direction) = $group;
+            list($column, $direction) = $group;
 
             if (is_array($column)) {
                 // Use the column alias

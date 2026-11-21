@@ -2,9 +2,9 @@
 
 namespace Kohana\Http\Exceptions;
 
-use Kohana\Routing\Url;
 use Kohana\Foundation\Application;
 use Kohana\Foundation\KohanaException;
+use Kohana\Routing\Url;
 
 /**
  * Redirect HTTP exception class. Used for all [HTTP_Exception]'s where the status
@@ -28,8 +28,9 @@ abstract class RedirectHttpException extends ExpectedHttpException
      */
     public function location(?string $uri = null)
     {
-        if ($uri === null)
+        if ($uri === null) {
             return $this->headers('Location');
+        }
 
         if (strpos($uri, '://') === false) {
             // Make the URI into a URL
@@ -49,8 +50,9 @@ abstract class RedirectHttpException extends ExpectedHttpException
      */
     public function check(): bool
     {
-        if ($this->headers('location') === null)
+        if ($this->headers('location') === null) {
             throw new KohanaException('A \'location\' must be specified for a redirect');
+        }
 
         return true;
     }

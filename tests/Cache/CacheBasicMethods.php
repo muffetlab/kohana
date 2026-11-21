@@ -1,11 +1,11 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\UsesClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Kohana\Cache\Cache;
 use Kohana\Cache\CacheException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @package    Kohana/Cache
@@ -48,8 +48,9 @@ abstract class Kohana_CacheBasicMethodsTest extends TestCase
      */
     public function cache(?Cache $cache = null)
     {
-        if ($cache === null)
+        if ($cache === null) {
             return $this->_cache_driver;
+        }
 
         $this->_cache_driver = $cache;
         return $this;
@@ -62,7 +63,7 @@ abstract class Kohana_CacheBasicMethodsTest extends TestCase
      */
     public static function provider_set_get(): array
     {
-        $object = new StdClass;
+        $object = new StdClass();
         $object->foo = 'foo';
         $object->bar = 'bar';
 
@@ -84,9 +85,9 @@ TESTTEXT;
                     'ttl' => 0, // Time to live
                     'wait' => false, // Test wait time to let cache expire
                     'type' => 'string', // Type test
-                    'default' => null // Default value get should return
+                    'default' => null, // Default value get should return
                 ],
-                'foobar'
+                'foobar',
             ],
             [
                 [
@@ -95,9 +96,9 @@ TESTTEXT;
                     'ttl' => 0,
                     'wait' => false,
                     'type' => 'int',
-                    'default' => null
+                    'default' => null,
                 ],
-                101010
+                101010,
             ],
             [
                 [
@@ -106,26 +107,26 @@ TESTTEXT;
                     'ttl' => 0,
                     'wait' => false,
                     'type' => 'float',
-                    'default' => null
+                    'default' => null,
                 ],
-                10.00
+                10.00,
             ],
             [
                 [
                     'id' => 'array',
                     'value' => [
                         'key' => 'foo',
-                        'value' => 'bar'
+                        'value' => 'bar',
                     ],
                     'ttl' => 0,
                     'wait' => false,
                     'type' => 'array',
-                    'default' => null
+                    'default' => null,
                 ],
                 [
                     'key' => 'foo',
-                    'value' => 'bar'
-                ]
+                    'value' => 'bar',
+                ],
             ],
             [
                 [
@@ -134,9 +135,9 @@ TESTTEXT;
                     'ttl' => 0,
                     'wait' => false,
                     'type' => 'bool',
-                    'default' => null
+                    'default' => null,
                 ],
-                true
+                true,
             ],
             [
                 [
@@ -145,9 +146,9 @@ TESTTEXT;
                     'ttl' => 0,
                     'wait' => false,
                     'type' => 'null',
-                    'default' => null
+                    'default' => null,
                 ],
-                null
+                null,
             ],
             [
                 [
@@ -156,9 +157,9 @@ TESTTEXT;
                     'ttl' => 0,
                     'wait' => false,
                     'type' => 'object',
-                    'default' => null
+                    'default' => null,
                 ],
-                $object
+                $object,
             ],
             [
                 [
@@ -167,9 +168,9 @@ TESTTEXT;
                     'ttl' => 0,
                     'wait' => false,
                     'type' => 'string',
-                    'default' => null
+                    'default' => null,
                 ],
-                'foo bar snafu'
+                'foo bar snafu',
             ],
             [
                 [
@@ -178,9 +179,9 @@ TESTTEXT;
                     'ttl' => 0,
                     'wait' => 1,
                     'type' => 'string',
-                    'default' => null
+                    'default' => null,
                 ],
-                'cache value that should last'
+                'cache value that should last',
             ],
             [
                 [
@@ -189,9 +190,9 @@ TESTTEXT;
                     'ttl' => 3,
                     'wait' => 5,
                     'type' => 'null',
-                    'default' => null
+                    'default' => null,
                 ],
-                null
+                null,
             ],
             [
                 [
@@ -200,9 +201,9 @@ TESTTEXT;
                     'ttl' => 3,
                     'wait' => 5,
                     'type' => 'string',
-                    'default' => 'something completely different!'
+                    'default' => 'something completely different!',
                 ],
-                'something completely different!'
+                'something completely different!',
             ],
             [
                 [
@@ -213,7 +214,7 @@ TESTTEXT;
                     'type' => 'string',
                     'default' => null,
                 ],
-                $html_text
+                $html_text,
             ],
             [
                 [
@@ -224,7 +225,7 @@ TESTTEXT;
                     'type' => 'string',
                     'default' => null,
                 ],
-                'blabla'
+                'blabla',
             ],
             [
                 [
@@ -235,8 +236,8 @@ TESTTEXT;
                     'type' => 'string',
                     'default' => null,
                 ],
-                'bla bla'
-            ]
+                'bla bla',
+            ],
         ];
     }
 

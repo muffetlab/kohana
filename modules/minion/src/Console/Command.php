@@ -2,10 +2,10 @@
 
 namespace Kohana\Console;
 
+use Kohana\Foundation\Application;
 use Kohana\Support\Arr;
 use Kohana\Validation\Validator;
 use Kohana\View\View;
-use Kohana\Foundation\Application;
 
 /**
  * Interface that all minion tasks must implement
@@ -34,8 +34,9 @@ abstract class Command
     {
         $task = trim($task);
 
-        if (empty($task))
+        if (empty($task)) {
             return '';
+        }
 
         // db:migrate => App\Console\Commands\Db\MigrateCommand, falling back to Kohana\Console\Commands
         $class = implode('\\', array_map('ucfirst', explode(static::$taskSeparator, $task))) . 'Command';
@@ -77,7 +78,7 @@ abstract class Command
     {
         if (($task = Arr::get($options, 'task')) !== null) {
             unset($options['task']);
-        } else if (($task = Arr::get($options, 0)) !== null) {
+        } elseif (($task = Arr::get($options, 0)) !== null) {
             // The first positional argument (aka 0) may be the task name
             unset($options[0]);
         } else {
@@ -91,7 +92,7 @@ abstract class Command
             throw new InvalidCommandException("Task ':task' is not a valid minion task", [':task' => $class]);
         }
 
-        $class = new $class;
+        $class = new $class();
 
         if (!$class instanceof self) {
             throw new InvalidCommandException("Task ':task' is not a valid minion task", [':task' => $class]);

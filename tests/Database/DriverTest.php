@@ -1,11 +1,11 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use Kohana\Testing\TestCase;
 use Kohana\Database\Connection;
 use Kohana\Database\DB;
 use Kohana\Database\PgsqlConnection;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Runs real queries against every driver (PDO MySQL, MySQLi, PostgreSQL).

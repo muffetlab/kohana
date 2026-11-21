@@ -82,7 +82,7 @@ use Kohana\Support\Arr;
 class MemcachedStore extends Cache implements Arithmetic
 {
     // Memcached has a maximum cache lifetime of 30 days.
-    const CACHE_CEILING = 2592000;
+    public const CACHE_CEILING = 2592000;
 
     /**
      * Memcached resource.
@@ -123,7 +123,7 @@ class MemcachedStore extends Cache implements Arithmetic
         parent::__construct($config);
 
         // Setup Memcached.
-        $this->memcached = new \Memcached;
+        $this->memcached = new \Memcached();
 
         // Load servers from configuration.
         $servers = Arr::get($this->config, 'servers');
@@ -138,7 +138,7 @@ class MemcachedStore extends Cache implements Arithmetic
             'host' => 'localhost',
             'port' => 11211,
             'weight' => 1,
-            'options' => []
+            'options' => [],
         ];
 
         // Add the memcached servers to the pool.
@@ -149,7 +149,7 @@ class MemcachedStore extends Cache implements Arithmetic
             if (!$this->memcached->addServer($server['host'], $server['port'], $server['weight'])) {
                 throw new CacheException('Memcached could not connect to host \':host\' using port \':port\'', [
                 ':host' => $server['host'],
-                ':port' => $server['port']
+                ':port' => $server['port'],
                 ]);
             }
 

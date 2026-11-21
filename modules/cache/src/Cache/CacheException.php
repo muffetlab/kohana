@@ -6,5 +6,4 @@ use Kohana\Foundation\KohanaException;
 
 class CacheException extends KohanaException
 {
-    
 }

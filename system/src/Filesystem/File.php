@@ -38,8 +38,9 @@ class File
             // Use getimagesize() to find the mime type on images
             $file = getimagesize($filename);
 
-            if (isset($file['mime']))
+            if (isset($file['mime'])) {
                 return $file['mime'];
+            }
         }
 
         if (class_exists('finfo', false)) {

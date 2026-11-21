@@ -86,7 +86,7 @@ use Kohana\Support\Arr;
  */
 abstract class Cache
 {
-    const DEFAULT_EXPIRE = 3600;
+    public const DEFAULT_EXPIRE = 3600;
 
     /**
      * @var   string     default driver to use
@@ -180,14 +180,16 @@ abstract class Cache
      */
     public function config($key = null, $value = null)
     {
-        if ($key === null)
+        if ($key === null) {
             return $this->config;
+        }
 
         if (is_array($key)) {
             $this->config = $key;
         } else {
-            if ($value === null)
+            if ($value === null) {
                 return Arr::get($this->config, $key);
+            }
 
             $this->config[$key] = $value;
         }

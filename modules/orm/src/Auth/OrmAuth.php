@@ -3,9 +3,9 @@
 namespace Kohana\Auth;
 
 use Kohana\Auth\Models\User;
-use Kohana\Orm\Model;
-use Kohana\Http\Request;
 use Kohana\Cookie\Cookie;
+use Kohana\Http\Request;
+use Kohana\Orm\Model;
 
 /**
  * ORM Auth driver.
@@ -31,13 +31,15 @@ class OrmAuth extends Auth
         // Get the user from the session
         $user = $this->getUser();
 
-        if (!$user)
+        if (!$user) {
             return false;
+        }
 
         if ($user instanceof User && $user->loaded()) {
             // If we don't have a roll no further checking is needed
-            if (!$role)
+            if (!$role) {
                 return true;
+            }
 
             if (is_array($role)) {
                 // Get all the roles
@@ -47,18 +49,18 @@ class OrmAuth extends Auth
                     ->asArray(null, 'id');
 
                 // Make sure all the roles are valid ones
-                if (count($roles) !== count($role))
+                if (count($roles) !== count($role)) {
                     return false;
-            }
-            else {
+                }
+            } else {
                 if (!is_object($role)) {
                     // Load the role
                     $roles = $this->model('Role', ['name' => $role]);
 
-                    if (!$roles->loaded())
+                    if (!$roles->loaded()) {
                         return false;
-                }
-                else {
+                    }
+                } else {
                     $roles = $role;
                 }
             }
@@ -209,8 +211,9 @@ class OrmAuth extends Auth
 
         if ($user === $default) {
             // check for "remembered" login
-            if (($user = $this->autoLogin()) === false)
+            if (($user = $this->autoLogin()) === false) {
                 return $default;
+            }
         }
 
         return $user;
@@ -298,8 +301,9 @@ class OrmAuth extends Auth
     {
         $user = $this->getUser();
 
-        if (!$user)
+        if (!$user) {
             return false;
+        }
 
         return $this->verify((string) $password, $user->password);
     }

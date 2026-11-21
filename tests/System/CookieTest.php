@@ -1,10 +1,10 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use Kohana\Testing\TestCase;
 use Kohana\Cookie\Cookie;
 use Kohana\Foundation\KohanaException;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the cookie class
@@ -23,8 +23,8 @@ use Kohana\Foundation\KohanaException;
 #[Group('kohana.core.cookie')]
 class Kohana_CookieTest extends TestCase
 {
-    const UNIX_TIMESTAMP = 1411040141;
-    const COOKIE_EXPIRATION = 60;
+    public const UNIX_TIMESTAMP = 1411040141;
+    public const COOKIE_EXPIRATION = 60;
 
     /**
      * Sets up the environment
@@ -38,7 +38,7 @@ class Kohana_CookieTest extends TestCase
 
         $this->setEnvironment([
             'Kohana\Cookie\Cookie::$salt' => 'some-random-salt',
-            'HTTP_USER_AGENT' => 'cli'
+            'HTTP_USER_AGENT' => 'cli',
         ]);
     }
 
@@ -60,7 +60,7 @@ class Kohana_CookieTest extends TestCase
             'path' => '/path',
             'domain' => 'my.domain',
             'secure' => true,
-            'httponly' => false
+            'httponly' => false,
         ]);
     }
 
@@ -89,7 +89,7 @@ class Kohana_CookieTest extends TestCase
     public function test_set_calculates_expiry_from_lifetime(?int $expiration, int $expect_expiry)
     {
         $this->setEnvironment([
-            'Kohana\Cookie\Cookie::$expiration' => self::COOKIE_EXPIRATION
+            'Kohana\Cookie\Cookie::$expiration' => self::COOKIE_EXPIRATION,
         ]);
         Kohana_CookieTest_TestableCookie::set('foo', 'bar', $expiration);
         $this->assertSetCookieWith(['expire' => $expect_expiry]);
@@ -196,7 +196,7 @@ class Kohana_CookieTest extends TestCase
                     'value' => 'bar',
                     'salt' => 'our-salt',
                 ],
-                ['name' => 'changed']
+                ['name' => 'changed'],
             ],
             [
                 [
@@ -204,7 +204,7 @@ class Kohana_CookieTest extends TestCase
                     'value' => 'bar',
                     'salt' => 'our-salt',
                 ],
-                ['value' => 'changed']
+                ['value' => 'changed'],
             ],
             [
                 [
@@ -212,7 +212,7 @@ class Kohana_CookieTest extends TestCase
                     'value' => 'bar',
                     'salt' => 'our-salt',
                 ],
-                ['salt' => 'changed-salt']
+                ['salt' => 'changed-salt'],
             ],
         ];
     }
@@ -256,7 +256,7 @@ class Kohana_CookieTest extends TestCase
             'path' => Cookie::$path,
             'domain' => Cookie::$domain,
             'secure' => Cookie::$secure,
-            'httponly' => Cookie::$httponly
+            'httponly' => Cookie::$httponly,
         ]);
     }
 
@@ -298,7 +298,7 @@ class Kohana_CookieTest_TestableCookie extends Cookie
             'path' => $path,
             'domain' => $domain,
             'secure' => $secure,
-            'httponly' => $httponly
+            'httponly' => $httponly,
         ];
 
         return true;

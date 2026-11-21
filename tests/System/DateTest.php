@@ -1,11 +1,11 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
+use Kohana\Support\Date;
+use Kohana\Testing\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\Ticket;
-use Kohana\Testing\TestCase;
-use Kohana\Support\Date;
 
 /**
  * Tests Date class
@@ -135,7 +135,8 @@ class Kohana_DateTest extends TestCase
     public function test_am_pm($hour, $expected)
     {
         $this->assertSame(
-            $expected, Date::ampm($hour)
+            $expected,
+            Date::ampm($hour)
         );
     }
 
@@ -190,7 +191,8 @@ class Kohana_DateTest extends TestCase
     public function test_adjust($hour, $ampm, $expected)
     {
         $this->assertSame(
-            $expected, Date::adjust($hour, $ampm)
+            $expected,
+            Date::adjust($hour, $ampm)
         );
     }
 
@@ -234,7 +236,8 @@ class Kohana_DateTest extends TestCase
         $days = Date::days($month, $year);
 
         $this->assertSame(
-            $expected, count($days)
+            $expected,
+            count($days)
         );
 
         // This should be a mirrored array, days => days
@@ -256,33 +259,33 @@ class Kohana_DateTest extends TestCase
             // Test the default format
             [
                 '2010-04-16 17:00:00',
-                '5:00PM 16th April 2010'
+                '5:00PM 16th April 2010',
             ],
             // Now we use our own format
             // Binary date!
             [
                 '01/01/2010 01:00',
                 '1AM 1st January 2010',
-                'd/m/Y H:i'
+                'd/m/Y H:i',
             ],
             // Timezones (see #3902)
             [
                 '2011-04-01 01:23:45 Antarctica/McMurdo',
                 '2011-04-01 01:23:45',
                 'Y-m-d H:i:s e',
-                'Antarctica/McMurdo'
+                'Antarctica/McMurdo',
             ],
             [
                 '2011-04-01 01:23:45 Antarctica/McMurdo',
                 '2011-03-31 14:23:45 Europe/Paris',
                 'Y-m-d H:i:s e',
-                'Antarctica/McMurdo'
+                'Antarctica/McMurdo',
             ],
             [
                 '2011-04-01 01:23:45 Antarctica/McMurdo',
                 '@1301574225',
                 'Y-m-d H:i:s e',
-                'Antarctica/McMurdo'
+                'Antarctica/McMurdo',
             ],
         ];
     }
@@ -316,71 +319,71 @@ class Kohana_DateTest extends TestCase
         return [
             [
                 [
-                    1 => "1",
-                    2 => "2",
-                    3 => "3",
-                    4 => "4",
-                    5 => "5",
-                    6 => "6",
-                    7 => "7",
-                    8 => "8",
-                    9 => "9",
-                    10 => "10",
-                    11 => "11",
-                    12 => "12"
+                    1 => '1',
+                    2 => '2',
+                    3 => '3',
+                    4 => '4',
+                    5 => '5',
+                    6 => '6',
+                    7 => '7',
+                    8 => '8',
+                    9 => '9',
+                    10 => '10',
+                    11 => '11',
+                    12 => '12',
                 ],
-                null
+                null,
             ],
             [
                 [
-                    1 => "1",
-                    2 => "2",
-                    3 => "3",
-                    4 => "4",
-                    5 => "5",
-                    6 => "6",
-                    7 => "7",
-                    8 => "8",
-                    9 => "9",
-                    10 => "10",
-                    11 => "11",
-                    12 => "12"
+                    1 => '1',
+                    2 => '2',
+                    3 => '3',
+                    4 => '4',
+                    5 => '5',
+                    6 => '6',
+                    7 => '7',
+                    8 => '8',
+                    9 => '9',
+                    10 => '10',
+                    11 => '11',
+                    12 => '12',
                 ],
-                'Guinness'
+                'Guinness',
             ],
             [
                 [
-                    1 => "January",
-                    2 => "February",
-                    3 => "March",
-                    4 => "April",
-                    5 => "May",
-                    6 => "June",
-                    7 => "July",
-                    8 => "August",
-                    9 => "September",
-                    10 => "October",
-                    11 => "November",
-                    12 => "December"
+                    1 => 'January',
+                    2 => 'February',
+                    3 => 'March',
+                    4 => 'April',
+                    5 => 'May',
+                    6 => 'June',
+                    7 => 'July',
+                    8 => 'August',
+                    9 => 'September',
+                    10 => 'October',
+                    11 => 'November',
+                    12 => 'December',
                 ],
-                Date::MONTHS_LONG
+                Date::MONTHS_LONG,
             ],
             [
                 [
-                    1 => "Jan",
-                    2 => "Feb",
-                    3 => "Mar",
-                    4 => "Apr",
-                    5 => "May",
-                    6 => "Jun",
-                    7 => "Jul",
-                    8 => "Aug",
-                    9 => "Sep",
-                    10 => "Oct",
-                    11 => "Nov",
-                    12 => "Dec"
+                    1 => 'Jan',
+                    2 => 'Feb',
+                    3 => 'Mar',
+                    4 => 'Apr',
+                    5 => 'May',
+                    6 => 'Jun',
+                    7 => 'Jul',
+                    8 => 'Aug',
+                    9 => 'Sep',
+                    10 => 'Oct',
+                    11 => 'Nov',
+                    12 => 'Dec',
                 ],
-                Date::MONTHS_SHORT
+                Date::MONTHS_SHORT,
             ],
         ];
     }
@@ -412,14 +415,14 @@ class Kohana_DateTest extends TestCase
                 $time,
                 $time,
                 '',
-                false
+                false,
             ],
             // Test that providing only one output just returns that output
             [
                 $time - 30,
                 $time,
                 'seconds',
-                30
+                30,
             ],
             // Random tests
             [
@@ -433,8 +436,8 @@ class Kohana_DateTest extends TestCase
                     'days' => 0,
                     'hours' => 0,
                     'minutes' => 0,
-                    'seconds' => 30
-                ]
+                    'seconds' => 30,
+                ],
             ],
             [
                 $time - (60 * 60 * 24 * 782) + (60 * 25),
@@ -447,8 +450,8 @@ class Kohana_DateTest extends TestCase
                     'days' => 0,
                     'hours' => 1,
                     'minutes' => 28,
-                    'seconds' => 24
-                ]
+                    'seconds' => 24,
+                ],
             ],
             // Should be able to compare with the future & that it only uses formats specified
             [
@@ -460,8 +463,8 @@ class Kohana_DateTest extends TestCase
                     'days' => 1,
                     'hours' => 0,
                     'minutes' => 5,
-                    'seconds' => 0
-                ]
+                    'seconds' => 0,
+                ],
             ],
             [
                 // Add a bit of extra time to account for phpunit processing
@@ -470,8 +473,8 @@ class Kohana_DateTest extends TestCase
                 'months,years',
                 [
                     'months' => 2,
-                    'years' => 1
-                ]
+                    'years' => 1,
+                ],
             ],
         ];
     }
@@ -489,7 +492,8 @@ class Kohana_DateTest extends TestCase
     public function test_span(int $time1, $time2, string $output, $expected)
     {
         $this->assertSame(
-            $expected, Date::span($time1, $time2, $output)
+            $expected,
+            Date::span($time1, $time2, $output)
         );
     }
 
@@ -562,7 +566,8 @@ class Kohana_DateTest extends TestCase
     public function test_fuzzy_span(string $expected, int $timestamp, int $local_timestamp)
     {
         $this->assertSame(
-            $expected, Date::fuzzySpan($timestamp, $local_timestamp)
+            $expected,
+            Date::fuzzySpan($timestamp, $local_timestamp)
         );
     }
 
@@ -589,7 +594,7 @@ class Kohana_DateTest extends TestCase
                     2015 => '2015',
                 ],
                 2005,
-                2015
+                2015,
             ],
         ];
     }
@@ -602,7 +607,8 @@ class Kohana_DateTest extends TestCase
     public function test_years($expected, $start = false, $end = false)
     {
         $this->assertSame(
-            $expected, Date::years($start, $end)
+            $expected,
+            Date::years($start, $end)
         );
     }
 
@@ -623,7 +629,7 @@ class Kohana_DateTest extends TestCase
                     10 => '10',
                     11 => '11',
                     12 => '12',
-                ]
+                ],
             ],
         ];
     }
@@ -636,7 +642,8 @@ class Kohana_DateTest extends TestCase
     public function test_hours($expected, $step = 1, $long = false, $start = null)
     {
         $this->assertSame(
-            $expected, Date::hours($step, $long, $start)
+            $expected,
+            Date::hours($step, $long, $start)
         );
     }
 
@@ -666,7 +673,7 @@ class Kohana_DateTest extends TestCase
                 ],
                 1,
                 0,
-                60
+                60,
             ],
         ];
     }
@@ -676,7 +683,8 @@ class Kohana_DateTest extends TestCase
     public function test_seconds($expected, $step = 1, $start = 0, $end = 60)
     {
         $this->assertSame(
-            $expected, Date::seconds($step, $start, $end)
+            $expected,
+            Date::seconds($step, $start, $end)
         );
     }
 
@@ -695,7 +703,7 @@ class Kohana_DateTest extends TestCase
                     30 => '30', 35 => '35', 40 => '40',
                     45 => '45', 50 => '50', 55 => '55',
                 ],
-                5
+                5,
             ],
         ];
     }
@@ -705,7 +713,8 @@ class Kohana_DateTest extends TestCase
     public function test_minutes($expected, $step)
     {
         $this->assertSame(
-            $expected, Date::minutes($step)
+            $expected,
+            Date::minutes($step)
         );
     }
 
@@ -724,7 +733,8 @@ class Kohana_DateTest extends TestCase
         ];
 
         $this->assertSame(
-            $minutes, Date::minutes()
+            $minutes,
+            Date::minutes()
         );
     }
 

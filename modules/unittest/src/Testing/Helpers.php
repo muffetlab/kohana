@@ -15,7 +15,7 @@ class Helpers
      * @see has_internet
      * @var bool
      */
-    static protected $hasInternet = null;
+    protected static $hasInternet = null;
 
     /**
      * Check for internet connectivity
@@ -26,7 +26,7 @@ class Helpers
     {
         if (!isset(self::$hasInternet)) {
             // The @ operator is used here to avoid DNS errors when there is no connection.
-            $sock = @fsockopen("www.google.com", 80, $errno, $errstr, 1);
+            $sock = @fsockopen('www.google.com', 80, $errno, $errstr, 1);
 
             self::$hasInternet = (bool) $sock;
         }
@@ -40,7 +40,7 @@ class Helpers
      * @param string $path
      * @return string
      */
-    static public function dirSeparator(string $path): string
+    public static function dirSeparator(string $path): string
     {
         return str_replace('/', DIRECTORY_SEPARATOR, $path);
     }
@@ -50,7 +50,7 @@ class Helpers
      *
      * @return void
      */
-    static public function cleanCacheDir()
+    public static function cleanCacheDir()
     {
         $cache_dir = opendir(Application::$cacheDir);
 
@@ -99,8 +99,9 @@ class Helpers
      */
     public function setEnvironment(array $environment)
     {
-        if (!count($environment))
+        if (!count($environment)) {
             return false;
+        }
 
         foreach ($environment as $option => $value) {
             $backup_needed = !array_key_exists($option, $this->environmentBackup);

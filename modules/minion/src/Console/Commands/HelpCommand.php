@@ -3,7 +3,6 @@
 namespace Kohana\Console\Commands;
 
 use Kohana\Console\Command;
-use Kohana\Foundation\Application;
 use Kohana\View\View;
 
 /**

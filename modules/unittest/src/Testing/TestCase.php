@@ -67,7 +67,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     public function setUp(): void
     {
-        $this->helpers = new Helpers;
+        $this->helpers = new Helpers();
 
         $this->setEnvironment($this->environmentDefault);
     }

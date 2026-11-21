@@ -1,8 +1,8 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
 use Kohana\Cache\Cache;
 use Kohana\Cache\RedisStore;
+use PHPUnit\Framework\Attributes\Group;
 
 include_once __DIR__ . '/CacheArithmeticMethods.php';
 
@@ -29,7 +29,7 @@ class Kohana_RedisTest extends Kohana_CacheArithmeticMethodsTest
         ];
 
         try {
-            $cache = new class($config) extends RedisStore {
+            $cache = new class ($config) extends RedisStore {
                 public function __construct(array $config)
                 {
                     parent::__construct($config);

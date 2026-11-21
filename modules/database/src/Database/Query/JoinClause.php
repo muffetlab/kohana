@@ -2,8 +2,8 @@
 
 namespace Kohana\Database\Query;
 
-use Kohana\Foundation\KohanaException;
 use Kohana\Database\Connection;
+use Kohana\Foundation\KohanaException;
 
 /**
  * Database query builder for JOIN statements. See [Query Builder](/database/query/builder) for usage and examples.

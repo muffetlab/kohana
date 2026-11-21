@@ -2,8 +2,8 @@
 
 namespace Kohana\Cookie;
 
-use Kohana\Security\Security;
 use Kohana\Foundation\KohanaException;
+use Kohana\Security\Security;
 
 /**
  * Cookie helper.
@@ -74,7 +74,7 @@ class Cookie
 
         if (isset($cookie[$split]) && $cookie[$split] === '~') {
             // Separate the salt and the value
-            list ($hash, $value) = explode('~', $cookie, 2);
+            list($hash, $value) = explode('~', $cookie, 2);
 
             if (Security::slowEquals(static::salt($key, $value), $hash)) {
                 // Cookie signature is valid

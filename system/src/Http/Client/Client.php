@@ -2,9 +2,9 @@
 
 namespace Kohana\Http\Client;
 
+use Kohana\Http\Cache;
 use Kohana\Http\Request;
 use Kohana\Http\Response;
-use Kohana\Http\Cache;
 use Kohana\Support\Arr;
 
 /**
@@ -45,7 +45,7 @@ abstract class Client
      * @var array  Callbacks to use when response contains given headers
      */
     protected $headerCallbacks = [
-        'Location' => [Client::class, 'onHeaderLocation']
+        'Location' => [Client::class, 'onHeaderLocation'],
     ];
 
     /**
@@ -105,17 +105,19 @@ abstract class Client
     public function execute(Request $request): Response
     {
         // Prevent too much recursion of header callback requests
-        if ($this->callbackDepth() > $this->maxCallbackDepth())
-            throw new RecursionException("Could not execute request to :uri - too many recursions after :depth requests", [
+        if ($this->callbackDepth() > $this->maxCallbackDepth()) {
+            throw new RecursionException('Could not execute request to :uri - too many recursions after :depth requests', [
             ':uri' => $request->uri(),
             ':depth' => $this->callbackDepth() - 1,
             ]);
+        }
 
         // Execute the request and pass the currently used protocol
         $orig_response = $response = Response::factory(['protocol' => $request->protocol()]);
 
-        if (($cache = $this->cache()) instanceof Cache)
+        if (($cache = $this->cache()) instanceof Cache) {
             return $cache->execute($this, $request, $response);
+        }
 
         $response = $this->executeRequest($request, $response);
 
@@ -137,8 +139,9 @@ abstract class Client
                 }
 
                 // If the callback has created a new response, do not process any further
-                if ($response !== $orig_response)
+                if ($response !== $orig_response) {
                     break;
+                }
             }
         }
 
@@ -167,8 +170,9 @@ abstract class Client
      */
     public function cache(?Cache $cache = null)
     {
-        if ($cache === null)
+        if ($cache === null) {
             return $this->cache;
+        }
 
         $this->cache = $cache;
         return $this;
@@ -183,8 +187,9 @@ abstract class Client
      */
     public function follow(?bool $follow = null)
     {
-        if ($follow === null)
+        if ($follow === null) {
             return $this->follow;
+        }
 
         $this->follow = $follow;
 
@@ -200,8 +205,9 @@ abstract class Client
      */
     public function followHeaders(?array $follow_headers = null)
     {
-        if ($follow_headers === null)
+        if ($follow_headers === null) {
             return $this->followHeaders;
+        }
 
         $this->followHeaders = array_map('strtolower', $follow_headers);
 
@@ -223,8 +229,9 @@ abstract class Client
      */
     public function strictRedirect(?bool $strict_redirect = null)
     {
-        if ($strict_redirect === null)
+        if ($strict_redirect === null) {
             return $this->strictRedirect;
+        }
 
         $this->strictRedirect = $strict_redirect;
 
@@ -254,8 +261,9 @@ abstract class Client
      */
     public function headerCallbacks(?array $header_callbacks = null)
     {
-        if ($header_callbacks === null)
+        if ($header_callbacks === null) {
             return $this->headerCallbacks;
+        }
 
         $this->headerCallbacks = $header_callbacks;
 
@@ -275,8 +283,9 @@ abstract class Client
      */
     public function maxCallbackDepth(?int $depth = null)
     {
-        if ($depth === null)
+        if ($depth === null) {
             return $this->maxCallbackDepth;
+        }
 
         $this->maxCallbackDepth = $depth;
 
@@ -292,8 +301,9 @@ abstract class Client
      */
     public function callbackDepth(?int $depth = null)
     {
-        if ($depth === null)
+        if ($depth === null) {
             return $this->callbackDepth;
+        }
 
         $this->callbackDepth = $depth;
 
@@ -325,8 +335,9 @@ abstract class Client
     public function callbackParams($param = null, $value = null)
     {
         // Getter for full array
-        if ($param === null)
+        if ($param === null) {
             return $this->callbackParams;
+        }
 
         // Setter for full array
         if (is_array($param)) {

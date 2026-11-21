@@ -1,12 +1,12 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use Kohana\Testing\TestCase;
-use Kohana\Http\HeaderBag;
 use Kohana\Foundation\Application;
-use Kohana\Http\Response;
 use Kohana\Foundation\KohanaException;
+use Kohana\Http\HeaderBag;
+use Kohana\Http\Response;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Unit Tests for Kohana_HTTP_Header
@@ -37,26 +37,26 @@ class Kohana_HTTP_HeaderTest extends TestCase
                     'text/html; q=1',
                     'text/plain; q=.5',
                     'application/json; q=.1',
-                    'text/*'
+                    'text/*',
                 ],
                 [
                     'text/html' => 1.0,
                     'text/plain' => 0.5,
                     'application/json' => 0.1,
-                    'text/*' => 1.0
-                ]
+                    'text/*' => 1.0,
+                ],
             ],
             [
                 [
                     'text/*',
                     'text/html; level=1; q=0.4',
-                    'application/xml+rss; q=0.5; level=4'
+                    'application/xml+rss; q=0.5; level=4',
                 ],
                 [
                     'text/*' => 1.0,
                     'text/html; level=1' => 0.4,
-                    'application/xml+rss; level=4' => 0.5
-                ]
+                    'application/xml+rss; level=4' => 0.5,
+                ],
             ],
         ];
     }
@@ -96,28 +96,28 @@ class Kohana_HTTP_HeaderTest extends TestCase
                     'text' => [
                         'html' => 1.0,
                         'plain' => 1.0,
-                        '*' => 1.0
+                        '*' => 1.0,
                     ],
                     '*' => [
-                        '*' => 1.0
-                    ]
-                ]
+                        '*' => 1.0,
+                    ],
+                ],
             ],
             [
                 'text/html; q=.5, application/json, application/xml+rss; level=1; q=.7, text/*, */*',
                 [
                     'text' => [
                         'html' => 0.5,
-                        '*' => 1.0
+                        '*' => 1.0,
                     ],
                     'application' => [
                         'json' => 1.0,
-                        'xml+rss; level=1' => 0.7
+                        'xml+rss; level=1' => 0.7,
                     ],
                     '*' => [
-                        '*' => 1.0
-                    ]
-                ]
+                        '*' => 1.0,
+                    ],
+                ],
             ],
         ];
     }
@@ -151,8 +151,8 @@ class Kohana_HTTP_HeaderTest extends TestCase
                     'utf-8' => 1.0,
                     'utf-10' => 1.0,
                     'utf-16' => 1.0,
-                    'iso-8859-1' => 1.0
-                ]
+                    'iso-8859-1' => 1.0,
+                ],
             ],
             [
                 'utf-8, utf-10; q=.9, utf-16; q=.5, iso-8859-1; q=.75',
@@ -160,14 +160,14 @@ class Kohana_HTTP_HeaderTest extends TestCase
                     'utf-8' => 1.0,
                     'utf-10' => 0.9,
                     'utf-16' => 0.5,
-                    'iso-8859-1' => 0.75
-                ]
+                    'iso-8859-1' => 0.75,
+                ],
             ],
             [
                 null,
                 [
-                    '*' => 1.0
-                ]
+                    '*' => 1.0,
+                ],
             ],
         ];
     }
@@ -200,28 +200,28 @@ class Kohana_HTTP_HeaderTest extends TestCase
                 [
                     'compress' => 1.0,
                     'gzip' => 1.0,
-                    'blowfish' => 1.0
-                ]
+                    'blowfish' => 1.0,
+                ],
             ],
             [
                 'compress, gzip; q=0.12345, blowfish; q=1.0',
                 [
                     'compress' => 1.0,
                     'gzip' => 0.12345,
-                    'blowfish' => 1.0
-                ]
+                    'blowfish' => 1.0,
+                ],
             ],
             [
                 null,
                 [
-                    '*' => 1.0
-                ]
+                    '*' => 1.0,
+                ],
             ],
             [
                 '',
                 [
-                    'identity' => 1.0
-                ]
+                    'identity' => 1.0,
+                ],
             ],
         ];
     }
@@ -255,16 +255,16 @@ class Kohana_HTTP_HeaderTest extends TestCase
                     'en' => [
                         '*' => 1.0,
                         'us' => 1.0,
-                        'gb' => 1.0
+                        'gb' => 1.0,
                     ],
                     'fr' => [
                         '*' => 1.0,
-                        'fr' => 1.0
+                        'fr' => 1.0,
                     ],
                     'es' => [
-                        'es' => 1.0
-                    ]
-                ]
+                        'es' => 1.0,
+                    ],
+                ],
             ],
             [
                 'en; q=.9, en-us, en-gb, fr; q=.5, fr-fr; q=0.4, es-es; q=0.9, en-gb-gb; q=.45',
@@ -273,24 +273,24 @@ class Kohana_HTTP_HeaderTest extends TestCase
                         '*' => 0.9,
                         'us' => 1.0,
                         'gb' => 1.0,
-                        'gb-gb' => 0.45
+                        'gb-gb' => 0.45,
                     ],
                     'fr' => [
                         '*' => 0.5,
-                        'fr' => 0.4
+                        'fr' => 0.4,
                     ],
                     'es' => [
-                        'es' => 0.9
-                    ]
-                ]
+                        'es' => 0.9,
+                    ],
+                ],
             ],
             [
                 null,
                 [
                     '*' => [
-                        '*' => 1.0
-                    ]
-                ]
+                        '*' => 1.0,
+                    ],
+                ],
             ],
         ];
     }
@@ -323,9 +323,9 @@ class Kohana_HTTP_HeaderTest extends TestCase
                     'public',
                     'max-age' => 1800,
                     'must-revalidate',
-                    's-max-age' => 3600
+                    's-max-age' => 3600,
                 ],
-                'public, max-age=1800, must-revalidate, s-max-age=3600'
+                'public, max-age=1800, must-revalidate, s-max-age=3600',
             ],
             [
                 [
@@ -334,16 +334,16 @@ class Kohana_HTTP_HeaderTest extends TestCase
                     'public',
                     'must-revalidate',
                 ],
-                'max-age=1800, s-max-age=1800, public, must-revalidate'
+                'max-age=1800, s-max-age=1800, public, must-revalidate',
             ],
             [
                 [
                     'private',
                     'no-cache',
                     'max-age' => 0,
-                    'must-revalidate'
+                    'must-revalidate',
                 ],
-                'private, no-cache, max-age=0, must-revalidate'
+                'private, no-cache, max-age=0, must-revalidate',
             ],
         ];
     }
@@ -377,8 +377,8 @@ class Kohana_HTTP_HeaderTest extends TestCase
                     'public',
                     'max-age' => 1800,
                     'must-revalidate',
-                    's-max-age' => 3600
-                ]
+                    's-max-age' => 3600,
+                ],
             ],
             [
                 'max-age=1800, s-max-age=1800, public, must-revalidate',
@@ -387,7 +387,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
                     's-max-age' => 1800,
                     'public',
                     'must-revalidate',
-                ]
+                ],
             ],
             [
                 'private, no-cache, max-age=0, must-revalidate',
@@ -395,8 +395,8 @@ class Kohana_HTTP_HeaderTest extends TestCase
                     'private',
                     'no-cache',
                     'max-age' => 0,
-                    'must-revalidate'
-                ]
+                    'must-revalidate',
+                ],
             ],
         ];
     }
@@ -434,59 +434,59 @@ class Kohana_HTTP_HeaderTest extends TestCase
      */
     // @codingStandardsIgnoreStart
     public static function provider_offsetSet(): array
-        // @codingStandardsIgnoreEnd
+    // @codingStandardsIgnoreEnd
     {
         return [
             [
                 [
                     'Content-Type' => 'application/x-www-form-urlencoded',
                     'Accept' => 'text/html, text/plain; q=.1, */*',
-                    'Accept-Language' => 'en-gb, en-us, en; q=.1'
-                ],
-                [
-                    ['Accept-Encoding', 'compress, gzip', false]
-                ],
-                [
-                    'content-type' => 'application/x-www-form-urlencoded',
-                    'accept' => 'text/html, text/plain; q=.1, */*',
-                    'accept-language' => 'en-gb, en-us, en; q=.1',
-                    'accept-encoding' => 'compress, gzip'
-                ]
-            ],
-            [
-                [
-                    'Content-Type' => 'application/x-www-form-urlencoded',
-                    'Accept' => 'text/html, text/plain; q=.1, */*',
-                    'Accept-Language' => 'en-gb, en-us, en; q=.1'
+                    'Accept-Language' => 'en-gb, en-us, en; q=.1',
                 ],
                 [
                     ['Accept-Encoding', 'compress, gzip', false],
-                    ['Accept-Encoding', 'bzip', false]
                 ],
                 [
                     'content-type' => 'application/x-www-form-urlencoded',
                     'accept' => 'text/html, text/plain; q=.1, */*',
                     'accept-language' => 'en-gb, en-us, en; q=.1',
-                    'accept-encoding' => ['compress, gzip', 'bzip']
-                ]
+                    'accept-encoding' => 'compress, gzip',
+                ],
             ],
             [
                 [
                     'Content-Type' => 'application/x-www-form-urlencoded',
                     'Accept' => 'text/html, text/plain; q=.1, */*',
-                    'Accept-Language' => 'en-gb, en-us, en; q=.1'
+                    'Accept-Language' => 'en-gb, en-us, en; q=.1',
+                ],
+                [
+                    ['Accept-Encoding', 'compress, gzip', false],
+                    ['Accept-Encoding', 'bzip', false],
+                ],
+                [
+                    'content-type' => 'application/x-www-form-urlencoded',
+                    'accept' => 'text/html, text/plain; q=.1, */*',
+                    'accept-language' => 'en-gb, en-us, en; q=.1',
+                    'accept-encoding' => ['compress, gzip', 'bzip'],
+                ],
+            ],
+            [
+                [
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                    'Accept' => 'text/html, text/plain; q=.1, */*',
+                    'Accept-Language' => 'en-gb, en-us, en; q=.1',
                 ],
                 [
                     ['Accept-Encoding', 'compress, gzip', false],
                     ['Accept-Encoding', 'bzip', true],
-                    ['Accept', 'text/*', false]
+                    ['Accept', 'text/*', false],
                 ],
                 [
                     'content-type' => 'application/x-www-form-urlencoded',
                     'accept' => ['text/html, text/plain; q=.1, */*', 'text/*'],
                     'accept-language' => 'en-gb, en-us, en; q=.1',
-                    'accept-encoding' => 'bzip'
-                ]
+                    'accept-encoding' => 'bzip',
+                ],
             ],
         ];
     }
@@ -525,53 +525,53 @@ class Kohana_HTTP_HeaderTest extends TestCase
      */
     // @codingStandardsIgnoreStart
     public static function provider_offsetGet(): array
-        // @codingStandardsIgnoreEnd
+    // @codingStandardsIgnoreEnd
     {
         return [
             [
                 [
                     'FoO' => 'bar',
                     'START' => 'end',
-                    'true' => true
+                    'true' => true,
                 ],
                 'FOO',
-                'bar'
+                'bar',
             ],
             [
                 [
                     'FoO' => 'bar',
                     'START' => 'end',
-                    'true' => true
+                    'true' => true,
                 ],
                 'true',
-                true
+                true,
             ],
             [
                 [
                     'FoO' => 'bar',
                     'START' => 'end',
-                    'true' => true
+                    'true' => true,
                 ],
                 'True',
-                true
+                true,
             ],
             [
                 [
                     'FoO' => 'bar',
                     'START' => 'end',
-                    'true' => true
+                    'true' => true,
                 ],
                 'Start',
-                'end'
+                'end',
             ],
             [
                 [
                     'content-type' => 'bar',
                     'Content-Type' => 'end',
-                    'Accept' => '*/*'
+                    'Accept' => '*/*',
                 ],
                 'content-type',
-                'end'
+                'end',
             ],
         ];
     }
@@ -602,44 +602,44 @@ class Kohana_HTTP_HeaderTest extends TestCase
      */
     // @codingStandardsIgnoreStart
     public static function provider_offsetExists(): array
-        // @codingStandardsIgnoreEnd
+    // @codingStandardsIgnoreEnd
     {
         return [
             [
                 [
                     'Accept' => 'text/html, application/json',
                     'Accept-Language' => 'en, en-GB',
-                    'Content-Type' => 'application/x-www-form-urlencoded'
+                    'Content-Type' => 'application/x-www-form-urlencoded',
                 ],
                 'Content-Type',
-                true
+                true,
             ],
             [
                 [
                     'Accept' => 'text/html, application/json',
                     'Accept-Language' => 'en, en-GB',
-                    'Content-Type' => 'application/x-www-form-urlencoded'
+                    'Content-Type' => 'application/x-www-form-urlencoded',
                 ],
                 'CONTENT-TYPE',
-                true
+                true,
             ],
             [
                 [
                     'Accept' => 'text/html, application/json',
                     'Accept-Language' => 'en, en-GB',
-                    'Content-Type' => 'application/x-www-form-urlencoded'
+                    'Content-Type' => 'application/x-www-form-urlencoded',
                 ],
                 'accept-language',
-                true
+                true,
             ],
             [
                 [
                     'Accept' => 'text/html, application/json',
                     'Accept-Language' => 'en, en-GB',
-                    'Content-Type' => 'application/x-www-form-urlencoded'
+                    'Content-Type' => 'application/x-www-form-urlencoded',
                 ],
                 'x-powered-by',
-                false
+                false,
             ],
         ];
     }
@@ -670,44 +670,44 @@ class Kohana_HTTP_HeaderTest extends TestCase
      */
     // @codingStandardsIgnoreStart
     public static function provider_offsetUnset(): array
-        // @codingStandardsIgnoreEnd
+    // @codingStandardsIgnoreEnd
     {
         return [
             [
                 [
                     'Accept' => 'text/html, application/json',
                     'Accept-Language' => 'en, en-GB',
-                    'Content-Type' => 'application/x-www-form-urlencoded'
+                    'Content-Type' => 'application/x-www-form-urlencoded',
                 ],
                 'Accept-Language',
                 [
                     'accept' => 'text/html, application/json',
-                    'content-type' => 'application/x-www-form-urlencoded'
-                ]
+                    'content-type' => 'application/x-www-form-urlencoded',
+                ],
             ],
             [
                 [
                     'Accept' => 'text/html, application/json',
                     'Accept-Language' => 'en, en-GB',
-                    'Content-Type' => 'application/x-www-form-urlencoded'
+                    'Content-Type' => 'application/x-www-form-urlencoded',
                 ],
                 'ACCEPT',
                 [
                     'accept-language' => 'en, en-GB',
-                    'content-type' => 'application/x-www-form-urlencoded'
-                ]
+                    'content-type' => 'application/x-www-form-urlencoded',
+                ],
             ],
             [
                 [
                     'Accept' => 'text/html, application/json',
                     'Accept-Language' => 'en, en-GB',
-                    'Content-Type' => 'application/x-www-form-urlencoded'
+                    'Content-Type' => 'application/x-www-form-urlencoded',
                 ],
                 'content-type',
                 [
                     'accept' => 'text/html, application/json',
                     'accept-language' => 'en, en-GB',
-                ]
+                ],
             ],
         ];
     }
@@ -744,29 +744,29 @@ class Kohana_HTTP_HeaderTest extends TestCase
                 [
                     "Content-Type: application/x-www-form-urlencoded\r\n",
                     "Accept: text/html, text/plain; q=.5, application/json, */* \r\n",
-                    "X-Powered-By: Kohana Baby     \r\n"
+                    "X-Powered-By: Kohana Baby     \r\n",
                 ],
                 [
                     'content-type' => 'application/x-www-form-urlencoded',
                     'accept' => 'text/html, text/plain; q=.5, application/json, */* ',
-                    'x-powered-by' => 'Kohana Baby     '
-                ]
+                    'x-powered-by' => 'Kohana Baby     ',
+                ],
             ],
             [
                 [
                     "Content-Type: application/x-www-form-urlencoded\r\n",
                     "Accept: text/html, text/plain; q=.5, application/json, */* \r\n",
                     "X-Powered-By: Kohana Baby     \r\n",
-                    "Content-Type: application/json\r\n"
+                    "Content-Type: application/json\r\n",
                 ],
                 [
                     'content-type' => [
                         'application/x-www-form-urlencoded',
-                        'application/json'
+                        'application/json',
                     ],
                     'accept' => 'text/html, text/plain; q=.5, application/json, */* ',
-                    'x-powered-by' => 'Kohana Baby     '
-                ]
+                    'x-powered-by' => 'Kohana Baby     ',
+                ],
             ],
         ];
     }
@@ -802,63 +802,63 @@ class Kohana_HTTP_HeaderTest extends TestCase
         return [
             [
                 [
-                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1, */*'
+                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1, */*',
                 ],
                 'application/json',
                 false,
-                1.0
+                1.0,
             ],
             [
                 [
-                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1, */*'
+                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1, */*',
                 ],
                 'text/html',
                 false,
-                0.5
+                0.5,
             ],
             [
                 [
-                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1, */*'
+                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1, */*',
                 ],
                 'text/plain',
                 false,
-                0.1
+                0.1,
             ],
             [
                 [
-                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1, */*'
+                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1, */*',
                 ],
                 'text/plain',
                 true,
-                false
+                false,
             ],
             [
                 [
-                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1, */*'
+                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1, */*',
                 ],
                 'application/xml',
                 false,
-                1.0
+                1.0,
             ],
             [
                 [
-                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1, */*'
+                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1, */*',
                 ],
                 'application/xml',
                 true,
-                false
+                false,
             ],
             [
                 [],
                 'application/xml',
                 false,
-                1.0
+                1.0,
             ],
             [
                 [],
                 'application/xml',
                 true,
-                false
+                false,
             ],
         ];
     }
@@ -892,35 +892,35 @@ class Kohana_HTTP_HeaderTest extends TestCase
         return [
             [
                 [
-                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1, */*'
+                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1, */*',
                 ],
                 ['text/html', 'application/json', 'text/plain'],
                 false,
-                'application/json'
+                'application/json',
             ],
             [
                 [
-                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1, */*'
+                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1, */*',
                 ],
                 ['text/plain', 'application/xml', 'image/jpeg'],
                 false,
-                'application/xml'
+                'application/xml',
             ],
             [
                 [
-                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1'
+                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1',
                 ],
                 ['text/plain', 'application/xml', 'image/jpeg'],
                 false,
-                'text/plain'
+                'text/plain',
             ],
             [
                 [
-                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1, */*'
+                    'Accept' => 'application/json, text/html; q=.5, text/*; q=.1, */*',
                 ],
                 ['text/plain', 'application/xml', 'image/jpeg'],
                 true,
-                false
+                false,
             ],
         ];
     }
@@ -954,31 +954,31 @@ class Kohana_HTTP_HeaderTest extends TestCase
         return [
             [
                 [
-                    'Accept-Charset' => 'utf-8, utf-10, utf-16, iso-8859-1'
+                    'Accept-Charset' => 'utf-8, utf-10, utf-16, iso-8859-1',
                 ],
                 'utf-8',
-                1.0
+                1.0,
             ],
             [
                 [
-                    'Accept-Charset' => 'utf-8, utf-10, utf-16, iso-8859-1'
+                    'Accept-Charset' => 'utf-8, utf-10, utf-16, iso-8859-1',
                 ],
                 'utf-16',
-                1.0
+                1.0,
             ],
             [
                 [
-                    'Accept-Charset' => 'utf-8; q=.1, utf-10, utf-16; q=.2, iso-8859-1'
+                    'Accept-Charset' => 'utf-8; q=.1, utf-10, utf-16; q=.2, iso-8859-1',
                 ],
                 'utf-8',
-                0.1
+                0.1,
             ],
             [
                 [
-                    'Accept-Charset' => 'utf-8; q=.1, utf-10, utf-16; q=.2, iso-8859-1; q=.5'
+                    'Accept-Charset' => 'utf-8; q=.1, utf-10, utf-16; q=.2, iso-8859-1; q=.5',
                 ],
                 'iso-8859-1',
-                0.5
+                0.5,
             ],
         ];
     }
@@ -1012,12 +1012,12 @@ class Kohana_HTTP_HeaderTest extends TestCase
             [
                 ['Accept-Charset' => 'utf-8, utf-10, utf-16, iso-8859-1'],
                 ['utf-8', 'utf-16'],
-                'utf-8'
+                'utf-8',
             ],
             [
                 ['Accept-Charset' => 'utf-8, utf-10, utf-16, iso-8859-1'],
                 ['UTF-10'],
-                'UTF-10'
+                'UTF-10',
             ],
         ];
     }
@@ -1050,43 +1050,43 @@ class Kohana_HTTP_HeaderTest extends TestCase
         return [
             [
                 [
-                    'accept-encoding' => 'compress, gzip, blowfish; q=.7, *; q=.5'
+                    'accept-encoding' => 'compress, gzip, blowfish; q=.7, *; q=.5',
                 ],
                 'gzip',
                 false,
-                1.0
+                1.0,
             ],
             [
                 [
-                    'accept-encoding' => 'compress, gzip, blowfish; q=.7, *; q=.5'
+                    'accept-encoding' => 'compress, gzip, blowfish; q=.7, *; q=.5',
                 ],
                 'gzip',
                 true,
-                1.0
+                1.0,
             ],
             [
                 [
-                    'accept-encoding' => 'compress, gzip, blowfish; q=.7, *; q=.5'
+                    'accept-encoding' => 'compress, gzip, blowfish; q=.7, *; q=.5',
                 ],
                 'blowfish',
                 false,
-                0.7
+                0.7,
             ],
             [
                 [
-                    'accept-encoding' => 'compress, gzip, blowfish; q=.7, *; q=.5'
+                    'accept-encoding' => 'compress, gzip, blowfish; q=.7, *; q=.5',
                 ],
                 'bzip',
                 false,
-                0.5
+                0.5,
             ],
             [
                 [
-                    'accept-encoding' => 'compress, gzip, blowfish; q=.7, *; q=.5'
+                    'accept-encoding' => 'compress, gzip, blowfish; q=.7, *; q=.5',
                 ],
                 'bzip',
                 true,
-                0.0
+                0.0,
             ],
         ];
     }
@@ -1119,35 +1119,35 @@ class Kohana_HTTP_HeaderTest extends TestCase
         return [
             [
                 [
-                    'accept-encoding' => 'compress, gzip, blowfish; q=.7, *; q=.5'
+                    'accept-encoding' => 'compress, gzip, blowfish; q=.7, *; q=.5',
                 ],
                 ['gzip', 'blowfish', 'bzip'],
                 false,
-                'gzip'
+                'gzip',
             ],
             [
                 [
-                    'accept-encoding' => 'compress, gzip, blowfish; q=.7, *; q=.5'
+                    'accept-encoding' => 'compress, gzip, blowfish; q=.7, *; q=.5',
                 ],
                 ['bzip', 'ROT-13'],
                 false,
-                'bzip'
+                'bzip',
             ],
             [
                 [
-                    'accept-encoding' => 'compress, gzip, blowfish; q=.7, *; q=.5'
+                    'accept-encoding' => 'compress, gzip, blowfish; q=.7, *; q=.5',
                 ],
                 ['bzip', 'ROT-13'],
                 true,
-                false
+                false,
             ],
             [
                 [
-                    'accept-encoding' => 'compress, gzip, blowfish; q=.2, *; q=.5'
+                    'accept-encoding' => 'compress, gzip, blowfish; q=.2, *; q=.5',
                 ],
                 ['ROT-13', 'blowfish'],
                 false,
-                'ROT-13'
+                'ROT-13',
             ],
         ];
     }
@@ -1180,51 +1180,51 @@ class Kohana_HTTP_HeaderTest extends TestCase
         return [
             [
                 [
-                    'accept-language' => 'en-us; q=.9, en-gb; q=.7, en; q=.5, fr-fr; q=.9, fr; q=.8'
+                    'accept-language' => 'en-us; q=.9, en-gb; q=.7, en; q=.5, fr-fr; q=.9, fr; q=.8',
                 ],
                 'en',
                 false,
-                0.5
+                0.5,
             ],
             [
                 [
-                    'accept-language' => 'en-us; q=.9, en-gb; q=.7, en; q=.5, fr-fr; q=.9, fr; q=.8'
+                    'accept-language' => 'en-us; q=.9, en-gb; q=.7, en; q=.5, fr-fr; q=.9, fr; q=.8',
                 ],
                 'en-gb',
                 false,
-                0.7
+                0.7,
             ],
             [
                 [
-                    'accept-language' => 'en-us; q=.9, en-gb; q=.7, en; q=.5, fr-fr; q=.9, fr; q=.8'
+                    'accept-language' => 'en-us; q=.9, en-gb; q=.7, en; q=.5, fr-fr; q=.9, fr; q=.8',
                 ],
                 'en',
                 true,
-                0.5
+                0.5,
             ],
             [
                 [
-                    'accept-language' => 'en-us; q=.9, en-gb; q=.7, en; q=.5, fr-fr; q=.9, fr; q=.8'
+                    'accept-language' => 'en-us; q=.9, en-gb; q=.7, en; q=.5, fr-fr; q=.9, fr; q=.8',
                 ],
                 'fr-ni',
                 false,
-                0.8
+                0.8,
             ],
             [
                 [
-                    'accept-language' => 'en-us; q=.9, en-gb; q=.7, en; q=.5, fr-fr; q=.9, fr; q=.8'
+                    'accept-language' => 'en-us; q=.9, en-gb; q=.7, en; q=.5, fr-fr; q=.9, fr; q=.8',
                 ],
                 'fr-ni',
                 true,
-                0.0
+                0.0,
             ],
             [
                 [
-                    'accept-language' => 'en-US'
+                    'accept-language' => 'en-US',
                 ],
                 'en-us',
                 true,
-                1.0
+                1.0,
             ],
         ];
     }
@@ -1257,43 +1257,43 @@ class Kohana_HTTP_HeaderTest extends TestCase
         return [
             [
                 [
-                    'accept-language' => 'en-us; q=.9, en-gb; q=.7, en; q=.5, fr-fr; q=.9, fr; q=.8'
+                    'accept-language' => 'en-us; q=.9, en-gb; q=.7, en; q=.5, fr-fr; q=.9, fr; q=.8',
                 ],
                 ['en', 'fr', 'en-gb'],
                 false,
-                'fr'
+                'fr',
             ],
             [
                 [
-                    'accept-language' => 'en-us; q=.9, en-gb; q=.7, en; q=.5, fr-fr; q=.9, fr; q=.8'
+                    'accept-language' => 'en-us; q=.9, en-gb; q=.7, en; q=.5, fr-fr; q=.9, fr; q=.8',
                 ],
                 ['en', 'fr', 'en-gb'],
                 true,
-                'fr'
+                'fr',
             ],
             [
                 [
-                    'accept-language' => 'en-us; q=.9, en-gb; q=.7, en; q=.5, fr-fr; q=.9, fr; q=.8'
+                    'accept-language' => 'en-us; q=.9, en-gb; q=.7, en; q=.5, fr-fr; q=.9, fr; q=.8',
                 ],
                 ['en-au', 'fr-ni', 'fr'],
                 false,
-                'fr-ni'
+                'fr-ni',
             ],
             [
                 [
-                    'accept-language' => 'en-us; q=.9, en-gb; q=.7, en; q=.5, fr-fr; q=.9, fr; q=.8'
+                    'accept-language' => 'en-us; q=.9, en-gb; q=.7, en; q=.5, fr-fr; q=.9, fr; q=.8',
                 ],
                 ['en-au', 'fr-ni', 'fr'],
                 true,
-                'fr'
+                'fr',
             ],
             [
                 [
-                    'accept-language' => 'en-US'
+                    'accept-language' => 'en-US',
                 ],
                 ['en-us'],
                 true,
-                'en-us'
+                'en-us',
             ],
         ];
     }
@@ -1332,7 +1332,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
                     'HTTP/1.1 200 OK',
                     'Content-Type: ' . $content_type,
                 ],
-                false
+                false,
             ],
             [
                 [],
@@ -1341,14 +1341,14 @@ class Kohana_HTTP_HeaderTest extends TestCase
                     'Content-Type: ' . $content_type,
                     'X-Powered-By: ' . Application::version(),
                 ],
-                true
+                true,
             ],
             [
                 [
                     'accept' => 'text/html, text/plain, text/*, */*',
                     'accept-charset' => 'utf-8, utf-10, iso-8859-1',
                     'accept-encoding' => 'compress, gzip',
-                    'accept-language' => 'en, en-gb, en-us'
+                    'accept-language' => 'en, en-gb, en-us',
                 ],
                 [
                     'HTTP/1.1 200 OK',
@@ -1358,7 +1358,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
                     'Accept-Language: en, en-gb, en-us',
                     'Content-Type: ' . $content_type,
                 ],
-                false
+                false,
             ],
             [
                 [
@@ -1368,7 +1368,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
                     'accept-language' => 'en, en-gb, en-us',
                     'content-type' => 'application/json',
                     'x-powered-by' => 'Mohana',
-                    'x-ssl-enabled' => 'TRUE'
+                    'x-ssl-enabled' => 'TRUE',
                 ],
                 [
                     'HTTP/1.1 200 OK',
@@ -1378,9 +1378,9 @@ class Kohana_HTTP_HeaderTest extends TestCase
                     'Accept-Language: en, en-gb, en-us',
                     'Content-Type: application/json',
                     'X-Powered-By: Mohana',
-                    'X-Ssl-Enabled: TRUE'
+                    'X-Ssl-Enabled: TRUE',
                 ],
-                true
+                true,
             ],
         ];
     }
@@ -1399,7 +1399,7 @@ class Kohana_HTTP_HeaderTest extends TestCase
     {
         Application::$expose = $expose;
 
-        $response = new Response;
+        $response = new Response();
         $response->headers($state);
 
         $this->assertSame($expected, $response->sendHeaders(false, function ($response, $headers) {

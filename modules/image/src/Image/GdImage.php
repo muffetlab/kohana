@@ -16,10 +16,10 @@ use Kohana\Foundation\KohanaException;
 class GdImage extends Image
 {
     // Which GD functions are available?
-    const IMAGEROTATE = 'imagerotate';
-    const IMAGECONVOLUTION = 'imageconvolution';
-    const IMAGEFILTER = 'imagefilter';
-    const IMAGELAYEREFFECT = 'imagelayereffect';
+    public const IMAGEROTATE = 'imagerotate';
+    public const IMAGECONVOLUTION = 'imageconvolution';
+    public const IMAGEFILTER = 'imagefilter';
+    public const IMAGELAYEREFFECT = 'imagelayereffect';
 
     protected static $availableFunctions = [];
 
@@ -40,7 +40,7 @@ class GdImage extends Image
             static::IMAGEROTATE,
             static::IMAGECONVOLUTION,
             static::IMAGEFILTER,
-            static::IMAGELAYEREFFECT
+            static::IMAGELAYEREFFECT,
         ];
         foreach ($functions as $function) {
             static::$availableFunctions[$function] = function_exists($function);

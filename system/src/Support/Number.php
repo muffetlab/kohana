@@ -16,10 +16,10 @@ use Kohana\Foundation\KohanaException;
  */
 class Number
 {
-    const ROUND_HALF_UP = 1;
-    const ROUND_HALF_DOWN = 2;
-    const ROUND_HALF_EVEN = 3;
-    const ROUND_HALF_ODD = 4;
+    public const ROUND_HALF_UP = 1;
+    public const ROUND_HALF_DOWN = 2;
+    public const ROUND_HALF_EVEN = 3;
+    public const ROUND_HALF_ODD = 4;
 
     /**
      * @var  array  Valid byte units => power of 2 that defines the unit's size
@@ -198,8 +198,9 @@ class Number
         $pattern = '/^([0-9]+(?:\.[0-9]+)?)(' . $accepted . ')?$/Di';
 
         // Verify the size format and store the matching parts
-        if (!preg_match($pattern, $size, $matches))
+        if (!preg_match($pattern, $size, $matches)) {
             throw new KohanaException('The byte unit size, ":size", is improperly formatted.', [':size' => $size,]);
+        }
 
         // Find the float value of the size
         $size = (float) $matches[1];

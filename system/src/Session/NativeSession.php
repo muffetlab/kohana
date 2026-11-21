@@ -46,7 +46,11 @@ class NativeSession extends Session
 
         // Sync up the session cookie with Cookie parameters
         session_set_cookie_params(
-            $this->lifetime, Cookie::$path, $session_cookie_domain, Cookie::$secure, Cookie::$httponly
+            $this->lifetime,
+            Cookie::$path,
+            $session_cookie_domain,
+            Cookie::$secure,
+            Cookie::$httponly
         );
 
         // Do not allow PHP to send Cache-Control headers

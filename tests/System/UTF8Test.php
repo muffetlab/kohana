@@ -1,11 +1,11 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\Testing\TestCase;
 use Kohana\Support\Utf8;
 use Kohana\Support\Utf8Exception;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests Kohana_UTF8 class
@@ -406,7 +406,7 @@ class Kohana_UTF8Test extends TestCase
     public static function provider_strspn(): array
     {
         return [
-            ["foo", "o", 1, 2, 2],
+            ['foo', 'o', 1, 2, 2],
             ['Cocoñùт', 'oñ', null, null, 1],
             ['Cocoñùт', 'oñ', 2, 4, 1],
             ['Cocoñùт', 'šš', 3, 9, 4],

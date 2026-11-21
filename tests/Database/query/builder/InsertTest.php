@@ -1,12 +1,12 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\Testing\DatabaseTestCase;
-use Kohana\Database\DB;
 use Kohana\Database\DatabaseException;
+use Kohana\Database\DB;
 use Kohana\Foundation\KohanaException;
+use Kohana\Testing\DatabaseTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @package    Kohana/Database

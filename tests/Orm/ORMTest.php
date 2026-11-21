@@ -1,11 +1,11 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use Kohana\Testing\TestCase;
 use Kohana\Database\Connection;
 use Kohana\Database\PgsqlConnection;
 use Kohana\Orm\Model;
 use Kohana\Orm\ValidationException;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Smoke tests for ORM against a real database.

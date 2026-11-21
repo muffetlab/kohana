@@ -87,8 +87,9 @@ class Inflector
         $count = $count === null ? 1.0 : (float) $count;
 
         // Do nothing when $count is not 1
-        if ($count != 1)
+        if ($count != 1) {
             return $str;
+        }
 
         // Remove garbage
         $str = strtolower(trim($str));
@@ -96,11 +97,13 @@ class Inflector
         // Cache key name
         $key = 'singular_' . $str . $count;
 
-        if (isset(static::$cache[$key]))
+        if (isset(static::$cache[$key])) {
             return static::$cache[$key];
+        }
 
-        if (static::uncountable($str))
+        if (static::uncountable($str)) {
             return static::$cache[$key] = $str;
+        }
 
         if (empty(static::$irregular)) {
             // Cache irregular words
@@ -152,8 +155,9 @@ class Inflector
         $count = $count === null ? 0.0 : (float) $count;
 
         // Do nothing with singular
-        if ($count == 1)
+        if ($count == 1) {
             return $str;
+        }
 
         // Remove garbage
         $str = trim($str);
@@ -164,11 +168,13 @@ class Inflector
         // Check uppercase
         $is_uppercase = ctype_upper($str);
 
-        if (isset(static::$cache[$key]))
+        if (isset(static::$cache[$key])) {
             return static::$cache[$key];
+        }
 
-        if (static::uncountable($str))
+        if (static::uncountable($str)) {
             return static::$cache[$key] = $str;
+        }
 
         if (empty(static::$irregular)) {
             // Cache irregular words

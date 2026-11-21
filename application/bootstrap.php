@@ -1,11 +1,11 @@
 <?php
 
-use Kohana\Translation\Translator;
-use Kohana\Http\Http;
-use Kohana\Foundation\Application;
-use Kohana\Log\Writers\FileWriter;
 use Kohana\Config\FileReader;
+use Kohana\Foundation\Application;
+use Kohana\Http\Http;
+use Kohana\Log\Writers\FileWriter;
 use Kohana\Routing\Route;
+use Kohana\Translation\Translator;
 
 // Register the Composer autoloader
 require DOCROOT . '../vendor/autoload.php';
@@ -108,7 +108,7 @@ Application::$log->attach(new FileWriter(APPPATH . 'logs'));
 /**
  * Attach a file reader to config. Multiple readers are supported.
  */
-Application::$config->attach(new FileReader);
+Application::$config->attach(new FileReader());
 
 /**
  * Enable modules. Modules are referenced by a relative or absolute path.

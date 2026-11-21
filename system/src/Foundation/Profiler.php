@@ -121,13 +121,13 @@ class Profiler
         // Min and max are unknown by default
         $min = $max = [
             'time' => null,
-            'memory' => null
+            'memory' => null,
         ];
 
         // Total values are always integers
         $total = [
             'time' => 0,
-            'memory' => 0
+            'memory' => 0,
         ];
 
         foreach ($tokens as $token) {
@@ -167,14 +167,14 @@ class Profiler
         // Determine the averages
         $average = [
             'time' => $total['time'] / $count,
-            'memory' => $total['memory'] / $count
+            'memory' => $total['memory'] / $count,
         ];
 
         return [
             'min' => $min,
             'max' => $max,
             'total' => $total,
-            'average' => $average
+            'average' => $average,
         ];
     }
 
@@ -212,13 +212,13 @@ class Profiler
             // Min and max are unknown by default
             $groups[$group]['min'] = $groups[$group]['max'] = [
                 'time' => null,
-                'memory' => null
+                'memory' => null,
             ];
 
             // Total values are always integers
             $groups[$group]['total'] = [
                 'time' => 0,
-                'memory' => 0
+                'memory' => 0,
             ];
 
             foreach ($names as $total) {
@@ -302,17 +302,17 @@ class Profiler
             $stats = [
                 'min' => [
                     'time' => null,
-                    'memory' => null
+                    'memory' => null,
                 ],
                 'max' => [
                     'time' => null,
-                    'memory' => null
+                    'memory' => null,
                 ],
                 'total' => [
                     'time' => null,
-                    'memory' => null
+                    'memory' => null,
                 ],
-                'count' => 0
+                'count' => 0,
             ];
         }
 
@@ -349,12 +349,12 @@ class Profiler
         $stats['total']['memory'] += $memory;
 
         // Another mark has been added to the stats
-        $stats['count'] ++;
+        $stats['count']++;
 
         // Determine the averages
         $stats['average'] = [
             'time' => $stats['total']['time'] / $stats['count'],
-            'memory' => $stats['total']['memory'] / $stats['count']
+            'memory' => $stats['total']['memory'] / $stats['count'],
         ];
 
         // Cache the new stats

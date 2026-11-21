@@ -3,8 +3,8 @@
 namespace Kohana\Cache;
 
 use Kohana\Cache\Contracts\GarbageCollect;
-use Kohana\Support\Arr;
 use Kohana\Foundation\Application;
+use Kohana\Support\Arr;
 
 /**
  * [Kohana Cache](api/Kohana_Cache) File driver. Provides a file based
@@ -311,10 +311,11 @@ class FileStore extends Cache implements GarbageCollect
                     }
 
                     // If the delete flag is set delete file
-                    if ($delete === true)
+                    if ($delete === true) {
                         return unlink($file->getRealPath());
-                    else
+                    } else {
                         return false;
+                    }
                 } catch (\ErrorException $e) {
                     // Catch any delete file warnings
                     if ($e->getCode() === E_WARNING) {

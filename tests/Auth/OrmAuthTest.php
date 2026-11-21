@@ -1,12 +1,12 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
 use Kohana\Auth\Auth;
 use Kohana\Auth\Models\User;
 use Kohana\Auth\OrmAuth;
 use Kohana\Database\Connection;
 use Kohana\Database\DB;
 use Kohana\Database\PgsqlConnection;
+use PHPUnit\Framework\Attributes\Group;
 
 require_once __DIR__ . '/AuthTest.php';
 

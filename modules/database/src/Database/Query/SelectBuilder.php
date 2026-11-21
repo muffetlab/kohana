@@ -284,8 +284,9 @@ class SelectBuilder extends WhereBuilder
         if (is_string($select)) {
             $select = DB::select()->from($select);
         }
-        if (!$select instanceof self)
+        if (!$select instanceof self) {
             throw new KohanaException('first parameter must be a string or an instance of Database_Query_Builder_Select');
+        }
         $this->union [] = ['select' => $select, 'all' => $all];
         return $this;
     }

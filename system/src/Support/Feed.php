@@ -3,9 +3,9 @@
 namespace Kohana\Support;
 
 use Kohana\Foundation\KohanaException;
-use Kohana\Validation\Rules;
 use Kohana\Http\Request;
 use Kohana\Routing\Url;
+use Kohana\Validation\Rules;
 
 /**
  * RSS and Atom feed helper.
@@ -31,8 +31,9 @@ class Feed
     public static function parse(string $feed, int $limit = 0): array
     {
         // Check if SimpleXML is installed
-        if (!function_exists('simplexml_load_file'))
+        if (!function_exists('simplexml_load_file')) {
             throw new KohanaException('SimpleXML must be installed!');
+        }
 
         // Disable error reporting while opening the feed
         $error_level = error_reporting(0);
@@ -54,8 +55,9 @@ class Feed
         error_reporting($error_level);
 
         // Feed could not be loaded
-        if ($feed === false)
+        if ($feed === false) {
             return [];
+        }
 
         $namespaces = $feed->getNamespaces(true);
 
@@ -66,8 +68,9 @@ class Feed
         $items = [];
 
         foreach ($feed as $item) {
-            if ($limit > 0 && $i++ === $limit)
+            if ($limit > 0 && $i++ === $limit) {
                 break;
+            }
             $item_fields = (array) $item;
 
             // get namespaced tags

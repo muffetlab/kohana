@@ -13,11 +13,13 @@ use Kohana\Support\Utf8;
  */
 function _ltrim($str, $charlist = null)
 {
-    if ($charlist === null)
+    if ($charlist === null) {
         return ltrim($str);
+    }
 
-    if (Utf8::isAscii($charlist))
+    if (Utf8::isAscii($charlist)) {
         return ltrim($str, $charlist);
+    }
 
     $charlist = preg_replace('#[-\[\]:\\\\^/]#', '\\\\$0', $charlist);
 

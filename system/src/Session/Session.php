@@ -2,10 +2,10 @@
 
 namespace Kohana\Session;
 
-use Kohana\Foundation\Application;
 use Kohana\Encryption\Encrypter;
-use Kohana\Log\Logger;
+use Kohana\Foundation\Application;
 use Kohana\Foundation\KohanaException;
+use Kohana\Log\Logger;
 
 /**
  * Base session class.

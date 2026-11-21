@@ -1,11 +1,11 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use Kohana\Testing\TestCase;
 use Kohana\Filesystem\File;
 use Kohana\Foundation\KohanaException;
+use Kohana\Testing\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests Kohana File helper
@@ -34,7 +34,7 @@ class Kohana_FileTest extends TestCase
             // $value, $result
             [
                 KOHANA_FIXTURES . '/github.png',
-                'image/png'
+                'image/png',
             ],
         ];
     }

@@ -1,10 +1,10 @@
 <?php
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
-use Kohana\Image\Image;
 use Kohana\Foundation\Application;
 use Kohana\Foundation\KohanaException;
+use Kohana\Image\Image;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @package    Kohana/Image

@@ -61,8 +61,8 @@ class StreamClient extends ExternalClient
             strtolower($protocol) => [
                 'method' => $request->method(),
                 'header' => (string) $request->headers(),
-                'content' => $body
-            ]
+                'content' => $body,
+            ],
         ];
 
         // Create the context stream

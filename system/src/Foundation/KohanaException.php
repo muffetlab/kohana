@@ -2,9 +2,9 @@
 
 namespace Kohana\Foundation;
 
+use Kohana\Http\Exceptions\HttpException;
 use Kohana\Http\Response;
 use Kohana\Log\Logger;
-use Kohana\Http\Exceptions\HttpException;
 use Kohana\View\View;
 
 /**

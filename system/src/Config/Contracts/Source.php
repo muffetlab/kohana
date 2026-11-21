@@ -15,5 +15,4 @@ namespace Kohana\Config\Contracts;
  */
 interface Source
 {
-    
 }
