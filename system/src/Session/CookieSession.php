@@ -40,7 +40,7 @@ class CookieSession extends Session
      */
     protected function writeSession(): bool
     {
-        return Cookie::set($this->name, $this->__toString(), $this->lifetime);
+        return $this->sendCookie($this->__toString());
     }
 
     /**
@@ -56,7 +56,7 @@ class CookieSession extends Session
      */
     protected function destroySession(): bool
     {
-        return Cookie::delete($this->name);
+        return $this->deleteCookie();
     }
 
 }

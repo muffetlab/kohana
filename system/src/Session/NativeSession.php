@@ -44,17 +44,30 @@ class NativeSession extends Session
          */
         $session_cookie_domain = empty(Cookie::$domain) ? ini_get('session.cookie_domain') : Cookie::$domain;
 
-        // Sync up the session cookie with Cookie parameters
-        session_set_cookie_params(
-            $this->lifetime,
-            Cookie::$path,
-            $session_cookie_domain,
-            Cookie::$secure,
-            Cookie::$httponly
-        );
+        // Headers can only be changed before output starts (always true in a web request)
+        $headers = !$this->headersSent();
 
-        // Do not allow PHP to send Cache-Control headers
-        session_cache_limiter(false);
+        if ($headers) {
+            // Sync up the session cookie with Cookie parameters
+            session_set_cookie_params(
+                $this->lifetime,
+                Cookie::$path,
+                $session_cookie_domain,
+                Cookie::$secure,
+                Cookie::$httponly
+            );
+        }
+
+        // Keep session files in storage/framework/sessions instead of the system temp directory
+        if (!empty($this->config['save_path']) && session_status() !== PHP_SESSION_ACTIVE) {
+            is_dir($this->config['save_path']) or mkdir($this->config['save_path'], 0755, true);
+            session_save_path($this->config['save_path']);
+        }
+
+        if ($headers) {
+            // Do not allow PHP to send Cache-Control headers
+            session_cache_limiter('');
+        }
 
         // Set the session cookie name
         session_name($this->name);
@@ -64,8 +77,8 @@ class NativeSession extends Session
             session_id($id);
         }
 
-        // Start the session
-        session_start();
+        // Start the session; without headers (e.g. on the command line) it cannot send a cookie
+        session_start($headers ? [] : ['use_cookies' => 0, 'cache_limiter' => '']);
 
         // Use the $_SESSION global for storing data
         $this->data = &$_SESSION;
@@ -101,7 +114,7 @@ class NativeSession extends Session
     protected function restartSession(): bool
     {
         // Fire up a new session
-        $status = session_start();
+        $status = session_start($this->headersSent() ? ['use_cookies' => 0, 'cache_limiter' => ''] : []);
 
         // Use the $_SESSION global for storing data
         $this->data = &$_SESSION;
@@ -122,7 +135,7 @@ class NativeSession extends Session
 
         if ($status) {
             // Make sure the session cannot be restarted
-            Cookie::delete($this->name);
+            $this->deleteCookie();
         }
 
         return $status;

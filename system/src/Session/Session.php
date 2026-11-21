@@ -2,6 +2,7 @@
 
 namespace Kohana\Session;
 
+use Kohana\Cookie\Cookie;
 use Kohana\Encryption\Encrypter;
 use Kohana\Foundation\Application;
 use Kohana\Foundation\KohanaException;
@@ -18,6 +19,11 @@ use Kohana\Log\Logger;
  */
 abstract class Session
 {
+    /**
+     * @var array Driver settings from config/session.php
+     */
+    protected $config = [];
+
     /**
      * @var  string|null  default session adapter; null uses the "driver" of config/session.php
      */
@@ -104,6 +110,8 @@ abstract class Session
      */
     public function __construct(?array $config = null, ?string $id = null)
     {
+        $this->config = (array) $config;
+
         if (isset($config['name'])) {
             // Cookie name to store the session id in
             $this->name = (string) $config['name'];
@@ -342,7 +350,7 @@ abstract class Session
      */
     public function write(): bool
     {
-        if (headers_sent() || $this->destroyed) {
+        if ($this->headersSent() || $this->destroyed) {
             // Session cannot be written when the headers are sent or when
             // the session has been destroyed
             return false;
@@ -434,6 +442,30 @@ abstract class Session
     }
 
     /**
+     * Whether the response headers were sent, so the session cookie can no longer be set.
+     */
+    protected function headersSent(): bool
+    {
+        return headers_sent();
+    }
+
+    /**
+     * Sends the session cookie with a value (usually the session id).
+     */
+    protected function sendCookie(string $value): bool
+    {
+        return Cookie::set($this->name, $value, $this->lifetime);
+    }
+
+    /**
+     * Removes the session cookie.
+     */
+    protected function deleteCookie(): bool
+    {
+        return Cookie::delete($this->name);
+    }
+
+    /**
      * Decodes the session data using [base64_decode].
      *
      * @param string $data Data
@@ -448,7 +480,7 @@ abstract class Session
      * Loads the raw session data string and returns it.
      *
      * @param string|null $id Session ID
-     * @return string|array
+     * @return string|array|null
      */
     abstract protected function readSession(?string $id = null);
     /**
