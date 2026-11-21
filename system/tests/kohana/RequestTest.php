@@ -327,7 +327,7 @@ class Kohana_RequestTest extends Unittest_TestCase
      * @return  void
      * @throws Kohana_Exception
      */
-    public function test_post_max_size_exceeded(int $content_length, bool $expected)
+    public function test_post_max_size_exceeded($content_length, $expected)
     {
         // Ensure the request method is set to POST
         Request::$initial->method(HTTP_Request::POST);

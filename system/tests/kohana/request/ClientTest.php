@@ -40,7 +40,7 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
         $routes_prop = $route_class->getProperty('_routes');
         $routes_prop->setAccessible(true);
 
-        self::$_original_routes = $routes_prop->getValue('Route');
+        self::$_original_routes = $routes_prop->getValue(null);
 
         $routes = [
             'ko_request_clienttest' => new Route('<controller>/<action>/<data>', [
@@ -243,7 +243,7 @@ class Kohana_Request_ClientTest extends Unittest_TestCase
      * @throws Kohana_Exception
      * @throws Request_Exception
      */
-    public function test_follows_with_strict_method(string $status_code, ?bool $strict_redirect, string $orig_method, string $expect_method)
+    public function test_follows_with_strict_method($status_code, $strict_redirect, $orig_method, $expect_method)
     {
         $response = Request::factory($this->_dummy_redirect_uri($status_code), [
                 'follow' => true,

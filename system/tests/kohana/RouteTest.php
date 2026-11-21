@@ -273,7 +273,7 @@ class Kohana_RouteTest extends Unittest_TestCase
         $property = $reflection->getProperty('_route_regex');
         $property->setAccessible(true);
 
-        $this->assertContains($regex['id'], $property->getValue($route));
+        $this->assertStringContainsString($regex['id'], $property->getValue($route));
     }
 
     /**

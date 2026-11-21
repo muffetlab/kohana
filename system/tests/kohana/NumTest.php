@@ -67,7 +67,7 @@ class Kohana_NumTest extends Unittest_TestCase
      * @param string $size Input value
      * @throws Kohana_Exception
      */
-    public function test_bytes(float $expected, string $size)
+    public function test_bytes($expected, $size)
     {
         $this->assertSame($expected, Num::bytes($size));
     }

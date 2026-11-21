@@ -69,7 +69,7 @@ class Kohana_FileTest extends Unittest_TestCase
      * @param int $peices Input for File::split
      * @param int $expected Output for File::split
      */
-    public function test_split_join($input, int $peices, int $expected)
+    public function test_split_join($input, $peices, $expected)
     {
         $this->assertSame($expected, File::split($input, $peices));
         $this->assertSame($expected, File::join($input));

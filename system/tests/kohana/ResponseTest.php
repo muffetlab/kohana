@@ -74,7 +74,7 @@ class Kohana_ResponseTest extends Unittest_TestCase
      * @param string $expected
      * @return void
      */
-    public function test_body_string_zero(string $string, string $expected)
+    public function test_body_string_zero($string, $expected)
     {
         $response = new Response;
         $response->body($string);

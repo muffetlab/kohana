@@ -30,7 +30,7 @@ class Userguide_ControllerTest extends Unittest_TestCase
      * @param string $page           Page name passed in the URL
      * @param string $expected_file  Expected result from Controller_Userguide::file
      */
-    public function test_file_finds_markdown_files(string $page, string $expected_file)
+    public function test_file_finds_markdown_files($page, $expected_file)
     {
         $controller = $this->getMockBuilder('Controller_Userguide')
             ->setMethods(['__construct'])

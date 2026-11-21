@@ -396,7 +396,7 @@ class Kohana_TextTest extends Unittest_TestCase
                 break;
         }
 
-        $this->assertRegExp('/^[' . $pool . ']{' . $length . '}$/u', Text::random($type, $length));
+        $this->assertMatchesRegularExpression('/^[' . $pool . ']{' . $length . '}$/u', Text::random($type, $length));
     }
 
     /**

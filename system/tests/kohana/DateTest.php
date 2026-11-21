@@ -127,7 +127,7 @@ class Kohana_DateTest extends Unittest_TestCase
      * @param int $hour
      * @param string $expected
      */
-    public function test_am_pm(int $hour, string $expected)
+    public function test_am_pm($hour, $expected)
     {
         $this->assertSame(
             $expected, Date::ampm($hour)
@@ -182,7 +182,7 @@ class Kohana_DateTest extends Unittest_TestCase
      * @param string $ampm Either am or pm
      * @param string $expected Expected result
      */
-    public function test_adjust(int $hour, string $ampm, string $expected)
+    public function test_adjust($hour, $ampm, $expected)
     {
         $this->assertSame(
             $expected, Date::adjust($hour, $ampm)
@@ -225,7 +225,7 @@ class Kohana_DateTest extends Unittest_TestCase
      * @param int $year
      * @param int $expected
      */
-    public function test_days(int $month, int $year, int $expected)
+    public function test_days($month, $year, $expected)
     {
         $days = Date::days($month, $year);
 

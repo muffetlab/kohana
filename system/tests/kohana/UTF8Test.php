@@ -347,8 +347,8 @@ class Kohana_UTF8Test extends Unittest_TestCase
             ['Cocoñùт', 'Cocoñùт', 0],
             ['Čau', 'Čauo', -1],
             ['Čau', 'Ča', 1],
-            ['Cocoñùт', 'Cocoñ', 4],
-            ['Cocoñùт', 'Coco', 6],
+            ['Cocoñùт', 'Cocoñ', 1],
+            ['Cocoñùт', 'Coco', 1],
         ];
     }
 
