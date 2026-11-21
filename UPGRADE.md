@@ -82,3 +82,14 @@ On PHP 8.2+, string comparison functions return only -1, 0 or 1, not the byte di
 **Action:**
 - Models that override `serialize()`/`unserialize()` must override `__serialize()`/`__unserialize()` instead.
 - ORM objects serialized before the upgrade (in sessions or cache) use the old `C:` format and cannot be restored. Clear sessions and cache that hold ORM objects when you deploy.
+
+## 13. Removed modules and drivers
+
+| Removed | Replacement |
+|---|---|
+| `codebench` module | None. Use a dedicated benchmarking tool such as PHPBench. |
+| `userguide` module (`/guide` browser, `Kodoc`) | The guides are Markdown files in `docs/`. |
+| `Cache_Memcache` driver (`ext-memcache`) | `Cache_Memcached` (`ext-memcached`), with the config driver `'memcached'`. |
+| `Cache_Wincache` driver (`ext-wincache`) | `Cache_Apcu` or `Cache_File`. |
+
+**Action:** Remove these modules from `Kohana::modules()` in `bootstrap.php`. Delete any `config/userguide.php` files from your own modules.
