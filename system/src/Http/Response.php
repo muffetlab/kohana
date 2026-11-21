@@ -35,7 +35,7 @@ class Response implements \Kohana\Http\Contracts\Response
      *      $response = Response::factory(['status' => 200]);
      *
      * @param   array    $config Set up the response object
-     * @return  Response
+     * @return  \Kohana\Http\Response
      */
     public static function factory(array $config = []): self
     {
@@ -99,7 +99,7 @@ class Response implements \Kohana\Http\Contracts\Response
     protected $status = 200;
 
     /**
-     * @var  HTTP_Header  Headers returned in the response
+     * @var  \Kohana\Http\HeaderBag  Headers returned in the response
      */
     protected $header;
 
@@ -152,7 +152,7 @@ class Response implements \Kohana\Http\Contracts\Response
     /**
      * Gets or sets the body of the response
      *
-     * @return Kohana_Response|string
+     * @return \Kohana\Http\Response|string
      */
     public function body(?string $content = null)
     {
@@ -169,7 +169,7 @@ class Response implements \Kohana\Http\Contracts\Response
      * is `HTTP/1.1`.
      *
      * @param string|null $protocol Protocol to set to the request/response
-     * @return  Kohana_Response|string
+     * @return  \Kohana\Http\Response|string
      */
     public function protocol(?string $protocol = null)
     {
@@ -196,8 +196,8 @@ class Response implements \Kohana\Http\Contracts\Response
      *      $status = $response->status();
      *
      * @param int|null $code Status to set to this response
-     * @return int|Kohana_Response
-     * @throws Kohana_Exception
+     * @return int|\Kohana\Http\Response
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function status(?int $code = null)
     {
@@ -272,7 +272,7 @@ class Response implements \Kohana\Http\Contracts\Response
      *
      * @param   mixed   $key    cookie name, or array of cookie values
      * @param mixed $value Value to set to cookie
-     * @return array|string|Kohana_Response
+     * @return array|string|\Kohana\Http\Response
      */
     public function cookie($key = null, $value = null)
     {
@@ -308,7 +308,7 @@ class Response implements \Kohana\Http\Contracts\Response
      * Deletes a cookie set to the response
      *
      * @param string $name
-     * @return  Kohana_Response
+     * @return  \Kohana\Http\Response
      */
     public function deleteCookie(string $name): self
     {
@@ -319,7 +319,7 @@ class Response implements \Kohana\Http\Contracts\Response
     /**
      * Deletes all cookies from this response
      *
-     * @return Kohana_Response
+     * @return \Kohana\Http\Response
      */
     public function deleteCookies(): self
     {
@@ -333,7 +333,7 @@ class Response implements \Kohana\Http\Contracts\Response
      * @param bool $replace replace existing headers
      * @param callable|null $callback Function to handle header output
      * @return  mixed
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function sendHeaders(bool $replace = false, ?callable $callback = null)
     {
@@ -367,10 +367,10 @@ class Response implements \Kohana\Http\Contracts\Response
      * @param string|null $download downloaded file name
      * @param array|null $options additional options
      * @return  void
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      * @uses    File::mime_by_ext
      * @uses    File::mime
-     * @uses    Request::send_headers
+     * @uses    \Kohana\Http\Request::send_headers
      */
     public function sendFile($filename, ?string $download = null, ?array $options = null)
     {
@@ -576,7 +576,7 @@ class Response implements \Kohana\Http\Contracts\Response
      * Generate ETag
      * Generates an ETag from the response ready to be returned
      *
-     * @throws Request_Exception
+     * @throws \Kohana\Http\Exceptions\RequestException
      * @return String Generated ETag
      */
     public function generateEtag(): string

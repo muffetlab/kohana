@@ -22,7 +22,7 @@ class Validator implements \ArrayAccess
      * Creates a new Validation instance.
      *
      * @param   array   $array  array to use for validation
-     * @return  Validation
+     * @return  \Kohana\Validation\Validator
      */
     public static function factory(array $array): self
     {
@@ -58,7 +58,7 @@ class Validator implements \ArrayAccess
      * Throws an exception because Validation is read-only.
      * Implements ArrayAccess method.
      *
-     * @throws  Kohana_Exception
+     * @throws  \Kohana\Foundation\KohanaException
      * @param   string   $offset    key to set
      * @param   mixed    $value     value to set
      * @return  void
@@ -84,7 +84,7 @@ class Validator implements \ArrayAccess
      * Throws an exception because Validation is read-only.
      * Implements ArrayAccess method.
      *
-     * @throws  Kohana_Exception
+     * @throws  \Kohana\Foundation\KohanaException
      * @param   string  $offset key to unset
      * @return  void
      */
@@ -111,7 +111,7 @@ class Validator implements \ArrayAccess
      *     $copy = $array->copy($new_data);
      *
      * @param   array   $array  new data set
-     * @return  Kohana_Validation
+     * @return  \Kohana\Validation\Validator
      * @since   3.0.5
      */
     public function copy(array $array): self
@@ -263,7 +263,7 @@ class Validator implements \ArrayAccess
      *     }
      *
      * @return bool
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function check(): bool
     {
@@ -440,7 +440,7 @@ class Validator implements \ArrayAccess
      * @param   string|null $file File to load error messages from
      * @param   mixed   $translate  translate the message
      * @return  array
-     * @uses    Kohana::message
+     * @uses    \Kohana\Foundation\Application::message
      */
     public function errors(?string $file = null, $translate = true): array
     {

@@ -39,9 +39,9 @@ abstract class Session
      *
      * @param string|null $type Type of session (native, cookie, etc.)
      * @param string|null $id Session identifier
-     * @return  Session
-     * @throws Kohana_Exception
-     * @uses    Kohana::$config
+     * @return  \Kohana\Session\Session
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Foundation\Application::$config
      */
     public static function instance(?string $type = null, ?string $id = null): self
     {
@@ -99,8 +99,8 @@ abstract class Session
      *
      * @param array|null $config configuration
      * @param string|null $id session id
-     * @throws Session_Exception
-     * @uses    Session::read
+     * @throws \Kohana\Session\SessionException
+     * @uses    \Kohana\Session\Session::read
      */
     public function __construct(?array $config = null, ?string $id = null)
     {
@@ -136,8 +136,8 @@ abstract class Session
      *     echo $session;
      *
      * @return  string
-     * @throws Kohana_Exception
-     * @uses    Encrypt::encode
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Encryption\Encrypter::encode
      */
     public function __toString()
     {
@@ -288,7 +288,7 @@ abstract class Session
      *
      * @param string|null $id Session ID
      * @return  void
-     * @throws Session_Exception
+     * @throws \Kohana\Session\SessionException
      */
     public function read(?string $id = null)
     {
@@ -338,7 +338,7 @@ abstract class Session
      * been sent.
      *
      * @return  bool
-     * @uses    Kohana::$log
+     * @uses    \Kohana\Foundation\Application::$log
      */
     public function write(): bool
     {

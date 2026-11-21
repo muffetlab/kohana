@@ -46,7 +46,7 @@ class Model extends \Kohana\Foundation\Model
      * @chainable
      * @param string $name Model name
      * @param   mixed   $id     Parameter for find()
-     * @return  ORM
+     * @return  \Kohana\Orm\Model
      */
     public static function factory(string $name, $id = null): \Kohana\Foundation\Model
     {
@@ -82,7 +82,7 @@ class Model extends \Kohana\Foundation\Model
 
     /**
      * Validation object created before saving/updating
-     * @var Validation
+     * @var \Kohana\Validation\Validator
      */
     protected $validation = null;
 
@@ -195,7 +195,7 @@ class Model extends \Kohana\Foundation\Model
 
     /**
      * Database Object
-     * @var Database
+     * @var \Kohana\Database\Connection
      */
     protected $db = null;
 
@@ -225,7 +225,7 @@ class Model extends \Kohana\Foundation\Model
 
     /**
      * Database query builder
-     * @var Database_Query_Builder_Select
+     * @var \Kohana\Database\Query\SelectBuilder
      */
     protected $dbBuilder;
 
@@ -252,7 +252,7 @@ class Model extends \Kohana\Foundation\Model
      * Constructs a new model and loads a record if given
      *
      * @param mixed $id Parameter for find or object to load
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function __construct($id = null)
     {
@@ -283,7 +283,7 @@ class Model extends \Kohana\Foundation\Model
      * and loads column information.
      *
      * @return void
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     protected function initialize()
     {
@@ -406,7 +406,7 @@ class Model extends \Kohana\Foundation\Model
      * Unloads the current object and clears the status.
      *
      * @chainable
-     * @return Kohana_ORM
+     * @return \Kohana\Orm\Model
      */
     public function clear(): self
     {
@@ -434,8 +434,8 @@ class Model extends \Kohana\Foundation\Model
      * Reloads the current object from the database.
      *
      * @chainable
-     * @return Kohana_ORM
-     * @throws Kohana_Exception
+     * @return \Kohana\Orm\Model
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function reload(): self
     {
@@ -534,7 +534,7 @@ class Model extends \Kohana\Foundation\Model
      *
      * @param array $data Serialized object state
      * @return  void
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function __unserialize(array $data): void
     {
@@ -557,7 +557,7 @@ class Model extends \Kohana\Foundation\Model
      *
      * @param string $column Column name
      * @return  mixed
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function __get(string $column)
     {
@@ -570,7 +570,7 @@ class Model extends \Kohana\Foundation\Model
      *
      * @param string $column Column name
      * @return mixed
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function get(string $column)
     {
@@ -636,7 +636,7 @@ class Model extends \Kohana\Foundation\Model
      * @param string $column Column name
      * @param mixed $value Column value
      * @return void
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function __set(string $column, $value)
     {
@@ -649,8 +649,8 @@ class Model extends \Kohana\Foundation\Model
      *
      * @param string $column Column name
      * @param mixed $value Column value
-     * @return Kohana_ORM
-     * @throws ReflectionException
+     * @return \Kohana\Orm\Model
+     * @throws \ReflectionException
      */
     public function set(string $column, $value): self
     {
@@ -698,7 +698,7 @@ class Model extends \Kohana\Foundation\Model
      *
      * @param array $values Array of column => value pairs
      * @param array $columns Array of columns to be set
-     * @return Kohana_ORM
+     * @return \Kohana\Orm\Model
      */
     public function values(array $values, array $columns): self
     {
@@ -730,7 +730,7 @@ class Model extends \Kohana\Foundation\Model
      * models that have already been loaded using with()
      *
      * @return array
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function asArray(): array
     {
@@ -754,7 +754,7 @@ class Model extends \Kohana\Foundation\Model
      * can be nested using 'object1:object2' syntax
      *
      * @param string $target_path Target model to bind to
-     * @return Kohana_ORM
+     * @return \Kohana\Orm\Model
      */
     public function with(string $target_path): self
     {
@@ -826,7 +826,7 @@ class Model extends \Kohana\Foundation\Model
      * Initializes the Database Builder to given query type
      *
      * @param int $type Type of Database query
-     * @return Kohana_ORM
+     * @return \Kohana\Orm\Model
      */
     protected function build(int $type): self
     {
@@ -860,8 +860,8 @@ class Model extends \Kohana\Foundation\Model
      * Finds and loads a single database row into the object.
      *
      * @chainable
-     * @return Database_Result_Cached|Kohana_ORM|object
-     * @throws Kohana_Exception
+     * @return \Kohana\Database\CachedResult|\Kohana\Orm\Model|object
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function find()
     {
@@ -884,8 +884,8 @@ class Model extends \Kohana\Foundation\Model
     /**
      * Finds multiple database rows and returns an iterator of the rows found.
      *
-     * @throws Kohana_Exception
-     * @return Database_Result
+     * @throws \Kohana\Foundation\KohanaException
+     * @return \Kohana\Database\Result
      */
     public function findAll()
     {
@@ -911,8 +911,8 @@ class Model extends \Kohana\Foundation\Model
      *
      * @chainable
      * @param bool $multiple Return an iterator or load a single row
-     * @return Database_Result_Cached|Kohana_ORM|object
-     * @throws Kohana_Exception
+     * @return \Kohana\Database\CachedResult|\Kohana\Orm\Model|object
+     * @throws \Kohana\Foundation\KohanaException
      */
     protected function loadResult(bool $multiple = false)
     {
@@ -967,7 +967,7 @@ class Model extends \Kohana\Foundation\Model
      *
      * @chainable
      * @param  array $values Values to load
-     * @return Kohana_ORM
+     * @return \Kohana\Orm\Model
      */
     protected function loadValues(array $values): self
     {
@@ -1030,7 +1030,7 @@ class Model extends \Kohana\Foundation\Model
      * @param string $field The column name
      * @param mixed $value The value to filter
      * @return mixed
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     protected function runFilter(string $field, $value)
     {
@@ -1099,10 +1099,10 @@ class Model extends \Kohana\Foundation\Model
     /**
      * Validates the current model's data
      *
-     * @param Validation|null $extra_validation Validation object
-     * @return Kohana_ORM
-     * @throws ORM_Validation_Exception
-     * @throws ReflectionException
+     * @param \Kohana\Validation\Validator|null $extra_validation Validation object
+     * @return \Kohana\Orm\Model
+     * @throws \Kohana\Orm\ValidationException
+     * @throws \ReflectionException
      */
     public function check(?Validator $extra_validation = null): self
     {
@@ -1129,11 +1129,11 @@ class Model extends \Kohana\Foundation\Model
 
     /**
      * Insert a new object to the database
-     * @param Validation|null $validation Validation object
-     * @return Kohana_ORM
-     * @throws Kohana_Exception
-     * @throws ORM_Validation_Exception
-     * @throws ReflectionException
+     * @param \Kohana\Validation\Validator|null $validation Validation object
+     * @return \Kohana\Orm\Model
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \Kohana\Orm\ValidationException
+     * @throws \ReflectionException
      */
     public function create(?Validator $validation = null): self
     {
@@ -1186,11 +1186,11 @@ class Model extends \Kohana\Foundation\Model
      * Updates a single record or multiple records
      *
      * @chainable
-     * @param Validation|null $validation Validation object
-     * @return Kohana_ORM
-     * @throws Kohana_Exception
-     * @throws ORM_Validation_Exception
-     * @throws ReflectionException
+     * @param \Kohana\Validation\Validator|null $validation Validation object
+     * @return \Kohana\Orm\Model
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \Kohana\Orm\ValidationException
+     * @throws \ReflectionException
      */
     public function update(?Validator $validation = null): self
     {
@@ -1250,11 +1250,11 @@ class Model extends \Kohana\Foundation\Model
      * Updates or Creates the record depending on loaded()
      *
      * @chainable
-     * @param Validation|null $validation Validation object
-     * @return Kohana_ORM
-     * @throws Kohana_Exception
-     * @throws ORM_Validation_Exception
-     * @throws ReflectionException
+     * @param \Kohana\Validation\Validator|null $validation Validation object
+     * @return \Kohana\Orm\Model
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \Kohana\Orm\ValidationException
+     * @throws \ReflectionException
      */
     public function save(?Validator $validation = null): self
     {
@@ -1265,8 +1265,8 @@ class Model extends \Kohana\Foundation\Model
      * Deletes a single record while ignoring relationships.
      *
      * @chainable
-     * @return Kohana_ORM
-     * @throws Kohana_Exception
+     * @return \Kohana\Orm\Model
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function delete(): self
     {
@@ -1303,7 +1303,7 @@ class Model extends \Kohana\Foundation\Model
      * @param string $alias Alias of the has_many "through" relationship
      * @param mixed $far_keys Related model, primary key, or an array of primary keys
      * @return bool
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function has(string $alias, $far_keys = null): bool
     {
@@ -1332,7 +1332,7 @@ class Model extends \Kohana\Foundation\Model
      * @param string $alias Alias of the has_many "through" relationship
      * @param mixed $far_keys Related model, primary key, or an array of primary keys
      * @return bool
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function hasAny(string $alias, $far_keys = null): bool
     {
@@ -1354,7 +1354,7 @@ class Model extends \Kohana\Foundation\Model
      * @param string $alias Alias of the has_many "through" relationship
      * @param mixed $far_keys Related model, primary key, or an array of primary keys
      * @return int
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function countRelations(string $alias, $far_keys = null): int
     {
@@ -1396,8 +1396,8 @@ class Model extends \Kohana\Foundation\Model
      *
      * @param string $alias Alias of the has_many "through" relationship
      * @param mixed $far_keys Related model, primary key, or an array of primary keys
-     * @return Kohana_ORM
-     * @throws Kohana_Exception
+     * @return \Kohana\Orm\Model
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function add(string $alias, $far_keys): self
     {
@@ -1431,8 +1431,8 @@ class Model extends \Kohana\Foundation\Model
      *
      * @param string $alias Alias of the has_many "through" relationship
      * @param mixed $far_keys Related model, primary key, or an array of primary keys
-     * @return Kohana_ORM
-     * @throws Kohana_Exception
+     * @return \Kohana\Orm\Model
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function remove(string $alias, $far_keys = null): self
     {
@@ -1455,7 +1455,7 @@ class Model extends \Kohana\Foundation\Model
      * Count the number of records in the table.
      *
      * @return int
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function countAll(): int
     {
@@ -1507,7 +1507,7 @@ class Model extends \Kohana\Foundation\Model
      * Returns an ORM model for the given one-one related alias
      *
      * @param string $alias Alias name
-     * @return ORM
+     * @return \Kohana\Orm\Model
      */
     protected function related(string $alias): ?self
     {
@@ -1548,7 +1548,7 @@ class Model extends \Kohana\Foundation\Model
      * query conditions for another query.
      *
      * @param bool $next Pass false to avoid resetting on the next call
-     * @return Kohana_ORM
+     * @return \Kohana\Orm\Model
      */
     public function reset(bool $next = true): self
     {
@@ -2099,7 +2099,7 @@ class Model extends \Kohana\Foundation\Model
      *
      * @param int|null $lifetime Number of seconds to cache
      * @return  $this
-     * @uses    Kohana::$cache_life
+     * @uses    \Kohana\Foundation\Application::$cache_life
      */
     public function cached(?int $lifetime = null): self
     {
@@ -2154,7 +2154,7 @@ class Model extends \Kohana\Foundation\Model
      * @param string $field the field to check for uniqueness
      * @param mixed $value the value to check for uniqueness
      * @return  bool     whether the value is unique
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function unique(string $field, $value): bool
     {

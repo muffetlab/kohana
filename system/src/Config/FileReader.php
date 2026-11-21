@@ -42,7 +42,7 @@ class FileReader implements Reader
      *
      * @param string $group Configuration group name
      * @return  array
-     * @uses    Kohana::load
+     * @uses    \Kohana\Foundation\Application::load
      */
     public function load(string $group): array
     {

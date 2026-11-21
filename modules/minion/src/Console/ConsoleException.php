@@ -21,9 +21,9 @@ class ConsoleException extends KohanaException
      *
      * Should this display a stack trace? It's useful.
      *
-     * @param Throwable $e
+     * @param \Throwable $e
      * @return  void
-     * @uses    Kohana_Exception::text
+     * @uses    \Kohana\Foundation\KohanaException::\Kohana\Support\Str
      */
     public static function handler(\Throwable $e)
     {

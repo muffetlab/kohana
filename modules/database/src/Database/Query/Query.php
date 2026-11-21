@@ -76,7 +76,7 @@ class Query
      * @param int|null $lifetime Number of seconds to cache, 0 deletes it from the cache
      * @param bool $force whether to execute the query during a cache hit
      * @return  $this
-     * @uses    Kohana::$cache_life
+     * @uses    \Kohana\Foundation\Application::$cache_life
      */
     public function cached(?int $lifetime = null, bool $force = false): self
     {
@@ -174,7 +174,7 @@ class Query
      *
      * @param mixed $db Database instance or name of instance
      * @return  string
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function compile($db = null): string
     {
@@ -203,8 +203,8 @@ class Query
      * @param mixed $db Database instance or name of instance
      * @param string|null $as_object Result object classname, true for stdClass or false for array
      * @param array|null $object_params Result object constructor arguments
-     * @return Database_Result|array|int Database_Result for SELECT queries, insert ID for INSERT queries, number of affected rows for all other queries.
-     * @throws Kohana_Exception
+     * @return \Kohana\Database\Result|array|int Database_Result for SELECT queries, insert ID for INSERT queries, number of affected rows for all other queries.
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function execute($db = null, ?string $as_object = null, ?array $object_params = null)
     {

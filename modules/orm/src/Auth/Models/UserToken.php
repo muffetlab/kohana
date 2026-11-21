@@ -30,7 +30,7 @@ class UserToken extends Model
      * Handles garbage collection and deleting of expired objects.
      *
      * @return  void
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function __construct($id = null)
     {
@@ -50,8 +50,8 @@ class UserToken extends Model
     /**
      * Deletes all expired tokens.
      *
-     * @return  ORM
-     * @throws Kohana_Exception
+     * @return  \Kohana\Orm\Model
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function deleteExpired(): Model
     {

@@ -19,7 +19,7 @@ abstract class Model
      *     $model = Model::factory($name);
      *
      * @param string $name Model name
-     * @return  Model
+     * @return  \Kohana\Foundation\Model
      */
     public static function factory(string $name): self
     {

@@ -91,7 +91,7 @@ class Route
      * @param string $name Route name
      * @param string|null $uri URI pattern
      * @param array|null $regex Regex patterns for route keys
-     * @return  Route
+     * @return  \Kohana\Routing\Route
      */
     public static function set(string $name, ?string $uri = null, ?array $regex = null): self
     {
@@ -104,8 +104,8 @@ class Route
      *     $route = Route::get('default');
      *
      * @param string $name Route name
-     * @return  Route
-     * @throws  Kohana_Exception
+     * @return  \Kohana\Routing\Route
+     * @throws  \Kohana\Foundation\KohanaException
      */
     public static function get(string $name): self
     {
@@ -133,7 +133,7 @@ class Route
      *
      *     $name = Route::name($route)
      *
-     * @param   Route   $route  instance
+     * @param   \Kohana\Routing\Route   $route  instance
      * @return int|string|false
      */
     public static function name(self $route)
@@ -154,8 +154,8 @@ class Route
      * @param bool $save cache the current routes
      * @param bool $append append, rather than replace, cached routes when loading
      * @return void|bool Returns void when saving routes, or bool when loading routes.
-     * @throws Kohana_Exception
-     * @uses    Kohana::cache
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Foundation\Application::\Kohana\Cache\Cache
      */
     public static function cache(bool $save = false, bool $append = false)
     {
@@ -197,8 +197,8 @@ class Route
      * @param array|null $params URI parameters
      * @param mixed $protocol protocol string or boolean, adds protocol and domain
      * @return  string
-     * @throws Kohana_Exception
-     * @uses    URL::site
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Routing\Url::site
      * @since   3.0.7
      */
     public static function url(string $name, ?array $params = null, $protocol = null): string
@@ -226,8 +226,8 @@ class Route
      * @param $uri
      * @param array|null $regex
      * @return  string
-     * @uses    Route::REGEX_ESCAPE
-     * @uses    Route::REGEX_SEGMENT
+     * @uses    \Kohana\Routing\Route::REGEX_ESCAPE
+     * @uses    \Kohana\Routing\Route::REGEX_SEGMENT
      */
     public static function compile($uri, ?array $regex = null): string
     {
@@ -295,7 +295,7 @@ class Route
      * @param string|null $uri Route URI pattern
      * @param array|null $regex Key patterns
      * @return  void
-     * @uses    Route::_compile
+     * @uses    \Kohana\Routing\Route::_compile
      */
     public function __construct(?string $uri = null, ?array $regex = null)
     {
@@ -328,7 +328,7 @@ class Route
      * If no parameter is passed, this method will act as a getter.
      *
      * @param array|null $defaults key values
-     * @return array|Kohana_Route
+     * @return array|\Kohana\Routing\Route
      */
     public function defaults(?array $defaults = null)
     {
@@ -363,7 +363,7 @@ class Route
      *
      * @param   array   $callback   callback string, array, or closure
      * @return  $this
-     * @throws  Kohana_Exception
+     * @throws  \Kohana\Foundation\KohanaException
      */
     public function filter(array $callback): self
     {
@@ -471,9 +471,9 @@ class Route
      *
      * @param array|null $params URI parameters
      * @return  string
-     * @throws Kohana_Exception
-     * @uses    Route::REGEX_GROUP
-     * @uses    Route::REGEX_KEY
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Routing\Route::REGEX_GROUP
+     * @uses    \Kohana\Routing\Route::REGEX_KEY
      */
     public function uri(?array $params = null): string
     {
@@ -493,7 +493,7 @@ class Route
          * @param string $portion Part of the URI specification
          * @param bool $required Whether parameters are required (initially)
          * @return  array   Tuple of the compiled portion and whether it contained specified parameters
-         * @throws Kohana_Exception
+         * @throws \Kohana\Foundation\KohanaException
          */
         $compile = function (string $portion, bool $required) use (&$compile, $defaults, $params) {
             $missing = [];

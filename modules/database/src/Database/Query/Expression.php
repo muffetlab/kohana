@@ -103,7 +103,7 @@ class Expression
      *     echo $expression;
      *
      * @return  string
-     * @uses    Database_Expression::value
+     * @uses    \Kohana\Database\Query\Expression::value
      */
     public function __toString()
     {
@@ -116,7 +116,7 @@ class Expression
      *
      * @param mixed $db Database instance or name of instance
      * @return  string
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function compile($db = null): string
     {

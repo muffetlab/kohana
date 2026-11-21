@@ -60,7 +60,7 @@ class User extends Model
      * automatically hashes the password when it's set in the model.
      *
      * @return array Filters
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function filters(): array
     {
@@ -89,9 +89,9 @@ class User extends Model
      * Complete the login for a user by incrementing the logins and saving login timestamp
      *
      * @return void
-     * @throws Kohana_Exception
-     * @throws ORM_Validation_Exception
-     * @throws ReflectionException
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \Kohana\Orm\ValidationException
+     * @throws \ReflectionException
      */
     public function completeLogin()
     {
@@ -113,7 +113,7 @@ class User extends Model
      * @param mixed $value the value to test
      * @param string|null $field Field name
      * @return bool
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function uniqueKeyExists($value, ?string $field = null): bool
     {
@@ -145,7 +145,7 @@ class User extends Model
      * Password validation for plain passwords.
      *
      * @param array $values
-     * @return Validation
+     * @return \Kohana\Validation\Validator
      */
     public static function getPasswordValidation(array $values): Validator
     {
@@ -171,10 +171,10 @@ class User extends Model
      *
      * @param array $values
      * @param array $expected
-     * @return ORM
-     * @throws Kohana_Exception
-     * @throws ORM_Validation_Exception
-     * @throws ReflectionException
+     * @return \Kohana\Orm\Model
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \Kohana\Orm\ValidationException
+     * @throws \ReflectionException
      */
     public function createUser(array $values, array $expected): Model
     {
@@ -204,10 +204,10 @@ class User extends Model
      *
      * @param array $values
      * @param array|null $expected
-     * @return ORM
-     * @throws Kohana_Exception
-     * @throws ORM_Validation_Exception
-     * @throws ReflectionException
+     * @return \Kohana\Orm\Model
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \Kohana\Orm\ValidationException
+     * @throws \ReflectionException
      */
     public function updateUser(array $values, ?array $expected = null): Model
     {

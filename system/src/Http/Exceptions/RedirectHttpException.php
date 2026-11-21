@@ -24,7 +24,7 @@ abstract class RedirectHttpException extends ExpectedHttpException
      * Specifies the URI to redirect to.
      *
      * @param string|null $uri URI of the proxy
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function location(?string $uri = null)
     {
@@ -45,7 +45,7 @@ abstract class RedirectHttpException extends ExpectedHttpException
     /**
      * Validate this exception contains everything needed to continue.
      *
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      * @return bool
      */
     public function check(): bool

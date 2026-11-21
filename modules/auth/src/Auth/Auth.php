@@ -22,8 +22,8 @@ abstract class Auth
     /**
      * Singleton pattern
      *
-     * @return Auth
-     * @throws Kohana_Exception
+     * @return \Kohana\Auth\Auth
+     * @throws \Kohana\Foundation\KohanaException
      */
     public static function instance(): self
     {
@@ -53,7 +53,7 @@ abstract class Auth
      *
      * @param array $config Config Options
      * @return  void
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function __construct(array $config = [])
     {

@@ -55,8 +55,8 @@ abstract class Connection
      *
      * @param string|null $name instance name
      * @param array|null $config configuration parameters
-     * @return  Database
-     * @throws Kohana_Exception
+     * @return  \Kohana\Database\Connection
+     * @throws \Kohana\Foundation\KohanaException
      */
     public static function instance(?string $name = null, ?array $config = null): self
     {
@@ -161,7 +161,7 @@ abstract class Connection
      *
      *     $db->connect();
      *
-     * @throws  Database_Exception
+     * @throws  \Kohana\Database\DatabaseException
      * @return  void
      */
     abstract public function connect();
@@ -187,7 +187,7 @@ abstract class Connection
      *
      * @param   string   $charset  character set name
      * @return  void
-     * @throws  Database_Exception
+     * @throws  \Kohana\Database\DatabaseException
      */
     abstract public function setCharset(string $charset);
 
@@ -204,8 +204,8 @@ abstract class Connection
      * @param string $sql SQL query
      * @param mixed $as_object result object class string, true for stdClass, false for assoc array
      * @param array|null $params object construct parameters for result class
-     * @return Database_Result|array|int Database_Result for SELECT queries, list (insert ID, row count) for INSERT queries, or number of affected rows for all other queries
-     * @throws Database_Exception
+     * @return \Kohana\Database\Result|array|int Database_Result for SELECT queries, list (insert ID, row count) for INSERT queries, or number of affected rows for all other queries
+     * @throws \Kohana\Database\DatabaseException
      */
     abstract public function query(int $type, string $sql, $as_object = false, ?array $params = null);
     /**
@@ -257,7 +257,7 @@ abstract class Connection
      *
      * @param mixed $table table name string or [query, alias]
      * @return int
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function countRecords($table): int
     {
@@ -422,8 +422,8 @@ abstract class Connection
      *
      * @param mixed $value any value to quote
      * @return  string
-     * @throws Kohana_Exception
-     * @uses    Database::escape
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Database\Connection::escape
      */
     public function quote($value)
     {
@@ -472,9 +472,9 @@ abstract class Connection
      *
      * @param mixed $column column name or [column, alias]
      * @return  string
-     * @throws Kohana_Exception
-     * @uses    Database::table_prefix
-     * @uses    Database::quote_identifier
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Database\Connection::table_prefix
+     * @uses    \Kohana\Database\Connection::quote_identifier
      */
     public function quoteColumn($column): string
     {
@@ -543,9 +543,9 @@ abstract class Connection
      *
      * @param mixed $table table name or [table, alias]
      * @return  string
-     * @throws Kohana_Exception
-     * @uses    Database::table_prefix
-     * @uses    Database::quote_identifier
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Database\Connection::table_prefix
+     * @uses    \Kohana\Database\Connection::quote_identifier
      */
     public function quoteTable($table): string
     {
@@ -610,7 +610,7 @@ abstract class Connection
      *
      * @param mixed $value any identifier
      * @return  string
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function quoteIdentifier($value): string
     {

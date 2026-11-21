@@ -32,8 +32,8 @@ abstract class ExpectedHttpException extends HttpException
      *
      * @param string $message Status message, custom content to display with error
      * @param array|null $variables translation variables
-     * @param Exception|null $previous
-     * @throws Kohana_Exception
+     * @param \Exception|null $previous
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function __construct(string $message = '', ?array $variables = null, ?\Exception $previous = null)
     {
@@ -77,7 +77,7 @@ abstract class ExpectedHttpException extends HttpException
      * Generate a Response for the current Exception
      *
      * @return Response
-     * @uses   Kohana_Exception::response()
+     * @uses   \Kohana\Foundation\KohanaException::response()
      */
     public function getResponse(): Response
     {

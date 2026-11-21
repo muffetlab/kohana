@@ -30,7 +30,7 @@ class Http305Exception extends ExpectedHttpException
     /**
      * Validate this exception contains everything needed to continue.
      *
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      * @return bool
      */
     public function check(): bool

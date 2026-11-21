@@ -36,8 +36,8 @@ abstract class Encrypter
      *
      * @param string|null $name configuration group name
      * @param array|null $config configuration options
-     * @return  Encrypt
-     * @throws Kohana_Exception
+     * @return  \Kohana\Encryption\Encrypter
+     * @throws \Kohana\Foundation\KohanaException
      */
     public static function instance(?string $name = null, ?array $config = null): self
     {

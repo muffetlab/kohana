@@ -20,7 +20,7 @@ class StdOutWriter extends Writer
      *
      * @param array $messages
      * @return  void
-     * @throws Exception
+     * @throws \Exception
      */
     public function write(array $messages)
     {

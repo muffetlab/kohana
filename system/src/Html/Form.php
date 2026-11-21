@@ -35,9 +35,9 @@ class Form
      * @param mixed $action form action, defaults to the current request URI, or [Request] class to use
      * @param array|null $attributes HTML attributes
      * @return  string
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      * @uses    URL::site
-     * @uses    HTML::attributes
+     * @uses    \Kohana\Html\Html::attributes
      * @uses    Request
      */
     public static function open($action = null, ?array $attributes = null): string
@@ -91,7 +91,7 @@ class Form
      * @param string|null $value input value
      * @param array|null $attributes HTML attributes
      * @return  string
-     * @uses    HTML::attributes
+     * @uses    \Kohana\Html\Html::attributes
      */
     public static function input(string $name, ?string $value = null, ?array $attributes = null): string
     {
@@ -118,7 +118,7 @@ class Form
      * @param string|null $value input value
      * @param array|null $attributes HTML attributes
      * @return  string
-     * @uses    Form::input
+     * @uses    \Kohana\Html\Form::input
      */
     public static function hidden(string $name, ?string $value = null, ?array $attributes = null): string
     {
@@ -136,7 +136,7 @@ class Form
      * @param string|null $value input value
      * @param array|null $attributes HTML attributes
      * @return  string
-     * @uses    Form::input
+     * @uses    \Kohana\Html\Form::input
      */
     public static function password(string $name, ?string $value = null, ?array $attributes = null): string
     {
@@ -153,7 +153,7 @@ class Form
      * @param string $name input name
      * @param array|null $attributes HTML attributes
      * @return  string
-     * @uses    Form::input
+     * @uses    \Kohana\Html\Form::input
      */
     public static function file(string $name, ?array $attributes = null): string
     {
@@ -172,7 +172,7 @@ class Form
      * @param bool $checked checked status
      * @param array|null $attributes HTML attributes
      * @return  string
-     * @uses    Form::input
+     * @uses    \Kohana\Html\Form::input
      */
     public static function checkbox(string $name, ?string $value = null, bool $checked = false, ?array $attributes = null): string
     {
@@ -197,7 +197,7 @@ class Form
      * @param bool $checked checked status
      * @param array|null $attributes HTML attributes
      * @return  string
-     * @uses    Form::input
+     * @uses    \Kohana\Html\Form::input
      */
     public static function radio(string $name, ?string $value = null, bool $checked = false, ?array $attributes = null): string
     {
@@ -221,8 +221,8 @@ class Form
      * @param array|null $attributes HTML attributes
      * @param bool $double_encode encode existing HTML characters
      * @return  string
-     * @uses    HTML::attributes
-     * @uses    HTML::chars
+     * @uses    \Kohana\Html\Html::attributes
+     * @uses    \Kohana\Html\Html::chars
      */
     public static function textarea(string $name, string $body = '', ?array $attributes = null, bool $double_encode = true): string
     {
@@ -247,7 +247,7 @@ class Form
      * @param mixed $selected selected option string, or an array of selected options
      * @param array|null $attributes HTML attributes
      * @return  string
-     * @uses    HTML::attributes
+     * @uses    \Kohana\Html\Html::attributes
      */
     public static function select(string $name, ?array $options = null, $selected = null, ?array $attributes = null): string
     {
@@ -334,7 +334,7 @@ class Form
      * @param string $value input value
      * @param array|null $attributes HTML attributes
      * @return  string
-     * @uses    Form::input
+     * @uses    \Kohana\Html\Form::input
      */
     public static function submit(string $name, string $value, ?array $attributes = null): string
     {
@@ -353,8 +353,8 @@ class Form
      * @param array|null $attributes HTML attributes
      * @param bool $index add index file to URL?
      * @return  string
-     * @throws Kohana_Exception
-     * @uses    Form::input
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Html\Form::input
      */
     public static function image(string $name, string $value, ?array $attributes = null, bool $index = false): string
     {
@@ -380,7 +380,7 @@ class Form
      * @param string $body input value
      * @param array|null $attributes HTML attributes
      * @return  string
-     * @uses    HTML::attributes
+     * @uses    \Kohana\Html\Html::attributes
      */
     public static function button(string $name, string $body, ?array $attributes = null): string
     {
@@ -399,7 +399,7 @@ class Form
      * @param string|null $text label text
      * @param array|null $attributes HTML attributes
      * @return  string
-     * @uses    HTML::attributes
+     * @uses    \Kohana\Html\Html::attributes
      */
     public static function label(string $input, ?string $text = null, ?array $attributes = null): string
     {

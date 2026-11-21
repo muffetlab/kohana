@@ -30,7 +30,7 @@ class FileWriter extends Writer
      *
      * @param string $directory log directory
      * @return  void
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function __construct(string $directory)
     {
@@ -51,7 +51,7 @@ class FileWriter extends Writer
      *
      * @param array $messages
      * @return  void
-     * @throws Exception
+     * @throws \Exception
      */
     public function write(array $messages)
     {

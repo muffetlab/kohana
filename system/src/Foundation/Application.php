@@ -124,12 +124,12 @@ class Application
     public static $expose = false;
 
     /**
-     * @var  Log  logging object
+     * @var  \Kohana\Log\Logger  logging object
      */
     public static $log;
 
     /**
-     * @var  Config  config object
+     * @var  \Kohana\Config\Repository  config object
      */
     public static $config;
 
@@ -182,11 +182,11 @@ class Application
      *
      * @param array|null $settings Array of settings. See above.
      * @return  void
-     * @throws Kohana_Exception
-     * @uses    Kohana::globals
-     * @uses    Kohana::sanitize
-     * @uses    Kohana::cache
-     * @uses    Profiler
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Foundation\Application::globals
+     * @uses    \Kohana\Foundation\Application::sanitize
+     * @uses    \Kohana\Foundation\Application::\Kohana\Cache\Cache
+     * @uses    \Kohana\Foundation\Profiler
      */
     public static function init(?array $settings = null)
     {
@@ -452,7 +452,7 @@ class Application
      *
      * @param array|null $modules list of module paths
      * @return  array   enabled modules
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public static function modules(?array $modules = null): array
     {
@@ -813,7 +813,7 @@ class Application
      * PHP error handler, converts all errors into ErrorExceptions. This handler
      * respects error_reporting settings.
      *
-     * @throws  ErrorException
+     * @throws  \ErrorException
      * @return  true
      */
     public static function errorHandler($code, $error, $file = null, $line = null): bool
@@ -832,8 +832,8 @@ class Application
      * Catches errors that are not caught by the error handler, such as E_PARSE.
      *
      * @return  void
-     * @throws Kohana_Exception
-     * @uses    Kohana_Exception::handler
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Foundation\KohanaException::handler
      */
     public static function shutdownHandler()
     {

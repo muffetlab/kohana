@@ -94,8 +94,8 @@ class Helpers
      *
      * @param array $environment List of environment to set
      * @return false|void
-     * @throws Kohana_Exception
-     * @throws ReflectionException
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \ReflectionException
      */
     public function setEnvironment(array $environment)
     {
@@ -156,8 +156,8 @@ class Helpers
      *
      * @chainable
      * @return void
-     * @throws Kohana_Exception
-     * @throws ReflectionException
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \ReflectionException
      */
     public function restoreEnvironment()
     {

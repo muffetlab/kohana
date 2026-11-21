@@ -39,7 +39,7 @@ class Repository
      *     $config->attach($reader);        // Try first
      *     $config->attach($reader, false); // Try last
      *
-     * @param   Kohana_Config_Source    $source instance
+     * @param   \Kohana\Config\Contracts\Source    $source instance
      * @param bool $first Add the reader as the first used object
      * @return  $this
      */
@@ -64,7 +64,7 @@ class Repository
      *
      *     $config->detach($reader);
      *
-     * @param   Kohana_Config_Source    $source instance
+     * @param   \Kohana\Config\Contracts\Source    $source instance
      * @return  $this
      */
     public function detach(Source $source): self
@@ -87,8 +87,8 @@ class Repository
      * See [Kohana_Config_Group] for more info
      *
      * @param string $group Configuration group name
-     * @return  Kohana_Config_Group|mixed
-     * @throws  Kohana_Exception
+     * @return  \Kohana\Config\Group|mixed
+     * @throws  \Kohana\Foundation\KohanaException
      */
     public function load(string $group)
     {
@@ -141,7 +141,7 @@ class Repository
      *
      * @param string $group configuration group name
      * @return  $this
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function copy(string $group): self
     {
@@ -161,7 +161,7 @@ class Repository
      * @param string $group Group name
      * @param string $key Variable name
      * @param mixed     $value  The new value
-     * @return Kohana_Config Chainable instance
+     * @return \Kohana\Config\Repository Chainable instance
      */
     public function writeConfig(string $group, string $key, $value): self
     {

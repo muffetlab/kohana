@@ -21,7 +21,7 @@ use Kohana\Translation\Translator;
  * @author     Kohana Team
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    https://kohana.top/license
- * @uses       Kohana::cache
+ * @uses       \Kohana\Foundation\Application::\Kohana\Cache\Cache
  */
 class Fragment
 {
@@ -48,7 +48,7 @@ class Fragment
      * @param string $name Fragment name
      * @param bool|null $i18n Multilingual fragment support
      * @return  string
-     * @uses    I18n::lang
+     * @uses    \Kohana\Translation\Translator::lang
      * @since   3.0.4
      */
     protected static function cacheKey(string $name, ?bool $i18n = null): string

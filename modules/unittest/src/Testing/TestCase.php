@@ -49,7 +49,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * A set of unittest helpers that are shared between normal / database
      * testcases
-     * @var Kohana_Unittest_Helpers
+     * @var \Kohana\Testing\Helpers
      */
     protected $helpers = null;
 
@@ -116,8 +116,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      *
      * @param array $environment List of environment to set
      * @return false|null
-     * @throws Kohana_Exception
-     * @throws ReflectionException
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \ReflectionException
      */
     public function setEnvironment(array $environment): ?bool
     {

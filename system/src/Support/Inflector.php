@@ -46,7 +46,7 @@ class Inflector
      *
      * @param string $str word to check
      * @return bool
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public static function uncountable(string $str): bool
     {
@@ -78,8 +78,8 @@ class Inflector
      * @param string $str word to make singular
      * @param int|float $count Count of thing
      * @return  string
-     * @throws Kohana_Exception
-     * @uses    Inflector::uncountable
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Support\Inflector::uncountable
      */
     public static function singular(string $str, $count = null): string
     {
@@ -146,8 +146,8 @@ class Inflector
      * @param string $str word to pluralize
      * @param int|float $count Count of thing
      * @return  string
-     * @throws Kohana_Exception
-     * @uses    Inflector::uncountable
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Support\Inflector::uncountable
      */
     public static function plural(string $str, $count = null): string
     {

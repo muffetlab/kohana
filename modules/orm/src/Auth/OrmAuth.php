@@ -22,9 +22,9 @@ class OrmAuth extends Auth
      *
      * @param string|null $role Role name string, role ORM object, or array with role names
      * @return bool
-     * @throws Kohana_Exception
-     * @throws ORM_Validation_Exception
-     * @throws ReflectionException
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \Kohana\Orm\ValidationException
+     * @throws \ReflectionException
      */
     public function loggedIn(?string $role = null): bool
     {
@@ -78,9 +78,9 @@ class OrmAuth extends Auth
      * @param string $password
      * @param bool $remember enable autologin
      * @return bool
-     * @throws Kohana_Exception
-     * @throws ORM_Validation_Exception
-     * @throws ReflectionException
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \Kohana\Orm\ValidationException
+     * @throws \ReflectionException
      */
     protected function attemptLogin($user, $password, $remember): bool
     {
@@ -137,7 +137,7 @@ class OrmAuth extends Auth
      * @param mixed $user username string, or user ORM object
      * @param bool $mark_session_as_forced mark the session as forced
      * @return  void
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function forceLogin($user, bool $mark_session_as_forced = false)
     {
@@ -162,9 +162,9 @@ class OrmAuth extends Auth
      * Logs a user in, based on the authautologin cookie.
      *
      * @return  mixed
-     * @throws Kohana_Exception
-     * @throws ORM_Validation_Exception
-     * @throws ReflectionException
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \Kohana\Orm\ValidationException
+     * @throws \ReflectionException
      */
     public function autoLogin()
     {
@@ -201,9 +201,9 @@ class OrmAuth extends Auth
      *
      * @param mixed $default to return in case user isn't logged in
      * @return  mixed
-     * @throws Kohana_Exception
-     * @throws ORM_Validation_Exception
-     * @throws ReflectionException
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \Kohana\Orm\ValidationException
+     * @throws \ReflectionException
      */
     public function getUser($default = null)
     {
@@ -225,7 +225,7 @@ class OrmAuth extends Auth
      * @param bool $destroy completely destroy the session
      * @param bool $logout_all remove all tokens for user
      * @return bool
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function logout(bool $destroy = false, bool $logout_all = false): bool
     {
@@ -259,7 +259,7 @@ class OrmAuth extends Auth
      *
      * @param mixed $user username string, or user ORM object
      * @return  string
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function password($user): string
     {
@@ -293,9 +293,9 @@ class OrmAuth extends Auth
      *
      * @param string $password
      * @return bool
-     * @throws Kohana_Exception
-     * @throws ORM_Validation_Exception
-     * @throws ReflectionException
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \Kohana\Orm\ValidationException
+     * @throws \ReflectionException
      */
     public function checkPassword($password): bool
     {

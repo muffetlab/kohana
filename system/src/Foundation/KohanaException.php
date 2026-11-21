@@ -50,7 +50,7 @@ class KohanaException extends \Exception
      * @param string $message error message
      * @param array|null $variables translation variables
      * @param int|string $code the exception code
-     * @param Exception|null $previous Previous exception
+     * @param \Exception|null $previous Previous exception
      */
     public function __construct(string $message = '', ?array $variables = null, $code = 0, ?\Exception $previous = null)
     {
@@ -70,7 +70,7 @@ class KohanaException extends \Exception
      *
      *     echo $exception;
      *
-     * @uses    Kohana_Exception::text
+     * @uses    \Kohana\Foundation\KohanaException::\Kohana\Support\Str
      * @return  string
      */
     public function __toString()
@@ -82,10 +82,10 @@ class KohanaException extends \Exception
      * Inline exception handler, displays the error message, source of the
      * exception, and the stack trace of the error.
      *
-     * @param Throwable $e
+     * @param \Throwable $e
      * @return  void
-     * @throws Kohana_Exception
-     * @uses    Kohana_Exception::response
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Foundation\KohanaException::response
      */
     public static function handler(\Throwable $e)
     {
@@ -101,9 +101,9 @@ class KohanaException extends \Exception
      * Exception handler, logs the exception and generates a Response object
      * for display.
      *
-     * @param   Throwable   $e
+     * @param   \Throwable   $e
      * @return  Response
-     * @uses    Kohana_Exception::response
+     * @uses    \Kohana\Foundation\KohanaException::response
      */
     public static function render(\Throwable $e): Response
     {
@@ -133,10 +133,10 @@ class KohanaException extends \Exception
     /**
      * Logs an exception.
      *
-     * @param   Throwable   $e
+     * @param   \Throwable   $e
      * @param int $level
      * @return  void
-     * @uses    Kohana_Exception::text
+     * @uses    \Kohana\Foundation\KohanaException::\Kohana\Support\Str
      */
     public static function log(\Throwable $e, int $level = Logger::EMERGENCY)
     {
@@ -157,7 +157,7 @@ class KohanaException extends \Exception
      *
      * Error [ Code ]: Message ~ File [ Line ]
      *
-     * @param Throwable $e
+     * @param \Throwable $e
      * @return  string
      */
     public static function text(\Throwable $e): string
@@ -168,10 +168,10 @@ class KohanaException extends \Exception
     /**
      * Get a Response object representing the exception
      *
-     * @param Throwable $e
+     * @param \Throwable $e
      * @return  Response
-     * @throws Kohana_Exception
-     * @uses    Kohana_Exception::text
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Foundation\KohanaException::\Kohana\Support\Str
      */
     public static function response(\Throwable $e): Response
     {

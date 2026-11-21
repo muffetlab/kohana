@@ -35,8 +35,8 @@ abstract class Http
      *
      * @param string $uri URI to redirect to
      * @param int $code HTTP Status code to use for the redirect
-     * @throws HTTP_Exception_Redirect
-     * @throws Kohana_Exception
+     * @throws \Kohana\Http\Exceptions\RedirectHttpException
+     * @throws \Kohana\Foundation\KohanaException
      */
     public static function redirect(string $uri = '', int $code = 302)
     {
@@ -54,11 +54,11 @@ abstract class Http
      * execution will halt and a 304 Not Modified will be sent if the
      * browser cache is up-to-date.
      *
-     * @param Request $request Request
-     * @param Response $response Response
+     * @param \Kohana\Http\Request $request Request
+     * @param \Kohana\Http\Response $response Response
      * @param string|null $etag Resource ETag
-     * @return Response
-     * @throws Request_Exception
+     * @return \Kohana\Http\Response
+     * @throws \Kohana\Http\Exceptions\RequestException
      */
     public static function checkCache(Request $request, Response $response, ?string $etag = null): Response
     {
@@ -91,7 +91,7 @@ abstract class Http
      * Parses an HTTP header string into an associative array
      *
      * @param string $header_string Header string to parse
-     * @return  HTTP_Header
+     * @return  \Kohana\Http\HeaderBag
      */
     public static function parseHeaderString(string $header_string): HeaderBag
     {
@@ -146,7 +146,7 @@ abstract class Http
      *      // Get http headers into the request
      *      $request->headers = HTTP::request_headers();
      *
-     * @return  HTTP_Header
+     * @return  \Kohana\Http\HeaderBag
      */
     public static function requestHeaders(): HeaderBag
     {

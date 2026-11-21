@@ -28,7 +28,7 @@ class InsertBuilder extends Builder
      *
      * @param mixed $table table name or [$table, $alias] or object
      * @param array|null $columns column names
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function __construct($table = null, ?array $columns = null)
     {
@@ -51,7 +51,7 @@ class InsertBuilder extends Builder
      *
      * @param string $table table name
      * @return  $this
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function table(string $table): self
     {
@@ -82,7 +82,7 @@ class InsertBuilder extends Builder
      *
      * @param array ...$values values list
      * @return  $this
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function values(array ...$values): self
     {
@@ -100,9 +100,9 @@ class InsertBuilder extends Builder
     /**
      * Use a sub-query to for the inserted values.
      *
-     * @param Database_Query $query Database_Query of SELECT type
+     * @param \Kohana\Database\Query\Query $query Database_Query of SELECT type
      * @return  $this
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function select(Query $query): self
     {
@@ -120,7 +120,7 @@ class InsertBuilder extends Builder
      *
      * @param mixed $db Database instance or name of instance
      * @return  string
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function compile($db = null): string
     {

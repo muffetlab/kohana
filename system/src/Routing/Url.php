@@ -41,9 +41,9 @@ class Url
      * @param mixed $protocol Protocol string, [Request], or boolean
      * @param bool $index Add index file to URL?
      * @return  string
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      * @uses    Request::protocol()
-     * @uses    Kohana::$index_file
+     * @uses    \Kohana\Foundation\Application::$index_file
      */
     public static function base($protocol = null, bool $index = false): string
     {
@@ -118,8 +118,8 @@ class Url
      * @param mixed $protocol Protocol string or [Request] class to use protocol from
      * @param bool $index Include the index_page in the URL
      * @return  string
-     * @throws Kohana_Exception
-     * @uses    URL::base
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Routing\Url::base
      */
     public static function site(string $uri = '', $protocol = null, bool $index = true): string
     {
@@ -217,7 +217,7 @@ class Url
      * @param string $host
      * @param array|null $trusted_hosts
      * @return bool true if $host is trustworthy.
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public static function isTrustedHost(string $host, ?array $trusted_hosts = null): bool
     {

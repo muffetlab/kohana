@@ -21,7 +21,7 @@ class Group extends \ArrayObject
     /**
      * Reference the config object that created this group
      * Used when updating config
-     * @var Kohana_Config
+     * @var \Kohana\Config\Repository
      */
     protected $parentInstance = null;
 
@@ -36,7 +36,7 @@ class Group extends \ArrayObject
      * Constructs the group object.  Kohana_Config passes the config group
      * and its config items to the object here.
      *
-     * @param Kohana_Config  $instance "Owning" instance of Kohana_Config
+     * @param \Kohana\Config\Repository  $instance "Owning" instance of Kohana_Config
      * @param string         $group    The group name
      * @param array          $config   Group's config
      */

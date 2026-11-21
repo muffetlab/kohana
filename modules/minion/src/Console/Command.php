@@ -53,7 +53,7 @@ abstract class Command
     /**
      * Gets the task name of a task class / task object
      *
-     * @param string|Minion_Task $class The task class / object
+     * @param string|\Kohana\Console\Command $class The task class / object
      * @return string             The task name
      */
     public static function convertClassToTask($class): string
@@ -71,8 +71,8 @@ abstract class Command
      * Factory for loading minion tasks
      *
      * @param array $options An array of command line options. It should contain the 'task' key
-     * @return Minion_Task The Minion task
-     * @throws Minion_Exception_InvalidTask
+     * @return \Kohana\Console\Command The Minion task
+     * @throws \Kohana\Console\InvalidCommandException
      */
     public static function factory(array $options): self
     {
@@ -161,7 +161,7 @@ abstract class Command
      * Sets options for this task
      *
      * @param array $options The array of options to set
-     * @return Kohana_Minion_Task
+     * @return \Kohana\Console\Command
      */
     public function setOptions(array $options): self
     {
@@ -201,9 +201,9 @@ abstract class Command
      *             ->rule('paramname', 'not_empty'); // Require this param
      *     }
      *
-     * @param Validation $validation the validation object to add rules to
+     * @param \Kohana\Validation\Validator $validation the validation object to add rules to
      *
-     * @return Validation
+     * @return \Kohana\Validation\Validator
      */
     public function buildValidation(Validator $validation): Validator
     {
@@ -229,8 +229,8 @@ abstract class Command
      * Execute the task with the specified set of options
      *
      * @return void
-     * @throws ReflectionException
-     * @throws View_Exception
+     * @throws \ReflectionException
+     * @throws \Kohana\View\ViewException
      */
     public function execute()
     {
@@ -257,7 +257,7 @@ abstract class Command
      * Outputs help for this task
      *
      * @return void
-     * @throws View_Exception
+     * @throws \Kohana\View\ViewException
      */
     protected function help(array $params)
     {

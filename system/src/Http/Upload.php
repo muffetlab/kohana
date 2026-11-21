@@ -54,7 +54,7 @@ class Upload
      * @param string|null $directory New directory
      * @param int|false $chmod chmod mask
      * @return string|false Full path to new file on success, false on failure.
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public static function save(array $file, ?string $filename = null, ?string $directory = null, $chmod = 0644)
     {
@@ -165,7 +165,7 @@ class Upload
      * @param array $file $_FILES item
      * @param string $size maximum file size allowed
      * @return  bool
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public static function size(array $file, string $size): bool
     {

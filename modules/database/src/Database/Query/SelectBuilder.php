@@ -277,7 +277,7 @@ class SelectBuilder extends WhereBuilder
      * Otherwise, it must be an instance of Database_Query_Builder_Select.
      * @param bool $all Determines if it's a UNION or UNION ALL clause.
      * @return $this
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function union($select, bool $all = true): self
     {
@@ -309,8 +309,8 @@ class SelectBuilder extends WhereBuilder
      *
      * @param mixed $db Database instance or name of instance
      * @return  string
-     * @throws Database_Exception
-     * @throws Kohana_Exception
+     * @throws \Kohana\Database\DatabaseException
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function compile($db = null): string
     {

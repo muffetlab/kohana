@@ -81,7 +81,7 @@ class PdoConnection extends Connection
      * @param int $arguments Number of arguments that the SQL function takes
      *
      * @return bool
-     * @throws Database_Exception
+     * @throws \Kohana\Database\DatabaseException
      */
     public function createAggregate(string $name, callable $step, callable $final, int $arguments = -1): bool
     {
@@ -107,7 +107,7 @@ class PdoConnection extends Connection
      * @param int $arguments Number of arguments that the SQL function takes
      *
      * @return bool
-     * @throws Database_Exception
+     * @throws \Kohana\Database\DatabaseException
      */
     public function createFunction(string $name, callable $callback, int $arguments = -1): bool
     {
@@ -144,8 +144,8 @@ class PdoConnection extends Connection
      * @param string $sql SQL query
      * @param mixed $as_object result object class string, true for stdClass, false for assoc array
      * @param array|null $params object construct parameters for result class
-     * @return Database_Result|array|int Database_Result for SELECT queries, list (insert ID, row count) for INSERT queries, or number of affected rows for all other queries
-     * @throws Database_Exception
+     * @return \Kohana\Database\Result|array|int Database_Result for SELECT queries, list (insert ID, row count) for INSERT queries, or number of affected rows for all other queries
+     * @throws \Kohana\Database\DatabaseException
      */
     public function query(int $type, string $sql, $as_object = false, ?array $params = null)
     {

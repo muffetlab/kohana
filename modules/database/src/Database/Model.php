@@ -22,7 +22,7 @@ abstract class Model extends \Kohana\Foundation\Model
      *
      * @param string $name Model name
      * @param   mixed    $db    Database instance object or string
-     * @return  Model
+     * @return  \Kohana\Foundation\Model
      */
     public static function factory(string $name, $db = null): \Kohana\Foundation\Model
     {
@@ -42,7 +42,7 @@ abstract class Model extends \Kohana\Foundation\Model
      *
      * @param mixed $db Database instance object or string
      * @return  void
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function __construct($db = null)
     {

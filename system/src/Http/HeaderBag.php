@@ -442,7 +442,7 @@ class HeaderBag extends \ArrayObject
      * @param string $type
      * @param bool $explicit explicit check, excludes `*`
      * @return  mixed
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      * @since   3.2.0
      */
     public function acceptsAtQuality(string $type, bool $explicit = false)
@@ -515,7 +515,7 @@ class HeaderBag extends \ArrayObject
      * @param array $types the content types to examine
      * @param bool $explicit only allow explicit references, no wildcards
      * @return  string  name of the preferred content type
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      * @since   3.2.0
      */
     public function preferredAccept(array $types, bool $explicit = false)
@@ -773,11 +773,11 @@ class HeaderBag extends \ArrayObject
      * [!!] if you supply a custom header handler via `$callback`, it is
      *  recommended that `$response` is returned
      *
-     * @param HTTP_Response|null $response header to send
+     * @param \Kohana\Http\Contracts\Response|null $response header to send
      * @param bool $replace replace existing value
      * @param callable|null $callback optional callback to replace PHP header function
      * @return  mixed
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      * @since   3.2.0
      */
     public function sendHeaders(?Response $response = null, bool $replace = false, ?callable $callback = null)
@@ -828,7 +828,7 @@ class HeaderBag extends \ArrayObject
      * @param array $headers headers to send to php
      * @param bool $replace replace existing headers
      * @return  self
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      * @since   3.2.0
      */
     protected function sendHeadersToPhp(array $headers, bool $replace): self

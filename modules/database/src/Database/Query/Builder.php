@@ -19,7 +19,7 @@ abstract class Builder extends Query
     /**
      * Compiles an array of JOIN statements into an SQL partial.
      *
-     * @param Database $db Database instance
+     * @param \Kohana\Database\Connection $db Database instance
      * @param array $joins join statements
      * @return  string
      */
@@ -39,10 +39,10 @@ abstract class Builder extends Query
      * Compiles an array of conditions into an SQL partial. Used for WHERE
      * and HAVING.
      *
-     * @param Database $db Database instance
+     * @param \Kohana\Database\Connection $db Database instance
      * @param array $conditions condition statements
      * @return  string
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     protected function compileConditions(Connection $db, array $conditions): string
     {
@@ -128,10 +128,10 @@ abstract class Builder extends Query
     /**
      * Compiles an array of set values into an SQL partial. Used for UPDATE.
      *
-     * @param Database $db Database instance
+     * @param \Kohana\Database\Connection $db Database instance
      * @param array $values updated values
      * @return  string
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     protected function compileSet(Connection $db, array $values): string
     {
@@ -157,10 +157,10 @@ abstract class Builder extends Query
     /**
      * Compiles an array of GROUP BY columns into an SQL partial.
      *
-     * @param Database $db Database instance
+     * @param \Kohana\Database\Connection $db Database instance
      * @param array $columns
      * @return  string
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     protected function compileGroupBy(Connection $db, array $columns): string
     {
@@ -184,11 +184,11 @@ abstract class Builder extends Query
     /**
      * Compiles an array of ORDER BY statements into an SQL partial.
      *
-     * @param Database $db Database instance
+     * @param \Kohana\Database\Connection $db Database instance
      * @param array $columns sorting columns
      * @return  string
-     * @throws Database_Exception
-     * @throws Kohana_Exception
+     * @throws \Kohana\Database\DatabaseException
+     * @throws \Kohana\Foundation\KohanaException
      */
     protected function compileOrderBy(Connection $db, array $columns): string
     {

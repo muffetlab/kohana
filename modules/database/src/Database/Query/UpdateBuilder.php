@@ -84,8 +84,8 @@ class UpdateBuilder extends WhereBuilder
      *
      * @param mixed $db Database instance or name of instance
      * @return  string
-     * @throws Database_Exception
-     * @throws Kohana_Exception
+     * @throws \Kohana\Database\DatabaseException
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function compile($db = null): string
     {

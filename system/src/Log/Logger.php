@@ -33,7 +33,7 @@ class Logger
     public static $writeOnAdd = false;
 
     /**
-     * @var  Log  Singleton instance container
+     * @var  \Kohana\Log\Logger  Singleton instance container
      */
     protected static $instance;
 
@@ -42,7 +42,7 @@ class Logger
      *
      *     $log = Log::instance();
      *
-     * @return  Log
+     * @return  \Kohana\Log\Logger
      */
     public static function instance(): self
     {
@@ -73,10 +73,10 @@ class Logger
      *
      *     $log->attach($writer);
      *
-     * @param   Log_Writer  $writer     instance
+     * @param   \Kohana\Log\Writers\Writer  $writer     instance
      * @param   mixed       $levels     array of messages levels to write OR max level to write
      * @param int $min_level Min level to write IF $levels is not an array
-     * @return  Kohana_Log
+     * @return  \Kohana\Log\Logger
      */
     public function attach(Writer $writer, $levels = [], int $min_level = 0): self
     {
@@ -97,8 +97,8 @@ class Logger
      *
      *     $log->detach($writer);
      *
-     * @param   Log_Writer  $writer instance
-     * @return  Kohana_Log
+     * @param   \Kohana\Log\Writers\Writer  $writer instance
+     * @return  \Kohana\Log\Logger
      */
     public function detach(Writer $writer): self
     {
@@ -120,7 +120,7 @@ class Logger
      * @param string $message message body
      * @param array|null $values values to replace in the message
      * @param array|null $additional additional custom parameters to supply to the log writer
-     * @return  Kohana_Log
+     * @return  \Kohana\Log\Logger
      */
     public function add(string $level, string $message, ?array $values = null, ?array $additional = null): self
     {

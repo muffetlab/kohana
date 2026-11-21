@@ -29,8 +29,8 @@ class View
      *
      * @param string|null $file view filename
      * @param array|null $data array of values
-     * @return  View
-     * @throws View_Exception
+     * @return  \Kohana\View\View
+     * @throws \Kohana\View\ViewException
      */
     public static function factory(?string $file = null, ?array $data = null): self
     {
@@ -47,7 +47,7 @@ class View
      * @param string $kohana_view_filename Filename
      * @param   array   $kohana_view_data       variables
      * @return  string
-     * @throws  Exception
+     * @throws  \Exception
      */
     protected static function capture(string $kohana_view_filename, array $kohana_view_data): string
     {
@@ -91,7 +91,7 @@ class View
      * [!!] Note: When setting with using Traversable object we're not attaching the whole object to the view,
      * i.e. the object's standard properties will not be available in the view context.
      *
-     * @param   string|array|Traversable  $key    variable name or an array of variables
+     * @param   string|array|\Traversable  $key    variable name or an array of variables
      * @param   mixed                     $value  value
      * @return  void
      */
@@ -134,8 +134,8 @@ class View
      *
      * @param string|null $file view filename
      * @param array|null $data array of values
-     * @throws View_Exception
-     * @uses    View::set_filename
+     * @throws \Kohana\View\ViewException
+     * @uses    \Kohana\View\View::set_filename
      */
     public function __construct(?string $file = null, ?array $data = null)
     {
@@ -159,7 +159,7 @@ class View
      *
      * @param string $key Variable name
      * @return  mixed
-     * @throws  Kohana_Exception
+     * @throws  \Kohana\Foundation\KohanaException
      */
     public function & __get(string $key)
     {
@@ -218,7 +218,7 @@ class View
      * Magic method, returns the output of [View::render].
      *
      * @return  string
-     * @uses    View::render
+     * @uses    \Kohana\View\View::render
      */
     public function __toString()
     {
@@ -243,8 +243,8 @@ class View
      *     $view->set_filename($file);
      *
      * @param string $file View filename
-     * @return  Kohana_View
-     * @throws  View_Exception
+     * @return  \Kohana\View\View
+     * @throws  \Kohana\View\ViewException
      */
     public function setFilename(string $file): self
     {
@@ -273,7 +273,7 @@ class View
      * [!!] Note: When setting with using Traversable object we're not attaching the whole object to the view,
      * i.e. the object's standard properties will not be available in the view context.
      *
-     * @param   string|array|Traversable  $key    variable name or an array of variables
+     * @param   string|array|\Traversable  $key    variable name or an array of variables
      * @param   mixed                     $value  value
      * @return  $this
      */
@@ -321,8 +321,8 @@ class View
      *
      * @param string|null $file View filename
      * @return  string
-     * @throws  View_Exception
-     * @uses    View::capture
+     * @throws  \Kohana\View\ViewException
+     * @uses    \Kohana\View\View::capture
      */
     public function render(?string $file = null): string
     {

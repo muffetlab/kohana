@@ -147,8 +147,8 @@ class MySqliConnection extends Connection
      * @param string $sql SQL query
      * @param mixed $as_object result object class string, true for stdClass, false for assoc array
      * @param array|null $params object construct parameters for result class
-     * @return Database_Result|array|int Database_Result for SELECT queries, list (insert ID, row count) for INSERT queries, or number of affected rows for all other queries
-     * @throws Database_Exception
+     * @return \Kohana\Database\Result|array|int Database_Result for SELECT queries, list (insert ID, row count) for INSERT queries, or number of affected rows for all other queries
+     * @throws \Kohana\Database\DatabaseException
      */
     public function query(int $type, string $sql, $as_object = false, ?array $params = null)
     {
@@ -256,7 +256,7 @@ class MySqliConnection extends Connection
      *
      * @param string|null $mode Isolation level
      * @return bool
-     * @throws Database_Exception
+     * @throws \Kohana\Database\DatabaseException
      */
     public function begin(?string $mode = null): bool
     {
@@ -274,7 +274,7 @@ class MySqliConnection extends Connection
      * Commit a SQL transaction
      *
      * @return bool
-     * @throws Database_Exception
+     * @throws \Kohana\Database\DatabaseException
      */
     public function commit(): bool
     {
@@ -288,7 +288,7 @@ class MySqliConnection extends Connection
      * Rollback a SQL transaction
      *
      * @return bool
-     * @throws Database_Exception
+     * @throws \Kohana\Database\DatabaseException
      */
     public function rollback(): bool
     {

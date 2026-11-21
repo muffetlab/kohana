@@ -16,14 +16,14 @@ use Kohana\Foundation\KohanaException;
 class ImagickImage extends Image
 {
     /**
-     * @var  Imagick  image magick object
+     * @var  \Imagick  image magick object
      */
     protected $im;
 
     /**
      * Checks if ImageMagick is enabled.
      *
-     * @throws  Kohana_Exception
+     * @throws  \Kohana\Foundation\KohanaException
      * @return  bool
      */
     public static function check(): bool
@@ -39,8 +39,8 @@ class ImagickImage extends Image
      * Runs [Image_Imagick::check] and loads the image.
      *
      * @param $file
-     * @throws ImagickException
-     * @throws Kohana_Exception
+     * @throws \ImagickException
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function __construct($file)
     {
@@ -291,7 +291,7 @@ class ImagickImage extends Image
      *
      * @param string $extension Image extension: png, jpg, etc.
      * @return array Array with normalized format and IMAGETYPE_* constant.
-     * @throws  Kohana_Exception
+     * @throws  \Kohana\Foundation\KohanaException
      */
     protected function getImagetype(string $extension): array
     {

@@ -50,7 +50,7 @@ class Date
      * @param string|null $local Timezone used as the baseline
      * @param mixed $now UNIX timestamp or date string
      * @return int
-     * @throws Exception
+     * @throws \Exception
      */
     public static function offset(string $remote, ?string $local = null, $now = null): int
     {
@@ -106,7 +106,7 @@ class Date
      *
      * @param   int $step amount to increment each step by, 1 to 30
      * @return  array   A mirrored (foo => foo) array from 1-60.
-     * @uses    Date::seconds
+     * @uses    \Kohana\Support\Date::seconds
      */
     public static function minutes(int $step = 5): array
     {
@@ -248,7 +248,7 @@ class Date
      *
      * @param   string|null  $format The format to use for months
      * @return  array   An array of months based on the specified format
-     * @uses    Date::hours
+     * @uses    \Kohana\Support\Date::hours
      */
     public static function months(?string $format = null): array
     {
@@ -501,7 +501,7 @@ class Date
      * @param string|null $timestamp_format Timestamp format
      * @param string|null $timezone Timezone identifier
      * @return  string
-     * @throws Exception
+     * @throws \Exception
      */
     public static function formattedTime(string $datetime_str = 'now', ?string $timestamp_format = null, ?string $timezone = null): string
     {

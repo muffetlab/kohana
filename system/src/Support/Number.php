@@ -184,7 +184,7 @@ class Number
      *
      * @param string $size file size in SB format
      * @return  float
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public static function bytes(string $size): float
     {

@@ -114,7 +114,7 @@ class Profiler
      *
      * @param   array   $tokens profiler tokens
      * @return  array   min, max, average, total
-     * @uses    Profiler::total
+     * @uses    \Kohana\Foundation\Profiler::total
      */
     public static function stats(array $tokens): array
     {
@@ -185,8 +185,8 @@ class Profiler
      *
      * @param   mixed   $groups single group name string, or array with group names; all groups by default
      * @return  array   min, max, average, total
-     * @uses    Profiler::groups
-     * @uses    Profiler::stats
+     * @uses    \Kohana\Foundation\Profiler::groups
+     * @uses    \Kohana\Foundation\Profiler::stats
      */
     public static function groupStats($groups = null): array
     {
@@ -290,7 +290,7 @@ class Profiler
      *     list($time, $memory) = Profiler::application();
      *
      * @return  array  execution time, memory
-     * @uses    Kohana::cache
+     * @uses    \Kohana\Foundation\Application::\Kohana\Cache\Cache
      */
     public static function application(): array
     {

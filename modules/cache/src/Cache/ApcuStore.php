@@ -51,7 +51,7 @@ class ApcuStore extends Cache implements Arithmetic
      * be instantiated using the `Cache::instance()` method.
      *
      * @param  array  $config  configuration
-     * @throws Cache_Exception
+     * @throws \Kohana\Cache\CacheException
      */
     protected function __construct(array $config)
     {

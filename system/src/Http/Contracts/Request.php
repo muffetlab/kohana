@@ -38,7 +38,7 @@ interface Request extends Message
     /**
      * Gets the URI of this request.
      *
-     * @return string|HTTP_Request
+     * @return string|\Kohana\Http\Contracts\Request
      */
     public function uri();
     /**

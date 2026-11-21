@@ -14,8 +14,8 @@ abstract class HttpException extends KohanaException
      * @param int $code the http status code
      * @param string $message Status message, custom content to display with error
      * @param array|null $variables translation variables
-     * @param Exception|null $previous
-     * @return  HTTP_Exception
+     * @param \Exception|null $previous
+     * @return  \Kohana\Http\Exceptions\HttpException
      */
     public static function factory(int $code, string $message = '', ?array $variables = null, ?\Exception $previous = null): self
     {
@@ -41,7 +41,7 @@ abstract class HttpException extends KohanaException
      *
      * @param string $message status message, custom content to display with error
      * @param array|null $variables translation variables
-     * @param Exception|null $previous
+     * @param \Exception|null $previous
      */
     public function __construct(string $message = '', ?array $variables = null, ?\Exception $previous = null)
     {
@@ -52,7 +52,7 @@ abstract class HttpException extends KohanaException
      * Store the Request that triggered this exception.
      *
      * @param Request|null $request Request object that triggered this exception.
-     * @return  Kohana_HTTP_Exception|Request
+     * @return  \Kohana\Http\Exceptions\HttpException|Request
      */
     public function request(?Request $request = null)
     {
@@ -69,8 +69,8 @@ abstract class HttpException extends KohanaException
      * Generate a Response for the current Exception
      *
      * @return Response
-     * @throws Kohana_Exception
-     * @uses   Kohana_Exception::response()
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses   \Kohana\Foundation\KohanaException::response()
      */
     public function getResponse(): Response
     {

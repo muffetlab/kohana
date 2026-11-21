@@ -94,7 +94,7 @@ abstract class Cache
     public static $default = 'file';
 
     /**
-     * @var   Kohana_Cache instances
+     * @var   \Kohana\Cache\Cache instances
      */
     public static $instances = [];
 
@@ -112,9 +112,9 @@ abstract class Cache
      *     $foo_group = Cache::$instances['default'];
      *
      * @param string|null $group The name of the cache group to use
-     * @return  Cache
-     * @throws Cache_Exception
-     * @throws Kohana_Exception
+     * @return  \Kohana\Cache\Cache
+     * @throws \Kohana\Cache\CacheException
+     * @throws \Kohana\Foundation\KohanaException
      */
     public static function instance(?string $group = null): self
     {
@@ -146,7 +146,7 @@ abstract class Cache
     }
 
     /**
-     * @var  Config
+     * @var  \Kohana\Config\Repository
      */
     protected $config = [];
 
@@ -201,7 +201,7 @@ abstract class Cache
      * Overload the __clone() method to prevent cloning
      *
      * @return  void
-     * @throws  Cache_Exception
+     * @throws  \Kohana\Cache\CacheException
      */
     final public function __clone()
     {
@@ -223,7 +223,7 @@ abstract class Cache
      * @param string $id ID of cache entry
      * @param mixed $default Default value to return if cache miss
      * @return  mixed
-     * @throws  Cache_Exception
+     * @throws  \Kohana\Cache\CacheException
      */
     abstract public function get(string $id, $default = null);
     /**

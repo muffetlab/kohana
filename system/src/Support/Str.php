@@ -92,7 +92,7 @@ class Str
      * @param string|null $end_char End character or entity
      * @param bool $preserve_words Enable or disable the preservation of words while limiting
      * @return  string
-     * @uses    UTF8::strlen
+     * @uses    \Kohana\Support\Utf8::strlen
      */
     public static function limitChars(string $str, int $limit = 100, ?string $end_char = null, bool $preserve_words = false): string
     {
@@ -170,7 +170,7 @@ class Str
      * @param string|null $type A type of pool, or a string of characters to use as the pool
      * @param int $length Length of string to return
      * @return  string
-     * @uses    UTF8::split
+     * @uses    \Kohana\Support\Utf8::split
      */
     public static function random(?string $type = null, int $length = 8): string
     {
@@ -241,7 +241,7 @@ class Str
      * @param string $string String to transform
      * @param string $delimiter Delimiter to use
      * @return  string
-     * @uses    UTF8::ucfirst
+     * @uses    \Kohana\Support\Utf8::ucfirst
      */
     public static function ucfirst(string $string, string $delimiter = '-'): string
     {
@@ -275,7 +275,7 @@ class Str
      * @param string $replacement Replacement string
      * @param bool $replace_partial_words Replace words across word boundaries (space, period, etc.)
      * @return  string
-     * @uses    UTF8::strlen
+     * @uses    \Kohana\Support\Utf8::strlen
      */
     public static function censor(string $str, array $badwords, string $replacement = '#', bool $replace_partial_words = true): string
     {
@@ -339,8 +339,8 @@ class Str
      *
      * @param string $text Text to auto link
      * @return  string
-     * @uses    Text::auto_link_urls
-     * @uses    Text::auto_link_emails
+     * @uses    \Kohana\Support\Str::auto_link_urls
+     * @uses    \Kohana\Support\Str::auto_link_emails
      */
     public static function autoLink(string $text): string
     {
@@ -604,8 +604,8 @@ class Str
      * @param string $agent user_agent
      * @param mixed $value array or string to return: browser, version, robot, mobile, platform
      * @return  mixed   requested information, false if nothing is found
-     * @throws Kohana_Exception
-     * @uses    Kohana::$config
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Foundation\Application::$config
      */
     public static function userAgent(string $agent, $value)
     {

@@ -62,7 +62,7 @@ class OpensslEncrypter extends Encrypter
      *
      * @param string $name configuration group name
      * @param array $config configuration options
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function __construct(string $name, array $config)
     {

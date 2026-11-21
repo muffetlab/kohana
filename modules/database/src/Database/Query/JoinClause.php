@@ -53,7 +53,7 @@ class JoinClause extends Builder
      * @param string $op logic operator
      * @param mixed $c2 column name or [$column, $alias] or object
      * @return  $this
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function on($c1, string $op, $c2): self
     {
@@ -71,7 +71,7 @@ class JoinClause extends Builder
      *
      * @param string ...$columns column name
      * @return  $this
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function using(...$columns): self
     {
@@ -89,7 +89,7 @@ class JoinClause extends Builder
      *
      * @param mixed $db Database instance or name of instance
      * @return  string
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function compile($db = null): string
     {

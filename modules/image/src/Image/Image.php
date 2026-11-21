@@ -39,8 +39,8 @@ abstract class Image
      *
      * @param string $file image file path
      * @param string|null $driver Driver type: GD, ImageMagick, etc.
-     * @return  Image
-     * @throws Kohana_Exception
+     * @return  \Kohana\Image\Image
+     * @throws \Kohana\Foundation\KohanaException
      */
     public static function factory(string $file, ?string $driver = null): self
     {
@@ -90,7 +90,7 @@ abstract class Image
      *
      * @param string $file Image file path
      * @return  void
-     * @throws  Kohana_Exception
+     * @throws  \Kohana\Foundation\KohanaException
      */
     public function __construct(string $file)
     {
@@ -168,7 +168,7 @@ abstract class Image
      * @param int|null $height  New height
      * @param int|null $master  Master dimension
      * @return  $this
-     * @uses    Image::_do_resize
+     * @uses    \Kohana\Image\Image::_do_resize
      */
     public function resize(?int $width = null, ?int $height = null, ?int $master = null): self
     {
@@ -266,7 +266,7 @@ abstract class Image
      * @param   mixed    $offset_x  offset from the left
      * @param   mixed    $offset_y  offset from the top
      * @return  $this
-     * @uses    Image::_do_crop
+     * @uses    \Kohana\Image\Image::_do_crop
      */
     public function crop(int $width, int $height, $offset_x = null, $offset_y = null): self
     {
@@ -332,7 +332,7 @@ abstract class Image
      *
      * @param int $degrees Degrees to rotate: -360-360
      * @return  $this
-     * @uses    Image::_do_rotate
+     * @uses    \Kohana\Image\Image::_do_rotate
      */
     public function rotate(int $degrees): self
     {
@@ -366,7 +366,7 @@ abstract class Image
      *
      * @param int $direction Direction: Image::HORIZONTAL, Image::VERTICAL
      * @return  $this
-     * @uses    Image::_do_flip
+     * @uses    \Kohana\Image\Image::_do_flip
      */
     public function flip(int $direction): self
     {
@@ -388,7 +388,7 @@ abstract class Image
      *
      * @param int $amount Amount to sharpen: 1-100
      * @return  $this
-     * @uses    Image::_do_sharpen
+     * @uses    \Kohana\Image\Image::_do_sharpen
      */
     public function sharpen(int $amount): self
     {
@@ -421,7 +421,7 @@ abstract class Image
      * @param int $opacity Reflection opacity: 0-100
      * @param bool $fade_in True to fade in, false to fade out
      * @return  $this
-     * @uses    Image::_do_reflection
+     * @uses    \Kohana\Image\Image::_do_reflection
      */
     public function reflection(?int $height = null, int $opacity = 100, bool $fade_in = false): self
     {
@@ -449,12 +449,12 @@ abstract class Image
      *     $mark = Image::factory('upload/watermark.png');
      *     $image->watermark($mark, true, true);
      *
-     * @param   Image    $watermark  watermark Image instance
+     * @param   \Kohana\Image\Image    $watermark  watermark Image instance
      * @param int|true|null $offset_x Offset from the left
      * @param int|true|null $offset_y Offset from the top
      * @param int $opacity Opacity of watermark: 1-100
      * @return  $this
-     * @uses    Image::_do_watermark
+     * @uses    \Kohana\Image\Image::_do_watermark
      */
     public function watermark(self $watermark, $offset_x = null, $offset_y = null, int $opacity = 100): self
     {
@@ -501,7 +501,7 @@ abstract class Image
      * @param string $color Hexadecimal color value
      * @param int $opacity Background opacity: 0-100
      * @return  $this
-     * @uses    Image::_do_background
+     * @uses    \Kohana\Image\Image::_do_background
      */
     public function background(string $color, int $opacity = 100): self
     {
@@ -544,8 +544,8 @@ abstract class Image
      * @param string|null $file New image path
      * @param int $quality Quality of image: 1-100
      * @return  bool
-     * @throws  Kohana_Exception
-     * @uses    Image::_save
+     * @throws  \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Image\Image::_save
      */
     public function save(?string $file = null, int $quality = 100): bool
     {
@@ -585,7 +585,7 @@ abstract class Image
      * @param string|null $type Image type to return: png, jpg, gif, etc.
      * @param int $quality Quality of image: 1-100
      * @return  string
-     * @uses    Image::_do_render
+     * @uses    \Kohana\Image\Image::_do_render
      */
     public function render(?string $type = null, int $quality = 100): string
     {
@@ -648,7 +648,7 @@ abstract class Image
     /**
      * Execute a watermarking.
      *
-     * @param   Image    $image     watermarking Image
+     * @param   \Kohana\Image\Image    $image     watermarking Image
      * @param int $offset_x Offset from the left
      * @param int $offset_y Offset from the top
      * @param int $opacity Opacity of watermark

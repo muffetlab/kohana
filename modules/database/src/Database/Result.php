@@ -68,7 +68,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      *
      *     $cachable = serialize($result->cached());
      *
-     * @return  Database_Result_Cached
+     * @return  \Kohana\Database\CachedResult
      * @since   3.0.5
      */
     public function cached(): self
@@ -225,7 +225,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      * @param   int     $offset
      * @param   mixed   $value
      * @return  void
-     * @throws  Kohana_Exception
+     * @throws  \Kohana\Foundation\KohanaException
      */
     final public function offsetSet($offset, $value): void
     {
@@ -239,7 +239,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      *
      * @param   int     $offset
      * @return  void
-     * @throws  Kohana_Exception
+     * @throws  \Kohana\Foundation\KohanaException
      */
     final public function offsetUnset($offset): void
     {

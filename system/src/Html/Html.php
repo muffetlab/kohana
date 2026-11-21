@@ -105,10 +105,10 @@ class Html
      * @param mixed $protocol protocol to pass to URL::base()
      * @param bool $index include the index page
      * @return  string
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      * @uses    URL::base
      * @uses    URL::site
-     * @uses    HTML::attributes
+     * @uses    \Kohana\Html\Html::attributes
      */
     public static function anchor(string $uri, ?string $title = null, ?array $attributes = null, $protocol = null, bool $index = true): string
     {
@@ -150,8 +150,8 @@ class Html
      * @param mixed $protocol protocol to pass to URL::base()
      * @param bool $index include the index page
      * @return  string
-     * @throws Kohana_Exception
-     * @uses    HTML::attributes
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Html\Html::attributes
      * @uses    URL::base
      */
     public static function fileAnchor(string $file, ?string $title = null, ?array $attributes = null, $protocol = null, bool $index = false): string
@@ -177,7 +177,7 @@ class Html
      * @param string|null $title link text
      * @param array|null $attributes HTML anchor attributes
      * @return  string
-     * @uses    HTML::attributes
+     * @uses    \Kohana\Html\Html::attributes
      */
     public static function mailto(string $email, ?string $title = null, ?array $attributes = null): string
     {
@@ -199,8 +199,8 @@ class Html
      * @param mixed $protocol protocol to pass to URL::base()
      * @param bool $index include the index page
      * @return  string
-     * @throws Kohana_Exception
-     * @uses    HTML::attributes
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Html\Html::attributes
      * @uses    URL::base
      */
     public static function style(string $file, ?array $attributes = null, $protocol = null, bool $index = false): string
@@ -232,8 +232,8 @@ class Html
      * @param mixed $protocol protocol to pass to URL::base()
      * @param bool $index include the index page
      * @return  string
-     * @throws Kohana_Exception
-     * @uses    HTML::attributes
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Html\Html::attributes
      * @uses    URL::base
      */
     public static function script(string $file, ?array $attributes = null, $protocol = null, bool $index = false): string
@@ -262,8 +262,8 @@ class Html
      * @param mixed $protocol protocol to pass to URL::base()
      * @param bool $index include the index page
      * @return  string
-     * @throws Kohana_Exception
-     * @uses    HTML::attributes
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Html\Html::attributes
      * @uses    URL::base
      */
     public static function image(string $file, ?array $attributes = null, $protocol = null, bool $index = false): string

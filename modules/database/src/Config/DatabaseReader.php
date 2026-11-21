@@ -45,7 +45,7 @@ class DatabaseReader implements Reader
      *
      * @param string $group Configuration group
      * @return bool|array
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function load(string $group)
     {

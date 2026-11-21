@@ -75,7 +75,7 @@ class FileStore extends Cache implements GarbageCollect
      * be instantiated using the `Cache::instance()` method.
      *
      * @param   array  $config  config
-     * @throws  Cache_Exception
+     * @throws  \Kohana\Cache\CacheException
      */
     protected function __construct(array $config)
     {
@@ -117,8 +117,8 @@ class FileStore extends Cache implements GarbageCollect
      * @param string $id id of cache to entry
      * @param mixed $default Default value to return if cache miss
      * @return  mixed
-     * @throws Cache_Exception
-     * @throws ErrorException
+     * @throws \Kohana\Cache\CacheException
+     * @throws \ErrorException
      */
     public function get(string $id, $default = null)
     {
@@ -186,8 +186,8 @@ class FileStore extends Cache implements GarbageCollect
      * @param string $data data to set to cache
      * @param int|null $lifetime Lifetime in seconds
      * @return bool
-     * @throws Cache_Exception
-     * @throws ErrorException
+     * @throws \Kohana\Cache\CacheException
+     * @throws \ErrorException
      */
     public function set(string $id, $data, ?int $lifetime = null): bool
     {
@@ -236,7 +236,7 @@ class FileStore extends Cache implements GarbageCollect
      *
      * @param string $id id to remove from cache
      * @return bool
-     * @throws Cache_Exception
+     * @throws \Kohana\Cache\CacheException
      */
     public function delete(string $id): bool
     {
@@ -257,7 +257,7 @@ class FileStore extends Cache implements GarbageCollect
      *     Cache::instance('file')->delete_all();
      *
      * @return bool
-     * @throws Cache_Exception
+     * @throws \Kohana\Cache\CacheException
      */
     public function deleteAll(): bool
     {
@@ -269,7 +269,7 @@ class FileStore extends Cache implements GarbageCollect
      * cache entries from the cache.
      *
      * @return  void
-     * @throws Cache_Exception
+     * @throws \Kohana\Cache\CacheException
      */
     public function garbageCollect()
     {
@@ -282,12 +282,12 @@ class FileStore extends Cache implements GarbageCollect
      *     // Delete a file or folder whilst retaining parent directory and ignore all errors
      *     $this->_delete_file($folder, true, true);
      *
-     * @param   SplFileInfo  $file                     file
+     * @param   \SplFileInfo  $file                     file
      * @param bool $retain_parent_directory Retain the parent directory
      * @param bool $ignore_errors Ignore_errors to prevent all exceptions interrupting exec
      * @param bool $only_expired Only expired files
      * @return  bool
-     * @throws  Cache_Exception
+     * @throws  \Kohana\Cache\CacheException
      */
     protected function deleteFile(\SplFileInfo $file, bool $retain_parent_directory = false, bool $ignore_errors = false, bool $only_expired = false): bool
     {
@@ -404,8 +404,8 @@ class FileStore extends Cache implements GarbageCollect
      * @param int $mode chmod mode
      * @param bool $recursive Allows nested directories creation
      * @param   resource  $context      a stream context
-     * @return  SplFileInfo
-     * @throws  Cache_Exception
+     * @return  \SplFileInfo
+     * @throws  \Kohana\Cache\CacheException
      */
     protected function makeDirectory(string $directory, int $mode = 0777, bool $recursive = false, $context = null): \SplFileInfo
     {
@@ -428,9 +428,9 @@ class FileStore extends Cache implements GarbageCollect
     /**
      * Test if cache file is expired
      *
-     * @param SplFileInfo $file the cache file
+     * @param \SplFileInfo $file the cache file
      * @return bool true if expired false otherwise
-     * @throws Cache_Exception
+     * @throws \Kohana\Cache\CacheException
      */
     protected function isExpired(\SplFileInfo $file): bool
     {

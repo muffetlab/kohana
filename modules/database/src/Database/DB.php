@@ -47,7 +47,7 @@ class DB
      *
      * @param int $type Type: Database::SELECT, Database::UPDATE, etc.
      * @param string $sql SQL statement
-     * @return  Database_Query
+     * @return  \Kohana\Database\Query\Query
      */
     public static function query(int $type, string $sql): Query
     {
@@ -65,7 +65,7 @@ class DB
      *     $query = DB::select(['id', 'user_id']);
      *
      * @param mixed ...$columns column name or [$column, $alias] or object
-     * @return  Database_Query_Builder_Select
+     * @return  \Kohana\Database\Query\SelectBuilder
      */
     public static function select(...$columns): SelectBuilder
     {
@@ -79,7 +79,7 @@ class DB
      *     $query = DB::select_array(['id', 'username']);
      *
      * @param array|null $columns columns to select
-     * @return  Database_Query_Builder_Select
+     * @return  \Kohana\Database\Query\SelectBuilder
      */
     public static function selectArray(?array $columns = null): SelectBuilder
     {
@@ -94,8 +94,8 @@ class DB
      *
      * @param string|null $table table to insert into
      * @param array|null $columns list of column names or [$column, $alias] or object
-     * @return  Database_Query_Builder_Insert
-     * @throws Kohana_Exception
+     * @return  \Kohana\Database\Query\InsertBuilder
+     * @throws \Kohana\Foundation\KohanaException
      */
     public static function insert(?string $table = null, ?array $columns = null): InsertBuilder
     {
@@ -109,7 +109,7 @@ class DB
      *     $query = DB::update('users');
      *
      * @param string|null $table Table to update
-     * @return  Database_Query_Builder_Update
+     * @return  \Kohana\Database\Query\UpdateBuilder
      */
     public static function update(?string $table = null): UpdateBuilder
     {
@@ -123,7 +123,7 @@ class DB
      *     $query = DB::delete('users');
      *
      * @param string|null $table Table to delete from
-     * @return  Database_Query_Builder_Delete
+     * @return  \Kohana\Database\Query\DeleteBuilder
      */
     public static function delete(?string $table = null): DeleteBuilder
     {
@@ -140,7 +140,7 @@ class DB
      *
      * @param string $string expression
      * @param array $parameters parameters
-     * @return  Database_Expression
+     * @return  \Kohana\Database\Query\Expression
      */
     public static function expr(string $string, array $parameters = []): Expression
     {

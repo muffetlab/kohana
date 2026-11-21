@@ -111,7 +111,7 @@ class MemcachedStore extends Cache implements Arithmetic
      * `Cache::instance()` method.
      *
      * @param   array  $config  Configuration
-     * @throws  Cache_Exception
+     * @throws  \Kohana\Cache\CacheException
      */
     protected function __construct(array $config)
     {

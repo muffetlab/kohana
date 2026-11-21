@@ -177,7 +177,7 @@ class Arr
      * @param string|array $path Path
      * @param mixed $value Value to set
      * @param string|null $delimiter Path delimiter
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      * @see Arr::path()
      */
     public static function setPath(array &$array, $path, $value, ?string $delimiter = null)
@@ -276,7 +276,7 @@ class Arr
      * @param array $paths List of path
      * @param mixed $default Default value
      * @return  array
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public static function extract(array $array, array $paths, $default = null): array
     {

@@ -76,7 +76,7 @@ abstract class Writer
      * @param array $message
      * @param string $format
      * @return  string
-     * @throws Exception
+     * @throws \Exception
      */
     public function formatMessage(array $message, string $format = 'time --- level: body in file:line'): string
     {

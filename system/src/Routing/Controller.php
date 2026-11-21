@@ -69,7 +69,7 @@ abstract class Controller
      * will be called.
      *
      * @return  Response
-     * @throws Kohana_HTTP_Exception
+     * @throws \Kohana\Http\Exceptions\HttpException
      */
     public function execute(): Response
     {
@@ -125,8 +125,8 @@ abstract class Controller
      * @param string $uri URI to redirect to
      * @param int $code HTTP Status code to use for the redirect
      * @return mixed
-     * @throws HTTP_Exception_Redirect
-     * @throws Kohana_Exception
+     * @throws \Kohana\Http\Exceptions\RedirectHttpException
+     * @throws \Kohana\Foundation\KohanaException
      */
     public static function redirect(string $uri = '', int $code = 302)
     {
@@ -142,7 +142,7 @@ abstract class Controller
      *
      * @param string|null $etag Resource Etag
      * @return Response
-     * @throws Request_Exception
+     * @throws \Kohana\Http\Exceptions\RequestException
      */
     protected function checkCache(?string $etag = null): Response
     {

@@ -29,7 +29,7 @@ class GdImage extends Image
      * bundled.
      *
      * @return bool
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public static function check(): bool
     {
@@ -77,7 +77,7 @@ class GdImage extends Image
      *
      * @param string $file Image file path
      * @return  void
-     * @throws  Kohana_Exception
+     * @throws  \Kohana\Foundation\KohanaException
      */
     public function __construct(string $file)
     {
@@ -228,7 +228,7 @@ class GdImage extends Image
      *
      * @param int $degrees degrees to rotate
      * @return  void
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     protected function doRotate(int $degrees)
     {
@@ -303,7 +303,7 @@ class GdImage extends Image
      *
      * @param int $amount amount to sharpen
      * @return  void
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     protected function doSharpen(int $amount)
     {
@@ -339,7 +339,7 @@ class GdImage extends Image
      * @param int $opacity reflection opacity
      * @param bool $fade_in True to fade in, false to fade out
      * @return  void
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     protected function doReflection(int $height, int $opacity, bool $fade_in)
     {
@@ -407,12 +407,12 @@ class GdImage extends Image
     /**
      * Execute a watermarking.
      *
-     * @param Image $image watermarking Image
+     * @param \Kohana\Image\Image $image watermarking Image
      * @param int $offset_x offset from the left
      * @param int $offset_y offset from the top
      * @param int $opacity opacity of watermark
      * @return  void
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     protected function doWatermark(Image $image, int $offset_x, int $offset_y, int $opacity)
     {
@@ -498,7 +498,7 @@ class GdImage extends Image
      * @param string $file new image filename
      * @param int $quality quality
      * @return bool
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     protected function doSave(string $file, int $quality): bool
     {
@@ -529,7 +529,7 @@ class GdImage extends Image
      * @param string $type image type: png, jpg, gif, etc.
      * @param int $quality quality
      * @return  string
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     protected function doRender(string $type, int $quality): string
     {
@@ -561,7 +561,7 @@ class GdImage extends Image
      * @param string $extension Image type: png, jpg, etc.
      * @param int $quality Image quality
      * @return  array    save function, IMAGETYPE_* constant
-     * @throws  Kohana_Exception
+     * @throws  \Kohana\Foundation\KohanaException
      */
     protected function saveFunction(string $extension, int &$quality): array
     {

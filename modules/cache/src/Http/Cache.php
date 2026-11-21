@@ -39,10 +39,10 @@ class Cache
      *
      * @param mixed $cache cache engine to use
      * @param array $options options to set to this class
-     * @return  HTTP_Cache
-     * @throws Cache_Exception
-     * @throws Kohana_Exception
-     * @uses    Cache
+     * @return  \Kohana\Http\Cache
+     * @throws \Kohana\Cache\CacheException
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Cache\Cache
      */
     public static function factory($cache, array $options = []): self
     {
@@ -63,7 +63,7 @@ class Cache
      *      // Generate cache key
      *      $cache_key = HTTP_Cache::basic_cache_key_generator($request);
      *
-     * @param   Request $request
+     * @param   \Kohana\Http\Request $request
      * @return  string
      */
     public static function basicCacheKeyGenerator(Request $request): string
@@ -77,7 +77,7 @@ class Cache
     }
 
     /**
-     * @var     Cache    cache driver to use for HTTP caching
+     * @var     \Kohana\Cache\Cache    cache driver to use for HTTP caching
      */
     protected $cache;
 
@@ -107,7 +107,7 @@ class Cache
      * required components such as `Cache` and the cache key generator.
      *
      * @param array $options
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function __construct(array $options = [])
     {
@@ -129,11 +129,11 @@ class Cache
      * cache completely and ensure the response is not cached. All other
      * Request methods will allow caching, if the rules are met.
      *
-     * @param Request_Client $client client to execute with Cache-Control
-     * @param Request $request request to execute with client
-     * @param Response $response A response object
-     * @return false|HTTP_Header|mixed|Response
-     * @throws Cache_Exception
+     * @param \Kohana\Http\Client\Client $client client to execute with Cache-Control
+     * @param \Kohana\Http\Request $request request to execute with client
+     * @param \Kohana\Http\Response $response A response object
+     * @return false|\Kohana\Http\HeaderBag|mixed|\Kohana\Http\Response
+     * @throws \Kohana\Cache\CacheException
      */
     public function execute(Client $client, Request $request, Response $response)
     {
@@ -191,7 +191,7 @@ class Cache
      * This has the effect of deleting the response from the
      * [Cache] entry.
      *
-     * @param   Request  $request Response to remove from cache
+     * @param   \Kohana\Http\Request  $request Response to remove from cache
      * @return  void
      */
     public function invalidateCache(Request $request)
@@ -205,8 +205,8 @@ class Cache
      * Getter and setter for the internal caching engine,
      * used to cache responses if available and valid.
      *
-     * @param Cache|null $cache engine to use for caching
-     * @return Kohana_Cache|Kohana_HTTP_Cache
+     * @param \Kohana\Cache\Cache|null $cache engine to use for caching
+     * @return \Kohana\Cache\Cache|\Kohana\Http\Cache
      */
     public function cache(?\Kohana\Cache\Cache $cache = null)
     {
@@ -225,7 +225,7 @@ class Cache
      *
      * @link    https://www.rfc-editor.org/rfc/rfc9111#name-private
      * @param bool|null $setting Allow caching of privately marked responses
-     * @return bool|Kohana_HTTP_Cache
+     * @return bool|\Kohana\Http\Cache
      */
     public function allowPrivateCache(?bool $setting = null)
     {
@@ -260,8 +260,8 @@ class Cache
      *      });
      *
      * @param callable|null $callback
-     * @return callable|Kohana_HTTP_Cache
-     * @throws Kohana_Exception
+     * @return callable|\Kohana\Http\Cache
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function cacheKeyCallback(?callable $callback = null)
     {
@@ -284,7 +284,7 @@ class Cache
      * This is the default cache key generating logic, but can be overridden
      * by setting [HTTP_Cache::cache_key_callback()].
      *
-     * @param   Request     $request    request to create key for
+     * @param   \Kohana\Http\Request     $request    request to create key for
      * @param   callable    $callback   optional callback to use instead of built-in method
      * @return  string
      */
@@ -302,7 +302,7 @@ class Cache
      * protocol to determine whether the response can be cached.
      *
      * @link    https://www.rfc-editor.org/rfc/rfc9111#name-storing-responses-in-caches RFC 9111
-     * @param   Response  $response The Response
+     * @param   \Kohana\Http\Response  $response The Response
      * @return  bool
      */
     public function setCache(Response $response): bool
@@ -352,10 +352,10 @@ class Cache
      * one that is available.
      *
      * @param string $key the cache key to use
-     * @param Request $request the HTTP Request
-     * @param Response|null $response the HTTP Response
-     * @return bool|Response
-     * @throws Cache_Exception
+     * @param \Kohana\Http\Request $request the HTTP Request
+     * @param \Kohana\Http\Response|null $response the HTTP Response
+     * @return bool|\Kohana\Http\Response
+     * @throws \Kohana\Cache\CacheException
      */
     public function cacheResponse(string $key, Request $request, ?Response $response = null)
     {
@@ -411,7 +411,7 @@ class Cache
      * Calculates the total Time To Live based on the specification
      * RFC 2616 cache lifetime rules.
      *
-     * @param   Response  $response  Response to evaluate
+     * @param   \Kohana\Http\Response  $response  Response to evaluate
      * @return  mixed  TTL value or false if the response should not be cached
      */
     public function cacheLifetime(Response $response)

@@ -269,7 +269,7 @@ class Cli
      * @param string $foreground the foreground color
      * @param string|null $background The background color
      * @return string the color coded string
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      * @license    MIT License
      * @copyright  2010 - 2011 Fuel Development Team
      * @link       http://fuelphp.com

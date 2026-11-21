@@ -26,7 +26,7 @@ abstract class DatabaseTestCase extends TestCase
     /**
      * A set of unittest helpers that are shared between normal / database
      * testcases
-     * @var Kohana_Unittest_Helpers
+     * @var \Kohana\Testing\Helpers
      */
     protected $helpers = null;
 
@@ -49,8 +49,8 @@ abstract class DatabaseTestCase extends TestCase
      * parent::setUp()
      *
      * @return void
-     * @throws Kohana_Exception
-     * @throws ReflectionException
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \ReflectionException
      */
     public function setUp(): void
     {
@@ -68,8 +68,8 @@ abstract class DatabaseTestCase extends TestCase
      * should call parent::tearDown()
      *
      * @return void
-     * @throws Kohana_Exception
-     * @throws ReflectionException
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \ReflectionException
      */
     public function tearDown(): void
     {
@@ -81,8 +81,8 @@ abstract class DatabaseTestCase extends TestCase
     /**
      * Creates a connection to the unittesting database
      *
-     * @return PDO
-     * @throws Kohana_Exception
+     * @return \PDO
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function getConnection(): \PDO
     {
@@ -108,8 +108,8 @@ abstract class DatabaseTestCase extends TestCase
     /**
      * Gets a connection to the unittest database
      *
-     * @return Kohana_Database The database connection
-     * @throws Kohana_Exception
+     * @return \Kohana\Database\Connection The database connection
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function getKohanaConnection(): Connection
     {
@@ -149,8 +149,8 @@ abstract class DatabaseTestCase extends TestCase
      *
      * @param array $environment List of environment to set
      * @return false|null
-     * @throws Kohana_Exception
-     * @throws ReflectionException
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \ReflectionException
      */
     public function setEnvironment(array $environment): ?bool
     {

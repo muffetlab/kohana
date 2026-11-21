@@ -35,7 +35,7 @@ class DatabaseWriter extends DatabaseReader implements Writer
      *
      * @param string $group Configuration group
      * @return bool|array
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function load(string $group)
     {
@@ -58,7 +58,7 @@ class DatabaseWriter extends DatabaseReader implements Writer
      * @param string $key The config key to write to
      * @param mixed $config The configuration to write
      * @return bool
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public function write(string $group, string $key, $config): bool
     {
@@ -88,8 +88,8 @@ class DatabaseWriter extends DatabaseReader implements Writer
      * @param string $group The config group
      * @param string $key The config key to write to
      * @param string $config The serialized configuration to write
-     * @return Kohana_Config_Database_Writer
-     * @throws Kohana_Exception
+     * @return \Kohana\Config\DatabaseWriter
+     * @throws \Kohana\Foundation\KohanaException
      */
     protected function insert(string $group, string $key, string $config): self
     {
@@ -106,8 +106,8 @@ class DatabaseWriter extends DatabaseReader implements Writer
      * @param string $group The config group
      * @param string $key The config key to write to
      * @param string $config The serialized configuration to write
-     * @return Kohana_Config_Database_Writer
-     * @throws Kohana_Exception
+     * @return \Kohana\Config\DatabaseWriter
+     * @throws \Kohana\Foundation\KohanaException
      */
     protected function update(string $group, string $key, string $config): self
     {

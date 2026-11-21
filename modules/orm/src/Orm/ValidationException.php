@@ -31,11 +31,11 @@ class ValidationException extends KohanaException
      * Constructs a new exception for the specified model
      *
      * @param string $alias The alias to use when looking for error messages
-     * @param Validation $object The Validation object of the model
+     * @param \Kohana\Validation\Validator $object The Validation object of the model
      * @param string $message The error message
      * @param array|null $values The array of values for the error message
      * @param int $code The error code for the exception
-     * @param Exception|null $previous
+     * @param \Exception|null $previous
      */
     public function __construct($alias, Validator $object, $message = 'Failed to validate array', ?array $values = null, int $code = 0, ?\Exception $previous = null)
     {
@@ -61,9 +61,9 @@ class ValidationException extends KohanaException
      *     // ];
      *
      * @param string $alias The relationship alias from the model
-     * @param  Validation $object   The Validation object to merge
+     * @param  \Kohana\Validation\Validator $object   The Validation object to merge
      * @param  mixed      $has_many The array key to use if this exception can be merged multiple times
-     * @return Kohana_ORM_Validation_Exception
+     * @return \Kohana\Orm\ValidationException
      */
     public function addObject(string $alias, Validator $object, $has_many = false): self
     {
@@ -87,9 +87,9 @@ class ValidationException extends KohanaException
      * Merges an ORM_Validation_Exception object into the current exception
      * Useful when you want to combine errors into one array
      *
-     * @param  ORM_Validation_Exception $object   The exception to merge
+     * @param  \Kohana\Orm\ValidationException $object   The exception to merge
      * @param  mixed                    $has_many The array key to use if this exception can be merged multiple times
-     * @return Kohana_ORM_Validation_Exception
+     * @return \Kohana\Orm\ValidationException
      */
     public function merge(self $object, $has_many = false): self
     {

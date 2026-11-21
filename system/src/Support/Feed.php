@@ -24,9 +24,9 @@ class Feed
      * @param string $feed remote feed URL
      * @param int $limit item limit to fetch
      * @return  array
-     * @throws HTTP_Exception_404
-     * @throws Kohana_Exception
-     * @throws Request_Exception
+     * @throws \Kohana\Http\Exceptions\Http404Exception
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \Kohana\Http\Exceptions\RequestException
      */
     public static function parse(string $feed, int $limit = 0): array
     {
@@ -90,7 +90,7 @@ class Feed
      * @param array $items items to add to the feed
      * @param string $encoding define which encoding to use
      * @return  string
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public static function create(array $info, array $items, string $encoding = 'UTF-8'): string
     {

@@ -57,7 +57,7 @@ class Cookie
      * @param string $key cookie name
      * @param mixed $default default value to return
      * @return string|null
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     public static function get(string $key, $default = null): ?string
     {
@@ -104,8 +104,8 @@ class Cookie
      * @param string $value value of cookie
      * @param int|null $lifetime Lifetime in seconds
      * @return bool
-     * @throws Kohana_Exception
-     * @uses    Cookie::salt
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Cookie\Cookie::salt
      */
     public static function set(string $name, string $value, ?int $lifetime = null): bool
     {
@@ -151,7 +151,7 @@ class Cookie
      * @param string $value Value of cookie
      *
      * @return  string
-     * @throws Kohana_Exception if Cookie::$salt is not configured.
+     * @throws \Kohana\Foundation\KohanaException if Cookie::$salt is not configured.
      */
     public static function salt(string $name, string $value): string
     {

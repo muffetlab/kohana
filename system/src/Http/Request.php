@@ -44,12 +44,12 @@ class Request implements \Kohana\Http\Contracts\Request
     public static $trustedProxies = ['127.0.0.1', 'localhost', 'localhost.localdomain'];
 
     /**
-     * @var Request|null Main request instance
+     * @var \Kohana\Http\Request|null Main request instance
      */
     public static $initial;
 
     /**
-     * @var  Request  currently executing request instance
+     * @var  \Kohana\Http\Request  currently executing request instance
      */
     public static $current;
 
@@ -66,9 +66,9 @@ class Request implements \Kohana\Http\Contracts\Request
      * @param array $client_params An array of params to pass to the request client
      * @param bool $allow_external Allow external requests? (deprecated in 3.3)
      * @param array $injected_routes An array of routes to use, for testing
-     * @return Request
-     * @throws Kohana_Exception
-     * @throws Request_Exception
+     * @return \Kohana\Http\Request
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \Kohana\Http\Exceptions\RequestException
      * @uses    Route::all
      * @uses    Route::matches
      */
@@ -199,7 +199,7 @@ class Request implements \Kohana\Http\Contracts\Request
      *     $uri = Request::detect_uri();
      *
      * @return  string  URI of the main request
-     * @throws  Kohana_Exception
+     * @throws  \Kohana\Foundation\KohanaException
      * @since   3.0.8
      */
     public static function detectUri(): string
@@ -263,7 +263,7 @@ class Request implements \Kohana\Http\Contracts\Request
      *
      *     $request = Request::current();
      *
-     * @return  Request
+     * @return  \Kohana\Http\Request
      * @since   3.0.5
      */
     public static function current(): self
@@ -282,7 +282,7 @@ class Request implements \Kohana\Http\Contracts\Request
      *     if (Request::initial() === Request::current())
      *          // Do something useful
      *
-     * @return  Request|null
+     * @return  \Kohana\Http\Request|null
      * @since   3.1.0
      */
     public static function initial(): ?self
@@ -295,9 +295,9 @@ class Request implements \Kohana\Http\Contracts\Request
      *
      * @param mixed $value array or string to return: browser, version, robot, mobile, platform
      * @return  mixed   requested information, false if nothing is found
-     * @throws Kohana_Exception
-     * @uses    Text::user_agent
-     * @uses    Request::$user_agent
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses    \Kohana\Support\Str::user_agent
+     * @uses    \Kohana\Http\Request::$user_agent
      */
     public static function userAgent($value)
     {
@@ -310,9 +310,9 @@ class Request implements \Kohana\Http\Contracts\Request
      * helps to solve that problem.
      *
      * @return bool
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      * @uses    Arr::get
-     * @uses    Num::bytes
+     * @uses    \Kohana\Support\Number::bytes
      */
     public static function postMaxSizeExceeded(): bool
     {
@@ -331,7 +331,7 @@ class Request implements \Kohana\Http\Contracts\Request
     /**
      * Process a request to find a matching route
      *
-     * @param Request $request Request
+     * @param \Kohana\Http\Request $request Request
      * @param array|null $routes Route
      * @return  array
      */
@@ -450,7 +450,7 @@ class Request implements \Kohana\Http\Contracts\Request
     protected $routes;
 
     /**
-     * @var  Kohana_HTTP_Header  headers to sent as part of the request
+     * @var  \Kohana\Http\HeaderBag  headers to sent as part of the request
      */
     protected $header;
 
@@ -505,7 +505,7 @@ class Request implements \Kohana\Http\Contracts\Request
     protected $cookies = [];
 
     /**
-     * @var Kohana_Request_Client
+     * @var \Kohana\Http\Client\Client
      */
     protected $client;
 
@@ -522,7 +522,7 @@ class Request implements \Kohana\Http\Contracts\Request
      * @param array $client_params Array of params to pass to the request client
      * @param bool $allow_external Allow external requests? (deprecated in 3.3)
      * @param array $injected_routes An array of routes to use, for testing
-     * @throws Request_Exception
+     * @throws \Kohana\Http\Exceptions\RequestException
      * @uses    Route::all
      * @uses    Route::matches
      */
@@ -589,7 +589,7 @@ class Request implements \Kohana\Http\Contracts\Request
      * Sets and gets the URI from the request.
      *
      * @param string|null $uri
-     * @return string|HTTP_Request
+     * @return string|\Kohana\Http\Contracts\Request
      */
     public function uri(?string $uri = null)
     {
@@ -611,7 +611,7 @@ class Request implements \Kohana\Http\Contracts\Request
      *
      * @param mixed $protocol protocol string or Request object
      * @return  string
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      * @uses    URL::site
      * @since   3.0.7
      */
@@ -649,7 +649,7 @@ class Request implements \Kohana\Http\Contracts\Request
      * Sets and gets the referrer from the request.
      *
      * @param string|null $referrer
-     * @return  Kohana_Request|string
+     * @return  \Kohana\Http\Request|string
      */
     public function referrer(?string $referrer = null)
     {
@@ -668,7 +668,7 @@ class Request implements \Kohana\Http\Contracts\Request
      * Sets and gets the route from the request.
      *
      * @param Route|null $route
-     * @return Kohana_Request|Route
+     * @return \Kohana\Http\Request|Route
      */
     public function route(?Route $route = null)
     {
@@ -687,7 +687,7 @@ class Request implements \Kohana\Http\Contracts\Request
      * Sets and gets the directory for the controller.
      *
      * @param string|null $directory Directory to execute the controller from
-     * @return  Kohana_Request|string
+     * @return  \Kohana\Http\Request|string
      */
     public function directory(?string $directory = null)
     {
@@ -706,7 +706,7 @@ class Request implements \Kohana\Http\Contracts\Request
      * Sets and gets the controller for the matched route.
      *
      * @param string|null $controller Controller to execute the action
-     * @return  Kohana_Request|string
+     * @return  \Kohana\Http\Request|string
      */
     public function controller(?string $controller = null)
     {
@@ -725,7 +725,7 @@ class Request implements \Kohana\Http\Contracts\Request
      * Sets and gets the action for the controller.
      *
      * @param string|null $action Action to execute the controller from
-     * @return  Kohana_Request|string
+     * @return  \Kohana\Http\Request|string
      */
     public function action(?string $action = null)
     {
@@ -743,7 +743,7 @@ class Request implements \Kohana\Http\Contracts\Request
     /**
      * Provides access to the [Request_Client].
      *
-     * @return Kohana_Request|Request_Client
+     * @return \Kohana\Http\Request|\Kohana\Http\Client\Client
      */
     public function client(?Client $client = null)
     {
@@ -760,7 +760,7 @@ class Request implements \Kohana\Http\Contracts\Request
      * be relative to the x-requested-with pseudo header.
      *
      * @param string|null $requested_with Requested with value
-     * @return  Kohana_Request|string
+     * @return  \Kohana\Http\Request|string
      */
     public function requestedWith(?string $requested_with = null)
     {
@@ -790,11 +790,11 @@ class Request implements \Kohana\Http\Contracts\Request
      *
      *     $request->execute();
      *
-     * @return  Response
-     * @throws Kohana_Exception
-     * @throws Request_Exception
-     * @uses    [Kohana::$profiling]
-     * @uses    [Profiler]
+     * @return  \Kohana\Http\Response
+     * @throws \Kohana\Foundation\KohanaException
+     * @throws \Kohana\Http\Exceptions\RequestException
+     * @uses    [\Kohana\Foundation\Application::$profiling]
+     * @uses    [\Kohana\Foundation\Profiler]
      */
     public function execute(): Response
     {
@@ -883,7 +883,7 @@ class Request implements \Kohana\Http\Contracts\Request
      * traditional CRUD applications.
      *
      * @param string|null $method Method to use for this request
-     * @return  Kohana_Request|string
+     * @return  \Kohana\Http\Request|string
      */
     public function method(?string $method = null)
     {
@@ -903,7 +903,7 @@ class Request implements \Kohana\Http\Contracts\Request
      * it will use the default set in HTTP::$protocol
      *
      * @param string|null $protocol Protocol to set to the request
-     * @return  Kohana_Request|string
+     * @return  \Kohana\Http\Request|string
      */
     public function protocol(?string $protocol = null)
     {
@@ -925,7 +925,7 @@ class Request implements \Kohana\Http\Contracts\Request
      * method should be treated as immutable.
      *
      * @param bool|null $secure Is this request secure?
-     * @return  bool|Kohana_Request
+     * @return  bool|\Kohana\Http\Request
      */
     public function secure(?bool $secure = null)
     {
@@ -988,7 +988,7 @@ class Request implements \Kohana\Http\Contracts\Request
      *
      * @param   mixed    $key    Cookie name, or array of cookie values
      * @param string|null $value Value to set to cookie
-     * @return array|mixed|Kohana_Request
+     * @return array|mixed|\Kohana\Http\Request
      */
     public function cookie($key = null, ?string $value = null)
     {
@@ -1015,7 +1015,7 @@ class Request implements \Kohana\Http\Contracts\Request
      * included after the header, separated by a single empty new line.
      *
      * @param string|null $content Content to set to the object
-     * @return  Kohana_Request|string
+     * @return  \Kohana\Http\Request|string
      */
     public function body(?string $content = null)
     {

@@ -303,7 +303,7 @@ class Debug
      *
      * @param array|null $trace
      * @return array
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public static function trace(?array $trace = null): array
     {

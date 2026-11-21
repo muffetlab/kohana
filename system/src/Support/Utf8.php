@@ -43,9 +43,9 @@ class Utf8
      * @param   mixed   $var        variable to clean
      * @param string|null $charset Character set, defaults to Kohana::$charset
      * @return  mixed
-     * @uses    UTF8::clean
-     * @uses    UTF8::strip_ascii_ctrl
-     * @uses    UTF8::is_ascii
+     * @uses    \Kohana\Support\Utf8::clean
+     * @uses    \Kohana\Support\Utf8::strip_ascii_ctrl
+     * @uses    \Kohana\Support\Utf8::is_ascii
      */
     public static function clean($var, ?string $charset = null)
     {
@@ -155,7 +155,7 @@ class Utf8
      *
      * @param string $str String being measured for length
      * @return  int
-     * @uses    Kohana::$charset
+     * @uses    \Kohana\Foundation\Application::$charset
      */
     public static function strlen(string $str): int
     {
@@ -173,7 +173,7 @@ class Utf8
      * @param int $offset Offset from which character in haystack to start searching
      * @return  int|false Position of needle if found, false otherwise.
      * @author  Harry Fuecks <hfuecks@gmail.com>
-     * @uses    Kohana::$charset
+     * @uses    \Kohana\Foundation\Application::$charset
      */
     public static function strpos(string $str, string $search, int $offset = 0)
     {
@@ -208,7 +208,7 @@ class Utf8
      * @param int|null $length Length limit
      * @return  string
      * @author  Chris Smith <chris@jalakai.co.uk>
-     * @uses    Kohana::$charset
+     * @uses    \Kohana\Foundation\Application::$charset
      */
     public static function substr(string $str, int $offset, ?int $length = null): string
     {
@@ -249,7 +249,7 @@ class Utf8
      * @param   string  $str mixed case string
      * @return  string
      * @author  Andreas Gohr <andi@splitbrain.org>
-     * @uses    Kohana::$charset
+     * @uses    \Kohana\Foundation\Application::$charset
      */
     public static function strtolower(string $str): string
     {
@@ -263,7 +263,7 @@ class Utf8
      * @param   string  $str mixed case string
      * @return  string
      * @author  Andreas Gohr <andi@splitbrain.org>
-     * @uses    Kohana::$charset
+     * @uses    \Kohana\Foundation\Application::$charset
      */
     public static function strtoupper(string $str): string
     {
@@ -442,7 +442,7 @@ class Utf8
      * @param string $pad_str string to use as padding
      * @param string $pad_type padding type: STR_PAD_RIGHT, STR_PAD_LEFT, or STR_PAD_BOTH
      * @return  string
-     * @throws UTF8_Exception
+     * @throws \Kohana\Support\Utf8Exception
      * @author  Harry Fuecks <hfuecks@gmail.com>
      */
     public static function strPad(string $str, int $final_str_length, string $pad_str = ' ', $pad_type = STR_PAD_RIGHT): string
@@ -578,7 +578,7 @@ class Utf8
      *
      * @param string $chr UTF-8 encoded character
      * @return int
-     * @throws UTF8_Exception
+     * @throws \Kohana\Support\Utf8Exception
      * @author  Harry Fuecks <hfuecks@gmail.com>
      */
     public static function ord(string $chr): int
@@ -608,7 +608,7 @@ class Utf8
      *
      * @param string $str UTF-8 encoded string
      * @return array|false Unicode code points if succeeded, or false if the string is invalid.
-     * @throws UTF8_Exception
+     * @throws \Kohana\Support\Utf8Exception
      */
     public static function toUnicode(string $str)
     {
@@ -637,7 +637,7 @@ class Utf8
      *
      * @param array $arr Unicode code points representing a string
      * @return string|false UTF-8 encoded string on success, false if invalid code point encountered.
-     * @throws UTF8_Exception
+     * @throws \Kohana\Support\Utf8Exception
      */
     public static function fromUnicode(array $arr)
     {

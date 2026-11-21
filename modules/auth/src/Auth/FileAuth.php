@@ -36,7 +36,7 @@ class FileAuth extends Auth
      * @param string $password Password
      * @param bool $remember Enable autologin (not supported)
      * @return bool
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     protected function attemptLogin($username, $password, $remember): bool
     {

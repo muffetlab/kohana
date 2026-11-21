@@ -22,7 +22,7 @@ class SqliteStore extends Cache implements Tagging, GarbageCollect
     /**
      * Database resource
      *
-     * @var  PDO
+     * @var  \PDO
      */
     protected $db;
 
@@ -31,7 +31,7 @@ class SqliteStore extends Cache implements Tagging, GarbageCollect
      * initialises the PDO connection
      *
      * @param  array  $config  configuration
-     * @throws  Cache_Exception
+     * @throws  \Kohana\Cache\CacheException
      */
     protected function __construct(array $config)
     {
@@ -72,7 +72,7 @@ class SqliteStore extends Cache implements Tagging, GarbageCollect
      * @param string $id ID of cache entry.
      * @param mixed $default Default value to return if ID not found
      * @return  mixed
-     * @throws  Cache_Exception
+     * @throws  \Kohana\Cache\CacheException
      */
     public function get(string $id, $default = null)
     {
@@ -119,7 +119,7 @@ class SqliteStore extends Cache implements Tagging, GarbageCollect
      * @param mixed $data Data to set to cache
      * @param int|null $lifetime Lifetime in seconds
      * @return bool
-     * @throws Cache_Exception
+     * @throws \Kohana\Cache\CacheException
      */
     public function set(string $id, $data, ?int $lifetime = null): bool
     {
@@ -131,7 +131,7 @@ class SqliteStore extends Cache implements Tagging, GarbageCollect
      *
      * @param string $id ID of cache entry to delete.
      * @return  bool
-     * @throws  Cache_Exception
+     * @throws  \Kohana\Cache\CacheException
      */
     public function delete(string $id): bool
     {
@@ -152,7 +152,7 @@ class SqliteStore extends Cache implements Tagging, GarbageCollect
      * Delete all cache entries
      *
      * @return bool
-     * @throws Cache_Exception
+     * @throws \Kohana\Cache\CacheException
      */
     public function deleteAll(): bool
     {
@@ -177,7 +177,7 @@ class SqliteStore extends Cache implements Tagging, GarbageCollect
      * @param int|null $lifetime Lifetime in seconds
      * @param array|null $tags Tags to associate with the cache entry
      * @return  bool
-     * @throws Cache_Exception
+     * @throws \Kohana\Cache\CacheException
      */
     public function setWithTags(string $id, $data, ?int $lifetime = null, ?array $tags = null): bool
     {
@@ -213,7 +213,7 @@ class SqliteStore extends Cache implements Tagging, GarbageCollect
      *
      * @param string $tag Tag label identifying cache entries to be deleted.
      * @return  bool
-     * @throws  Cache_Exception
+     * @throws  \Kohana\Cache\CacheException
      */
     public function deleteTag(string $tag): bool
     {
@@ -235,7 +235,7 @@ class SqliteStore extends Cache implements Tagging, GarbageCollect
      *
      * @param string $tag Tag label used to find associated cache entries.
      * @return  array
-     * @throws  Cache_Exception
+     * @throws  \Kohana\Cache\CacheException
      */
     public function find(string $tag): array
     {
@@ -271,7 +271,7 @@ class SqliteStore extends Cache implements Tagging, GarbageCollect
      * cache entries from the cache.
      *
      * @return  void
-     * @throws Cache_Exception
+     * @throws \Kohana\Cache\CacheException
      */
     public function garbageCollect()
     {
@@ -290,7 +290,7 @@ class SqliteStore extends Cache implements Tagging, GarbageCollect
      *
      * @param string $id ID
      * @return  bool
-     * @throws  Cache_Exception
+     * @throws  \Kohana\Cache\CacheException
      */
     protected function exists(string $id): bool
     {

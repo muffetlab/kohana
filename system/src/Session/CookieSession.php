@@ -18,7 +18,7 @@ class CookieSession extends Session
     /**
      * @param string|null $id Session ID
      * @return string|null
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     protected function readSession(?string $id = null): ?string
     {
@@ -36,7 +36,7 @@ class CookieSession extends Session
 
     /**
      * @return  bool
-     * @throws Kohana_Exception
+     * @throws \Kohana\Foundation\KohanaException
      */
     protected function writeSession(): bool
     {
