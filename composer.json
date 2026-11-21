@@ -39,6 +39,13 @@
         "pestphp/pest": "^5.3",
         "phpunit/phpunit-dom-assertions": "^3.8"
     },
+    "suggest": {
+        "ext-apcu": "For the APCu cache store",
+        "ext-memcached": "For the Memcached cache store",
+        "ext-redis": "For the Redis cache store",
+        "ext-pdo_pgsql": "For the PostgreSQL database driver",
+        "ext-imagick": "For the Imagick image driver"
+    },
     "autoload": {
         "psr-4": {
             "Kohana\\": [
