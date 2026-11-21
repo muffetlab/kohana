@@ -134,4 +134,39 @@ class Kohana_ConsoleTest extends TestCase
         $this->assertSame(['.gitignore'], array_values(array_diff(scandir($this->dir), ['.', '..'])));
         $this->assertSame(0, ClearCommand::clearDirectory($this->dir . '/missing'));
     }
+    public static function provider_global_flags(): array
+    {
+        return [
+            [['-V'], Kohana\Console\Commands\VersionCommand::class],
+            [['--version'], Kohana\Console\Commands\VersionCommand::class],
+            [['version' => null], Kohana\Console\Commands\VersionCommand::class],
+            [['-h'], Kohana\Console\Commands\HelpCommand::class],
+            [['help' => null], Kohana\Console\Commands\HelpCommand::class],
+            [[], Kohana\Console\Commands\HelpCommand::class],
+        ];
+    }
+
+    #[DataProvider('provider_global_flags')]
+    public function test_global_flags(array $options, string $expected)
+    {
+        $this->assertInstanceOf($expected, Command::factory($options));
+    }
+
+    public function test_bare_help_lists_commands()
+    {
+        $this->assertStringContainsString('Available commands:', $this->run_command(['help' => null]));
+        $this->assertStringContainsString(Kohana\Foundation\Application::version(), $this->run_command(['-V']));
+    }
+
+    public function test_unknown_flags_and_commands_are_rejected()
+    {
+        foreach ([['-x'], ['nope']] as $options) {
+            try {
+                Command::factory($options);
+                $this->fail('Expected an exception for ' . $options[0]);
+            } catch (Kohana\Console\InvalidCommandException $e) {
+                $this->assertStringContainsString('php kohana', $e->getMessage());
+            }
+        }
+    }
 }
