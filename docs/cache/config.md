@@ -54,6 +54,33 @@ Below are the default cache configuration groups for each supported driver. Add 
         ]
     ],
 
+## Redis settings
+
+Requires the [phpredis](https://github.com/phpredis/phpredis) extension (`ext-redis`). Works with Redis and Valkey.
+
+| Name       | Required | Description                                                                                       |
+|------------|----------|---------------------------------------------------------------------------------------------------|
+| driver     | __YES__  | (_string_) `redis`                                                                                |
+| host       | __NO__   | (_string_) Host name or unix socket path. Default `127.0.0.1`                                    |
+| port       | __NO__   | (_integer_) Port. Default `6379`, ignored for sockets                                             |
+| password   | __NO__   | (_string_ or _array_) Password, or `[username, password]` for an ACL user                         |
+| database   | __NO__   | (_integer_) Database index. Default `0`                                                           |
+| timeout    | __NO__   | (_float_) Connection timeout in seconds. Default `1.0`                                            |
+| persistent | __NO__   | (_boolean_) Reuse the connection between requests. Default `false`                                |
+| prefix     | __NO__   | (_string_) Prefix for every key. Default `kohana:`. `deleteAll()` removes only keys with this prefix; an empty prefix flushes the whole database |
+
+    'redis' => [
+        'driver' => 'redis',
+        'default_expire' => 3600,
+        'host' => '127.0.0.1',
+        'port' => 6379,
+        'password' => null,
+        'database' => 0,
+        'prefix' => 'kohana:',
+    ],
+
+A lifetime of `0` stores an item without expiry. The store supports `increment()`/`decrement()` (they return `false` for a missing key, like Memcached) and tags (`setWithTags()`, `find()`, `deleteTag()`). `Cache::instance('redis')->redis()` returns the underlying `\Redis` connection for other commands.
+
 ## APCu settings
 
     'apcu' => [

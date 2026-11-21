@@ -255,3 +255,7 @@ The database module has a PostgreSQL driver, `Kohana\Database\PgsqlConnection` (
 If you used the generic `PDO` type with a `pgsql:` DSN, switch to `'type' => 'pgsql'`. You can drop the `'identifier' => '"'` option. ORM did not work with the generic `PDO` type because it could not list columns; it does now.
 
 An unknown `type` now throws `DatabaseException('Unknown database type ...')` instead of a PHP warning.
+
+## 18. New: Redis cache store
+
+The cache module has a Redis store, `Kohana\Cache\RedisStore` (driver `'redis'`, needs `ext-redis`; works with Valkey too). It supports increment/decrement and tags, and keeps its keys under a configurable prefix so `deleteAll()` does not touch other applications sharing the server. See [`docs/cache/config.md`](docs/cache/config.md#redis-settings).

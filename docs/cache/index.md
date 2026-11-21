@@ -7,6 +7,7 @@
  *  APCu (`ApcuStore`)
  *  File (`FileStore`)
  *  Memcached (`MemcachedStore`)
+ *  Redis and Valkey (`RedisStore`)
  *  SQLite (`SqliteStore`)
 
 ## Introduction to caching
@@ -15,7 +16,7 @@ Caching should be implemented with consideration. Generally, caching the result 
 
 Caching engines that use memory are considerably faster than file based alternatives. But memory is limited whereas disk space is plentiful. If caching large datasets, such as large database result sets, it is best to use file caching.
 
-[!!] Cache drivers require the relevant PHP extensions to be installed. APCu and Memcached require non-standard PHP extensions.
+[!!] Cache drivers require the relevant PHP extensions to be installed. APCu, Memcached and Redis require non-standard PHP extensions (`ext-apcu`, `ext-memcached`, `ext-redis`).
 
 ## What the Kohana Cache module does (and does not do)
 
@@ -39,6 +40,7 @@ Getting and setting values to cache is very simple when using the _Kohana Cache_
 | APCu      | __Memory__ | Excellent | No   | No          | Yes                          | Widely available PHP opcode caching solution, improves php execution performance                           |
 | File      | __Disk__   | Poor      | No   | No          | No                           | Marginally faster than execution                                                                           |
 | Memcached | __Memory__ | Good      | No   | No          | Yes                          | Generally fast distributed solution, but has a speed hit due to variable network latency and serialization |
+| Redis     | __Memory__ | Excellent | Yes  | Yes         | Yes                          | Shared across servers; persistence optional                                                                |
 | Sqlite    | __Disk__   | Poor      | Yes  | No          | No                           | Marginally faster than execution                                                                           |
 
 It is possible to have hybrid cache solutions that use a combination of the engines above in different contexts. This is supported with _Kohana Cache_ as well.
