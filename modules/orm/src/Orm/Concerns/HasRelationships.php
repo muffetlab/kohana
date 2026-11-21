@@ -189,7 +189,6 @@ trait HasRelationships
             ->from($this->hasMany[$alias]['through'])
             ->where($this->hasMany[$alias]['foreign_key'], '=', $this->pk())
             ->where($this->hasMany[$alias]['far_key'], 'IN', $far_keys)
-            ->groupBy($this->hasMany[$alias]['far_key'])
             ->execute($this->db)->get('records_found');
     }
 
@@ -258,6 +257,55 @@ trait HasRelationships
         $query->execute($this->db);
 
         return $this;
+    }
+
+    /**
+     * Links far keys through a has_many "through" table. Alias of add().
+     *
+     * @param mixed $far_keys Model, key or array of keys
+     */
+    public function attach(string $alias, $far_keys): self
+    {
+        return $this->add($alias, $far_keys);
+    }
+
+    /**
+     * Unlinks far keys, or every key when none is given. Alias of remove().
+     *
+     * @param mixed $far_keys Model, key or array of keys
+     */
+    public function detach(string $alias, $far_keys = null): self
+    {
+        return $this->remove($alias, $far_keys);
+    }
+
+    /**
+     * Makes the given keys the only links of a has_many "through" relationship.
+     *
+     *     $article->sync('tags', [1, 3]);
+     *
+     * @param array<int, mixed> $far_keys Models or keys
+     * @return array{attached: array<int, mixed>, detached: array<int, mixed>}
+     */
+    public function sync(string $alias, array $far_keys): array
+    {
+        $relation = $this->hasMany[$alias];
+        $wanted = array_map(fn ($key) => $key instanceof self ? $key->pk() : $key, $far_keys);
+
+        $current = DB::select($relation['far_key'])
+            ->from($relation['through'])
+            ->where($relation['foreign_key'], '=', $this->pk())
+            ->execute($this->db)
+            ->asArray(null, $relation['far_key']);
+
+        // Keys come back as strings on some drivers
+        $attached = array_values(array_filter($wanted, fn ($key) => !in_array((string) $key, array_map('strval', $current), true)));
+        $detached = array_values(array_filter($current, fn ($key) => !in_array((string) $key, array_map('strval', $wanted), true)));
+
+        $detached && $this->remove($alias, $detached);
+        $attached && $this->add($alias, $attached);
+
+        return ['attached' => $attached, 'detached' => $detached];
     }
 
     /**
