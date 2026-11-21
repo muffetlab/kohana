@@ -354,3 +354,9 @@ Related fixes in the database module:
 - `MySqliConnection::listColumns()` no longer fails on column types it does not know, such as `JSON`; they are reported as strings. ORM models on such tables work.
 - The generic `PDO` driver supports `listTables()` for MySQL, PostgreSQL and SQLite.
 - `Application::$environment` is documented as the integer constant it always was.
+
+## 25. Console flags, version and auth tables migration
+
+- `Application::VERSION` is `4.0.0-dev`. `php kohana -V` (or `--version`, `version`) prints it; `-h` and `--help` list the commands. Other arguments starting with `-` before the command name are rejected instead of being taken as a command name.
+- Console errors end with a newline and exit with status 1 when the exception code is not a valid exit status. Before, a PDO error such as `42P07` was printed after the message instead of being used as the exit status.
+- `php kohana auth:migration` copies a migration for the ORM auth tables (`users`, `roles`, `roles_users`, `user_tokens`, plus the `login` and `admin` roles) into `app/migrations`. It is not run automatically, so enabling the ORM module never creates tables you did not ask for. Applications that already created these tables from `auth-schema-*.sql` should not run it.

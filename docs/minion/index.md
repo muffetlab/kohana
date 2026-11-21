@@ -13,7 +13,8 @@ The console loads the Minion module by itself, so you only need to enable it in 
 
 | Command | Does |
 |---|---|
-| `help` | Lists all commands. |
+| `help`, `-h` | Lists all commands. |
+| `version`, `-V`, `--version` | Shows the Kohana and PHP versions. |
 | `key:generate [--show] [--force]` | Writes a random `APP_KEY` and `COOKIE_SALT` to `.env`. See [Environment Configuration](../kohana/environment). |
 | `make:controller Name [--force]` | Creates `App\Http\Controllers\NameController`. `Admin/User` creates `App\Http\Controllers\Admin\UserController`. |
 | `make:model Name [--table=name] [--force]` | Creates an ORM model `App\Models\Name`. |
@@ -27,3 +28,4 @@ The console loads the Minion module by itself, so you only need to enable it in 
 | `migrate:rollback [--step=N] [--all] [--database=group] [--force]` | Reverts the last batch, the last N migrations, or all. |
 | `migrate:status [--database=group]` | Shows which migrations ran. |
 | `db:seed [--class=Name] [--database=group] [--force]` | Runs a seeder (default `DatabaseSeeder`). |
+| `auth:migration [--force]` | Copies the ORM auth tables migration into `app/migrations` (ORM module). See [Auth](../auth/index). |
