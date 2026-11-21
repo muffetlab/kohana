@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Kohana\Orm\Model;
+use Kohana\Orm\SoftDeletes;
 
 class Article extends Model
 {
+    use SoftDeletes;
+
     protected $timestamps = true;
 
     protected $fillable = ['title', 'views', 'rating', 'published', 'meta', 'published_at', 'secret'];

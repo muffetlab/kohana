@@ -6,6 +6,11 @@ use Kohana\Orm\Model;
 
 class ArticleTag extends Model
 {
+    // The pivot table is called article_tag, so the alias must differ
+    protected $objectName = 'tag';
+
+    protected $tableName = 'article_tags';
+
     protected $fillable = ['name'];
 
     protected $hasMany = [
