@@ -90,7 +90,7 @@ class Kohana_ConsoleTest extends TestCase
 
     public function test_generated_classes_are_valid_php()
     {
-        foreach (['make:controller' => ['App\Http\Controllers\Admin', 'UserController'], 'make:model' => ['App\Models', 'Post'], 'make:command' => ['App\Console\Commands\Db', 'SeedCommand']] as $task => [$namespace, $class]) {
+        foreach (['make:controller' => ['App\Http\Controllers\Admin', 'UserController'], 'make:model' => ['App\Models', 'Post'], 'make:command' => ['App\Console\Commands\Db', 'SeedCommand'], 'make:factory' => ['Database\Factories', 'PostFactory']] as $task => [$namespace, $class]) {
             $command = Command::factory([$task, 'table' => 'posts']);
             $source = (fn () => $this->stub($namespace, $class))->call($command);
 
