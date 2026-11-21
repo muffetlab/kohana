@@ -318,3 +318,17 @@ What changed:
 2. `cp .env.example .env` and move your secrets (database password, encryption key, cookie salt, old auth `hash_key`) into it. Keep your **existing** encryption key and cookie salt; do not generate new ones for an application that already has data and users.
 3. If your app relied on the module's default `PDO` connection or its `mysqli` group without overriding them, define them in `app/config/database.php` or set `DB_*` variables.
 4. Add `.env` to `.gitignore`.
+
+## 23. The `kohana` console
+
+A `kohana` script in the project root runs console commands, like Laravel's `artisan`: `php kohana route:list`. It loads the Minion module by itself. `php public/index.php --task=...` still works.
+
+New commands: `make:controller`, `make:model`, `make:command`, `route:list`, `cache:clear` and `serve`. `php kohana` lists every command with the first line of its docblock. See [`docs/minion/index.md`](docs/minion/index.md).
+
+What changed for your own commands:
+
+- Values after the command name are **arguments** (`$this->argument(0)`), not options. Before, `php public/index.php --task=report extra` passed `extra` as an option and failed validation.
+- Unknown options are rejected even when given without a value (`--nope`). Before, such flags slipped through validation.
+- `Cli::write()` and `Cli::writeReplace()` echo their output instead of writing to `STDOUT` directly, so output buffering (and tests) can capture it.
+
+**Action:** copy `kohana` from the framework into your project root.

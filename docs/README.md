@@ -12,7 +12,7 @@ Upgrading an existing application? Start with the [upgrade guide](../UPGRADE.md)
 | [Auth](auth/index.md) ([contents](auth/menu.md)) | User authentication and drivers |
 | [Cache](cache/index.md) ([contents](cache/menu.md)) | APCu, File, Memcached and SQLite stores |
 | [Image](image/index.md) ([contents](image/menu.md)) | Image manipulation with GD and Imagick |
-| [Minion](minion/index.md) ([contents](minion/menu.md)) | Console commands |
+| [Console](minion/index.md) ([contents](minion/menu.md)) | The `kohana` console, built-in commands, writing commands |
 | [Testing](unittest/index.md) ([contents](unittest/menu.md)) | Pest and PHPUnit tests, test doubles |
 
 Code examples omit `use` statements. Framework classes live in the `Kohana\` namespace (for example `Kohana\Http\Request`, `Kohana\Orm\Model`); see [`upgrade/class-map.php`](../upgrade/class-map.php) for every class's full name.

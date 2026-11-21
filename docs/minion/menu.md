@@ -1,3 +1,4 @@
-## [Minion]()
+## [Console]()
+ - [Overview](index)
  - [Setup](setup)
- - [Writing a Task](tasks)
+ - [Writing Commands](tasks)

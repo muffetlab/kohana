@@ -1,71 +1,84 @@
-# Writing Tasks
+# Writing Commands
 
-Writing a task in minion is very easy. Simply create a new class called `Task_<Taskname>` and put it inside `classes/task/<taskname>.php`.
+Generate a command with `make:command`, or create the class yourself. Commands live in `app/classes/Console/Commands` under `App\Console\Commands`, extend `Kohana\Console\Command` and implement `handle()`:
+
+    php kohana make:command report
 
     <?php
 
-    class DemoCommand extends Command
+    namespace App\Console\Commands;
+
+    use Kohana\Console\Cli;
+    use Kohana\Console\Command;
+
+    /**
+     * Sends the daily report.
+     *
+     * Options:
+     *   --to    Recipient address
+     *   --dry   Print the report instead of sending it
+     */
+    class ReportCommand extends Command
     {
         protected $options = [
-            'foo' => 'bar',
-            'bar' => null,
+            'to' => 'team@example.com',
+            'dry' => false,
         ];
 
-        /**
-         * This is a demo task
-         *
-         * @return null
-         */
         protected function handle(array $params)
         {
-            var_dump($params);
-            echo 'foobar';
+            $date = $this->argument(0, date('Y-m-d'));
+
+            Cli::write("Report for $date to {$params['to']}");
+
+            if ($params['dry'] !== false) {
+                return;
+            }
+
+            // ...
         }
     }
 
-You'll notice a few things here:
+    php kohana report 2026-11-21 --to=boss@example.com --dry
 
- - You need a main `_execute()` method. It should take one array parameter.
-   - This parameter contains any command line options passed to the task.
-   - For example, if you call the task above with `./minion --task=demo --foo=foobar` then `$params` will contain: `['foo' => 'foobar', 'bar' => null]`
- - It needs to have a `protected $options` array. This is a list of parameters you want to accept for this task. Any parameters passed to the task not in this list will be rejected.
+## Names
 
-## Namespacing Tasks
+The command name comes from the class name: `ReportCommand` is `report`, and subdirectories add a prefix with a colon, so `App\Console\Commands\Db\SeedCommand` (in `Console/Commands/Db/SeedCommand.php`) is `db:seed`. Application commands win over Kohana's commands of the same name.
 
-You can "namespace" tasks by placing them all in a subdirectory: `classes/task/database/generate.php`. This task will be named `database:generate` and can be called with this task name.
+## Arguments and options
 
-# Parameter Validations
+- **Arguments** are the values after the command name without dashes. Read them with `$this->argument(0)`, `$this->argument(1, $default)` or `$this->arguments()`.
+- **Options** are `--name=value` or `--flag`. `$params` holds every accepted option with its default from `$options`. A flag given without a value is `null`, so test flags with `$params['dry'] !== false`.
+- Options that are not listed in `$options` are rejected with an error.
 
-To add validations to your command line options, simply overload the `build_validation()` method in your task:
+## Validation
 
-    public function buildValidation(Validator $validation)
+Add Validation rules for options by overriding `buildValidation()`:
+
+    use Kohana\Validation\Validator;
+
+    public function buildValidation(Validator $validation): Validator
     {
         return parent::buildValidation($validation)
-            ->rule('foo', 'not_empty') // Require this param
-            ->rule('bar', 'numeric'); // This param should be numeric
+            ->rule('to', 'not_empty')
+            ->rule('to', 'email');
     }
 
-These validations will run for every task call unless `--help` is passed to the task.
+The rules run for every call except `--help`.
 
-# Task Help
+## Help
 
-Tasks can have built-in help. Minion will read class docblocks that you specify:
+`php kohana` lists commands with the first line of each class docblock, and `php kohana report --help` shows the whole docblock. Describe the arguments and options there.
 
-    <?php
+## Output and input
 
-    /**
-     * This is a demo task.
-     *
-     * It can accept the following options:
-     *  - foo: this parameter does something. It is required.
-     *  - bar: this parameter does something else. It should be numeric.
-     *
-     * @package    Kohana
-     * @category   Helpers
-     * @author     Kohana Team
-     * @copyright  (c) 2009-2011 Kohana Team
-     * @license    http://kohanaframework.org/license
-     */
-    class Minion_Task_Demo extends Command
+`Kohana\Console\Cli` has helpers for terminal I/O:
 
-The `@` tags in the class comments will also be displayed in a human-readable format. When writing your task comments, you should specify how to use it, and any parameters it accepts.
+| Method | Does |
+|---|---|
+| `Cli::write($text)` | Writes a line (or an array of lines). |
+| `Cli::writeReplace($text, $endLine)` | Overwrites the current line, for progress output. |
+| `Cli::color($text, 'green')` | Colors text. |
+| `Cli::read('Continue?', ['y', 'n'])` | Asks for input, optionally from a list of choices. |
+| `Cli::password('Password')` | Reads input without echoing it. |
+| `Cli::wait(5, true)` | Waits, with an optional countdown. |
