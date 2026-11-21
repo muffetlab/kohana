@@ -6,7 +6,7 @@ Below are additional configuration options that can be set for this driver.
 
 | Name  | Type    | Default | Description                                                              |
 |-------|---------|---------|--------------------------------------------------------------------------|
-| users | `array` | []      | A user => password (_hashed_) array of all the users in your application |
+| users | `array` | []      | A user => password hash array of all the users in your application |
 
 ## Forcing Login
 
@@ -17,3 +17,11 @@ Below are additional configuration options that can be set for this driver.
 Auth::instance()->forceLogin('admin');
 $user = Auth::instance()->getUser();
 ~~~
+
+Create a hash for the `users` array with `password_hash()`:
+
+    php -r "echo password_hash('secret', PASSWORD_ARGON2ID), PHP_EOL;"
+
+    'users' => [
+        'admin' => '$argon2id$v=19$m=65536,t=4,p=1$...',
+    ],

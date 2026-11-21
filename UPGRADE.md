@@ -259,3 +259,21 @@ An unknown `type` now throws `DatabaseException('Unknown database type ...')` in
 ## 18. New: Redis cache store
 
 The cache module has a Redis store, `Kohana\Cache\RedisStore` (driver `'redis'`, needs `ext-redis`; works with Valkey too). It supports increment/decrement and tags, and keeps its keys under a configurable prefix so `deleteAll()` does not touch other applications sharing the server. See [`docs/cache/config.md`](docs/cache/config.md#redis-settings).
+
+## 19. Passwords are hashed with `password_hash()`
+
+Kohana 3's Auth module stored passwords as `hash_hmac('sha256', $password, $hash_key)`: one key for every user, no per-user salt and a fast hash. Kohana 4 uses PHP's `password_hash()` (Argon2id, or bcrypt when PHP has no Argon2 support) and compares hashes in constant time.
+
+**Existing users keep working.** `Auth::verify()` still accepts the old HMAC hashes as long as `hash_method` and `hash_key` stay in your auth config, and the ORM driver replaces an old hash with a new one when the user logs in.
+
+**Action:**
+1. Widen the password column; Argon2id hashes are about 100 characters:
+
+        ALTER TABLE users MODIFY password VARCHAR(255) NOT NULL;          -- MySQL
+        ALTER TABLE users ALTER COLUMN password TYPE VARCHAR(255);         -- PostgreSQL
+
+2. Keep `hash_key` in `config/auth.php` until your users have logged in once. Users who never log in keep their old hash; force a password reset for them before you remove the key.
+3. File driver: replace the hashes in the `users` array with `password_hash()` output. The File driver cannot rewrite its config, so it does not upgrade hashes itself.
+4. If you called `Auth::hash($password) === $stored` yourself, use `Auth::instance()->verify($password, $stored)`; a new hash is different every time.
+
+`FileAuth::checkPassword()` also works now. It used to compare the plain text password with the stored hash and always returned `false`.
