@@ -6,7 +6,7 @@ use Kohana\Console\Command;
 use Kohana\View\View;
 
 /**
- * Help task to display general instructions and list all tasks
+ * Lists all commands
  *
  * @package    Kohana
  * @category   Helpers
@@ -23,7 +23,19 @@ class HelpCommand extends Command
      */
     protected function handle(array $params)
     {
-        $tasks = $this->compileTaskList($this->listTaskFiles());
+        $tasks = [];
+        foreach ($this->compileTaskList($this->listTaskFiles()) as $task) {
+            $class = static::convertTaskToClassName($task);
+
+            if (!class_exists($class) || (new \ReflectionClass($class))->isAbstract()) {
+                continue;
+            }
+
+            // First line of the class docblock
+            [$description] = $this->parseDoccomment((string) (new \ReflectionClass($class))->getDocComment());
+            $tasks[$task] = strtok($description, "\n") ?: '';
+        }
+        ksort($tasks);
 
         $view = new View('minion/help/list');
 

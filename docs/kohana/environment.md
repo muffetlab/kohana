@@ -3,7 +3,7 @@
 Settings that differ between machines (database passwords, keys, the base URL) belong in a `.env` file in the project root, not in your config files. Kohana loads it with [phpdotenv](https://github.com/vlucas/phpdotenv) at the start of `app/bootstrap.php`.
 
     cp .env.example .env
-    php public/index.php --task=key:generate
+    php kohana key:generate
 
 Keep `.env` out of version control; it is already in `.gitignore`. Commit `.env.example` with every variable your application needs and no secrets.
 
@@ -39,8 +39,8 @@ The second argument is the default when the variable is not set. The strings `tr
 
 `key:generate` (Minion module) writes a random `APP_KEY` and `COOKIE_SALT` to `.env`, creating it from `.env.example` when needed:
 
-    php public/index.php --task=key:generate          # fill empty values
-    php public/index.php --task=key:generate --show   # print, don't write
-    php public/index.php --task=key:generate --force  # replace existing values
+    php kohana key:generate          # fill empty values
+    php kohana key:generate --show   # print, don't write
+    php kohana key:generate --force  # replace existing values
 
 [!!] A new `APP_KEY` makes data encrypted with the old key unreadable, and a new `COOKIE_SALT` invalidates every signed cookie (users are logged out). That is why existing values are kept unless you pass `--force`.

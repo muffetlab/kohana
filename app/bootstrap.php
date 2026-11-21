@@ -127,7 +127,7 @@ Application::modules([
 ]);
 
 /**
- * Cookie salt, used to sign cookies. Generate one with: php public/index.php --task=key:generate
+ * Cookie salt, used to sign cookies. Generate one with: php kohana key:generate
  */
 Cookie::$salt = env('COOKIE_SALT');
 

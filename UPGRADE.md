@@ -311,7 +311,7 @@ What changed:
 - `config/encrypt.php` reads its `key` from `APP_KEY`. Keys starting with `base64:` are decoded.
 - `config/auth.php` reads the legacy `hash_key` from `AUTH_HASH_KEY`.
 - `'mysql'` is accepted as a database type and means MySQLi.
-- New command: `php public/index.php --task=key:generate` writes a random `APP_KEY` and `COOKIE_SALT` to `.env`.
+- New command: `php kohana key:generate` writes a random `APP_KEY` and `COOKIE_SALT` to `.env`.
 
 **Action:**
 1. Copy the new `bootstrap.php` lines (the `Dotenv` call after the Composer autoloader, `APP_ENV`, `APP_BASE_URL` and `COOKIE_SALT`) into your `app/bootstrap.php`.

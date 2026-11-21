@@ -1,17 +1,13 @@
-Minion is a cli tool for performing tasks
+Kohana console
 
-Usage 
+Usage:
+  php <?= basename($_SERVER['argv'][0]) ?> <command> [arguments] [--option=value]
 
-<?php echo $_SERVER['argv'][0]; ?> {task} --task=[options]
-
-Where {task} is one of the following:
-
-<?php foreach ($tasks as $task): ?>
-    * <?php echo $task; ?>
+Available commands:
+<?php $width = max(array_map('strlen', array_keys($tasks)) ?: [0]); ?>
+<?php foreach ($tasks as $task => $description): ?>
+  <?= str_pad($task, $width + 2) . $description ?>
 
 <?php endforeach; ?>
 
-For more information on what a task does and usage details execute 
-
-<?php echo $_SERVER['argv'][0]; ?> --task={task} --help
-
+Run "php <?= basename($_SERVER['argv'][0]) ?> <command> --help" for a command's options.

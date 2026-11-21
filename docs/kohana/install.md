@@ -27,7 +27,7 @@ Create your environment file and generate the application keys (see [Environment
 
 ~~~
 cp .env.example .env
-php public/index.php --task=key:generate
+php kohana key:generate
 ~~~
 
 Then set your database credentials and `APP_BASE_URL` in `.env`.

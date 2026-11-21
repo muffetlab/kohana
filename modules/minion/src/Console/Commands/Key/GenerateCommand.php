@@ -12,9 +12,9 @@ use Kohana\Console\Command;
  * makes previously encrypted data unreadable and a new COOKIE_SALT logs
  * everyone out.
  *
- *     php public/index.php --task=key:generate
- *     php public/index.php --task=key:generate --show
- *     php public/index.php --task=key:generate --force
+ *     php kohana key:generate
+ *     php kohana key:generate --show
+ *     php kohana key:generate --force
  *
  * Options:
  *   --show   Print new values instead of writing them

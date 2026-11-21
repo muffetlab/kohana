@@ -1,0 +1,42 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Kohana console:
+ *
+ *     php kohana                         # list commands
+ *     php kohana make:controller Post    # run a command
+ *     php kohana key:generate --show     # with options
+ *     php kohana route:list --help       # help for a command
+ */
+
+use Kohana\Console\Command;
+use Kohana\Console\ConsoleException;
+use Kohana\Console\Cli;
+use Kohana\Foundation\Application;
+
+if (PHP_SAPI !== 'cli') {
+    exit('The Kohana console must be run from the command line.' . PHP_EOL);
+}
+
+error_reporting(E_ALL);
+
+// Same paths as public/index.php
+define('DOCROOT', __DIR__ . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR);
+define('APPPATH', __DIR__ . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR);
+define('MODPATH', __DIR__ . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR);
+define('SYSPATH', __DIR__ . DIRECTORY_SEPARATOR . 'system' . DIRECTORY_SEPARATOR);
+define('VENDOR_PATH', __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR);
+define('KOHANA_START_TIME', microtime(true));
+define('KOHANA_START_MEMORY', memory_get_usage());
+
+require APPPATH . 'bootstrap.php';
+
+// The console needs the minion module's views and messages even when the web app does not
+if (!isset(Application::modules()['minion'])) {
+    Application::modules(Application::modules() + ['minion' => MODPATH . 'minion']);
+}
+
+set_exception_handler([ConsoleException::class, 'handler']);
+
+Command::factory(Cli::options())->execute();
