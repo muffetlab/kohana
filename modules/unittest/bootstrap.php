@@ -9,7 +9,6 @@ use Kohana\Foundation\Application;
  * this bootstrap file somewhere else then you'll need to modify this value to
  * compensate.
  */
-define('DOCROOT', realpath(__DIR__ . '/../../public') . DIRECTORY_SEPARATOR);
 
 /**
  * Set the PHP error reporting level. If you set this in php.ini, you remove this.
@@ -29,28 +28,15 @@ error_reporting(E_ALL);
  *
  * @link https://kohana.top/guide/using.configuration
  */
-// Define the absolute paths for configured directories
-define('APPPATH', realpath(DOCROOT . '../app') . DIRECTORY_SEPARATOR);
-define('MODPATH', realpath(DOCROOT . '../modules') . DIRECTORY_SEPARATOR);
-define('SYSPATH', realpath(DOCROOT . '../system') . DIRECTORY_SEPARATOR);
-define('VENDOR_PATH', realpath(DOCROOT . '../vendor') . DIRECTORY_SEPARATOR);
 
 /**
  * Define the start time of the application, used for profiling.
  */
-if (!defined('KOHANA_START_TIME')) {
-    define('KOHANA_START_TIME', microtime(true));
-}
-
 /**
  * Define the memory usage at the start of the application, used for profiling.
  */
-if (!defined('KOHANA_START_MEMORY')) {
-    define('KOHANA_START_MEMORY', memory_get_usage());
-}
-
 // Bootstrap the application
-require APPPATH . 'bootstrap.php';
+require __DIR__ . '/../../bootstrap/app.php';
 
 // Disable output buffering
 if (($ob_len = ob_get_length()) !== false) {

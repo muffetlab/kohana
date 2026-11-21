@@ -9,11 +9,11 @@ use Kohana\Database\Seeder;
 /**
  * Fills the database with a seeder.
  *
- *     php kohana db:seed                      # App\Database\Seeders\DatabaseSeeder
- *     php kohana db:seed --class=UserSeeder   # App\Database\Seeders\UserSeeder
+ *     php kohana db:seed                      # Database\Seeders\DatabaseSeeder
+ *     php kohana db:seed --class=UserSeeder   # Database\Seeders\UserSeeder
  *
  * Options:
- *   --class     Seeder class; short names are looked up in App\Database\Seeders
+ *   --class     Seeder class; short names are looked up in Database\Seeders
  *   --database  Database group (default: the default connection)
  *   --force     Run in production
  */
@@ -31,7 +31,7 @@ class SeedCommand extends Command
             return;
         }
 
-        $class = str_contains($params['class'], '\\') ? ltrim($params['class'], '\\') : 'App\\Database\\Seeders\\' . $params['class'];
+        $class = str_contains($params['class'], '\\') ? ltrim($params['class'], '\\') : 'Database\\Seeders\\' . $params['class'];
 
         if (!class_exists($class)) {
             Cli::write(Cli::color("Seeder $class not found", 'red') . '; create it with: php kohana make:seeder ' . $params['class']);

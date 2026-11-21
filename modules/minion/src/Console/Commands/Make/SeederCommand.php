@@ -5,9 +5,9 @@ namespace Kohana\Console\Commands\Make;
 use Kohana\Console\GeneratorCommand;
 
 /**
- * Creates a database seeder in app/classes/Database/Seeders.
+ * Creates a database seeder in database/seeders.
  *
- *     php kohana make:seeder User              # App\Database\Seeders\UserSeeder
+ *     php kohana make:seeder User              # Database\Seeders\UserSeeder
  *     php kohana make:seeder DatabaseSeeder
  *
  * Options:
@@ -15,9 +15,19 @@ use Kohana\Console\GeneratorCommand;
  */
 class SeederCommand extends GeneratorCommand
 {
-    protected function baseNamespace(): string
+    protected function rootNamespace(): string
     {
         return 'Database\\Seeders';
+    }
+
+    protected function rootPath(): string
+    {
+        return database_path('seeders');
+    }
+
+    protected function baseNamespace(): string
+    {
+        return '';
     }
 
     protected function suffix(): string

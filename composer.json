@@ -61,7 +61,8 @@
                 "modules/orm/src",
                 "modules/unittest/src"
             ],
-            "App\\": "app/classes/"
+            "App\\": "app/",
+            "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
             "system/helpers.php"
@@ -69,7 +70,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\": "tests/Fixtures/App/"
+            "App\\": "tests/Fixtures/App/",
+            "Database\\Seeders\\": "tests/Fixtures/Database/Seeders/"
         }
     },
     "config": {
@@ -88,6 +90,9 @@
         "test": "pest",
         "lint": "pint --test",
         "format": "pint",
-        "analyse": "phpstan analyse --memory-limit=1G"
+        "analyse": "phpstan analyse --memory-limit=1G",
+        "post-autoload-dump": [
+            "@php kohana package:discover"
+        ]
     }
 }

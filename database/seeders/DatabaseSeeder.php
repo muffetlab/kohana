@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Database\Seeders;
+namespace Database\Seeders;
 
 use Kohana\Database\DB;
 use Kohana\Database\Seeder;

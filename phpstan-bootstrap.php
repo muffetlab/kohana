@@ -1,10 +1,4 @@
 <?php
 
-// Constants defined by public/index.php at runtime
-define('DOCROOT', __DIR__ . '/public/');
-define('APPPATH', __DIR__ . '/app/');
-define('MODPATH', __DIR__ . '/modules/');
-define('SYSPATH', __DIR__ . '/system/');
-define('VENDOR_PATH', __DIR__ . '/vendor/');
-define('KOHANA_START_TIME', microtime(true));
-define('KOHANA_START_MEMORY', memory_get_usage());
+// Path constants defined at runtime by bootstrap/paths.php
+require __DIR__ . '/bootstrap/paths.php';

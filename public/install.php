@@ -46,7 +46,7 @@ clearstatcache(true);
             </tr>
             <tr>
                 <th>System Directory</th>
-                <?php if (is_file(SYSPATH . 'classes/Kohana.php')): ?>
+                <?php if (is_file(SYSPATH . 'src/Foundation/Application.php')): ?>
                     <td class="pass"><?= SYSPATH ?></td>
                 <?php else: $failed = true ?>
                     <td class="fail">The configured <code>system</code> directory does not exist or does not contain required files.</td>
@@ -54,26 +54,26 @@ clearstatcache(true);
             </tr>
             <tr>
                 <th>Application Directory</th>
-                <?php if (is_file(APPPATH . 'bootstrap.php')): ?>
-                    <td class="pass"><?= APPPATH ?></td>
+                <?php if (is_file(BASEPATH . 'bootstrap/app.php')): ?>
+                    <td class="pass"><?= BASEPATH . 'bootstrap' . DIRECTORY_SEPARATOR ?></td>
                 <?php else: $failed = true ?>
                     <td class="fail">The configured <code>app</code> directory does not exist or does not contain required files.</td>
                 <?php endif ?>
             </tr>
             <tr>
                 <th>Cache Directory</th>
-                <?php if (is_dir(APPPATH . 'cache') && is_writable(APPPATH . 'cache')): ?>
-                    <td class="pass"><?= APPPATH . 'cache' . DIRECTORY_SEPARATOR ?></td>
+                <?php if (is_dir(BASEPATH . 'storage/framework/cache') && is_writable(BASEPATH . 'storage/framework/cache')): ?>
+                    <td class="pass"><?= BASEPATH . 'storage/framework/cache' . DIRECTORY_SEPARATOR ?></td>
                 <?php else: $failed = true ?>
-                    <td class="fail">The <code><?= APPPATH . 'cache' . DIRECTORY_SEPARATOR ?></code> directory is not writable.</td>
+                    <td class="fail">The <code><?= BASEPATH . 'storage/framework/cache' . DIRECTORY_SEPARATOR ?></code> directory is not writable.</td>
                 <?php endif ?>
             </tr>
             <tr>
                 <th>Logs Directory</th>
-                <?php if (is_dir(APPPATH . 'logs') && is_writable(APPPATH . 'logs')): ?>
-                    <td class="pass"><?= APPPATH . 'logs' . DIRECTORY_SEPARATOR ?></td>
+                <?php if (is_dir(BASEPATH . 'storage/logs') && is_writable(BASEPATH . 'storage/logs')): ?>
+                    <td class="pass"><?= BASEPATH . 'storage/logs' . DIRECTORY_SEPARATOR ?></td>
                 <?php else: $failed = true ?>
-                    <td class="fail">The <code><?= APPPATH . 'logs' . DIRECTORY_SEPARATOR ?></code> directory is not writable.</td>
+                    <td class="fail">The <code><?= BASEPATH . 'storage/logs' . DIRECTORY_SEPARATOR ?></code> directory is not writable.</td>
                 <?php endif ?>
             </tr>
             <tr>

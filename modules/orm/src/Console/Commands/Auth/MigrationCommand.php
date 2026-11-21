@@ -7,7 +7,7 @@ use Kohana\Console\Command;
 use Kohana\Console\Commands\Make\MigrationCommand as MakeMigration;
 
 /**
- * Copies the migration for the ORM auth tables into app/migrations.
+ * Copies the migration for the ORM auth tables into database/migrations.
  *
  * Creates users, roles, roles_users and user_tokens with the "login" and
  * "admin" roles. Run "php kohana migrate" afterwards.
@@ -15,7 +15,7 @@ use Kohana\Console\Commands\Make\MigrationCommand as MakeMigration;
  *     php kohana auth:migration
  *
  * Options:
- *   --force  Copy it again even if app/migrations already has one
+ *   --force  Copy it again even if database/migrations already has one
  */
 class MigrationCommand extends Command
 {
@@ -25,7 +25,7 @@ class MigrationCommand extends Command
 
     protected function handle(array $params)
     {
-        $existing = glob(APPPATH . 'migrations' . DIRECTORY_SEPARATOR . '*_create_auth_tables.php') ?: [];
+        $existing = glob(database_path('migrations') . DIRECTORY_SEPARATOR . '*_create_auth_tables.php') ?: [];
 
         if ($existing && $params['force'] === false) {
             Cli::write(Cli::color('The auth migration already exists: ' . basename($existing[0]), 'red') . '; use --force to copy it again');

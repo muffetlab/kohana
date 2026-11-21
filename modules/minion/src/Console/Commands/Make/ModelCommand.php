@@ -5,7 +5,7 @@ namespace Kohana\Console\Commands\Make;
 use Kohana\Console\GeneratorCommand;
 
 /**
- * Creates an ORM model in app/classes/Models.
+ * Creates an ORM model in app/Models.
  *
  *     php kohana make:model Post               # App\Models\Post, table "posts"
  *     php kohana make:model Post --table=blog_posts

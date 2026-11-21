@@ -5,7 +5,7 @@ namespace Kohana\Database;
 /**
  * Base class of database seeders, which fill tables with initial or test data.
  *
- *     namespace App\Database\Seeders;
+ *     namespace Database\Seeders;
  *
  *     class DatabaseSeeder extends Seeder
  *     {

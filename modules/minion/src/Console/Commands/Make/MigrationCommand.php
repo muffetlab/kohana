@@ -6,7 +6,7 @@ use Kohana\Console\Cli;
 use Kohana\Console\Command;
 
 /**
- * Creates a migration file in app/migrations.
+ * Creates a migration file in database/migrations.
  *
  *     php kohana make:migration create_posts_table          # Schema::create('posts', ...)
  *     php kohana make:migration add_slug_to_posts_table     # Schema::table('posts', ...)
@@ -41,7 +41,7 @@ class MigrationCommand extends Command
 
         file_put_contents($file, static::stub($name, $params['create'], $params['table']));
 
-        Cli::write(Cli::color('Created migration ' . basename($file, '.php'), 'green') . ' in ' . str_replace(dirname(APPPATH) . DIRECTORY_SEPARATOR, '', $file));
+        Cli::write(Cli::color('Created migration ' . basename($file, '.php'), 'green') . ' in ' . str_replace(BASEPATH, '', $file));
     }
 
     /**
@@ -49,7 +49,7 @@ class MigrationCommand extends Command
      */
     public static function path(string $name, ?int $time = null): string
     {
-        $dir = APPPATH . 'migrations' . DIRECTORY_SEPARATOR;
+        $dir = database_path('migrations') . DIRECTORY_SEPARATOR;
         $time ??= time();
 
         // Migrations run in file name order; never reuse or go back from an existing timestamp

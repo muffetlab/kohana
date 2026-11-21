@@ -15,7 +15,7 @@ use Kohana\Database\Seeder;
  *
  * Options:
  *   --database  Database group (default: the default connection)
- *   --seed      Run App\Database\Seeders\DatabaseSeeder afterwards
+ *   --seed      Run Database\Seeders\DatabaseSeeder afterwards
  *   --force     Run in production
  */
 class MigrateCommand extends Command
@@ -38,7 +38,7 @@ class MigrateCommand extends Command
         Cli::write($ran ? Cli::color('Migrated ' . count($ran) . ' migration(s).', 'green') : 'Nothing to migrate.');
 
         if ($params['seed'] !== false) {
-            Seeder::seed('App\\Database\\Seeders\\DatabaseSeeder', $params['database'], fn ($class) => Cli::write("Seeding: $class"));
+            Seeder::seed('Database\\Seeders\\DatabaseSeeder', $params['database'], fn ($class) => Cli::write("Seeding: $class"));
             Cli::write(Cli::color('Database seeded.', 'green'));
         }
     }

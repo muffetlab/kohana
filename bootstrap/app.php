@@ -3,16 +3,19 @@
 use Kohana\Config\FileReader;
 use Kohana\Cookie\Cookie;
 use Kohana\Foundation\Application;
+use Kohana\Foundation\PackageManifest;
 use Kohana\Http\Http;
 use Kohana\Log\Writers\FileWriter;
-use Kohana\Routing\Route;
 use Kohana\Translation\Translator;
 
+// Project paths: BASEPATH, APPPATH, MODPATH, SYSPATH, DOCROOT, VENDOR_PATH
+require_once __DIR__ . '/paths.php';
+
 // Register the Composer autoloader
-require DOCROOT . '../vendor/autoload.php';
+require VENDOR_PATH . 'autoload.php';
 
 // Load the project's .env file. Real environment variables take precedence over it.
-Dotenv\Dotenv::createImmutable(dirname(DOCROOT))->safeLoad();
+Dotenv\Dotenv::createImmutable(BASEPATH)->safeLoad();
 
 // -- Environment setup --------------------------------------------------------
 
@@ -39,14 +42,6 @@ setlocale(LC_ALL, 'en_US.utf-8');
  * @link https://www.php.net/function.spl-autoload-register
  */
 spl_autoload_register([Application::class, 'autoLoad']);
-
-/**
- * Optionally, you can enable a compatibility autoloader for use with
- * older modules that have not been updated for PSR-0.
- *
- * It is recommended to not enable this unless absolutely necessary.
- */
-//spl_autoload_register([Application::class, 'auto_load_lowercase']);
 
 /**
  * Enable the Kohana autoloader for unserialization.
@@ -92,7 +87,7 @@ if ($environment = env('APP_ENV', env('KOHANA_ENV'))) {
  * - string   base_url    path, and optionally domain, of your application   null
  * - string   index_file  name of your index file, usually "index.php"       index.php
  * - string   charset     internal character set used for input and output   utf-8
- * - string   cache_dir   set the internal cache directory                   APPPATH/cache
+ * - string   cache_dir   set the internal cache directory                   storage/framework/cache
  * - integer  cache_life  lifetime, in seconds, of items cached              60
  * - boolean  errors      enable or disable error handling                   true
  * - boolean  profile     enable or disable internal profiling               true
@@ -106,7 +101,7 @@ Application::init([
 /**
  * Attach the file writer to logging. Multiple writers are supported.
  */
-Application::$log->attach(new FileWriter(APPPATH . 'logs'));
+Application::$log->attach(new FileWriter(storage_path('logs')));
 
 /**
  * Attach a file reader to config. Multiple readers are supported.
@@ -114,7 +109,14 @@ Application::$log->attach(new FileWriter(APPPATH . 'logs'));
 Application::$config->attach(new FileReader());
 
 /**
- * Enable modules. Modules are referenced by a relative or absolute path.
+ * Kohana modules installed with Composer are discovered from their composer.json
+ * ("extra": {"kohana": {"module": "name"}}). See docs/kohana/modules.md.
+ */
+Application::$packages = new PackageManifest(BASEPATH, VENDOR_PATH, BASEPATH . 'bootstrap/cache/packages.php');
+
+/**
+ * Enable modules. Modules are referenced by a relative or absolute path. Modules
+ * listed here come before the discovered packages in the cascading filesystem.
  */
 Application::modules([
 //    'auth' => MODPATH . 'auth', // Basic authentication
@@ -124,7 +126,7 @@ Application::modules([
 //    'minion' => MODPATH . 'minion', // CLI Tasks
 //    'orm' => MODPATH . 'orm', // Object Relationship Mapping
 //    'unittest' => MODPATH . 'unittest', // Unit testing
-]);
+] + Application::$packages->modules());
 
 /**
  * Cookie salt, used to sign cookies. Generate one with: php kohana key:generate
@@ -132,11 +134,6 @@ Application::modules([
 Cookie::$salt = env('COOKIE_SALT');
 
 /**
- * Set the routes. Each route must have a minimum of a name, a URI and a set of
- * defaults for the URI.
+ * Load the routes.
  */
-Route::set('default', '(<controller>(/<action>(/<id>)))')
-    ->defaults([
-        'controller' => 'welcome',
-        'action' => 'index',
-    ]);
+require BASEPATH . 'routes/web.php';

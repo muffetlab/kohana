@@ -12,7 +12,7 @@ use Kohana\Http\Request;
  * and warnings. Enable them by using: E_ALL
  *
  * In a production environment, it is safe to ignore notices and warnings.
- * Disable them by using: E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED
+ * Disable them by using: E_ALL & ~E_NOTICE & ~E_DEPRECATED
  */
 error_reporting(E_ALL);
 
@@ -22,36 +22,16 @@ error_reporting(E_ALL);
  *
  * @link https://kohana.top/guide/using.configuration
  */
-// Set the full path to the docroot
-const DOCROOT = __DIR__ . DIRECTORY_SEPARATOR;
+// Project paths: BASEPATH, APPPATH, MODPATH, SYSPATH, DOCROOT, VENDOR_PATH
+require __DIR__ . '/../bootstrap/paths.php';
 
-// Define the absolute paths for required directories
-define('APPPATH', realpath(DOCROOT . '../app') . DIRECTORY_SEPARATOR);
-define('MODPATH', realpath(DOCROOT . '../modules') . DIRECTORY_SEPARATOR);
-define('SYSPATH', realpath(DOCROOT . '../system') . DIRECTORY_SEPARATOR);
-define('VENDOR_PATH', realpath(DOCROOT . '../vendor') . DIRECTORY_SEPARATOR);
-
-if (file_exists('install.php')) {
+if (file_exists(__DIR__ . '/install.php')) {
     // Load the installation check
-    return include 'install.php';
-}
-
-/**
- * Define the start time of the application, used for profiling.
- */
-if (!defined('KOHANA_START_TIME')) {
-    define('KOHANA_START_TIME', microtime(true));
-}
-
-/**
- * Define the memory usage at the start of the application, used for profiling.
- */
-if (!defined('KOHANA_START_MEMORY')) {
-    define('KOHANA_START_MEMORY', memory_get_usage());
+    return include __DIR__ . '/install.php';
 }
 
 // Bootstrap the application
-require APPPATH . 'bootstrap.php';
+require BASEPATH . 'bootstrap/app.php';
 
 if (PHP_SAPI === 'cli') {
     // Try and load minion

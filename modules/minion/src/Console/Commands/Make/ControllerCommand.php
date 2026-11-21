@@ -5,7 +5,7 @@ namespace Kohana\Console\Commands\Make;
 use Kohana\Console\GeneratorCommand;
 
 /**
- * Creates a controller in app/classes/Http/Controllers.
+ * Creates a controller in app/Http/Controllers.
  *
  *     php kohana make:controller Post          # App\Http\Controllers\PostController
  *     php kohana make:controller Admin/User    # App\Http\Controllers\Admin\UserController

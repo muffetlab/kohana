@@ -5,7 +5,7 @@ namespace Kohana\Console\Commands\Make;
 use Kohana\Console\GeneratorCommand;
 
 /**
- * Creates a console command in app/classes/Console/Commands.
+ * Creates a console command in app/Console/Commands.
  *
  *     php kohana make:command report           # php kohana report
  *     php kohana make:command db:seed          # php kohana db:seed
