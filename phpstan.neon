@@ -14,3 +14,6 @@ parameters:
         - modules/unittest/src
     bootstrapFiles:
         - phpstan-bootstrap.php
+    ignoreErrors:
+        # Traits applications use in their own models
+        - identifier: trait.unused

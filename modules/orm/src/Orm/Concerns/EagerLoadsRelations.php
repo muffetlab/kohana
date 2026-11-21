@@ -99,6 +99,10 @@ trait EagerLoadsRelations
                 $owner = $target->objectName . '.' . $relation['foreign_key'];
             }
 
+            if ($target->usesSoftDeletes()) {
+                $query->where($target->qualifiedDeletedAtColumn(), 'IS', null);
+            }
+
             foreach ($target->sorting ?: [] as $column => $direction) {
                 $query->orderBy(str_contains($column, '.') ? $column : $target->objectName . '.' . $column, $direction);
             }

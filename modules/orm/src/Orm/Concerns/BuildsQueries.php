@@ -37,14 +37,18 @@ trait BuildsQueries
         }
 
         // Process pending database method calls
-        foreach ($this->dbPending as $method) {
-            $name = $method['name'];
-            $args = $method['args'];
+        $applyPending = function (): void {
+            foreach ($this->dbPending as $method) {
+                $name = $method['name'];
+                $args = $method['args'];
 
-            $this->dbApplied[$name] = $name;
+                $this->dbApplied[$name] = $name;
 
-            call_user_func_array([$this->dbBuilder, $name], $args);
-        }
+                call_user_func_array([$this->dbBuilder, $name], $args);
+            }
+        };
+
+        $type === Connection::SELECT ? $this->applySoftDeleteScope($applyPending) : $applyPending();
 
         return $this;
     }

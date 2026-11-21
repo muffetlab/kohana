@@ -463,12 +463,6 @@ parameters:
 			path: modules/orm/src/Auth/OrmAuth.php
 
 		-
-			message: '#^Property Kohana\\Orm\\Model\:\:\$objectName \(string\) in isset\(\) is not nullable\.$#'
-			identifier: isset.property
-			count: 1
-			path: modules/orm/src/Orm/Concerns/HasAttributes.php
-
-		-
 			message: '#^Call to function is_array\(\) with string will always evaluate to false\.$#'
 			identifier: function.impossibleType
 			count: 2
