@@ -83,7 +83,7 @@ class Kohana_ConsoleTest extends TestCase
 
         $this->assertSame($expected, $command->qualify($name));
         $this->assertSame(
-            APPPATH . 'classes/' . str_replace('\\', '/', substr($expected[0], 4)) . '/' . $expected[1] . '.php',
+            APPPATH . str_replace('\\', '/', substr($expected[0], 4)) . '/' . $expected[1] . '.php',
             str_replace(DIRECTORY_SEPARATOR, '/', $command->path(...$expected))
         );
     }
@@ -167,6 +167,23 @@ class Kohana_ConsoleTest extends TestCase
             } catch (Kohana\Console\InvalidCommandException $e) {
                 $this->assertStringContainsString('php kohana', $e->getMessage());
             }
+        }
+    }
+    public function test_package_commands_are_resolved_and_listed()
+    {
+        $previous = Kohana\Foundation\Application::$packages;
+        Kohana\Foundation\Application::$packages = new class ('', '', '') extends Kohana\Foundation\PackageManifest {
+            public function manifest(): array
+            {
+                return ['modules' => [], 'packages' => ['acme/demo' => 'demo'], 'commands' => ['demo:route-list' => Kohana\Console\Commands\Route\ListCommand::class]];
+            }
+        };
+
+        try {
+            $this->assertInstanceOf(Kohana\Console\Commands\Route\ListCommand::class, Command::factory(['demo:route-list']));
+            $this->assertMatchesRegularExpression('/demo:route-list\s+Lists the registered routes/', $this->run_command([]));
+        } finally {
+            Kohana\Foundation\Application::$packages = $previous;
         }
     }
 }

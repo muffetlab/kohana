@@ -1,6 +1,6 @@
 <?php
 
-use App\Database\Seeders\MigAuthorSeeder;
+use Database\Seeders\MigAuthorSeeder;
 use Kohana\Console\Commands\Make\MigrationCommand;
 use Kohana\Database\Connection;
 use Kohana\Database\DatabaseException;
@@ -216,7 +216,7 @@ class Kohana_Database_MigrationTest extends TestCase
         });
 
         $this->assertSame($previous, Connection::$default, 'The default connection is restored');
-        $this->assertSame([MigAuthorSeeder::class, App\Database\Seeders\MigPostSeeder::class], $seeded);
+        $this->assertSame([MigAuthorSeeder::class, Database\Seeders\MigPostSeeder::class], $seeded);
         $this->assertSame(['Ali', 'Ayşe'], DB::select('name')->from('mig_authors')->orderBy('name')->execute($db)->asArray(null, 'name'));
         $this->assertSame('Merhaba', DB::select('title')->from('mig_posts')->execute($db)->get('title'));
 

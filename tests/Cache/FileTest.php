@@ -45,7 +45,7 @@ class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest
                     'file',
                     [
                     'driver' => 'file',
-                    'cache_dir' => APPPATH . 'cache',
+                    'cache_dir' => storage_path('framework/cache'),
                     'default_expire' => 3600,
                     'ignore_on_delete' => [
                         'file_we_want_to_keep.cache',
