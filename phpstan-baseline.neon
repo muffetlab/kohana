@@ -601,12 +601,6 @@ parameters:
 			path: system/src/Foundation/Application.php
 
 		-
-			message: '#^Static property Kohana\\Foundation\\Application\:\:\$environment \(string\) does not accept default value of type int\.$#'
-			identifier: property.defaultValue
-			count: 1
-			path: system/src/Foundation/Application.php
-
-		-
 			message: '#^Static property Kohana\\Foundation\\Application\:\:\$log \(Kohana\\Log\\Logger\) does not accept null\.$#'
 			identifier: assign.propertyType
 			count: 1

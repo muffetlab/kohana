@@ -47,7 +47,7 @@ class Application
     public const FILE_CACHE = ":header \n\n// :name\n\n:data\n";
 
     /**
-     * @var  string  Current environment name
+     * @var  int  Current environment, one of the PRODUCTION, STAGING, TESTING or DEVELOPMENT constants
      */
     public static $environment = self::DEVELOPMENT;
 
