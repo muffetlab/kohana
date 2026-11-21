@@ -86,16 +86,31 @@ abstract class Command
             $task = 'help';
         }
 
+        // Global flags: "kohana -V", "kohana --version", "kohana -h"
+        if (str_starts_with($task, '-')) {
+            $task = match (ltrim($task, '-')) {
+                'V', 'version' => 'version',
+                'h', 'help' => 'help',
+                default => throw new InvalidCommandException('Unknown option :option; run "php kohana" for the list of commands', [':option' => $task]),
+            };
+        } elseif ($task === 'help' && array_key_exists('version', $options)) {
+            unset($options['version']);
+            $task = 'version';
+        } elseif ($task === 'help') {
+            // "kohana --help" lists the commands rather than describing the help command
+            unset($options['help']);
+        }
+
         $class = static::convertTaskToClassName($task);
 
         if (!class_exists($class)) {
-            throw new InvalidCommandException("Task ':task' is not a valid minion task", [':task' => $class]);
+            throw new InvalidCommandException('Command ":task" is not defined; run "php kohana" for the list of commands', [':task' => $task]);
         }
 
         $class = new $class();
 
         if (!$class instanceof self) {
-            throw new InvalidCommandException("Task ':task' is not a valid minion task", [':task' => $class]);
+            throw new InvalidCommandException('Command ":task" is not defined; run "php kohana" for the list of commands', [':task' => $task]);
         }
 
         // Remaining positional values are arguments: make:controller Post => ['Post']

@@ -23,7 +23,7 @@ use Kohana\Support\Arr;
 class Application
 {
     /** @var string Release version */
-    public const VERSION = '3.5.1';
+    public const VERSION = '4.0.0-dev';
 
     /** @var int Production environment type constant */
     public const PRODUCTION = 10;
