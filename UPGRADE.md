@@ -234,3 +234,16 @@ php vendor/kohana/kohana/upgrade/rename-members.php application modules/my-modul
 ```
 
 It renames declarations, calls, `[$object, 'method']` callables, `'Class::method'` strings and `action_*` methods. Public properties are only renamed on `$this`, because `$model->content_type` may be an ORM column; check other accesses by hand. Strings built at runtime (for example `'_' . $name`) are not found by any tool.
+
+## 16. PHP 8.4+, Pest 5 and PHPUnit 13
+
+`composer.json` now requires `"php": ">=8.4"`. The test suite runs on Pest 5 (PHPUnit 13), which needs PHP 8.4.
+
+The framework's tests moved from `system/tests` and `modules/*/tests` to a root `tests/` directory grouped by component (`tests/System`, `tests/Cache`, `tests/Database`, `tests/Orm`, ...). Test data lives in `tests/Fixtures`, fixture classes (dummy controllers and models) in `tests/Fixtures/App` (`autoload-dev`). Run the suite with `composer test` or `vendor/bin/pest`.
+
+**Action for your own tests:**
+- Replace docblock annotations with attributes: `@dataProvider` → `#[DataProvider]`, `@test` → `#[Test]`, `@group` → `#[Group]`. Rector's PHPUnit sets do this: `->withComposerBased(phpunit: true)->withAttributesSets(phpunit: true)`.
+- Data providers must be `public static`.
+- `getMockForAbstractClass()`, `setMethods()`, `$this->returnValue()` and `$this->at()` are gone. `Kohana\Testing\TestCase::mockAbstract($class, $constructorArgs, $extraMethods)` replaces `getMockForAbstractClass()`. Use `onlyMethods()`, `willReturn()` and `willReturnCallback()` for the rest.
+- PHPUnit cannot mock a class that has a method named `method()`, such as `Kohana\Http\Request`. Use a real `new Request($uri)`; its setters (`directory()`, `controller()`, `action()`) make it easy to configure.
+- `Kohana\Testing\TestCase` extends PHPUnit's `TestCase` directly. `assertSelectEquals()` is still available through `phpunit/phpunit-dom-assertions`.
