@@ -2,14 +2,27 @@
 
 The Kohana filesystem is a hierarchy of similar directory structures that cascade. The hierarchy in Kohana (used when a file is loaded by `Application::findFile()`) is in the following order:
 
-1. **Application Path**
-   Defined as `APPPATH` in `index.php`. The default value is `application`.
+1. **Application**
+   The project's own directories (see the table below).
 
-2. **Module Paths**
-   This is set as an associative array using `Application::modules()` in `APPPATH/bootstrap.php`. Each of the values of the array will be searched **in the order that the modules are defined**.
+2. **Modules**
+   Enabled with `Application::modules()` in `bootstrap/app.php`, followed by the [modules installed with Composer](modules#modules-installed-with-composer). Each is searched **in the order the modules are defined**.
 
-3. **System Path**
-   Defined as `SYSPATH` in `index.php`. The default value is `system`. All the main or "core" files and classes are defined here.
+3. **System**
+   `SYSPATH`, the `system` directory. All the core files are defined here.
+
+Modules and the system keep each type of file in a directory of that name (`config/`, `views/`, `messages/`, `i18n/`, `migrations/`). The application uses the project layout instead:
+
+| Type | Application | Modules and system |
+|---|---|---|
+| `config` | `config/` | `config/` |
+| `views` | `resources/views/` | `views/` |
+| `messages` | `resources/messages/` | `messages/` |
+| `i18n` | `lang/` | `i18n/` |
+| `migrations` | `database/migrations/` | `migrations/` |
+| any other type, e.g. `media` | `resources/media/` | `media/` |
+
+`Application::appDirectory('views')` returns the application's directory for a type, and `Application::$appDirectories` can change it.
 
 Files that are in directories higher up the include path order take precedence over files of the same name lower down the order, which makes it is possible to overload any file by placing a file with the same name in a "higher" directory:
 
@@ -17,20 +30,20 @@ Files that are in directories higher up the include path order take precedence o
 
 This image is only shows certain files, but we can use it to illustrate some examples of the cascading filesystem:
 
-* If Kohana catches an error, it would display the `kohana/error.php` view, So it would call `Application::findFile('views', 'kohana/error')`. This would return `app/views/kohana/error.php` because it takes precedence over `system/views/kohana/error.php`. By doing this we can change the error view without editing the system folder.
+* If Kohana catches an error, it would display the `kohana/error.php` view, So it would call `Application::findFile('views', 'kohana/error')`. This would return `resources/views/kohana/error.php` because it takes precedence over `system/views/kohana/error.php`. By doing this we can change the error view without editing the system folder.
 
-* If we used `View::factory('welcome')` it would call `Application::findFile('views','welcome')` which would return `app/views/welcome.php` because it takes precedence over `modules/common/views/welcome.php`. By doing this, you can overwrite things in a module without editing the modules files.
+* If we used `View::factory('welcome')` it would call `Application::findFile('views','welcome')` which would return `resources/views/welcome.php` because it takes precedence over `modules/common/views/welcome.php`. By doing this, you can overwrite things in a module without editing the modules files.
 
 * If you used `View::factory('user')` it would call `Application::findFile('views','user')` which would return `modules/common/views/user.php`.
 
-* If we wanted to change something in `config/database.php` we could copy the file to `app/config/database.php` and make the changes there. Keep in mind that [config files are merged](files/config#merge) rather than overwritten by the cascade.
+* If we wanted to change something in `config/database.php` we could copy the file to `config/database.php` and make the changes there. Keep in mind that [config files are merged](files/config#merge) rather than overwritten by the cascade.
 
 ## Types of Files
 
-The top level directories of the application, module, and system paths have the following default directories:
+The cascading filesystem knows these types of files (in the application, use the directories from the table above):
 
 classes/
-:  Application classes (`App\` namespace) live in `app/classes/`, framework and module classes in each `src/` directory. Composer [autoloads](autoloading) them by namespace; classes are not part of the cascade. File names must match the class name's case, see the [naming conventions](conventions#class-names-and-file-location).
+:  Application classes (`App\` namespace) live in `app/`, framework and module classes in each `src/` directory. Composer [autoloads](autoloading) them by namespace; classes are not part of the cascade. File names must match the class name's case, see the [naming conventions](conventions#class-names-and-file-location).
 
 config/
 :  Configuration files return an associative array of options that can be loaded using `Application::$config`. Config files are merged rather than overwritten by the cascade. See [config files](files/config) for more information.

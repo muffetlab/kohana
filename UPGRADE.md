@@ -129,7 +129,7 @@ Rector does not touch class names inside strings. Search your code for strings s
 
 ### Application classes use the `App\` namespace
 
-`composer.json` maps `App\` to `app/classes/`.
+`composer.json` maps `App\` to `app/`.
 
 | Kohana 3.5 | Kohana 4 | File |
 |---|---|---|
@@ -290,15 +290,49 @@ Kohana 3's Auth module stored passwords as `hash_hmac('sha256', $password, $hash
 
 **Action:** Remove any reference to these from your code.
 
-## 21. `application/` is now `app/`
+## 21. Project layout
 
-Like most PHP frameworks, Kohana calls the application directory `app/`. `APPPATH` still points to it, so code that uses the constant keeps working.
+The `application/` directory is split into a Laravel-style project layout. Classes live directly in `app/`, everything else moves to the project root. See [`docs/kohana/structure.md`](docs/kohana/structure.md).
+
+| Kohana 3.5 | Kohana 4 |
+|---|---|
+| `application/classes/` | `app/` (`App\` namespace) |
+| `application/bootstrap.php` | `bootstrap/app.php` |
+| routes in the bootstrap | `routes/web.php` |
+| `application/config/` | `config/` |
+| `application/views/` | `resources/views/` |
+| `application/messages/` | `resources/messages/` |
+| `application/i18n/` | `lang/` |
+| `application/cache/` | `storage/framework/cache/` |
+| `application/logs/` | `storage/logs/` |
+| (new) | `database/migrations/`, `database/seeders/`, `storage/app/`, `bootstrap/cache/` |
+
+Modules and the system keep their own layout (`config/`, `views/`, `messages/`, `i18n/`, `migrations/`); only the application layer of the cascading filesystem uses the new directories. `Application::findFile('views', 'welcome')` finds `resources/views/welcome.php` first, then module and system views as before. Kohana does not look in the old directories.
+
+The paths are defined once in `bootstrap/paths.php`: `BASEPATH` (new, the project root), `APPPATH` (now `app/`), `MODPATH`, `SYSPATH`, `DOCROOT`, `VENDOR_PATH`. New helpers return paths inside them: `base_path()`, `app_path()`, `config_path()`, `database_path()`, `lang_path()`, `resource_path()`, `storage_path()`, `public_path()`.
 
 **Action:**
-1. Rename your `application` directory to `app`.
-2. In `public/index.php` (and any other front controller or test bootstrap), change `realpath(DOCROOT . '../application')` to `realpath(DOCROOT . '../app')`.
-3. In `composer.json`, map `"App\\": "app/classes/"`, then run `composer dump-autoload`.
-4. Update deploy scripts, web server rules and `.gitignore` entries that mention `application/`.
+
+```bash
+mkdir -p bootstrap/cache database/migrations database/seeders resources routes storage/app storage/framework/sessions
+git mv application/classes app            # then move app/* up into app/ if a classes/ directory remains
+git mv application/bootstrap.php bootstrap/app.php
+git mv application/config config
+git mv application/views resources/views
+git mv application/messages resources/messages
+git mv application/i18n lang
+git mv application/cache storage/framework/cache
+git mv application/logs storage/logs
+```
+
+1. Copy `bootstrap/paths.php`, `public/index.php` and `kohana` from the framework, and compare your `bootstrap/app.php` with the framework's: it now starts with `require_once __DIR__ . '/paths.php';`, logs to `storage_path('logs')`, and ends with `require BASEPATH . 'routes/web.php';`. Move your `Route::set()` calls to `routes/web.php`.
+2. In `composer.json`, map `"App\\": "app/"` and `"Database\\Seeders\\": "database/seeders/"`, add `"post-autoload-dump": ["@php kohana package:discover"]` to `scripts`, then run `composer dump-autoload`.
+3. Replace `APPPATH . 'cache'` with `storage_path('framework/cache')` and `APPPATH . 'logs'` with `storage_path('logs')`, and any other `APPPATH . 'views'` style paths with the new directories.
+4. Make `storage/` and `bootstrap/cache/` writable by the web server, and update deploy scripts, web server rules and `.gitignore` entries.
+
+### Composer packages
+
+Kohana modules installed with Composer are discovered from their `composer.json` (`"extra": {"kohana": {"module": "name"}}`) and enabled after the modules you list in `bootstrap/app.php`. Packages can also register console commands. See [`docs/kohana/modules.md`](docs/kohana/modules.md#modules-installed-with-composer).
 
 ## 22. Environment variables and `.env`
 
@@ -306,7 +340,7 @@ Kohana loads a `.env` file from the project root with [phpdotenv](https://github
 
 What changed:
 
-- `app/bootstrap.php` loads `.env`, sets the environment from `APP_ENV` (`KOHANA_ENV` still works, and `local` means development), `base_url` from `APP_BASE_URL` (default `/`), and `Cookie::$salt` from `COOKIE_SALT`.
+- `bootstrap/app.php` loads `.env`, sets the environment from `APP_ENV` (`KOHANA_ENV` still works, and `local` means development), `base_url` from `APP_BASE_URL` (default `/`), and `Cookie::$salt` from `COOKIE_SALT`.
 - The database module's `default` connection now reads `DB_CONNECTION` (default `mysql`, which means the MySQLi driver), `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`, `DB_DSN`, `DB_PREFIX` and `DB_CHARSET`. Before, it was a generic `PDO` connection to `mysql:host=localhost;dbname=kohana`, and the module also shipped a `mysqli` sample group, which is gone.
 - `config/encrypt.php` reads its `key` from `APP_KEY`. Keys starting with `base64:` are decoded.
 - `config/auth.php` reads the legacy `hash_key` from `AUTH_HASH_KEY`.
@@ -314,9 +348,9 @@ What changed:
 - New command: `php kohana key:generate` writes a random `APP_KEY` and `COOKIE_SALT` to `.env`.
 
 **Action:**
-1. Copy the new `bootstrap.php` lines (the `Dotenv` call after the Composer autoloader, `APP_ENV`, `APP_BASE_URL` and `COOKIE_SALT`) into your `app/bootstrap.php`.
+1. Copy the new `bootstrap.php` lines (the `Dotenv` call after the Composer autoloader, `APP_ENV`, `APP_BASE_URL` and `COOKIE_SALT`) into your `bootstrap/app.php`.
 2. `cp .env.example .env` and move your secrets (database password, encryption key, cookie salt, old auth `hash_key`) into it. Keep your **existing** encryption key and cookie salt; do not generate new ones for an application that already has data and users.
-3. If your app relied on the module's default `PDO` connection or its `mysqli` group without overriding them, define them in `app/config/database.php` or set `DB_*` variables.
+3. If your app relied on the module's default `PDO` connection or its `mysqli` group without overriding them, define them in `config/database.php` or set `DB_*` variables.
 4. Add `.env` to `.gitignore`.
 
 ## 23. The `kohana` console
@@ -335,7 +369,7 @@ What changed for your own commands:
 
 ## 24. New: migrations, schema builder and seeders
 
-The database module now has a schema builder (`Kohana\Database\Schema\Schema`), migrations (`Kohana\Database\Migrations\Migration`, run by `Migrator`) and seeders (`Kohana\Database\Seeder`), with the console commands `make:migration`, `migrate`, `migrate:rollback`, `migrate:status`, `make:seeder` and `db:seed`. Migrations live in `app/migrations` (and modules' `migrations/` directories), seeders in `App\Database\Seeders`. See [`docs/database/migrations.md`](docs/database/migrations.md) and [`docs/database/seeding.md`](docs/database/seeding.md).
+The database module now has a schema builder (`Kohana\Database\Schema\Schema`), migrations (`Kohana\Database\Migrations\Migration`, run by `Migrator`) and seeders (`Kohana\Database\Seeder`), with the console commands `make:migration`, `migrate`, `migrate:rollback`, `migrate:status`, `make:seeder` and `db:seed`. Migrations live in `database/migrations` (and modules' `migrations/` directories), seeders in `Database\Seeders`. See [`docs/database/migrations.md`](docs/database/migrations.md) and [`docs/database/seeding.md`](docs/database/seeding.md).
 
 **To adopt migrations in an existing application**, create a first migration that describes the current schema, then mark it as run on databases that already have the tables instead of running it there:
 
@@ -359,4 +393,4 @@ Related fixes in the database module:
 
 - `Application::VERSION` is `4.0.0-dev`. `php kohana -V` (or `--version`, `version`) prints it; `-h` and `--help` list the commands. Other arguments starting with `-` before the command name are rejected instead of being taken as a command name.
 - Console errors end with a newline and exit with status 1 when the exception code is not a valid exit status. Before, a PDO error such as `42P07` was printed after the message instead of being used as the exit status.
-- `php kohana auth:migration` copies a migration for the ORM auth tables (`users`, `roles`, `roles_users`, `user_tokens`, plus the `login` and `admin` roles) into `app/migrations`. It is not run automatically, so enabling the ORM module never creates tables you did not ask for. Applications that already created these tables from `auth-schema-*.sql` should not run it.
+- `php kohana auth:migration` copies a migration for the ORM auth tables (`users`, `roles`, `roles_users`, `user_tokens`, plus the `login` and `admin` roles) into `database/migrations`. It is not run automatically, so enabling the ORM module never creates tables you did not ask for. Applications that already created these tables from `auth-schema-*.sql` should not run it.

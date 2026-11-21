@@ -11,7 +11,7 @@ Kohana uses [Composer](https://getcomposer.org) and the [PSR-4](https://www.php-
 | Namespace | Directory |
 |---|---|
 | `Kohana\` | `system/src/` and `modules/*/src/` |
-| `App\` | `app/classes/` |
+| `App\` | `app/` |
 
 A class name maps to a file by replacing namespace separators with directory separators, for example:
 
@@ -19,8 +19,8 @@ A class name maps to a file by replacing namespace separators with directory sep
 |---|---|
 | `Kohana\Http\Request` | `system/src/Http/Request.php` |
 | `Kohana\Database\Query\SelectBuilder` | `modules/database/src/Database/Query/SelectBuilder.php` |
-| `App\Http\Controllers\WelcomeController` | `app/classes/Http/Controllers/WelcomeController.php` |
-| `App\Models\User` | `app/classes/Models/User.php` |
+| `App\Http\Controllers\WelcomeController` | `app/Http/Controllers/WelcomeController.php` |
+| `App\Models\User` | `app/Models/User.php` |
 
 File names must match the class name's case exactly. Your computer's filesystem may not care, but Linux servers do.
 
@@ -29,7 +29,7 @@ Both mappings are declared in `composer.json`:
     "autoload": {
         "psr-4": {
             "Kohana\\": ["system/src", "modules/auth/src", ...],
-            "App\\": "app/classes/"
+            "App\\": "app/"
         }
     }
 
@@ -37,7 +37,7 @@ Run `composer dump-autoload` after you change them.
 
 ## The Kohana autoloader
 
-`app/bootstrap.php` still registers `Application::autoLoad()`:
+`bootstrap/app.php` still registers `Application::autoLoad()`:
 
     spl_autoload_register([Application::class, 'autoLoad']);
 

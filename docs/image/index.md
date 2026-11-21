@@ -12,7 +12,7 @@ The `GdImage` driver is the default. You can change this by providing an `image.
 - for example:
 
 ~~~
-// app/config/image.php
+// config/image.php
 <?php
 return [
     'default_driver' => 'Imagick'

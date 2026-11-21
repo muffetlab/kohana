@@ -1,6 +1,6 @@
 # Classes
 
-Your application's classes live in `app/classes/` under the `App\` namespace, and Composer [autoloads](../autoloading) them. [Models](../mvc/models) and [Controllers](../mvc/controllers) are classes too, with their own conventions; read their pages to learn more.
+Your application's classes live in `app/` under the `App\` namespace, and Composer [autoloads](../autoloading) them. [Models](../mvc/models) and [Controllers](../mvc/controllers) are classes too, with their own conventions; read their pages to learn more.
 
 ## Helper or Library?
 
@@ -10,7 +10,7 @@ Kohana does not distinguish "helper" classes from "library" classes. In general 
 
 Place the file where its namespace points, following the [naming conventions](../conventions#class-names-and-file-location). For example, a `Foobar` class:
 
-    // app/classes/Foobar.php
+    // app/Foobar.php
 
     namespace App;
 
@@ -30,7 +30,7 @@ Import it and call `Foobar::magic()` anywhere:
 
 Subdirectories become sub-namespaces:
 
-    // app/classes/Professor/Baxter.php
+    // app/Professor/Baxter.php
 
     namespace App\Professor;
 

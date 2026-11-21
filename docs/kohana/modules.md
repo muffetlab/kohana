@@ -25,6 +25,42 @@ Modules are enabled by calling `Application::modules()` and passing an array of 
         'unittest' => MODPATH . 'unittest', // Unit testing
     ]);
 
+## Modules installed with Composer
+
+A module can be a Composer package. Install it and Kohana enables it for you:
+
+    composer require acme/kohana-blog
+
+The package declares the module in its `composer.json`:
+
+    "extra": {
+        "kohana": {
+            "module": "blog",
+            "path": ".",
+            "commands": {
+                "blog:import": "Acme\\Blog\\Console\\ImportCommand"
+            }
+        }
+    }
+
+- `module`: the module name (required).
+- `path`: the module directory inside the package, default the package root. Its `config/`, `views/`, `messages/`, `i18n/`, `migrations/` and `init.php` work like those of any module.
+- `commands`: console commands, name => class, listed by `php kohana`.
+
+Classes are autoloaded through the package's own `autoload` section, as with any Composer package.
+
+After every `composer install` and `composer update`, Composer runs `php kohana package:discover` (the `post-autoload-dump` script in your `composer.json`), which writes the list to `bootstrap/cache/packages.php`. The list is also rebuilt automatically when `vendor/composer/installed.json` changes.
+
+Modules listed in `bootstrap/app.php` come first in the cascading filesystem, then the discovered packages, so your own modules can override package files. To skip packages, list them in your `composer.json`:
+
+    "extra": {
+        "kohana": {
+            "dont-discover": ["acme/kohana-blog"]
+        }
+    }
+
+Use `["*"]` to turn discovery off.
+
 ## Init.php
 
 When a module is activated, if an `init.php` file exists in that module's directory, it is included. This is the ideal place to have a module include routes or other initialization necessary for the module to function.
@@ -35,4 +71,4 @@ A file in an enabled module is virtually the same as having that exact file in t
 
 ## Creating your own module
 
-To create a module simply create a folder (usually in `DOCROOT/modules`) and place the files you want to be in the module there, and activate that module in your bootstrap. To share your module, you can upload it to [GitHub](https://github.com). You can look at examples of modules made by [Kohana](https://github.com/kohana) or [other users](#where-to-find-modules).
+To create a module simply create a folder (usually in `modules/`) and place the files you want to be in the module there, and activate that module in `bootstrap/app.php`. Put its classes in a `src/` directory under your own namespace and register it in `composer.json`. To share it, publish it as a Composer package with an `extra.kohana` section. To share your module, you can upload it to [GitHub](https://github.com). You can look at examples of modules made by [Kohana](https://github.com/kohana) or [other users](#where-to-find-modules).

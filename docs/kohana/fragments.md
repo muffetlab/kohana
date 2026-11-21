@@ -1,6 +1,6 @@
 # Fragments
 
-Fragments are a quick and simple way to cache HTML or other output. Fragments are not useful for caching objects or raw database results, in which case you should use a more robust caching method, which can be achieved with the [Cache module](../cache). Fragments use `Application::cache()` and will be placed in the cache directory (`app/cache` by default).
+Fragments are a quick and simple way to cache HTML or other output. Fragments are not useful for caching objects or raw database results, in which case you should use a more robust caching method, which can be achieved with the [Cache module](../cache). Fragments use `Application::cache()` and will be placed in the cache directory (`storage/framework/cache` by default).
 
 You should use Fragment (or any caching solution) when reading the cache is faster than reprocessing the result. Reading and parsing a remote file, parsing a complicated template, calculating something, etc.
 

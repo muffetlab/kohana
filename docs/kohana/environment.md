@@ -1,6 +1,6 @@
 # Environment Configuration
 
-Settings that differ between machines (database passwords, keys, the base URL) belong in a `.env` file in the project root, not in your config files. Kohana loads it with [phpdotenv](https://github.com/vlucas/phpdotenv) at the start of `app/bootstrap.php`.
+Settings that differ between machines (database passwords, keys, the base URL) belong in a `.env` file in the project root, not in your config files. Kohana loads it with [phpdotenv](https://github.com/vlucas/phpdotenv) at the start of `bootstrap/app.php`.
 
     cp .env.example .env
     php kohana key:generate

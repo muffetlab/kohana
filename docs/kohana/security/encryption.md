@@ -11,7 +11,7 @@ Encryption supports multiple instances of cryptography engines through a grouped
 ## Encryption configuration
 
 The default config file is located in `system/config/encrypt.php`.
-You should copy this file to `app/config/encrypt.php`.
+You should copy this file to `config/encrypt.php`.
 
 The encryption configuration contains an array of configuration groups.
 The structure of each configuration group looks like this:

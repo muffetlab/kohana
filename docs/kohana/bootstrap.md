@@ -1,6 +1,6 @@
 # Bootstrap
 
-The bootstrap is located at `app/bootstrap.php`. It is responsible for setting up the Kohana environment and executing the main response. It is included by `index.php` (see [Request flow](flow))
+The bootstrap is located at `bootstrap/app.php`. It is responsible for setting up the Kohana environment and executing the main response. It is included by `index.php` (see [Request flow](flow))
 
 [!!] The bootstrap is responsible for the flow of your application. In previous versions of Kohana the bootstrap was in `system` and was somewhat of an unseen, uneditable force. In Kohana 3 the bootstrap takes on a much more integral and versatile role. Do not be afraid to edit and change your bootstrap however you see fit.
 
@@ -39,7 +39,7 @@ Application::init([
 ]);
 
 // Attach the file writer to logging. Multiple writers are supported.
-Application::$log->attach(new FileWriter(APPPATH . 'logs'));
+Application::$log->attach(new FileWriter(storage_path('logs')));
 
 // Attach a file reader to config. Multiple readers are supported.
 Application::$config->attach(new FileReader);
@@ -78,24 +78,24 @@ Application::init([
 
 [Modules](modules) are then loaded using `Application::modules()`. Including modules is optional.
 
-Each key in the array should be the name of the module, and the value is the path to the module, either relative or absolute.
+Each key in the array should be the name of the module, and the value is the path to the module, either relative or absolute. Modules installed with Composer are added after them automatically.
 ~~~
-// Example excerpt from bootstrap.php
+// Example excerpt from bootstrap/app.php
 
 Application::modules([
     'database' => MODPATH . 'database',
     'orm' => MODPATH . 'orm',
-]);
+] + Application::$packages->modules());
 ~~~
 
 ## Routes
 
 **Read the [Routing](routing) page for a more detailed description and more examples.**
 
-[Routes](routing) are then defined via `Route::set()`.
+The bootstrap then loads `routes/web.php`, where [routes](routing) are defined via `Route::set()`.
 
 ~~~
-// The default route that comes with Kohana 3
+// routes/web.php
 Route::set('default', '(<controller>(/<action>(/<id>)))')
     ->defaults([
         'controller' => 'Welcome',

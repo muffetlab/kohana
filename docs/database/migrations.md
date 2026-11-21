@@ -10,7 +10,7 @@ The commands come with the [console](../minion/index); the database module must 
     php kohana make:migration add_slug_to_posts_table
     php kohana make:migration change_posts --table=posts
 
-The file goes into `app/migrations`, prefixed with the date and time (`2026_11_21_120000_create_posts_table.php`); migrations run in file name order. `create_*_table` names produce a `Schema::create()` stub, and `*_to_*_table`, `*_from_*_table` names a `Schema::table()` stub.
+The file goes into `database/migrations`, prefixed with the date and time (`2026_11_21_120000_create_posts_table.php`); migrations run in file name order. `create_*_table` names produce a `Schema::create()` stub, and `*_to_*_table`, `*_from_*_table` names a `Schema::table()` stub.
 
 A migration file returns an anonymous class:
 

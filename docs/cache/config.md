@@ -12,7 +12,7 @@ The default cache group is loaded based on the `Cache::$default` setting. It is 
 
 ## Group settings
 
-Below are the default cache configuration groups for each supported driver. Add to or override these settings within the `app/config/cache.php` file.
+Below are the default cache configuration groups for each supported driver. Add to or override these settings within the `config/cache.php` file.
 
 | Name           | Required | Description                              |
 |----------------|----------|------------------------------------------|
@@ -21,7 +21,7 @@ Below are the default cache configuration groups for each supported driver. Add 
 
     'file' => [
         'driver' => 'file',
-        'cache_dir' => APPPATH . 'cache',
+        'cache_dir' => storage_path('framework/cache'),
         'default_expire' => 3600,
     ],
 
@@ -93,7 +93,7 @@ A lifetime of `0` stores an item without expiry. The store supports `increment()
     'sqlite' => [
         'driver' => 'sqlite',
         'default_expire' => 3600,
-        'database' => APPPATH . 'cache/kohana-cache.sql3',
+        'database' => storage_path('framework/cache/kohana-cache.sql3'),
         'schema' => 'CREATE TABLE caches(id VARCHAR(127) PRIMARY KEY,
             tags VARCHAR(255), expiration INTEGER, cache TEXT)',
     ],
@@ -102,13 +102,13 @@ A lifetime of `0` stores an item without expiry. The store supports `increment()
 
     'file' => [
         'driver' => 'file',
-        'cache_dir' => APPPATH . 'cache',
+        'cache_dir' => storage_path('framework/cache'),
         'default_expire' => 3600,
     ],
 
 ## Override existing configuration group
 
-The following example demonstrates how to override an existing configuration setting, using the config file in `/app/config/cache.php`.
+The following example demonstrates how to override an existing configuration setting, using the config file in `/config/cache.php`.
 
     <?php
 
@@ -131,7 +131,7 @@ The following example demonstrates how to override an existing configuration set
 
 ## Add new configuration group
 
-The following example demonstrates how to add a new configuration setting, using the config file in `/app/config/cache.php`.
+The following example demonstrates how to add a new configuration setting, using the config file in `/config/cache.php`.
 
     <?php
 

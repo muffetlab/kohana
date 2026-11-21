@@ -1,6 +1,6 @@
 # Writing Commands
 
-Generate a command with `make:command`, or create the class yourself. Commands live in `app/classes/Console/Commands` under `App\Console\Commands`, extend `Kohana\Console\Command` and implement `handle()`:
+Generate a command with `make:command`, or create the class yourself. Commands live in `app/Console/Commands` under `App\Console\Commands`, extend `Kohana\Console\Command` and implement `handle()`:
 
     php kohana make:command report
 

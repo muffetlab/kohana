@@ -1,6 +1,6 @@
 # Seeding
 
-Seeders fill the database with initial or test data. They live in `app/classes/Database/Seeders` under `App\Database\Seeders`. The application ships an empty `DatabaseSeeder`; create more with:
+Seeders fill the database with initial or test data. They live in `app/Database/Seeders` under `Database\Seeders`. The application ships an empty `DatabaseSeeder`; create more with:
 
     php kohana make:seeder User
 
@@ -8,7 +8,7 @@ A seeder implements `run()` and can call other seeders:
 
     <?php
 
-    namespace App\Database\Seeders;
+    namespace Database\Seeders;
 
     use Kohana\Database\DB;
     use Kohana\Database\Seeder;

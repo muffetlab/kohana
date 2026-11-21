@@ -32,9 +32,9 @@ php kohana key:generate
 
 Then set your database credentials and `APP_BASE_URL` in `.env`.
 
-Before the application can be run, you will need to make a few changes to the `app/bootstrap.php` file. This
+Before the application can be run, you will need to make a few changes to the `bootstrap/app.php` file. This
 file is the first one to be included by `public/index.php` and sets up most of the global options for the application.
-Open `app/bootstrap.php` and make the following changes:
+Open `bootstrap/app.php` and make the following changes:
 
  - Set the default [timezone](https://www.php.net/timezones) for your application.
 ~~~
@@ -43,7 +43,7 @@ date_default_timezone_set('America/Sao_Paulo');
 ~~~
  - The `base_url` comes from `APP_BASE_URL` in `.env`. Set it to the location of the kohana folder on your server relative to the document root, for example `APP_BASE_URL=/kohana/` when Kohana is installed at /var/www/kohana and the DocumentRoot is /var/www.
 
- - List your trusted hosts. Open `app/config/url.php` and add regex patterns of the hosts you expect your application to be accessible from.
+ - List your trusted hosts. Open `config/url.php` and add regex patterns of the hosts you expect your application to be accessible from.
 
    [!!] Do not forget to escape your dots (.) as these are regex patterns. These patterns should always fully match, as they are prepended with `^` and appended with `$`.
 ~~~
@@ -55,15 +55,11 @@ return [
 ];
 ~~~
 
- - Define a salt for the `Cookie` class.
-~~~
-Cookie::$salt = 'some-really-long-cookie-salt-here';
-~~~
+ - The cookie salt comes from `COOKIE_SALT` in `.env`; `php kohana key:generate` sets it.
 
- - Make sure the `app/cache` and `app/logs` directories are writable by the web server.
+ - Make sure the `storage` and `bootstrap/cache` directories are writable by the web server.
 ~~~
-sudo chmod -R a+rwx app/cache
-sudo chmod -R a+rwx app/logs
+sudo chmod -R ug+rwx storage bootstrap/cache
 ~~~
 
 [!!] Make sure to use a unique salt for your application and never to share it. Take a look at the [Cookies](cookies) page for more information on how cookies work in Kohana. If you do not define a `Cookie::$salt` value, Kohana will throw an exception when it encounters any cookie on your domain.

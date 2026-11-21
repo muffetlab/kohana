@@ -7,6 +7,7 @@
       - [Controllers](mvc/controllers)
       - [Models](mvc/models)
       - [Views](mvc/views)
+   - [Directory Structure](structure)
    - [Cascading Filesystem](files)
       - [Class Files](files/classes)
       - [Config Files](files/config)
