@@ -56,7 +56,7 @@ trait BuildsQueries
      */
     public function lastQuery(): string
     {
-        return $this->db->last_query;
+        return (string) $this->db->lastQuery;
     }
 
     /**

@@ -463,16 +463,22 @@ parameters:
 			path: modules/orm/src/Auth/OrmAuth.php
 
 		-
-			message: '#^Access to an undefined property Kohana\\Database\\Connection\:\:\$last_query\.$#'
-			identifier: property.notFound
+			message: '#^Property Kohana\\Orm\\Model\:\:\$objectName \(string\) in isset\(\) is not nullable\.$#'
+			identifier: isset.property
 			count: 1
-			path: modules/orm/src/Orm/Model.php
+			path: modules/orm/src/Orm/Concerns/HasAttributes.php
 
 		-
 			message: '#^Call to function is_array\(\) with string will always evaluate to false\.$#'
 			identifier: function.impossibleType
 			count: 2
-			path: modules/orm/src/Orm/Model.php
+			path: modules/orm/src/Orm/Concerns/PersistsModels.php
+
+		-
+			message: '#^Property Kohana\\Orm\\Model\:\:\$validation \(Kohana\\Validation\\Validator\) in isset\(\) is not nullable\.$#'
+			identifier: isset.property
+			count: 1
+			path: modules/orm/src/Orm/Concerns/ValidatesAttributes.php
 
 		-
 			message: '#^Call to function is_object\(\) with Kohana\\Database\\Connection will always evaluate to true\.$#'
@@ -511,19 +517,7 @@ parameters:
 			path: modules/orm/src/Orm/Model.php
 
 		-
-			message: '#^Property Kohana\\Orm\\Model\:\:\$objectName \(string\) in isset\(\) is not nullable\.$#'
-			identifier: isset.property
-			count: 1
-			path: modules/orm/src/Orm/Model.php
-
-		-
 			message: '#^Property Kohana\\Orm\\Model\:\:\$objectPlural \(string\) in isset\(\) is not nullable\.$#'
-			identifier: isset.property
-			count: 1
-			path: modules/orm/src/Orm/Model.php
-
-		-
-			message: '#^Property Kohana\\Orm\\Model\:\:\$validation \(Kohana\\Validation\\Validator\) in isset\(\) is not nullable\.$#'
 			identifier: isset.property
 			count: 1
 			path: modules/orm/src/Orm/Model.php
