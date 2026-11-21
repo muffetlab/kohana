@@ -2150,7 +2150,7 @@ class Model extends \Kohana\Foundation\Model
      */
     public function unique(string $field, $value): bool
     {
-        $model = \Kohana\Orm\Model::factory($this->objectName())
+        $model = \Kohana\Orm\Model::factory(static::class)
             ->where($field, '=', $value)
             ->find();
 
