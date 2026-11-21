@@ -190,13 +190,23 @@ class PdoConnection extends Connection
         } elseif ($type === Connection::INSERT) {
             // Return a list of insert id and rows created
             return [
-                $this->connection->lastInsertId(),
+                $this->insertId(),
                 $result->rowCount(),
             ];
         } else {
             // Return the number of rows affected
             return $result->rowCount();
         }
+    }
+
+    /**
+     * Returns the ID of the last inserted row.
+     *
+     * @return string|false|null
+     */
+    protected function insertId()
+    {
+        return $this->connection->lastInsertId();
     }
 
     public function begin(?string $mode = null): bool

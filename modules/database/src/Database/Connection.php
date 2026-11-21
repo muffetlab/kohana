@@ -79,7 +79,10 @@ abstract class Connection
             $driver = str_contains($config['type'], '\\') ? $config['type'] : [
                 'pdo' => PdoConnection::class,
                 'mysqli' => MySqliConnection::class,
-            ][strtolower($config['type'])];
+                'pgsql' => PgsqlConnection::class,
+                'postgres' => PgsqlConnection::class,
+                'postgresql' => PgsqlConnection::class,
+            ][strtolower($config['type'])] ?? throw new DatabaseException('Unknown database type :type', [':type' => $config['type']]);
 
             // Create the database connection instance
             $driver = new $driver($name, $config);
