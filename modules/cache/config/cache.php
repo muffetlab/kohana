@@ -14,6 +14,15 @@ return [
 //            ],
 //        ]
 //    ],
+//    'redis' => [
+//        'driver' => 'redis',
+//        'default_expire' => 3600,
+//        'host' => '127.0.0.1',
+//        'port' => 6379,
+//        'password' => null,
+//        'database' => 0,
+//        'prefix' => 'kohana:',
+//    ],
 //    'apcu' => [
 //        'driver' => 'apcu',
 //        'default_expire' => 3600,
