@@ -1,6 +1,7 @@
 <?php
 
 use Kohana\Config\FileReader;
+use Kohana\Cookie\Cookie;
 use Kohana\Foundation\Application;
 use Kohana\Http\Http;
 use Kohana\Log\Writers\FileWriter;
@@ -9,6 +10,9 @@ use Kohana\Translation\Translator;
 
 // Register the Composer autoloader
 require DOCROOT . '../vendor/autoload.php';
+
+// Load the project's .env file. Real environment variables take precedence over it.
+Dotenv\Dotenv::createImmutable(dirname(DOCROOT))->safeLoad();
 
 // -- Environment setup --------------------------------------------------------
 
@@ -72,13 +76,12 @@ if (isset($_SERVER['SERVER_PROTOCOL'])) {
 }
 
 /**
- * Set Kohana::$environment if a 'KOHANA_ENV' environment variable has been supplied.
- *
- * Note: If you supply an invalid environment name, a PHP warning will be thrown
- * saying "Couldn't find constant Kohana::<INVALID_ENV_NAME>"
+ * Set Application::$environment from APP_ENV (or the older KOHANA_ENV):
+ * production, staging, testing or development ("local" means development).
  */
-if (isset($_SERVER['KOHANA_ENV'])) {
-    Application::$environment = constant(Application::class . '::' . strtoupper($_SERVER['KOHANA_ENV']));
+if ($environment = env('APP_ENV', env('KOHANA_ENV'))) {
+    $environment = strtoupper($environment) === 'LOCAL' ? 'DEVELOPMENT' : strtoupper($environment);
+    Application::$environment = constant(Application::class . '::' . $environment);
 }
 
 /**
@@ -97,7 +100,7 @@ if (isset($_SERVER['KOHANA_ENV'])) {
  * - boolean  expose      set the X-Powered-By header                        false
  */
 Application::init([
-    'base_url' => '/kohana/',
+    'base_url' => env('APP_BASE_URL', '/'),
 ]);
 
 /**
@@ -124,13 +127,9 @@ Application::modules([
 ]);
 
 /**
- * Cookie Salt
- * @see  https://kohana.top/3.3/guide/kohana/cookies
- *
- * If you have not defined a cookie salt in your Cookie class then
- * uncomment the line below and define a preferably long salt.
+ * Cookie salt, used to sign cookies. Generate one with: php public/index.php --task=key:generate
  */
-// Cookie::$salt = null;
+Cookie::$salt = env('COOKIE_SALT');
 
 /**
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
