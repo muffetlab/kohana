@@ -267,19 +267,19 @@ class Kohana_DateTest extends TestCase
             ],
             // Timezones (see #3902)
             [
-                '2011-04-01 01:23:45 Antarctica/South_Pole',
+                '2011-04-01 01:23:45 Antarctica/McMurdo',
                 '2011-04-01 01:23:45',
                 'Y-m-d H:i:s e',
                 'Antarctica/McMurdo'
             ],
             [
-                '2011-04-01 01:23:45 Antarctica/South_Pole',
+                '2011-04-01 01:23:45 Antarctica/McMurdo',
                 '2011-03-31 14:23:45 Europe/Paris',
                 'Y-m-d H:i:s e',
                 'Antarctica/McMurdo'
             ],
             [
-                '2011-04-01 01:23:45 Antarctica/South_Pole',
+                '2011-04-01 01:23:45 Antarctica/McMurdo',
                 '@1301574225',
                 'Y-m-d H:i:s e',
                 'Antarctica/McMurdo'
