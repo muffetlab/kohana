@@ -181,3 +181,56 @@ class User extends \Kohana\Auth\Models\User
 ### Tests
 
 The `unittest` module's custom suite loader (`Unittest_Tests`, `modules/unittest/tests.php`) is removed. Use a `phpunit.xml` that lists your test directories, with `modules/unittest/bootstrap.php` as the bootstrap. Test fixtures such as dummy controllers belong in a PSR-4 directory (`autoload-dev`), not at the bottom of a test file.
+
+## 15. Methods and properties are camelCase
+
+Every method and property name follows PSR-1 camelCase, and the leading underscore on protected members is gone:
+
+| Kohana 3.5 | Kohana 4 |
+|---|---|
+| `$result->as_array()` | `$result->asArray()` |
+| `$orm->find_all()`, `count_all()`, `has_any()` | `findAll()`, `countAll()`, `hasAny()` |
+| `Kohana::find_file()` | `Application::findFile()` |
+| `Kohana::$base_url`, `$index_file` | `Application::$baseUrl`, `$indexFile` |
+| `$this->auto_render` | `$this->autoRender` |
+| `protected $_data`, `$_table_name` | `protected $data`, `$tableName` |
+
+The complete list of 255 methods and 197 properties is in [`upgrade/member-map.php`](upgrade/member-map.php).
+
+### Template methods with new names
+
+Some protected methods had an underscore twin of a public method. They now have their own names:
+
+| Kohana 3.5 | Kohana 4 |
+|---|---|
+| `Minion_Task::_execute()` | `Command::handle()` |
+| `Auth::_login()` | `Auth::attemptLogin()` |
+| `Session::_read()`, `_write()`, `_regenerate()`, `_restart()`, `_destroy()` | `readSession()`, `writeSession()`, `regenerateSession()`, `restartSession()`, `destroySession()` |
+| `Session::_serialize()`, `_unserialize()` | `serializeData()`, `unserializeData()` |
+| `Kohana_Exception::_handler()` | `KohanaException::render()` |
+| `Debug::_dump()` | `Debug::dumpVar()` |
+| `ORM::_validation()` | `Model::initializeValidation()` |
+| `Database::set_charset()` | `Connection::setCharset()` |
+
+### Controller actions have no prefix
+
+`action_index()` is now `index()`. The route's `action` parameter is converted to camelCase, so the URL `/user/edit_profile` calls `editProfile()`.
+
+Only public, non-static methods declared in your controller (not in `Kohana\Routing\Controller` or `TemplateController`) can be called from a URL, so `before()`, `after()` and `execute()` are never routable. **Make helper methods in your controllers `protected` or `private`**, otherwise they become reachable as actions.
+
+### What does not change
+
+- Validation rule strings stay snake_case: `->rule('name', 'not_empty')`, `'max_length'`. They map to `Rules::notEmpty()`, `Rules::maxLength()`, and message files keep their snake_case keys. An array callback such as `[Rules::class, 'maxLength']` reports the error `max_length`.
+- Request client parameters stay snake_case: `Request::factory($uri, ['follow_headers' => true])`.
+- ORM column names are untouched. A column must not share its name with a model property (`db`, `object`, `changed`, `errors`, `loaded`, `saved`, `validation`, ...), the same rule as Eloquent's reserved attributes.
+
+### Rename your code automatically
+
+Run this after `upgrade/rector.php`:
+
+```bash
+composer require --dev nikic/php-parser:^5
+php vendor/kohana/kohana/upgrade/rename-members.php application modules/my-module
+```
+
+It renames declarations, calls, `[$object, 'method']` callables, `'Class::method'` strings and `action_*` methods. Public properties are only renamed on `$this`, because `$model->content_type` may be an ORM column; check other accesses by hand. Strings built at runtime (for example `'_' . $name`) are not found by any tool.
