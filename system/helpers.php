@@ -170,3 +170,36 @@ if (!function_exists('config')) {
         return $path === null ? $config : \Kohana\Support\Arr::path($config, $path, $default);
     }
 }
+
+if (!function_exists('session')) {
+    /**
+     * Reads or writes the default session (config/session.php "driver").
+     *
+     *     session('user_id');                    // read
+     *     session('user_id', 0);                 // read with a default
+     *     session(['user_id' => 42]);            // write one or more values
+     *     session()->regenerate();               // the Session object
+     *
+     * @param string|array|null $key Key to read, or key => value pairs to write
+     * @param mixed $default Value when the key is not set
+     * @return mixed
+     */
+    function session(string|array|null $key = null, $default = null)
+    {
+        $session = \Kohana\Session\Session::instance();
+
+        if ($key === null) {
+            return $session;
+        }
+
+        if (is_array($key)) {
+            foreach ($key as $name => $value) {
+                $session->set($name, $value);
+            }
+
+            return $session;
+        }
+
+        return $session->get($key, $default);
+    }
+}
