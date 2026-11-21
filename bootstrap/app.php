@@ -17,6 +17,9 @@ require VENDOR_PATH . 'autoload.php';
 // Load the project's .env file. Real environment variables take precedence over it.
 Dotenv\Dotenv::createImmutable(BASEPATH)->safeLoad();
 
+// Application settings (config/app.php), needed before the config system starts
+$app = require BASEPATH . 'config/app.php';
+
 // -- Environment setup --------------------------------------------------------
 
 /**
@@ -25,7 +28,7 @@ Dotenv\Dotenv::createImmutable(BASEPATH)->safeLoad();
  * @link https://kohana.top/guide/using.configuration
  * @link https://www.php.net/timezones
  */
-date_default_timezone_set('America/Chicago');
+date_default_timezone_set($app['timezone']);
 
 /**
  * Set the default locale.
@@ -33,7 +36,7 @@ date_default_timezone_set('America/Chicago');
  * @link https://kohana.top/guide/using.configuration
  * @link https://www.php.net/function.setlocale
  */
-setlocale(LC_ALL, 'en_US.utf-8');
+setlocale(LC_ALL, $app['system_locale']);
 
 /**
  * Enable the Kohana autoloader.
@@ -63,7 +66,7 @@ mb_substitute_character('none');
 /**
  * Set the default language
  */
-Translator::lang('en-us');
+Translator::lang($app['locale']);
 
 if (isset($_SERVER['SERVER_PROTOCOL'])) {
     // Replace the default protocol.
@@ -71,32 +74,18 @@ if (isset($_SERVER['SERVER_PROTOCOL'])) {
 }
 
 /**
- * Set Application::$environment from APP_ENV (or the older KOHANA_ENV):
- * production, staging, testing or development ("local" means development).
+ * Set Application::$environment from APP_ENV: production, staging, testing or
+ * development ("local" means development).
  */
-if ($environment = env('APP_ENV', env('KOHANA_ENV'))) {
-    $environment = strtoupper($environment) === 'LOCAL' ? 'DEVELOPMENT' : strtoupper($environment);
-    Application::$environment = constant(Application::class . '::' . $environment);
-}
+$environment = strtoupper($app['env']) === 'LOCAL' ? 'DEVELOPMENT' : strtoupper($app['env']);
+Application::$environment = constant(Application::class . '::' . $environment);
 
 /**
- * Initialize Kohana, setting the default options.
- *
- * The following options are available:
- *
- * - string   base_url    path, and optionally domain, of your application   null
- * - string   index_file  name of your index file, usually "index.php"       index.php
- * - string   charset     internal character set used for input and output   utf-8
- * - string   cache_dir   set the internal cache directory                   storage/framework/cache
- * - integer  cache_life  lifetime, in seconds, of items cached              60
- * - boolean  errors      enable or disable error handling                   true
- * - boolean  profile     enable or disable internal profiling               true
- * - boolean  caching     enable or disable internal caching                 false
- * - boolean  expose      set the X-Powered-By header                        false
+ * Initialize Kohana with the settings from config/app.php.
  */
-Application::init([
-    'base_url' => env('APP_BASE_URL', '/'),
-]);
+Application::init(array_intersect_key($app, array_flip([
+    'base_url', 'index_file', 'charset', 'errors', 'caching', 'cache_dir', 'cache_life', 'profile', 'expose',
+])));
 
 /**
  * Attach the file writer to logging. Multiple writers are supported.
@@ -115,23 +104,18 @@ Application::$config->attach(new FileReader());
 Application::$packages = new PackageManifest(BASEPATH, VENDOR_PATH, BASEPATH . 'bootstrap/cache/packages.php');
 
 /**
- * Enable modules. Modules are referenced by a relative or absolute path. Modules
- * listed here come before the discovered packages in the cascading filesystem.
+ * Enable the modules from config/app.php, then the discovered packages.
  */
-Application::modules([
-//    'auth' => MODPATH . 'auth', // Basic authentication
-//    'cache' => MODPATH . 'cache', // Caching with multiple backends
-//    'database' => MODPATH . 'database', // Database access
-//    'image' => MODPATH . 'image', // Image manipulation
-//    'minion' => MODPATH . 'minion', // CLI Tasks
-//    'orm' => MODPATH . 'orm', // Object Relationship Mapping
-//    'unittest' => MODPATH . 'unittest', // Unit testing
-] + Application::$packages->modules());
+Application::modules($app['modules'] + Application::$packages->modules());
 
 /**
- * Cookie salt, used to sign cookies. Generate one with: php kohana key:generate
+ * Cookie settings (config/cookie.php).
  */
-Cookie::$salt = env('COOKIE_SALT');
+foreach (Application::$config->load('cookie')->asArray() as $setting => $value) {
+    Cookie::${$setting} = $value;
+}
+
+unset($app, $environment, $setting, $value);
 
 /**
  * Load the routes.

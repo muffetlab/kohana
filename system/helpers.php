@@ -146,3 +146,27 @@ if (!function_exists('storage_path')) {
         return base_path('storage/' . ltrim($path, '/\\'));
     }
 }
+
+if (!function_exists('config')) {
+    /**
+     * Reads a configuration value with a dot path: the first segment is the
+     * config file, the rest is the path inside it.
+     *
+     *     config('app.timezone');
+     *     config('database.default.connection.hostname');
+     *     config('cache.redis.port', 6379);
+     *     config('session');                 // the whole group
+     *
+     * @param string $key File and path, e.g. "database.default.type"
+     * @param mixed $default Value when the path does not exist
+     * @return mixed
+     */
+    function config(string $key, $default = null)
+    {
+        [$group, $path] = array_pad(explode('.', $key, 2), 2, null);
+
+        $config = \Kohana\Foundation\Application::$config->load($group);
+
+        return $path === null ? $config : \Kohana\Support\Arr::path($config, $path, $default);
+    }
+}

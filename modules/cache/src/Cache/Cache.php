@@ -89,9 +89,9 @@ abstract class Cache
     public const DEFAULT_EXPIRE = 3600;
 
     /**
-     * @var   string     default driver to use
+     * @var   string|null  default cache group; null uses the "default" of config/cache.php
      */
-    public static $default = 'file';
+    public static $default = null;
 
     /**
      * @var   \Kohana\Cache\Cache instances
@@ -120,8 +120,8 @@ abstract class Cache
     {
         // If there is no group supplied
         if ($group === null) {
-            // Use the default setting
-            $group = static::$default;
+            // Cache::$default, then the "default" key of config/cache.php
+            $group = static::$default ?? Application::$config->load('cache')->get('default', 'file');
         }
 
         if (isset(static::$instances[$group])) {

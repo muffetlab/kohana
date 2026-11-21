@@ -19,9 +19,9 @@ use Kohana\Log\Logger;
 abstract class Session
 {
     /**
-     * @var  string  default session adapter
+     * @var  string|null  default session adapter; null uses the "driver" of config/session.php
      */
-    public static $default = 'native';
+    public static $default = null;
 
     /**
      * @var  array  session instances
@@ -46,8 +46,8 @@ abstract class Session
     public static function instance(?string $type = null, ?string $id = null): self
     {
         if ($type === null) {
-            // Use the default type
-            $type = static::$default;
+            // Session::$default, then the "driver" key of config/session.php
+            $type = static::$default ?? Application::$config->load('session')->get('driver', 'native');
         }
 
         if (!isset(static::$instances[$type])) {

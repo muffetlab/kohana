@@ -113,7 +113,7 @@ abstract class DatabaseTestCase extends TestCase
      */
     public function getKohanaConnection(): Connection
     {
-        return Connection::instance(Application::$config->load('unittest')->db_connection);
+        return Connection::instance($this->databaseConnection);
     }
 
     /**
