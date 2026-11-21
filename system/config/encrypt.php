@@ -9,6 +9,8 @@ return [
          * string   key     Secret passphrase.
          * integer  method  The cipher method, one of the return value from openssl_get_cipher_methods().
          */
+        // APP_KEY from .env; "base64:" keys are decoded. Generate one with: php public/index.php --task=key:generate
+        'key' => env('APP_KEY'),
         'method' => 'AES-256-CTR',
     ],
 ];

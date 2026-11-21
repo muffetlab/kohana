@@ -17,9 +17,9 @@ return [
 //    'redis' => [
 //        'driver' => 'redis',
 //        'default_expire' => 3600,
-//        'host' => '127.0.0.1',
-//        'port' => 6379,
-//        'password' => null,
+//        'host' => env('REDIS_HOST', '127.0.0.1'),
+//        'port' => env('REDIS_PORT', 6379),
+//        'password' => env('REDIS_PASSWORD'),
 //        'database' => 0,
 //        'prefix' => 'kohana:',
 //    ],

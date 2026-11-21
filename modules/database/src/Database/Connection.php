@@ -78,6 +78,7 @@ abstract class Connection
             // Set the driver class name
             $driver = str_contains($config['type'], '\\') ? $config['type'] : [
                 'pdo' => PdoConnection::class,
+                'mysql' => MySqliConnection::class,
                 'mysqli' => MySqliConnection::class,
                 'pgsql' => PgsqlConnection::class,
                 'postgres' => PgsqlConnection::class,

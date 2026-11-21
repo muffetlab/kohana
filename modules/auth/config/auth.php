@@ -10,7 +10,7 @@ return [
     'hash_options' => [],
     // Kohana 3 HMAC settings: only used to verify (and then rehash) passwords stored before Kohana 4
     'hash_method' => 'sha256',
-    'hash_key' => null,
+    'hash_key' => env('AUTH_HASH_KEY'),
     'lifetime' => 1209600,
     'session_type' => Session::$default,
     'session_key' => 'auth_user',

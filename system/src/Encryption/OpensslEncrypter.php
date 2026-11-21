@@ -78,7 +78,7 @@ class OpensslEncrypter extends Encrypter
 
         // Store the cipher method and the key.
         $this->method = $config['method'];
-        $this->key = $config['key'];
+        $this->key = str_starts_with($config['key'], 'base64:') ? base64_decode(substr($config['key'], 7), true) : $config['key'];
 
         // Store other parameters.
         isset($config['options']) and $this->options = $config['options'];
