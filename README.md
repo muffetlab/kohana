@@ -8,6 +8,7 @@ Released under an [MIT license](https://kohana.top/license), Kohana can be used 
 ## Supported Versions
 | Release | Supported PHP versions | Released    | Active Support Until | Security Support Until | Latest                                                            |
 |---------|------------------------|-------------|----------------------|------------------------|-------------------------------------------------------------------|
+| 4.0     | 8.4 – 8.5              | Unreleased  | To be determined     | To be determined       | See [UPGRADE.md](UPGRADE.md)                                       |
 | 3.5     | 7.1 – 7.3              | 31 Dec 2025 | To be determined     | To be determined       | [3.5.1](https://github.com/muffetlab/kohana/releases/tag/v3.5.1)  |
 | 3.4     | 5.6 – 7.1              | 25 Dec 2018 | 31 Dec 2026          | To be determined       | [3.4.5](https://github.com/muffetlab/kohana/releases/tag/v3.4.5)  |
 | 3.3     | 5.3 – 5.6              | 23 Oct 2012 | End of life          | End of life            | [3.3.6](https://github.com/muffetlab/kohana/releases/tag/v3.3.6)  |
