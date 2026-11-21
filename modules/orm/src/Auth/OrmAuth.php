@@ -90,13 +90,18 @@ class OrmAuth extends Auth
             $user->where($user->uniqueKey($username), '=', $username)->find();
         }
 
-        if (is_string($password)) {
-            // Create a hashed password
-            $password = $this->hash($password);
-        }
-
         // If the passwords match, perform a login
-        if ($user->has('roles', $this->model('Role', ['name' => 'login'])) && $user->password === $password) {
+        if ($user->loaded() && $this->verify((string) $password, $user->password) && $user->has('roles', $this->model('Role', ['name' => 'login']))) {
+            if ($this->needsRehash($user->password)) {
+                // Upgrade a legacy or outdated hash; the model's password filter hashes it
+                try {
+                    $user->password = $password;
+                    $user->save();
+                } catch (\Exception $e) {
+                    // A failed rehash must not block the login
+                }
+            }
+
             if ($remember === true) {
                 // Token data
                 $data = [
@@ -296,7 +301,7 @@ class OrmAuth extends Auth
         if (!$user)
             return false;
 
-        return $this->hash($password) === $user->password;
+        return $this->verify((string) $password, $user->password);
     }
 
     /**

@@ -40,12 +40,7 @@ class FileAuth extends Auth
      */
     protected function attemptLogin($username, $password, $remember): bool
     {
-        if (is_string($password)) {
-            // Create a hashed password
-            $password = $this->hash($password);
-        }
-
-        if (isset($this->users[$username]) && $this->users[$username] === $password) {
+        if (isset($this->users[$username]) && $this->verify((string) $password, $this->users[$username])) {
             // Complete the login
             return $this->completeLogin($username);
         }
@@ -87,11 +82,11 @@ class FileAuth extends Auth
     {
         $username = $this->getUser();
 
-        if ($username === false) {
+        if ($username === null) {
             return false;
         }
 
-        return $password === $this->password($username);
+        return $this->verify((string) $password, $this->password($username) ?: null);
     }
 
 }

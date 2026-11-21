@@ -132,18 +132,65 @@ abstract class Auth
     }
 
     /**
-     * Perform a hmac hash, using the configured method.
+     * Hashes a password with PHP's password_hash(): Argon2id when PHP
+     * supports it, bcrypt otherwise. Set `hash_algorithm` and
+     * `hash_options` in the auth config to change this.
      *
-     * @param string $str string to hash
-     * @return  string
-     * @throws Kohana_Exception
+     *     $hash = $auth->hash($password);
+     *
+     * @param string $password Plain text password
+     * @return string
      */
-    public function hash(string $str): string
+    public function hash(string $password): string
     {
-        if (!$this->config['hash_key'])
-            throw new KohanaException('A valid hash key must be set in your auth config.');
+        return password_hash($password, $this->algorithm(), $this->config['hash_options'] ?? []);
+    }
 
-        return hash_hmac($this->config['hash_method'], $str, $this->config['hash_key']);
+    /**
+     * Checks a plain text password against a stored hash. Kohana 3 HMAC
+     * hashes (`hash_method` + `hash_key`) are still accepted, so existing
+     * users can log in and be rehashed with needsRehash().
+     *
+     * @param string $password Plain text password
+     * @param string|null $hash Stored hash
+     * @return bool
+     */
+    public function verify(string $password, ?string $hash): bool
+    {
+        if ($hash === null || $hash === '') {
+            return false;
+        }
+
+        if (password_get_info($hash)['algo'] !== null) {
+            return password_verify($password, $hash);
+        }
+
+        // Legacy Kohana 3 hash
+        if (empty($this->config['hash_key'])) {
+            return false;
+        }
+
+        return hash_equals($hash, hash_hmac($this->config['hash_method'] ?? 'sha256', $password, $this->config['hash_key']));
+    }
+
+    /**
+     * Whether a stored hash should be replaced: it is a legacy HMAC hash or
+     * uses other settings than the current algorithm and options.
+     *
+     * @param string $hash Stored hash
+     * @return bool
+     */
+    public function needsRehash(string $hash): bool
+    {
+        return password_needs_rehash($hash, $this->algorithm(), $this->config['hash_options'] ?? []);
+    }
+
+    /**
+     * @return string|int|null Password algorithm for password_hash()
+     */
+    protected function algorithm()
+    {
+        return $this->config['hash_algorithm'] ?? (defined('PASSWORD_ARGON2ID') ? PASSWORD_ARGON2ID : PASSWORD_BCRYPT);
     }
 
     protected function completeLogin($user): bool
