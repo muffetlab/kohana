@@ -90,7 +90,8 @@ class Kohana_Arr
             // The path has already been separated into keys
             $keys = $path;
         } else {
-            if (array_key_exists($path, $array)) {
+            // PHP 8 array_key_exists() rejects objects such as Config_Group (ArrayObject)
+            if (is_array($array) ? array_key_exists($path, $array) : ($array instanceof ArrayAccess && $array->offsetExists($path))) {
                 // No need to do extra processing
                 return $array[$path];
             }
