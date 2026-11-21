@@ -526,7 +526,7 @@ class Kohana_Encrypt_OpensslTest extends TestCase
             $config[$configGroup] = [];
         }
         // Fill in the missing config variables.
-        $config[$configGroup] = $config[$configGroup] + $configArray;
+        $config[$configGroup] = array_filter($config[$configGroup], fn ($value) => $value !== null) + $configArray;
 
         // Call instance twice.
         $e = Encrypter::instance($instanceName);
