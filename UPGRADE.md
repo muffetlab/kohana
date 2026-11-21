@@ -222,7 +222,7 @@ Only public, non-static methods declared in your controller (not in `Kohana\Rout
 
 - Validation rule strings stay snake_case: `->rule('name', 'not_empty')`, `'max_length'`. They map to `Rules::notEmpty()`, `Rules::maxLength()`, and message files keep their snake_case keys. An array callback such as `[Rules::class, 'maxLength']` reports the error `max_length`.
 - Request client parameters stay snake_case: `Request::factory($uri, ['follow_headers' => true])`.
-- ORM column names are untouched. A column must not share its name with a model property (`db`, `object`, `changed`, `errors`, `loaded`, `saved`, `validation`, ...), the same rule as Eloquent's reserved attributes.
+- ORM column names are untouched. Inside a model's own methods, `$this->name` reads a declared property before a column, and the underscore no longer separates them. Avoid columns named after model properties (`db`, `object`, `changes`, `related`, `loaded`, `saved`, `valid`, `validation`, `sorting`, ...) or read them with `$this->get('name')`, the same caveat as Eloquent's reserved attributes.
 
 ### Rename your code automatically
 
