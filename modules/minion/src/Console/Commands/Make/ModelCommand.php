@@ -39,6 +39,14 @@ class ModelCommand extends GeneratorCommand
 
             class $class extends Model
             {{$table}
+                protected \$timestamps = true;
+
+                protected \$fillable = [];
+
+                protected \$hidden = [];
+
+                protected \$casts = [];
+
                 public function rules(): array
                 {
                     return [];
