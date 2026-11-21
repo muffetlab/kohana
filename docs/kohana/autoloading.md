@@ -1,69 +1,52 @@
 # Loading Classes
 
-Kohana supports the [PSR-0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md) autoloading specification as of version 3.3. This allows you to take advantage of PHP [autoloading](https://www.php.net/manual/en/language.oop5.autoload.php), removing the need to call [include](https://www.php.net/manual/en/function.include.php) or [require](https://www.php.net/require) before using a class. When you use a class Kohana will find and include the class file for you. For instance, when you want to use the `Cookie::set()` method, you simply call:
+Kohana uses [Composer](https://getcomposer.org) and the [PSR-4](https://www.php-fig.org/psr/psr-4/) autoloading standard. You never `include` or `require` a class file: when you use a class, Composer finds the file from the class's namespace.
+
+    use Kohana\Cookie\Cookie;
 
     Cookie::set('mycookie', 'any string value');
 
-Or to load an `Encrypter` instance, just call [Encrypt::instance]:
+## Namespaces
 
-    $encrypt = Encrypter::instance();
+| Namespace | Directory |
+|---|---|
+| `Kohana\` | `system/src/` and `modules/*/src/` |
+| `App\` | `application/classes/` |
 
-Classes are loaded via the `Application::autoLoad()` method, which makes a simple conversion from class name to file name:
+A class name maps to a file by replacing namespace separators with directory separators, for example:
 
-1. Classes are placed in the `classes/` directory of the [filesystem](files)
-2. Any underscore characters in the class name are converted to slashes
-3. The filename must match the case of the class
+| Class | File |
+|---|---|
+| `Kohana\Http\Request` | `system/src/Http/Request.php` |
+| `Kohana\Database\Query\SelectBuilder` | `modules/database/src/Database/Query/SelectBuilder.php` |
+| `App\Http\Controllers\WelcomeController` | `application/classes/Http/Controllers/WelcomeController.php` |
+| `App\Models\User` | `application/classes/Models/User.php` |
 
-When calling a class that has not been loaded (e.g., `CookieSession`), Kohana will search the filesystem using `Application::findFile()` for a file named `classes/Session/Cookie.php`.
+File names must match the class name's case exactly. Your computer's filesystem may not care, but Linux servers do.
 
-If your classes do not follow this convention, they cannot be autoloaded by Kohana. You will have to manually included your files, or add your own [autoload function.](http://us3.php.net/manual/en/function.spl-autoload-register.php)
+Both mappings are declared in `composer.json`:
 
-## Custom Autoloaders
-
-Kohana's default autoloader is enabled in `application/bootstrap.php` using [spl_autoload_register](https://www.php.net/spl_autoload_register):
-
-    spl_autoload_register(['Kohana', 'auto_load']);
-
-This allows `Application::autoLoad()` to attempt to find and include any class that does not yet exist when the class is first used as long as it follows the PSR-0 specification. If you wish to support the previous Kohana filename convention (using lowercase filenames), an additional autoloader is provided by Kohana:
-
-    spl_autoload_register(['Kohana', 'auto_load_lowercase']);
-
-
-### Example: Zend
-
-You can easily gain access to other libraries if they include an autoloader. For example, here is how to enable Zend's autoloader, so you can use Zend libraries in your Kohana application.
-
-#### Download and install the Zend Framework files
-
-- [Download the latest Zend Framework files](http://framework.zend.com/download/latest).
-- Create a `vendor` directory at `application/vendor`. This keeps third party software separate from your application classes.
-- Move the decompressed Zend folder containing Zend Framework to `application/vendor/Zend`.
-
-
-#### Include Zend's Autoloader in your bootstrap
-
-Somewhere in `application/bootstrap.php`, copy the following code:
-
-    /**
-     * Enable Zend Framework autoloading
-     */
-    if ($path = Application::findFile('vendor', 'Zend/Loader')) {
-        ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . dirname(dirname($path)));
-
-        require_once 'Zend/Loader/Autoloader.php';
-        Zend_Loader_Autoloader::getInstance();
+    "autoload": {
+        "psr-4": {
+            "Kohana\\": ["system/src", "modules/auth/src", ...],
+            "App\\": "application/classes/"
+        }
     }
 
-#### Usage example
+Run `composer dump-autoload` after you change them.
 
-You can now autoload any Zend Framework classes from inside your Kohana application.
+## The Kohana autoloader
 
-    if ($validate($this->request->post())) {
-        $mailer = new Zend_Mail;
+`application/bootstrap.php` still registers `Application::autoLoad()`:
 
-        $mailer->setBodyHtml($view)
-            ->setFrom(Application::$config->load('site')->email_from)
-            ->addTo($email)
-            ->setSubject($message)
-            ->send();
-    }
+    spl_autoload_register([Application::class, 'autoLoad']);
+
+It loads classes without a namespace from the `classes/` directories of the [cascading filesystem](files), converting underscores to directory separators (`Foo_Bar` → `classes/Foo/Bar.php`). New code should use namespaces and Composer instead.
+
+## Third-party libraries
+
+Install libraries with Composer and use them right away:
+
+    composer require symfony/mailer
+
+    use Symfony\Component\Mailer\Mailer;

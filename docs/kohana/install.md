@@ -2,7 +2,7 @@
 
 [!!] Before continuing, make sure you have a web server (like Apache) configured with the following requirements.
 
- - PHP 7.1 or newer.
+ - PHP 8.4 or newer.
  - [Iconv Extension](https://www.php.net/iconv)
  - [Character Type (CTYPE) Extension](https://www.php.net/ctype)
 

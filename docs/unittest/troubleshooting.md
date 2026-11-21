@@ -1,17 +1,22 @@
 # Troubleshooting
 
-## Some of my classes aren't getting whitelisted for code coverage even though their module is
+## Code coverage is empty
 
-Only the "highest" files in the cascading filesystem are whitelisted for code coverage.
+Coverage needs a driver. Install [PCOV](https://github.com/krakjoe/pcov) (fast, coverage only) or Xdebug, then run:
 
-To test your module's file, remove the higher file from the cascading filesystem by disabling their respective module.
+    vendor/bin/pest --coverage
+    vendor/bin/pest --coverage-html=build/coverage
 
-A good way of testing is to create a "vanilla" testing environment for your module, devoid of anything that isn't required by the module.
+The directories that count towards coverage are listed in the `<source>` section of `phpunit.xml`.
 
-## I get a blank page when trying to generate a code coverage report
+## Database tests are skipped
 
-Try the following:
+The database tests connect with the `default` (and `mysqli`) groups of `config/database.php` and skip themselves when the connection fails. Put local credentials in `application/config/database.php` and keep that file out of version control.
 
-1. Generate an HTML report from the command line using `phpunit {bootstrap info} --coverage-html ./report {insert path to tests.php}`. If any error messages show up, fix them and try to generate the report again.
-2. Increase the php memory limit.
-3. Make sure that display_errors is set to "on" in your php.ini config file (this value can sometimes be overridden in a .htaccess file).
+## "Class ... not found" for a test fixture
+
+Fixture classes such as dummy controllers and models are loaded by Composer. Put them in a PSR-4 directory listed under `autoload-dev` in `composer.json`, then run `composer dump-autoload`.
+
+## A test passes on macOS but fails on Linux
+
+Class file names must match the class name's case. macOS filesystems ignore case by default, Linux does not.

@@ -1,32 +1,61 @@
-# Usage
+# Testing
 
-    $ phpunit --bootstrap=modules/unittest/bootstrap.php modules/unittest/tests.php
+Kohana's tests run on [Pest](https://pestphp.com), which is built on [PHPUnit](https://phpunit.de). Pest runs both its own functional tests and ordinary PHPUnit test classes, so you can use either style.
 
-Alternatively you can use a phpunit.xml to have a more fine-grained control over which tests are included and which files are whitelisted.
+## Setup
 
-Make sure you only whitelist the highest files in the cascading filesystem, else you could end up with a lot of "class cannot be redefined" errors.
+Install Pest as a development dependency:
 
-If you use the tests.php testsuite loader then it will only whitelist the highest files. See config/unittest.php for details on configuring the tests.php whitelist.
+    composer require --dev pestphp/pest
+
+Create a `phpunit.xml` in your project root that boots Kohana and lists your test directory:
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <phpunit bootstrap="modules/unittest/bootstrap.php" colors="true">
+        <testsuites>
+            <testsuite name="Application">
+                <directory>tests</directory>
+            </testsuite>
+        </testsuites>
+    </phpunit>
+
+`modules/unittest/bootstrap.php` defines the Kohana paths and runs `application/bootstrap.php`, so your modules, config and routes are loaded as in a real request.
+
+Run the suite:
+
+    vendor/bin/pest
 
 ## Writing tests
 
-If you're writing a test for your application, place it in "application/tests". Similarly, if you're writing a test for a module place it in modules/modulefolder/tests.
+### Pest style
 
-Rather than tell you how to write tests I'll point you in the direction of the [PHPUnit Manual](http://www.phpunit.de/manual/5.7/en/index.html). One thing you should bear in mind when writing tests is that testcases should extend Unittest_Testcase rather than PHPUnit_Framework_TestCase, doing so gives you access to useful kohana specific helpers such as `setEnvironment()`.
+    // tests/Feature/HomePageTest.php
 
-Here's a taster of some of the cool things you can do with PHPUnit:
+    use Kohana\Http\Request;
 
-### Data Providers
+    uses(Kohana\Testing\TestCase::class);
 
-Sometimes you want to be able to run a specific test with different sets of data to try and test every eventuality.
+    it('says hello', function () {
+        $response = Request::factory('/')->execute();
 
-Ordinarily you could use a foreach loop to iterate over an array of test data, however PHPUnit already can take care of this for us rather easily using "Data Providers". A data provider is a function that returns an array of arguments that can be passed to a test.
+        expect($response->status())->toBe(200)
+            ->and($response->body())->toContain('hello');
+    });
 
-    <?php
+Add `uses(Kohana\Testing\TestCase::class)->in('Feature');` to `tests/Pest.php` to apply the test case to a whole directory.
 
-    Class ReallyCoolTest extends TestCase
+### PHPUnit style
+
+Test classes extend `Kohana\Testing\TestCase`, which adds Kohana helpers such as `setEnvironment()` (temporarily changes static properties, config values and superglobals, and restores them after the test) and `mockAbstract()`.
+
+    use Kohana\Testing\TestCase;
+    use PHPUnit\Framework\Attributes\DataProvider;
+    use PHPUnit\Framework\Attributes\Group;
+
+    #[Group('strings')]
+    class StrLenTest extends TestCase
     {
-        public function providerStrLen()
+        public static function providerStrLen(): array
         {
             return [
                 ['One set of testcase data', 24],
@@ -34,73 +63,35 @@ Ordinarily you could use a foreach loop to iterate over an array of test data, h
             ];
         }
 
-        /**
-         * @dataProvider providerStrLen
-         */
-        public function testStrLen($string, $length)
+        #[DataProvider('providerStrLen')]
+        public function testStrLen(string $string, int $length): void
         {
             $this->assertSame($length, strlen($string));
         }
     }
 
-The key thing to notice is the `@dataProvider` tag in the DocComment, this is what tells PHPUnit to use a data provider. The provider prefix is totally optional, but it's a nice standard to identify providers.
+Data providers must be `public static`. Metadata uses attributes (`#[DataProvider]`, `#[Group]`, `#[Test]`); docblock annotations are no longer read.
 
-For more info see:
+### Database tests
 
-* [Data Providers](https://phpunit.de/manual/5.7/en/writing-tests-for-phpunit.html#writing-tests-for-phpunit.data-providers)
+Extend `Kohana\Testing\DatabaseTestCase` to get `getConnection()` (a PDO connection) and `getKohanaConnection()` for the connection named in `config/unittest.php`. Skip the test when the database is not available:
 
-### Grouping tests
-
-To allow users to selectively run tests you need to organise your tests into groups. Here's an example test showing how to do this:
-
-    <?php
-
-    /**
-     * This is a description for my testcase.
-     *
-     * @group somegroup
-     * @group somegroup.morespecific
-     */
-    Class AnotherReallyCoolTest extends TestCase
+    public function setUp(): void
     {
-        /**
-         * Tests can also be grouped too!
-         *
-         * @group somegroup.morespecific.annoyingstuff
-         */
-        public function testSomeAnnoyingCase()
-        {
-            // CODE!!
+        parent::setUp();
+
+        try {
+            Connection::instance()->connect();
+        } catch (Exception $e) {
+            $this->markTestSkipped('Database connection failed: ' . $e->getMessage());
         }
     }
 
-Our convention is to use lowercase group names, with more specific levels in a group separated by periods. For example, the Validate helper tests are part of the following groups:
+## Grouping and filtering
 
-    kohana
-    kohana.validation
-    kohana.validation.helpers
+    vendor/bin/pest --group=strings
+    vendor/bin/pest --exclude-group=slow
+    vendor/bin/pest --filter=StrLen
+    vendor/bin/pest --list-groups
 
-To actually limit your testing to the "somegroup" group, use:
-
-    $ phpunit --boostrap=modules/unittest/bootstrap.php --group=somegroup modules/unittest/tests.php
-
-This functionality can be used to record which bug reports a test is for:
-
-    /**
-     *
-     * @group bugs.1477
-     */
-    function testAccountCannotGoBelowZero()
-    {
-        // Some arbitary code
-    }
-
-To see all groups that are available in your code run:
-
-    $ phpunit --boostrap=modules/unittest/bootstrap.php --list-groups modules/unittest/tests.php
-
-*Note:* The `--list-groups` switch should appear before the path to the test suite loader.
-
-You can also exclude groups while testing using the `--exclude-group` switch. This can be useful if you want to ignore all kohana tests:
-
-    $ phpunit --bootstrap=modules/unittest/bootstrap.php --exclude-group=kohana modules/unittest/tests.php
+Kohana's own tests use lowercase groups with periods for levels, for example `kohana.validation.helpers`.

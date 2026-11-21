@@ -2,7 +2,7 @@
 
 Kohana comes with many static "helper" functions to make certain tasks easier.
 
-You can make your own helpers by simply making a class and putting it in the `classes` directory, and you can also extend any helper to modify or add new functions using transparent extension.
+You can make your own helpers by creating a class in `application/classes` under the `App\` namespace, and you can [extend](extension) any helper to modify it or add new methods.
 
  - **`Arr`** - Array functions. Get an array key or default to a set value, get an array key by path, etc.
 

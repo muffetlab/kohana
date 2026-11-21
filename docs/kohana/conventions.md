@@ -4,49 +4,57 @@ It is encouraged that you follow Kohana's coding style. This makes code more rea
 
 ## Class Names and File Location
 
-Class names in Kohana follow a strict convention to facilitate [autoloading](autoloading). Class names should have uppercase first letters with underscores to separate words. Underscores are significant as they directly reflect the file location in the filesystem.
+Kohana follows [PSR-4](https://www.php-fig.org/psr/psr-4/), like Laravel and most modern PHP frameworks:
 
-The following conventions apply:
-
-1. CamelCased class names should be used when it is undesirable to create a new directory level.
-2. All class file names and directory names must match the case of the class as per [PSR-0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md).
-3. All classes should be in the `classes` directory. This may be at any level in the [cascading filesystem](files).
+1. Every class has a namespace: `Kohana\` for the framework, `App\` for your application.
+2. Class names are StudlyCase, without underscores.
+3. Each class lives in its own file, named after the class, in the directory that matches its namespace. File and directory names must match the class's case.
 
 ### Examples  {#class-name-examples}
 
-Remember that in a class, an underscore means a new directory. Consider the following examples:
+| Class | File |
+|---|---|
+| `App\Http\Controllers\WelcomeController` | `application/classes/Http/Controllers/WelcomeController.php` |
+| `App\Http\Controllers\Admin\UserController` | `application/classes/Http/Controllers/Admin/UserController.php` |
+| `App\Models\BlogPost` | `application/classes/Models/BlogPost.php` |
+| `App\Console\Commands\Db\MigrateCommand` | `application/classes/Console/Commands/Db/MigrateCommand.php` |
+| `Kohana\Database\Query\SelectBuilder` | `modules/database/src/Database/Query/SelectBuilder.php` |
+| `Kohana\Html\Form` | `system/src/Html/Form.php` |
 
-| Class Name          | File Path                       |
-|---------------------|---------------------------------|
-| Controller_Template | classes/Http/Controllers/TemplateController.php |
-| Model_User          | classes/Models/User.php          |
-| Model_BlogPost      | classes/Models/BlogPost.php      |
-| Database            | classes/Database.php            |
-| Database_Query      | classes/Database/Query.php      |
-| Form                | classes/Form.php                |
+Controllers end in `Controller`, console commands in `Command`. Models have no suffix.
 
 ## Coding Style
 
-In order to produce highly consistent source code, we ask that everyone follow the [PSR-12](https://www.php-fig.org/psr/psr-12) coding standard except the naming conventions below.
+Kohana follows the [PSR-12](https://www.php-fig.org/psr/psr-12) coding standard.
 
 ### Naming Conventions
 
-Kohana uses under_score naming, not camelCase naming.
+| What | Style | Example |
+|---|---|---|
+| Classes, interfaces, traits | StudlyCase | `HeaderBag`, `MySqliConnection` |
+| Methods | camelCase | `findAll()`, `asArray()` |
+| Properties | camelCase, no leading underscore | `protected $tableName` |
+| Constants | UPPER_CASE | `Application::PRODUCTION` |
+| Config keys, validation rules, message keys | snake_case | `'max_length'`, `'cache_dir'` |
 
 #### Classes
 
-    // Controller class, uses Controller_ prefix
+    namespace App\Http\Controllers;
+
+    use Kohana\Routing\Controller;
+
     class AppleController extends Controller
     {
+        public function index()
+        {
+        }
     }
 
-    // Model class, uses Model_ prefix
+    namespace App\Models;
+
+    use Kohana\Orm\Model;
+
     class Cheese extends Model
-    {
-    }
-
-    // Regular class
-    class Peanut
     {
     }
 

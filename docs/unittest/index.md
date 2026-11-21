@@ -1,3 +1,3 @@
 # UnitTest
 
-Unit tests for Kohana.
+Testing Kohana applications with Pest and PHPUnit.

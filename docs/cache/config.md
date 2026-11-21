@@ -54,50 +54,6 @@ Below are the default cache configuration groups for each supported driver. Add 
         ]
     ],
 
-## Memcache settings
-
-| Name        | Required | Description                                                                                                             |
-|-------------|----------|-------------------------------------------------------------------------------------------------------------------------|
-| driver      | __YES__  | (_string_) The driver type to use                                                                                       |
-| servers     | __YES__  | (_array_) Associative array of server details, must include a __host__ key. (see _Memcache server configuration_ below) |
-| compression | __NO__   | (_boolean_) Use data compression when caching                                                                           |
-
-### Memcache server configuration
-
-| Name             | Required | Description                                                                                                                                                                                                                                                                                                      |
-|------------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| host             | __YES__  | (_string_) The host of the memcache server, i.e. __localhost__; or __127.0.0.1__; or __memcache.domain.tld__                                                                                                                                                                                                     |
-| port             | __NO__   | (_integer_) Point to the port where memcached is listening for connections. Set this parameter to 0 when using UNIX domain sockets. Default to __11211__                                                                                                                                                         |
-| persistent       | __NO__   | (_boolean_) Controls the use of a persistent connection. Default to __true__                                                                                                                                                                                                                                     |
-| weight           | __NO__   | (_integer_) Number of buckets to create for this server which in turn control its probability of it being selected. The probability is relative to the total weight of all servers. Default to __1__                                                                                                             |
-| timeout          | __NO__   | (_integer_) Value in seconds which will be used for connecting to the daemon. Think twice before changing the default value of 1 second - you can lose all the advantages of caching if your connection is too slow. Default to __1__                                                                            |
-| retry_interval   | __NO__   | (_integer_) Controls how often a failed server will be retried, the default value is 15 seconds. Setting this parameter to -1 disables automatic retry. Default to __15__                                                                                                                                        |
-| status           | __NO__   | (_boolean_) Controls if the server should be flagged as online. Default to __true__                                                                                                                                                                                                                              |
-| failure_callback | __NO__   | (_[callback](https://www.php.net/manual/en/language.types.callable.php)_) Allows the user to specify a callback function to run upon encountering an error. The callback is run before failover is attempted. The function takes two parameters, the hostname and port of the failed server. Default to __null__ |
-
-    'memcache' => [
-        'driver' => 'memcache',
-        'default_expire' => 3600,
-        // Use Zlib compression (can cause issues with integers)
-        'compression' => false,
-        'servers' => [
-            'local' => [
-                // Memcache Server
-                'host' => 'localhost',
-                // Memcache port number
-                'port' => 11211,
-                // Persistent connection
-                'persistent' => false,
-                'weight' => 1,
-                'timeout' => 1,
-                'retry_interval' => 15,
-                'status' => true,
-            ],
-        ],
-        // Take server offline immediately on first fail (no retry)
-        'instant_death' => true,
-    ],
-
 ## APCu settings
 
     'apcu' => [
@@ -120,13 +76,6 @@ Below are the default cache configuration groups for each supported driver. Add 
     'file' => [
         'driver' => 'file',
         'cache_dir' => APPPATH . 'cache',
-        'default_expire' => 3600,
-    ],
-
-## Wincache settings
-
-    'wincache' => [
-        'driver' => 'wincache',
         'default_expire' => 3600,
     ],
 

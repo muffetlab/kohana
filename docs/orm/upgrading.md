@@ -1,3 +1,9 @@
+# Upgrading to Kohana 4
+
+Kohana 4 (PHP 8.4+) renames every class, method and property and removes several modules. Follow the step-by-step [upgrade guide](../../UPGRADE.md) in the repository root, which also ships Rector and php-parser scripts that rename your code automatically.
+
+The notes below cover older upgrades.
+
 # Upgrading from 3.4 to 3.5
 
 ## ORM::changed()
@@ -33,7 +39,7 @@ $user->values($data, ['username', 'logins']);
 ## Non-existent Property Access
 
 In Kohana 3.5, the ORM class now allows accessing and setting non-existent properties without throwing exceptions.
-Previously, attempting to access or set a property that didn't exist on the model would result in a Kohana_Exception
+Previously, attempting to access or set a property that didn't exist on the model would result in a `KohanaException`
 being thrown. This behavior has been changed to provide more flexibility when working with dynamic properties.
 
 ~~~

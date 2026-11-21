@@ -17,8 +17,11 @@ date_default_timezone_set('America/Chicago');
 // Set the default locale.
 setlocale(LC_ALL, 'en_US.utf-8');
 
-// Enable the Kohana autoloader.
-spl_autoload_register(['Kohana', 'auto_load']);
+// Composer autoloads the framework (Kohana\) and your application (App\).
+require DOCROOT . '../vendor/autoload.php';
+
+// Enable the Kohana autoloader for classes without a namespace.
+spl_autoload_register([Application::class, 'autoLoad']);
 
 // Enable the Kohana autoloader for unserialization.
 ini_set('unserialize_callback_func', 'spl_autoload_call');
@@ -82,7 +85,6 @@ Each key in the array should be the name of the module, and the value is the pat
 Application::modules([
     'database' => MODPATH . 'database',
     'orm' => MODPATH . 'orm',
-    'userguide' => MODPATH . 'userguide',
 ]);
 ~~~
 

@@ -11,9 +11,7 @@ Kohana provides both an exception handler and an error handler that transforms e
 
 ## Example
 
-Click any of the links to toggle the display of additional information:
-
-<div>{{userguide/examples/error}}</div>
+The error page shows the exception, a source excerpt, the stack trace and the environment, each in a collapsible section.
 
 ## Disabling Error/Exception Handling
 

@@ -1,35 +1,44 @@
 # Testing workflows
 
-Having unittests for your application is a nice idea, but unless you actually use them they're about as useful as a chocolate fireguard. There are quite a few ways of getting tests "into" your development process and this guide aims to cover a few of them.
+Tests are only useful if you run them. Here are a few ways to make that part of your routine.
 
-## Integrating with IDEs
+## In your editor
 
-Modern IDEs have come a long way in the last couple of years and ones like NetBeans have pretty decent PHP / PHPUnit support.
+PhpStorm and VS Code (with a PHPUnit or Pest extension) read `phpunit.xml` and can run a single test, a file or the whole suite from the editor. Point them at `vendor/bin/pest` (or `vendor/bin/phpunit`) and at the `phpunit.xml` in your project root.
 
-### NetBeans (8.2+)
+## On every change
 
-1. Open the Options window by choosing **Tools** > **Options** from the main menu. (If you are running on Mac OS X, choose NetBeans > Preferences.)
-2. Select the **PHP** category in the upper pane and click the **Frameworks & Tools** tab. Select **PHPUnit** in the left pane of the tab and specify the path to the PHPUnit script. Click **Apply** and close the Options window.
-3. Right-click the project node and select **Properties**.
-4. Select **Testing** in the Categories pane. Select **PHPUnit** as a Testing Provider and specify the location of the test directories for the project.
-5. Select **PHPUnit** under the Testing node in the Categories pane and specify the Bootstrap path to your `modules/unittest/bootstrap.php` file.
+Run only what you are working on:
 
-You can also specify a custom test suite loader (enter the path to your `modules/unittest/tests.php` file) and/or a custom configuration file (enter the path to your phpunit.xml file).
+    vendor/bin/pest tests/Feature/HomePageTest.php
+    vendor/bin/pest --filter=it_says_hello
 
-## Looping shell
+Run the failing tests first, and stop at the first failure:
 
-If you're developing in a text editor such as textmate, vim, gedit etc. chances are PHPUnit support isn't natively supported by your editor.
+    vendor/bin/pest --order-by=defects --stop-on-failure
 
-In such situations you can run a simple bash script to loop over the tests every X seconds, here's an example script:
+Run in parallel on large suites:
 
-    while(true) do clear; phpunit; sleep 8; done;
+    vendor/bin/pest --parallel
 
-You will probably need to adjust the timeout (`sleep 8`) to suit your own workflow, but 8 seconds seems to be about enough time to see what's erroring before the tests are re-run.
+## Continuous Integration
 
-In the above example we're using a phpunit.xml config file to specify all the unit testing settings and to reduce the complexity of the looping script.
+Run the suite on every push. A GitHub Actions workflow for a Kohana application:
 
-## Continuous Integration (CI)
+    name: Tests
 
-Continuous integration is a team-based tool which enables developers to keep tabs on whether changes committed to a project break the application. If a commit causes a test to fail, the build is classified as "broken". The CI server then alerts developers through email, RSS, instant messaging, or visual indicators (such as glowing bears or lava lamps), notifying them that someone has broken the build and that all hell has broken loose.
+    on: [push, pull_request]
 
-A popular CI server is [Hudson](http://hudson-ci.org/), which uses [Phing](http://phing.info/) to run the build tasks for your application.
+    jobs:
+      test:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v6
+          - uses: shivammathur/setup-php@v2
+            with:
+              php-version: '8.5'
+              tools: composer
+          - run: composer install --prefer-dist --no-progress
+          - run: vendor/bin/pest
+
+Kohana's own workflow in `.github/workflows/test.yml` also starts MySQL and Memcached services for the database and cache tests.

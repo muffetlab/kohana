@@ -1,45 +1,55 @@
 # Classes
 
-TODO: Brief intro to classes.
-
-[Models](mvc/models) and [Controllers](mvc/controllers) are classes as well, but are treated slightly differently by Kohana. Read their respective pages to learn more.
+Your application's classes live in `application/classes/` under the `App\` namespace, and Composer [autoloads](../autoloading) them. [Models](../mvc/models) and [Controllers](../mvc/controllers) are classes too, with their own conventions; read their pages to learn more.
 
 ## Helper or Library?
 
-Kohana 3 does not differentiate between "helper" classes and "library" classes like in previous versions. They are all placed in the `classes/` folder and follow the same conventions. The distinction is that in general, a "helper" class is used statically, (for examples see the [helpers included in Kohana](helpers)), and library classes are typically instantiated and used as objects (like the [Database query builders](../database/query/builder)). The distinction is not black and white, and is irrelevant anyway, since they are treated the same by Kohana.
+Kohana does not distinguish "helper" classes from "library" classes. In general a helper is used statically (see the [helpers included in Kohana](../helpers)) and a library is instantiated (like the [Database query builders](../../database/query/builder)), but both follow the same conventions.
 
 ## Creating a class
 
-To create a new class, simply place a file in the `classes/` directory at any point in the [Cascading Filesystem](files), that follows the [Class naming conventions](conventions#class-names-and-file-location). For example, let's create a `Foobar` class.
+Place the file where its namespace points, following the [naming conventions](../conventions#class-names-and-file-location). For example, a `Foobar` class:
 
-    // classes/Foobar.php
+    // application/classes/Foobar.php
+
+    namespace App;
 
     class Foobar
     {
-        static function magic()
+        public static function magic()
         {
             // Does something
         }
     }
 
-We can now call `Foobar::magic()` anywhere and Kohana will [autoload](autoloading) the file for us.
+Import it and call `Foobar::magic()` anywhere:
 
-We can also put classes in subdirectories.
+    use App\Foobar;
 
-    // classes/Professor/Baxter.php
+    Foobar::magic();
 
-    class Professor_Baxter
+Subdirectories become sub-namespaces:
+
+    // application/classes/Professor/Baxter.php
+
+    namespace App\Professor;
+
+    class Baxter
     {
-        static function teach()
+        public static function teach()
         {
             // Does something
         }
     }
 
-We could now call `Professor_Baxter::teach()` anywhere we want.
+## Classes in modules
 
-For examples of how to create and use classes, simply look at the 'classes' folder in `system` or any module.
+A module ships its classes in its own `src/` directory under its own namespace. Register it in your `composer.json`:
 
-## Namespacing your classes
+    "autoload": {
+        "psr-4": {
+            "Acme\\Blog\\": "modules/blog/src/"
+        }
+    }
 
-TODO: Discuss namespacing to provide transparent extension functionality in your own classes/modules.
+To change how a framework class behaves, see [Extending Classes](../extension).

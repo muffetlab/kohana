@@ -26,7 +26,7 @@ Let's see what's going on here:
 :    You should recognize the first tag as an opening php tag (if you don't you should probably [learn php](https://www.php.net)). What follows is a small check that makes sure that this file is being included by Kohana. It stops people from accessing files directly from the URL.
 
 `Class HelloController extends Controller`
-:    This line declares our controller, each controller class has to be prefixed with `Controller_` and an underscore delimited path to the folder the controller is in (see [Conventions and styles](about.conventions) for more info). Each controller should also extend the base `Controller` class which provides a standard structure for controllers.
+:    This line declares our controller. Controllers live in the `App\Http\Controllers` namespace and their names end in `Controller` (see [Conventions and styles](../conventions) for more info). Each controller should also extend the base `Controller` class which provides a standard structure for controllers.
 
 
 `public function index()`
