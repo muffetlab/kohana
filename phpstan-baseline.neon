@@ -235,12 +235,6 @@ parameters:
 			path: modules/database/src/Database/Result.php
 
 		-
-			message: '#^Method Kohana\\Session\\DatabaseSession\:\:readSession\(\) should return array\|string but returns null\.$#'
-			identifier: return.type
-			count: 1
-			path: modules/database/src/Session/DatabaseSession.php
-
-		-
 			message: '#^Function imagerotate invoked with 4 parameters, 3 required\.$#'
 			identifier: arguments.count
 			count: 1
@@ -803,24 +797,6 @@ parameters:
 			identifier: property.defaultValue
 			count: 1
 			path: system/src/Routing/TemplateController.php
-
-		-
-			message: '#^Parameter \#1 \$value of function session_cache_limiter expects string\|null, false given\.$#'
-			identifier: argument.type
-			count: 1
-			path: system/src/Session/NativeSession.php
-
-		-
-			message: '#^Return type \(null\) of method Kohana\\Session\\NativeSession\:\:readSession\(\) should be compatible with return type \(array\|string\) of method Kohana\\Session\\Session\:\:readSession\(\)$#'
-			identifier: method.childReturnType
-			count: 1
-			path: system/src/Session/NativeSession.php
-
-		-
-			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: system/src/Session/Session.php
 
 		-
 			message: '#^Parameter \#1 \$level of method Kohana\\Log\\Logger\:\:add\(\) expects string, int given\.$#'
