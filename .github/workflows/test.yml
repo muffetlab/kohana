@@ -33,6 +33,18 @@ jobs:
           --health-interval=5s
           --health-timeout=5s
           --health-retries=10
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: kohana
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd=pg_isready
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
 
     steps:
       - name: Checkout
@@ -43,7 +55,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           tools: composer
-          extensions: memcached, apcu, gd, mysqli, pdo_mysql, pdo_sqlite
+          extensions: memcached, apcu, gd, mysqli, pdo_mysql, pdo_pgsql, pdo_sqlite
           ini-values: apc.enable_cli=1
 
       - name: Get composer cache directory
@@ -77,6 +89,12 @@ jobs:
                   'connection' => ['hostname' => '127.0.0.1', 'database' => 'kohana', 'username' => 'root', 'password' => 'root', 'persistent' => false],
                   'table_prefix' => '',
                   'charset' => 'utf8mb4',
+              ],
+              'pgsql' => [
+                  'type' => 'pgsql',
+                  'connection' => ['hostname' => '127.0.0.1', 'port' => 5432, 'database' => 'kohana', 'username' => 'postgres', 'password' => 'postgres', 'persistent' => false],
+                  'table_prefix' => '',
+                  'charset' => 'UTF8',
               ],
           ];
           EOF
