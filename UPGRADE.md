@@ -93,3 +93,91 @@ On PHP 8.2+, string comparison functions return only -1, 0 or 1, not the byte di
 | `Cache_Wincache` driver (`ext-wincache`) | `Cache_Apcu` or `Cache_File`. |
 
 **Action:** Remove these modules from `Kohana::modules()` in `bootstrap.php`. Delete any `config/userguide.php` files from your own modules.
+
+## 14. Classes use the `Kohana\` namespace (PSR-4)
+
+Every framework class now lives under `Kohana\`, grouped like Laravel, and is autoloaded by Composer. The transparent extension layer is gone: there is no more `Kohana_Request` + `Request` pair, only `Kohana\Http\Request`. Old names have **no** aliases.
+
+The full old → new list is in [`upgrade/class-map.php`](upgrade/class-map.php). The most used ones:
+
+| Kohana 3.5 | Kohana 4 |
+|---|---|
+| `Kohana` | `Kohana\Foundation\Application` |
+| `Kohana_Exception` | `Kohana\Foundation\KohanaException` |
+| `Arr`, `Text`, `UTF8`, `Num`, `Date` | `Kohana\Support\Arr`, `Str`, `Utf8`, `Number`, `Date` |
+| `Request`, `Response`, `HTTP_Header` | `Kohana\Http\Request`, `Response`, `HeaderBag` |
+| `HTTP_Exception_404` | `Kohana\Http\Exceptions\Http404Exception` |
+| `Route`, `URL`, `Controller` | `Kohana\Routing\Route`, `Url`, `Controller` |
+| `View`, `HTML`, `Form` | `Kohana\View\View`, `Kohana\Html\Html`, `Form` |
+| `Validation`, `Valid` | `Kohana\Validation\Validator`, `Rules` |
+| `Config`, `I18n`, `Log`, `Session` | `Kohana\Config\Repository`, `Kohana\Translation\Translator`, `Kohana\Log\Logger`, `Kohana\Session\Session` |
+| `Database`, `DB`, `ORM` | `Kohana\Database\Connection`, `Kohana\Database\DB`, `Kohana\Orm\Model` |
+| `Cache`, `Cache_File` | `Kohana\Cache\Cache`, `Kohana\Cache\FileStore` |
+| `Minion_Task` | `Kohana\Console\Command` |
+| `Unittest_TestCase` | `Kohana\Testing\TestCase` |
+
+### Rename your code automatically
+
+`upgrade/rector.php` renames every class reference, type hint and docblock in your application:
+
+```bash
+composer require --dev rector/rector
+vendor/bin/rector process --config vendor/kohana/kohana/upgrade/rector.php
+```
+
+Rector does not touch class names inside strings. Search your code for strings such as `'Kohana::$base_url'`, `'Valid'`, or `['Kohana', 'method']` callables, and replace them with `Application::class . '::$base_url'`, `Rules::class`, `[Application::class, 'method']`.
+
+### Application classes use the `App\` namespace
+
+`composer.json` maps `App\` to `application/classes/`.
+
+| Kohana 3.5 | Kohana 4 | File |
+|---|---|---|
+| `Controller_Welcome` | `App\Http\Controllers\WelcomeController` | `classes/Http/Controllers/WelcomeController.php` |
+| `Controller_Admin_User` (directory `admin`) | `App\Http\Controllers\Admin\UserController` | `classes/Http/Controllers/Admin/UserController.php` |
+| `Model_User` | `App\Models\User` | `classes/Models/User.php` |
+| `Model_Blog_Post` | `App\Models\BlogPost` | `classes/Models/BlogPost.php` |
+| `Task_Db_Migrate` (`db:migrate`) | `App\Console\Commands\Db\MigrateCommand` | `classes/Console/Commands/Db/MigrateCommand.php` |
+
+Routes stay the same: `'controller' => 'welcome'` resolves to `App\Http\Controllers\WelcomeController`. A route may also name a controller by its fully qualified class.
+
+`Model::factory('blog_post')`, `ORM::factory('Blog_Post')` and the `'model'` key of ORM relationships resolve to `App\Models\BlogPost`. Pass a fully qualified class to use another namespace. ORM derives the object name from the class: `App\Models\BlogPost` → `blog_post` (table `blog_posts`), as before.
+
+**Action:** Move each controller, model and task to its new namespace and file, and remove the `Controller_`, `Model_` and `Task_` prefixes.
+
+### Drivers are resolved by namespace
+
+Config `driver`/`type` values keep working and map to `{Name}{Component}` classes in the component's namespace:
+
+| Config | Class |
+|---|---|
+| cache `'driver' => 'file'` | `Kohana\Cache\FileStore` |
+| session `native`, `cookie`, `database` | `Kohana\Session\NativeSession`, `CookieSession`, `DatabaseSession` |
+| database `'type' => 'PDO'` / `'MySQLi'` | `Kohana\Database\PdoConnection` / `MySqliConnection` |
+| auth `'driver' => 'ORM'` / `'File'` | `Kohana\Auth\OrmAuth` / `FileAuth` |
+| image `GD` / `Imagick` | `Kohana\Image\GdImage` / `ImagickImage` |
+| encrypt `'driver' => 'openssl'` | `Kohana\Encryption\OpensslEncrypter` |
+
+To use your own driver, set the value to a fully qualified class name, for example `'driver' => App\Cache\RedisStore::class`.
+
+### Auth models
+
+`Model_User`, `Model_Role` and `Model_User_Token` no longer ship with the ORM module. The ORM auth driver uses `App\Models\User` (and `Role`, `UserToken`) when your application defines them, otherwise `Kohana\Auth\Models\User` and friends. Extend them to add your own logic:
+
+```php
+namespace App\Models;
+
+class User extends \Kohana\Auth\Models\User
+{
+}
+```
+
+### Bootstrap
+
+- Remove the `require SYSPATH . 'classes/Kohana/Core.php'` and `classes/Kohana.php` lines. Composer autoloads the core.
+- Change `spl_autoload_register(['Kohana', 'auto_load'])` to `spl_autoload_register([Application::class, 'auto_load'])`. It is still needed for un-namespaced classes found through the cascading filesystem.
+- The `__()` translation function lives in `system/helpers.php`, loaded by Composer.
+
+### Tests
+
+The `unittest` module's custom suite loader (`Unittest_Tests`, `modules/unittest/tests.php`) is removed. Use a `phpunit.xml` that lists your test directories, with `modules/unittest/bootstrap.php` as the bootstrap. Test fixtures such as dummy controllers belong in a PSR-4 directory (`autoload-dev`), not at the bottom of a test file.
