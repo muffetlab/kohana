@@ -289,3 +289,13 @@ Kohana 3's Auth module stored passwords as `hash_hmac('sha256', $password, $hash
 | `Application::globals()` | None. |
 
 **Action:** Remove any reference to these from your code.
+
+## 21. `application/` is now `app/`
+
+Like most PHP frameworks, Kohana calls the application directory `app/`. `APPPATH` still points to it, so code that uses the constant keeps working.
+
+**Action:**
+1. Rename your `application` directory to `app`.
+2. In `public/index.php` (and any other front controller or test bootstrap), change `realpath(DOCROOT . '../application')` to `realpath(DOCROOT . '../app')`.
+3. In `composer.json`, map `"App\\": "app/classes/"`, then run `composer dump-autoload`.
+4. Update deploy scripts, web server rules and `.gitignore` entries that mention `application/`.
