@@ -220,6 +220,10 @@ trait PersistsModels
             $this->check($validation);
         }
 
+        if (!$this->fireEvent('saving') || !$this->fireEvent('creating')) {
+            return $this;
+        }
+
         $data = [];
         foreach ($this->changes as $column => $value) {
             // Generate list of column => values
@@ -255,6 +259,9 @@ trait PersistsModels
         $this->changes = [];
         $this->originalValues = $this->object;
 
+        $this->fireEvent('created');
+        $this->fireEvent('saved');
+
         return $this;
     }
 
@@ -277,6 +284,10 @@ trait PersistsModels
         // Run validation if the model isn't valid, or we have additional validation rules.
         if (!$this->valid || $validation) {
             $this->check($validation);
+        }
+
+        if (!$this->fireEvent('saving') || !$this->fireEvent('updating')) {
+            return $this;
         }
 
         if (empty($this->changes)) {
@@ -321,6 +332,9 @@ trait PersistsModels
         $this->changes = [];
         $this->originalValues = $this->object;
 
+        $this->fireEvent('updated');
+        $this->fireEvent('saved');
+
         return $this;
     }
 
@@ -352,6 +366,17 @@ trait PersistsModels
             throw new KohanaException('Cannot delete :model model because it is not loaded.', [':model' => $this->objectName]);
         }
 
+        if (!$this->fireEvent('deleting')) {
+            return $this;
+        }
+
+        if ($this->usesSoftDeletes() && !$this->forceDeleting) {
+            $this->performSoftDelete();
+            $this->fireEvent('deleted');
+
+            return $this;
+        }
+
         // Use primary key value
         $id = $this->pk();
 
@@ -359,6 +384,8 @@ trait PersistsModels
         DB::delete($this->tableName)
             ->where($this->primaryKey, '=', $id)
             ->execute($this->db);
+
+        $this->fireEvent('deleted');
 
         return $this->clear();
     }
