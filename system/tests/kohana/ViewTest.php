@@ -24,7 +24,7 @@ class Kohana_ViewTest extends Unittest_TestCase
      * @throws Kohana_Exception
      */
     // @codingStandardsIgnoreStart
-    public static function setupBeforeClass()
+    public static function setupBeforeClass(): void
     // @codingStandardsIgnoreEnd
     {
         self::$old_modules = Kohana::modules();
@@ -42,7 +42,7 @@ class Kohana_ViewTest extends Unittest_TestCase
      * @throws Kohana_Exception
      */
     // @codingStandardsIgnoreStart
-    public static function teardownAfterClass()
+    public static function teardownAfterClass(): void
     // @codingStandardsIgnoreEnd
     {
         Kohana::modules(self::$old_modules);
