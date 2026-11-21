@@ -17,7 +17,6 @@ Modules are enabled by calling [Kohana::modules] and passing an array of `'name'
     Kohana::modules([
         'auth' => MODPATH . 'auth', // Basic authentication
         'cache' => MODPATH . 'cache', // Caching with multiple backends
-        'codebench' => MODPATH . 'codebench', // Benchmarking tool
         'database' => MODPATH . 'database', // Database access
         'image' => MODPATH . 'image', // Image manipulation
         'orm' => MODPATH . 'orm', // Object Relationship Mapping
@@ -29,7 +28,7 @@ Modules are enabled by calling [Kohana::modules] and passing an array of `'name'
 
 ## Init.php
 
-When a module is activated, if an `init.php` file exists in that module's directory, it is included. This is the ideal place to have a module include routes or other initialization necessary for the module to function. The Userguide and Codebench modules have init.php files you can look at.
+When a module is activated, if an `init.php` file exists in that module's directory, it is included. This is the ideal place to have a module include routes or other initialization necessary for the module to function. The Database and Minion modules have init.php files you can look at.
 
 ## How modules work
 
