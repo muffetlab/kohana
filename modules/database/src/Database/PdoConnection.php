@@ -206,6 +206,18 @@ class PdoConnection extends Connection
     }
 
     /**
+     * Returns the PDO driver name, e.g. "mysql", "pgsql" or "sqlite".
+     *
+     * @return string
+     */
+    public function driver(): string
+    {
+        $this->connection or $this->connect();
+
+        return $this->connection->getAttribute(\PDO::ATTR_DRIVER_NAME);
+    }
+
+    /**
      * Returns the ID of the last inserted row.
      *
      * @return string|false|null
