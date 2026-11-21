@@ -37,6 +37,9 @@ class Model extends \Kohana\Foundation\Model implements \JsonSerializable
     use Concerns\QueriesStatically;
     use Concerns\ConvertsToArray;
     use Concerns\PaginatesQueries;
+    use Concerns\HasEvents;
+    use Concerns\HandlesSoftDeletes;
+    use Concerns\ManagesRecords;
 
     /**
      * Column filled when a record is created, with $timestamps = true; null to skip it
@@ -47,6 +50,8 @@ class Model extends \Kohana\Foundation\Model implements \JsonSerializable
      * Column filled when a record is saved, with $timestamps = true; null to skip it
      */
     public const UPDATED_AT = 'updated_at';
+
+    public const DELETED_AT = 'deleted_at';
 
     /**
      * Initialization storage for ORM models
@@ -274,6 +279,7 @@ class Model extends \Kohana\Foundation\Model implements \JsonSerializable
     public function __construct($id = null)
     {
         $this->initialize();
+        $this->bootIfNotBooted();
 
         if ($id !== null) {
             if (is_array($id)) {
