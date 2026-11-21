@@ -77,6 +77,10 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
+      - name: Check code style
+        if: matrix.php-versions == '8.5'
+        run: vendor/bin/pint --test
+
       - name: Configure test database
         run: |
           cat > application/config/database.php <<'EOF'
@@ -102,10 +106,6 @@ jobs:
               ],
           ];
           EOF
-
-      - name: Check code style
-        if: matrix.php-versions == '8.5'
-        run: vendor/bin/pint --test
 
       - name: Static analysis
         if: matrix.php-versions == '8.5'
