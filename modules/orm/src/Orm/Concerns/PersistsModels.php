@@ -2,6 +2,7 @@
 
 namespace Kohana\Orm\Concerns;
 
+use Kohana\Database\CachedResult;
 use Kohana\Database\Connection;
 use Kohana\Database\DB;
 use Kohana\Foundation\KohanaException;
@@ -29,7 +30,7 @@ trait PersistsModels
         $values = array_combine(array_keys($this->object), array_fill(0, count($this->object), null));
 
         // Replace the object and reset the object status
-        $this->object = $this->changes = $this->related = $this->originalValues = [];
+        $this->object = $this->changes = $this->related = $this->originalValues = $this->eagerLoaded = [];
 
         // Replace the current object with an empty one
         $this->loadValues($values);
@@ -90,8 +91,16 @@ trait PersistsModels
         }
 
         $this->build(Connection::SELECT);
+        $this->loadResult();
 
-        return $this->loadResult();
+        if ($paths = array_keys($this->eagerLoad)) {
+            $this->eagerLoad = [];
+            if ($this->loaded()) {
+                $this->eagerLoadRelations([$this], $paths);
+            }
+        }
+
+        return $this;
     }
 
     /**
@@ -106,6 +115,12 @@ trait PersistsModels
             throw new KohanaException('Method find_all() cannot be called on loaded objects');
         }
 
+        if ($this->usePreloaded()) {
+            $this->reset();
+
+            return new CachedResult($this->preloaded, '', static::class);
+        }
+
         if (!empty($this->loadWith)) {
             foreach ($this->loadWith as $alias) {
                 // Bind auto relationships
@@ -114,8 +129,19 @@ trait PersistsModels
         }
 
         $this->build(Connection::SELECT);
+        $result = $this->loadResult(true);
 
-        return $this->loadResult(true);
+        if ($paths = array_keys($this->eagerLoad)) {
+            $this->eagerLoad = [];
+            $models = [];
+            foreach ($result as $model) {
+                $models[] = $model;
+            }
+            $this->eagerLoadRelations($models, $paths);
+            $result = new CachedResult($models, $this->lastQuery(), static::class);
+        }
+
+        return $result;
     }
 
     /**

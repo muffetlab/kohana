@@ -46,7 +46,7 @@ trait ConvertsToArray
             }
         }
 
-        foreach ($this->eagerLoaded ?? [] as $alias => $models) {
+        foreach ($this->eagerLoaded as $alias => $models) {
             if ($this->isVisible($alias)) {
                 $array[$alias] = array_map(fn ($model) => $model->toArray(), iterator_to_array($models, false));
             }

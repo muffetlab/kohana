@@ -133,8 +133,9 @@ trait HasAttributes
                 $col = $model->objectName . '.' . $this->hasMany[$column]['foreign_key'];
             }
             $val = $this->pk();
+            $model->where($col, '=', $val);
 
-            return $model->where($col, '=', $val);
+            return isset($this->eagerLoaded[$column]) ? $model->preload($this->eagerLoaded[$column]) : $model;
         } else {
             return $this->castGet($column, in_array($column, $this->serializeColumns) ? $this->unserializeValue($this->object[$column]) : $this->object[$column] ?? null);
         }

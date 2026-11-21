@@ -26,6 +26,7 @@ class Model extends \Kohana\Foundation\Model implements \JsonSerializable
 {
     use Concerns\HasAttributes;
     use Concerns\HasRelationships;
+    use Concerns\EagerLoadsRelations;
     use Concerns\BuildsQueries;
     use Concerns\PersistsModels;
     use Concerns\ValidatesAttributes;
@@ -35,6 +36,7 @@ class Model extends \Kohana\Foundation\Model implements \JsonSerializable
     use Concerns\HasTimestamps;
     use Concerns\QueriesStatically;
     use Concerns\ConvertsToArray;
+    use Concerns\PaginatesQueries;
 
     /**
      * Column filled when a record is created, with $timestamps = true; null to skip it

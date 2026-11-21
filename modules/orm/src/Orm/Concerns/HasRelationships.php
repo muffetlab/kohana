@@ -23,6 +23,13 @@ trait HasRelationships
      */
     public function with(string $target_path): self
     {
+        if ($this->isEagerPath($target_path)) {
+            // has_many paths are loaded with a separate query after the main one
+            $this->eagerLoad[$target_path] = true;
+
+            return $this;
+        }
+
         if (isset($this->withApplied[$target_path])) {
             // Don't join anything already joined
             return $this;
