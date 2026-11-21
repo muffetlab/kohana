@@ -160,17 +160,25 @@ class MySqliConnection extends Connection
             $benchmark = Profiler::start("Database ($this->instance)", $sql);
         }
 
-        // Execute the query
-        if (($result = $this->connection->query($sql)) === false) {
+        // Execute the query. Since PHP 8.1 mysqli throws by default instead of returning false.
+        try {
+            $result = $this->connection->query($sql);
+            $error = $result === false ? [$this->connection->error, $this->connection->errno, null] : null;
+        } catch (\mysqli_sql_exception $e) {
+            $result = false;
+            $error = [$e->getMessage(), $e->getCode(), $e];
+        }
+
+        if ($result === false) {
             if (isset($benchmark)) {
                 // This benchmark is worthless
                 Profiler::delete($benchmark);
             }
 
             throw new DatabaseException(':error [ :query ]', [
-            ':error' => $this->connection->error,
-            ':query' => $sql,
-            ], $this->connection->errno);
+                ':error' => $error[0],
+                ':query' => $sql,
+            ], $error[1], $error[2]);
         }
 
         if (isset($benchmark)) {
