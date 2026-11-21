@@ -1,0 +1,320 @@
+<?php
+
+namespace Kohana\Image;
+
+use Kohana\Foundation\KohanaException;
+
+/**
+ * Support for image manipulation using [Imagick](https://www.php.net/Imagick).
+ *
+ * @package    Kohana/Image
+ * @category   Drivers
+ * @author     Tamas Mihalik tamas.mihalik@gmail.com
+ * @copyright  (c) 2009-2012 Kohana Team
+ * @license    https://kohana.top/license.html
+ */
+class ImagickImage extends Image
+{
+    /**
+     * @var  \Imagick  image magick object
+     */
+    protected $im;
+
+    /**
+     * Checks if ImageMagick is enabled.
+     *
+     * @throws  \Kohana\Foundation\KohanaException
+     * @return  bool
+     */
+    public static function check(): bool
+    {
+        if (!extension_loaded('imagick')) {
+            throw new KohanaException('Imagick is not installed, or the extension is not loaded');
+        }
+
+        return static::$checked = true;
+    }
+
+    /**
+     * Runs [Image_Imagick::check] and loads the image.
+     *
+     * @param $file
+     * @throws \ImagickException
+     * @throws \Kohana\Foundation\KohanaException
+     */
+    public function __construct($file)
+    {
+        if (!static::$checked) {
+            // Run the installation check
+            static::check();
+        }
+
+        parent::__construct($file);
+
+        $this->im = new \Imagick();
+        $this->im->readImage($file);
+
+        if (!$this->im->getImageAlphaChannel()) {
+            // Force the image to have an alpha channel
+            $this->im->setImageAlphaChannel(\Imagick::ALPHACHANNEL_SET);
+        }
+    }
+
+    /**
+     * Destroys the loaded image to free up resources.
+     *
+     * @return  void
+     */
+    public function __destruct()
+    {
+        $this->im->clear();
+    }
+
+    protected function doResize(int $width, int $height): bool
+    {
+        if ($this->im->scaleImage($width, $height)) {
+            // Reset the width and height
+            $this->width = $this->im->getImageWidth();
+            $this->height = $this->im->getImageHeight();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function doCrop(int $width, int $height, int $offset_x, int $offset_y): bool
+    {
+        if ($this->im->cropImage($width, $height, $offset_x, $offset_y)) {
+            // Reset the width and height
+            $this->width = $this->im->getImageWidth();
+            $this->height = $this->im->getImageHeight();
+
+            // Trim off hidden areas
+            $this->im->setImagePage($this->width, $this->height, 0, 0);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function doRotate(int $degrees): bool
+    {
+        if ($this->im->rotateImage(new \ImagickPixel('transparent'), $degrees)) {
+            // Reset the width and height
+            $this->width = $this->im->getImageWidth();
+            $this->height = $this->im->getImageHeight();
+
+            // Trim off hidden areas
+            $this->im->setImagePage($this->width, $this->height, 0, 0);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function doFlip(int $direction)
+    {
+        if ($direction === Image::HORIZONTAL) {
+            return $this->im->flopImage();
+        } else {
+            return $this->im->flipImage();
+        }
+    }
+
+    protected function doSharpen(int $amount)
+    {
+        // ImageMagick does not support $amount under 5 (0.15)
+        $amount = max($amount, 5);
+
+        // Amount should be in the range of 0.0 to 3.0
+        $amount = $amount * 3.0 / 100;
+
+        return $this->im->sharpenImage(0, $amount);
+    }
+
+    protected function doReflection(int $height, int $opacity, bool $fade_in): bool
+    {
+        // Clone the current image and flip it for reflection
+        $reflection = $this->im->clone();
+        $reflection->flipImage();
+
+        // Crop the reflection to the selected height
+        $reflection->cropImage($this->width, $height, 0, 0);
+        $reflection->setImagePage($this->width, $height, 0, 0);
+
+        // Select the fade direction
+        $direction = ['transparent', 'black'];
+
+        if ($fade_in) {
+            // Change the direction of the fade
+            $direction = array_reverse($direction);
+        }
+
+        // Create a gradient for fading
+        $fade = new \Imagick();
+        $fade->newPseudoImage($reflection->getImageWidth(), $reflection->getImageHeight(), vsprintf('gradient:%s-%s', $direction));
+
+        // Apply the fade alpha channel to the reflection
+        $reflection->compositeImage($fade, \Imagick::COMPOSITE_DSTOUT, 0, 0);
+
+        // NOTE: Using setImageOpacity will destroy alpha channels!
+        $reflection->evaluateImage(\Imagick::EVALUATE_MULTIPLY, $opacity / 100, \Imagick::CHANNEL_ALPHA);
+
+        // Create a new container to hold the image and reflection
+        $image = new \Imagick();
+        $image->newImage($this->width, $this->height + $height, new \ImagickPixel());
+
+        // Force the image to have an alpha channel
+        $image->setImageAlphaChannel(\Imagick::ALPHACHANNEL_SET);
+
+        // Force the background color to be transparent
+        // $image->setImageBackgroundColor(new ImagickPixel('transparent'));
+        // Match the colorspace between the two images before compositing
+        $image->setColorspace($this->im->getColorspace());
+
+        // Place the image and reflection into the container
+        if ($image->compositeImage($this->im, \Imagick::COMPOSITE_SRC, 0, 0)
+            && $image->compositeImage($reflection, \Imagick::COMPOSITE_OVER, 0, $this->height)) {
+            // Replace the current image with the reflected image
+            $this->im = $image;
+
+            // Reset the width and height
+            $this->width = $this->im->getImageWidth();
+            $this->height = $this->im->getImageHeight();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function doWatermark(Image $image, int $offset_x, int $offset_y, int $opacity)
+    {
+        // Convert the Image instance into an Imagick instance
+        $watermark = new \Imagick();
+        $watermark->readImageBlob($image->render(), $image->file);
+
+        if (!$watermark->getImageAlphaChannel()) {
+            // Force the image to have an alpha channel
+            $watermark->setImageAlphaChannel(\Imagick::ALPHACHANNEL_OPAQUE);
+        }
+
+        if ($opacity < 100) {
+            // NOTE: Using setImageOpacity will destroy current alpha channels!
+            $watermark->evaluateImage(\Imagick::EVALUATE_MULTIPLY, $opacity / 100, \Imagick::CHANNEL_ALPHA);
+        }
+
+        // Match the colorspace between the two images before compositing
+        // $watermark->setColorspace($this->im->getColorspace());
+        // Apply the watermark to the image
+        return $this->im->compositeImage($watermark, \Imagick::COMPOSITE_DISSOLVE, $offset_x, $offset_y);
+    }
+
+    protected function doBackground(int $r, int $g, int $b, int $opacity): bool
+    {
+        // Create an RGB color for the background
+        $color = sprintf('rgb(%d, %d, %d)', $r, $g, $b);
+
+        // Create a new image for the background
+        $background = new \Imagick();
+        $background->newImage($this->width, $this->height, new \ImagickPixel($color));
+
+        if (!$background->getImageAlphaChannel()) {
+            // Force the image to have an alpha channel
+            $background->setImageAlphaChannel(\Imagick::ALPHACHANNEL_SET);
+        }
+
+        // Clear the background image
+        $background->setImageBackgroundColor(new \ImagickPixel('transparent'));
+
+        // NOTE: Using setImageOpacity will destroy current alpha channels!
+        $background->evaluateImage(\Imagick::EVALUATE_MULTIPLY, $opacity / 100, \Imagick::CHANNEL_ALPHA);
+
+        // Match the colorspace between the two images before compositing
+        $background->setColorspace($this->im->getColorspace());
+
+        if ($background->compositeImage($this->im, \Imagick::COMPOSITE_DISSOLVE, 0, 0)) {
+            // Replace the current image with the new image
+            $this->im = $background;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function doSave(string $file, int $quality): bool
+    {
+        // Get the image format and type
+        list($format, $type) = $this->getImagetype(pathinfo($file, PATHINFO_EXTENSION));
+
+        // Set the output image type
+        $this->im->setFormat($format);
+
+        // Set the output quality
+        $this->im->setImageCompressionQuality($quality);
+
+        if ($this->im->writeImage($file)) {
+            // Reset the image type and mime type
+            $this->type = $type;
+            $this->mime = image_type_to_mime_type($type);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function doRender(string $type, int $quality): string
+    {
+        // Get the image format and type
+        list($format, $type) = $this->getImagetype($type);
+
+        // Set the output image type
+        $this->im->setFormat($format);
+
+        // Set the output quality
+        $this->im->setImageCompressionQuality($quality);
+
+        // Reset the image type and mime type
+        $this->type = $type;
+        $this->mime = image_type_to_mime_type($type);
+
+        return (string) $this->im;
+    }
+
+    /**
+     * Get the image type and format for an extension.
+     *
+     * @param string $extension Image extension: png, jpg, etc.
+     * @return array Array with normalized format and IMAGETYPE_* constant.
+     * @throws  \Kohana\Foundation\KohanaException
+     */
+    protected function getImagetype(string $extension): array
+    {
+        // Normalize the extension to a format
+        $format = strtolower($extension);
+
+        switch ($format) {
+            case 'jpg':
+            case 'jpe':
+            case 'jpeg':
+                $type = IMAGETYPE_JPEG;
+                break;
+            case 'gif':
+                $type = IMAGETYPE_GIF;
+                break;
+            case 'png':
+                $type = IMAGETYPE_PNG;
+                break;
+            default:
+                throw new KohanaException('Installed ImageMagick does not support :type images', [':type' => $extension]);
+        }
+
+        return [$format, $type];
+    }
+
+}

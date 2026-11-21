@@ -1,5 +1,7 @@
 <?php
 
+use Kohana\Support\Utf8Exception;
+
 /**
  * UTF8::from_unicode
  *
@@ -32,7 +34,7 @@ function _from_unicode($arr)
         // Test for illegal surrogates
         elseif ($arr[$k] >= 0xD800 && $arr[$k] <= 0xDFFF) {
             // Found a surrogate
-            throw new UTF8_Exception("UTF8::from_unicode: Illegal surrogate at index: ':index', value: ':value'", [
+            throw new Utf8Exception("Kohana\Support\Utf8::from_unicode: Illegal surrogate at index: ':index', value: ':value'", [
             ':index' => $k,
             ':value' => $arr[$k],
             ]);
@@ -52,7 +54,7 @@ function _from_unicode($arr)
         }
         // Out of range
         else {
-            throw new UTF8_Exception("UTF8::from_unicode: Codepoint out of Unicode range at index: ':index', value: ':value'", [
+            throw new Utf8Exception("Kohana\Support\Utf8::from_unicode: Codepoint out of Unicode range at index: ':index', value: ':value'", [
             ':index' => $k,
             ':value' => $arr[$k],
             ]);

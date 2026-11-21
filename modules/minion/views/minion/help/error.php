@@ -2,6 +2,6 @@
 
 Run
 
-php public/index.php --task=help
+php kohana help
 
 for more help

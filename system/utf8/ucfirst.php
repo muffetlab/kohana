@@ -1,5 +1,7 @@
 <?php
 
+use Kohana\Support\Utf8;
+
 /**
  * UTF8::ucfirst
  *
@@ -11,9 +13,10 @@
  */
 function _ucfirst($str): string
 {
-    if (UTF8::is_ascii($str))
+    if (Utf8::isAscii($str)) {
         return ucfirst($str);
+    }
 
     preg_match('/^(.?)(.*)$/us', $str, $matches);
-    return UTF8::strtoupper($matches[1]) . $matches[2];
+    return Utf8::strtoupper($matches[1]) . $matches[2];
 }

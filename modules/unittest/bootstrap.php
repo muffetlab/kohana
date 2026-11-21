@@ -1,5 +1,7 @@
 <?php
 
+use Kohana\Foundation\Application;
+
 /**
  * Set the path to the document root
  *
@@ -7,7 +9,6 @@
  * this bootstrap file somewhere else then you'll need to modify this value to
  * compensate.
  */
-define('DOCROOT', realpath(__DIR__ . '/../../public') . DIRECTORY_SEPARATOR);
 
 /**
  * Set the PHP error reporting level. If you set this in php.ini, you remove this.
@@ -17,7 +18,7 @@ define('DOCROOT', realpath(__DIR__ . '/../../public') . DIRECTORY_SEPARATOR);
  * and warnings. Enable them by using: E_ALL
  *
  * In a production environment, it is safe to ignore notices and warnings.
- * Disable them by using: E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED
+ * Disable them by using: E_ALL & ~E_NOTICE & ~E_DEPRECATED
  */
 error_reporting(E_ALL);
 
@@ -27,28 +28,15 @@ error_reporting(E_ALL);
  *
  * @link https://kohana.top/guide/using.configuration
  */
-// Define the absolute paths for configured directories
-define('APPPATH', realpath(DOCROOT . '../application') . DIRECTORY_SEPARATOR);
-define('MODPATH', realpath(DOCROOT . '../modules') . DIRECTORY_SEPARATOR);
-define('SYSPATH', realpath(DOCROOT . '../system') . DIRECTORY_SEPARATOR);
-define('VENDOR_PATH', realpath(DOCROOT . '../vendor') . DIRECTORY_SEPARATOR);
 
 /**
  * Define the start time of the application, used for profiling.
  */
-if (!defined('KOHANA_START_TIME')) {
-    define('KOHANA_START_TIME', microtime(true));
-}
-
 /**
  * Define the memory usage at the start of the application, used for profiling.
  */
-if (!defined('KOHANA_START_MEMORY')) {
-    define('KOHANA_START_MEMORY', memory_get_usage());
-}
-
 // Bootstrap the application
-require APPPATH . 'bootstrap.php';
+require __DIR__ . '/../../bootstrap/app.php';
 
 // Disable output buffering
 if (($ob_len = ob_get_length()) !== false) {
@@ -61,9 +49,9 @@ if (($ob_len = ob_get_length()) !== false) {
 }
 
 // Enable the unittest module if it is not already loaded - use the absolute path
-$modules = Kohana::modules();
+$modules = Application::modules();
 $unittest_path = realpath(__DIR__) . DIRECTORY_SEPARATOR;
 if (!in_array($unittest_path, $modules)) {
     $modules['unittest'] = $unittest_path;
-    Kohana::modules($modules);
+    Application::modules($modules);
 }

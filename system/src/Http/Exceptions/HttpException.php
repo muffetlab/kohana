@@ -1,0 +1,80 @@
+<?php
+
+namespace Kohana\Http\Exceptions;
+
+use Kohana\Foundation\KohanaException;
+use Kohana\Http\Request;
+use Kohana\Http\Response;
+
+abstract class HttpException extends KohanaException
+{
+    /**
+     * Creates an HTTP_Exception of the specified type.
+     *
+     * @param int $code the http status code
+     * @param string $message Status message, custom content to display with error
+     * @param array|null $variables translation variables
+     * @param \Exception|null $previous
+     * @return  \Kohana\Http\Exceptions\HttpException
+     */
+    public static function factory(int $code, string $message = '', ?array $variables = null, ?\Exception $previous = null): self
+    {
+        $class = __NAMESPACE__ . '\\Http' . $code . 'Exception';
+
+        return new $class($message, $variables, $previous);
+    }
+
+    /**
+     * @var  int        http status code
+     */
+    protected $code = 0;
+
+    /**
+     * @var  Request    Request instance that triggered this exception.
+     */
+    protected $request;
+
+    /**
+     * Creates a new translated exception.
+     *
+     *     throw new Kohana_Exception('Something went terrible wrong, :user', [':user' => $user]);
+     *
+     * @param string $message status message, custom content to display with error
+     * @param array|null $variables translation variables
+     * @param \Exception|null $previous
+     */
+    public function __construct(string $message = '', ?array $variables = null, ?\Exception $previous = null)
+    {
+        parent::__construct($message, $variables, $this->code, $previous);
+    }
+
+    /**
+     * Store the Request that triggered this exception.
+     *
+     * @param Request|null $request Request object that triggered this exception.
+     * @return  \Kohana\Http\Exceptions\HttpException|Request
+     */
+    public function request(?Request $request = null)
+    {
+        if ($request === null) {
+            return $this->request;
+        }
+
+        $this->request = $request;
+
+        return $this;
+    }
+
+    /**
+     * Generate a Response for the current Exception
+     *
+     * @return Response
+     * @throws \Kohana\Foundation\KohanaException
+     * @uses   \Kohana\Foundation\KohanaException::response()
+     */
+    public function getResponse(): Response
+    {
+        return KohanaException::response($this);
+    }
+
+}

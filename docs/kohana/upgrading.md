@@ -1,0 +1,47 @@
+# Upgrading to Kohana 4
+
+Kohana 4 (PHP 8.4+) renames every class, method and property and removes several modules. Follow the step-by-step [upgrade guide](../../UPGRADE.md) in the repository root, which also ships Rector and php-parser scripts that rename your code automatically.
+
+The notes below cover older upgrades.
+
+# Upgrading from 3.4 to 3.5
+
+## Requirements
+
+Kohana 3.5 supports PHP versions 7.1, 7.2, and 7.3. Compatibility with other PHP versions has not been fully tested, and
+certain features may not function as expected.
+
+## Dependency Management
+
+The `composer install` command is required for dependency installation since Kohana 3.4.4. Remember to run this command
+during upgrades.
+
+## Constants
+
+The global `EXT` constant has been removed. Explicitly specify `.php` or another file extension instead.
+
+## Arr
+
+The `Arr::callback()` method now guarantees that the second element of the returned array (`$params`) is always an
+array, even when no parameters are provided. You can safely remove null checks for `$params` in your code.
+
+## Core
+
+- The `Application::CODENAME` constant has been removed.
+- The static property `Application::$magicQuotes` was deprecated.
+
+## Encrypt
+
+The `Mcrypt` driver has been removed. Use the `OpenSSL` driver instead.
+
+## Request
+
+The `Request::accept_encoding()`, `Request::accept_lang()`, and `Request::accept_type()` methods have been removed. Use
+the header helper methods instead:
+
+- `$request->headers()->acceptsEncodingAtQuality()` — returns the quality for a specific encoding. Retrieving the
+  full list of accepted encodings is not supported.
+- `$request->headers()->acceptsLanguageAtQuality()` — returns the quality for a specific language. Retrieving the
+  full list of accepted languages is not supported.
+- `$request->headers()->acceptsAtQuality()` — returns the quality for a specific MIME type. Retrieving the full list
+  of accepted content types is not supported.

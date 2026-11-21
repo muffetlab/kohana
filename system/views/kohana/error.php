@@ -43,19 +43,19 @@ $error_id = uniqid('error');
     }
 </script>
 <div id="kohana_error">
-    <h1><span class="type"><?php echo $class ?> [ <?php echo $code ?> ]:</span> <span class="message"><?php echo htmlspecialchars((string) $message, ENT_QUOTES | ENT_IGNORE, Kohana::$charset); ?></span></h1>
+    <h1><span class="type"><?php echo $class ?> [ <?php echo $code ?> ]:</span> <span class="message"><?php echo htmlspecialchars((string) $message, ENT_QUOTES | ENT_IGNORE, \Kohana\Foundation\Application::$charset); ?></span></h1>
     <div id="<?php echo $error_id ?>" class="content">
-        <p><span class="file"><?php echo Debug::path($file) ?> [ <?php echo $line ?> ]</span></p>
+        <p><span class="file"><?php echo \Kohana\Foundation\Debug::path($file) ?> [ <?php echo $line ?> ]</span></p>
         <pre class="source">
-            <code><?php echo Debug::source($file, $line) ?></code>
+            <code><?php echo \Kohana\Foundation\Debug::source($file, $line) ?></code>
         </pre>
         <ol class="trace">
-            <?php foreach (Debug::trace($trace) as $i => $step): ?>
+            <?php foreach (\Kohana\Foundation\Debug::trace($trace) as $i => $step): ?>
                 <li>
                     <p>
                         <span class="file">
                             <?php if ($step['file']): $source_id = $error_id . 'source' . $i; ?>
-                                <a href="#<?php echo $source_id ?>" onclick="return toggle('<?php echo $source_id ?>')"><?php echo Debug::path($step['file']) ?> [ <?php echo $step['line'] ?> ]</a>
+                                <a href="#<?php echo $source_id ?>" onclick="return toggle('<?php echo $source_id ?>')"><?php echo \Kohana\Foundation\Debug::path($step['file']) ?> [ <?php echo $step['line'] ?> ]</a>
                             <?php else: ?>
                                 {<?php echo __('PHP internal call') ?>}
                             <?php endif ?>
@@ -69,7 +69,7 @@ $error_id = uniqid('error');
                                 <?php foreach ($step['args'] as $name => $arg): ?>
                                     <tr>
                                         <td><code><?php echo $name ?></code></td>
-                                        <td><pre><?php echo Debug::dump($arg) ?></pre></td>
+                                        <td><pre><?php echo \Kohana\Foundation\Debug::dump($arg) ?></pre></td>
                                     </tr>
                                 <?php endforeach ?>
                             </table>
@@ -91,7 +91,7 @@ $error_id = uniqid('error');
             <table>
                 <?php foreach ($included as $file): ?>
                     <tr>
-                        <td><code><?php echo Debug::path($file) ?></code></td>
+                        <td><code><?php echo \Kohana\Foundation\Debug::path($file) ?></code></td>
                     </tr>
                 <?php endforeach ?>
             </table>
@@ -102,7 +102,7 @@ $error_id = uniqid('error');
             <table>
                 <?php foreach ($included as $file): ?>
                     <tr>
-                        <td><code><?php echo Debug::path($file) ?></code></td>
+                        <td><code><?php echo \Kohana\Foundation\Debug::path($file) ?></code></td>
                     </tr>
                 <?php endforeach ?>
             </table>
@@ -114,8 +114,8 @@ $error_id = uniqid('error');
                 <table>
                     <?php foreach ($GLOBALS[$var] as $key => $value): ?>
                         <tr>
-                            <td><code><?php echo htmlspecialchars((string) $key, ENT_QUOTES, Kohana::$charset); ?></code></td>
-                            <td><pre><?php echo Debug::dump($value) ?></pre></td>
+                            <td><code><?php echo htmlspecialchars((string) $key, ENT_QUOTES, \Kohana\Foundation\Application::$charset); ?></code></td>
+                            <td><pre><?php echo \Kohana\Foundation\Debug::dump($value) ?></pre></td>
                         </tr>
                     <?php endforeach ?>
                 </table>

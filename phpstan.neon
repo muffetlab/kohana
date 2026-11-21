@@ -1,0 +1,19 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: 5
+    paths:
+        - system/src
+        - modules/auth/src
+        - modules/cache/src
+        - modules/database/src
+        - modules/image/src
+        - modules/minion/src
+        - modules/orm/src
+        - modules/unittest/src
+    bootstrapFiles:
+        - phpstan-bootstrap.php
+    ignoreErrors:
+        # Traits applications use in their own models
+        - identifier: trait.unused

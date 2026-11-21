@@ -2,7 +2,10 @@
     "name": "muffetlab/kohana",
     "type": "project",
     "description": "The Kohana PHP framework",
-    "keywords": ["framework", "kohana"],
+    "keywords": [
+        "framework",
+        "kohana"
+    ],
     "homepage": "https://kohana.top",
     "license": "MIT",
     "authors": [
@@ -16,7 +19,7 @@
         }
     ],
     "require": {
-        "php": ">=7.1,<7.4",
+        "php": ">=8.4",
         "ext-ctype": "*",
         "ext-curl": "*",
         "ext-dom": "*",
@@ -30,11 +33,48 @@
         "ext-openssl": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
-        "michelf/php-markdown": "^1.9"
+        "michelf/php-markdown": "^1.9",
+        "vlucas/phpdotenv": "^5.8"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.5",
-        "phpunit/phpunit-dom-assertions": "^2.6.0"
+        "pestphp/pest": "^5.3",
+        "phpunit/phpunit-dom-assertions": "^3.8",
+        "laravel/pint": "^1.32",
+        "phpstan/phpstan": "^2.3"
+    },
+    "suggest": {
+        "ext-apcu": "For the APCu cache store",
+        "ext-memcached": "For the Memcached cache store",
+        "ext-redis": "For the Redis cache store",
+        "ext-pdo_pgsql": "For the PostgreSQL database driver",
+        "ext-imagick": "For the Imagick image driver"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kohana\\": [
+                "system/src",
+                "modules/auth/src",
+                "modules/cache/src",
+                "modules/database/src",
+                "modules/image/src",
+                "modules/minion/src",
+                "modules/orm/src",
+                "modules/unittest/src"
+            ],
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        },
+        "files": [
+            "system/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\": "tests/Fixtures/App/",
+            "Database\\Factories\\": "tests/Fixtures/Database/Factories/",
+            "Database\\Seeders\\": "tests/Fixtures/Database/Seeders/"
+        }
     },
     "config": {
         "policy": {
@@ -43,6 +83,18 @@
                     "PKSA-z3gr-8qht-p93v"
                 ]
             }
+        },
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
         }
+    },
+    "scripts": {
+        "test": "pest",
+        "lint": "pint --test",
+        "format": "pint",
+        "analyse": "phpstan analyse --memory-limit=1G",
+        "post-autoload-dump": [
+            "@php kohana package:discover"
+        ]
     }
 }

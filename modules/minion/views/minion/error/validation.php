@@ -5,6 +5,6 @@ Parameter Errors:
 
 Run
 
-php public/index.php --task=<?php echo $task ?> --help
+php kohana <?php echo $task ?> --help
 
 for more help

@@ -1,0 +1,177 @@
+<?php
+
+namespace Kohana\Cache;
+
+use Kohana\Cache\Contracts\Arithmetic;
+use Kohana\Support\Arr;
+
+/**
+ * [Kohana Cache](api/Kohana_Cache) APCu data store driver for Kohana Cache
+ * library.
+ *
+ * ### Configuration example
+ *
+ * Below is an example of an _apcu_ server configuration.
+ *
+ *     return [
+ *         // Driver group
+ *         'apcu' => [
+ *             // Using APCu driver
+ *             'driver' => 'apcu',
+ *         ],
+ *     ];
+ *
+ * In cases where only one cache group is required, if the group is named `default` there is
+ * no need to pass the group name when instantiating a cache instance.
+ *
+ * #### General cache group configuration settings
+ *
+ * Below are the settings available to all types of cache driver.
+ *
+ * Name           | Required | Description
+ * -------------- | -------- | ---------------------------------------------------------------
+ * driver         | __YES__  | (_string_) The driver type to use
+ *
+ * ### System requirements
+ *
+ * *  Kohana 3.0.x
+ * *  PHP 5.2.4 or greater
+ * *  APCu PHP extension
+ *
+ * @package    Kohana/Cache
+ * @category   Base
+ * @author     Kohana Team
+ * @copyright  (c) 2009-2012 Kohana Team
+ * @license    https://kohana.top/license
+ */
+class ApcuStore extends Cache implements Arithmetic
+{
+    /**
+     * Check for existence of the APCu extension This method cannot be invoked externally. The driver must
+     * be instantiated using the `Cache::instance()` method.
+     *
+     * @param  array  $config  configuration
+     * @throws \Kohana\Cache\CacheException
+     */
+    protected function __construct(array $config)
+    {
+        if (!extension_loaded('apcu')) {
+            throw new CacheException('PHP APCu extension is not available.');
+        }
+
+        parent::__construct($config);
+    }
+
+    /**
+     * Retrieve a cached value entry by id.
+     *
+     *     // Retrieve cache entry from apcu group
+     *     $data = Cache::instance('apcu')->get('foo');
+     *
+     *     // Retrieve cache entry from apcu group and return 'bar' if missing
+     *     $data = Cache::instance('apcu')->get('foo', 'bar');
+     *
+     * @param string $id ID of cache entry
+     * @param mixed $default Default value to return if cache miss
+     * @return  mixed
+     */
+    public function get(string $id, $default = null)
+    {
+        $data = apcu_fetch($this->sanitizeId($id), $success);
+
+        return $success ? $data : $default;
+    }
+
+    /**
+     * Set a value to cache with id and lifetime
+     *
+     *     $data = 'bar';
+     *
+     *     // Set 'bar' to 'foo' in apcu group, using default expiry
+     *     Cache::instance('apcu')->set('foo', $data);
+     *
+     *     // Set 'bar' to 'foo' in apcu group for 30 seconds
+     *     Cache::instance('apcu')->set('foo', $data, 30);
+     *
+     * @param string $id ID of cache entry
+     * @param mixed $data Data to set to cache
+     * @param int|null $lifetime Lifetime in seconds
+     * @return  bool
+     */
+    public function set(string $id, $data, ?int $lifetime = null): bool
+    {
+        if ($lifetime === null) {
+            $lifetime = Arr::get($this->config, 'default_expire', Cache::DEFAULT_EXPIRE);
+        }
+
+        return apcu_store($this->sanitizeId($id), $data, $lifetime);
+    }
+
+    /**
+     * Delete a cache entry based on id
+     *
+     *     // Delete 'foo' entry from the apcu group
+     *     Cache::instance('apcu')->delete('foo');
+     *
+     * @param string $id ID to remove from cache
+     * @return  bool
+     */
+    public function delete(string $id): bool
+    {
+        return apcu_delete($this->sanitizeId($id));
+    }
+
+    /**
+     * Delete all cache entries.
+     *
+     * Beware of using this method when
+     * using shared memory cache systems, as it will wipe every
+     * entry within the system for all clients.
+     *
+     *     // Delete all cache entries in the apcu group
+     *     Cache::instance('apcu')->delete_all();
+     *
+     * @return bool
+     */
+    public function deleteAll(): bool
+    {
+        return apcu_clear_cache();
+    }
+
+    /**
+     * Increments a given value by the step value supplied.
+     * Useful for shared counters and other persistent integer based
+     * tracking.
+     *
+     * @param string $id id of cache entry to increment
+     * @param int $step step value to increment by
+     * @return int|false
+     */
+    public function increment(string $id, int $step = 1)
+    {
+        if (apcu_exists($id)) {
+            return apcu_inc($id, $step);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Decrements a given value by the step value supplied.
+     * Useful for shared counters and other persistent integer based
+     * tracking.
+     *
+     * @param string $id id of cache entry to decrement
+     * @param int $step step value to decrement by
+     * @return int|false
+     */
+    public function decrement(string $id, int $step = 1)
+    {
+        if (apcu_exists($id)) {
+            return apcu_dec($id, $step);
+        } else {
+            return false;
+        }
+    }
+
+}

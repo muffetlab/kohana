@@ -1,5 +1,7 @@
 <?php
 
+use Kohana\Support\Utf8;
+
 /**
  * UTF8::str_split
  *
@@ -13,14 +15,17 @@ function _str_split($str, $split_length = 1)
 {
     $split_length = (int) $split_length;
 
-    if (UTF8::is_ascii($str))
+    if (Utf8::isAscii($str)) {
         return str_split($str, $split_length);
+    }
 
-    if ($split_length < 1)
+    if ($split_length < 1) {
         return false;
+    }
 
-    if (UTF8::strlen($str) <= $split_length)
+    if (Utf8::strlen($str) <= $split_length) {
         return [$str];
+    }
 
     preg_match_all('/.{' . $split_length . '}|[^\x00]{1,' . $split_length . '}$/us', $str, $matches);
 

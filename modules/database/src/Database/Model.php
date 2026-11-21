@@ -1,0 +1,63 @@
+<?php
+
+namespace Kohana\Database;
+
+/**
+ * Database Model base class.
+ *
+ * @package    Kohana/Database
+ * @category   Models
+ * @author     Kohana Team
+ * @copyright  (c) 2008-2012 Kohana Team
+ * @license    https://kohana.top/license
+ */
+abstract class Model extends \Kohana\Foundation\Model
+{
+    /**
+     * Create a new model instance. A [Database] instance or configuration
+     * group name can be passed to the model. If no database is defined, the
+     * "default" database group will be used.
+     *
+     *     $model = Model::factory($name);
+     *
+     * @param string $name Model name
+     * @param   mixed    $db    Database instance object or string
+     * @return  \Kohana\Foundation\Model
+     */
+    public static function factory(string $name, $db = null): \Kohana\Foundation\Model
+    {
+        // Add the model prefix
+        $class = str_contains($name, '\\') ? $name : 'App\\Models\\' . str_replace('_', '', ucwords($name, '_'));
+
+        return new $class($db);
+    }
+
+    // Database instance
+    protected $db;
+
+    /**
+     * Loads the database.
+     *
+     *     $model = new Foo_Model($db);
+     *
+     * @param mixed $db Database instance object or string
+     * @return  void
+     * @throws \Kohana\Foundation\KohanaException
+     */
+    public function __construct($db = null)
+    {
+        if ($db) {
+            // Set the instance or name
+            $this->db = $db;
+        } elseif (!$this->db) {
+            // Use the default name
+            $this->db = Connection::$default;
+        }
+
+        if (is_string($this->db)) {
+            // Load the database
+            $this->db = Connection::instance($this->db);
+        }
+    }
+
+}

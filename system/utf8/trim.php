@@ -1,5 +1,7 @@
 <?php
 
+use Kohana\Support\Utf8;
+
 /**
  * UTF8::trim
  *
@@ -11,8 +13,9 @@
  */
 function _trim($str, $charlist = null): string
 {
-    if ($charlist === null)
+    if ($charlist === null) {
         return trim($str);
+    }
 
-    return UTF8::ltrim(UTF8::rtrim($str, $charlist), $charlist);
+    return Utf8::ltrim(Utf8::rtrim($str, $charlist), $charlist);
 }

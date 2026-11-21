@@ -1,5 +1,8 @@
 <?php
 
+use Kohana\Support\Utf8;
+use Kohana\Support\Utf8Exception;
+
 /**
  * UTF8::str_pad
  *
@@ -11,25 +14,27 @@
  */
 function _str_pad($str, $final_str_length, $pad_str = ' ', $pad_type = STR_PAD_RIGHT)
 {
-    if (UTF8::is_ascii($str) && UTF8::is_ascii($pad_str))
+    if (Utf8::isAscii($str) && Utf8::isAscii($pad_str)) {
         return str_pad($str, $final_str_length, $pad_str, $pad_type);
+    }
 
-    $str_length = UTF8::strlen($str);
+    $str_length = Utf8::strlen($str);
 
-    if ($final_str_length <= 0 || $final_str_length <= $str_length)
+    if ($final_str_length <= 0 || $final_str_length <= $str_length) {
         return $str;
+    }
 
-    $pad_str_length = UTF8::strlen($pad_str);
+    $pad_str_length = Utf8::strlen($pad_str);
     $pad_length = $final_str_length - $str_length;
 
     if ($pad_type === STR_PAD_RIGHT) {
         $repeat = ceil($pad_length / $pad_str_length);
-        return UTF8::substr($str . str_repeat($pad_str, $repeat), 0, $final_str_length);
+        return Utf8::substr($str . str_repeat($pad_str, $repeat), 0, $final_str_length);
     }
 
     if ($pad_type === STR_PAD_LEFT) {
         $repeat = ceil($pad_length / $pad_str_length);
-        return UTF8::substr(str_repeat($pad_str, $repeat), 0, floor($pad_length)) . $str;
+        return Utf8::substr(str_repeat($pad_str, $repeat), 0, floor($pad_length)) . $str;
     }
 
     if ($pad_type === STR_PAD_BOTH) {
@@ -39,12 +44,12 @@ function _str_pad($str, $final_str_length, $pad_str = ' ', $pad_type = STR_PAD_R
         $repeat_left = ceil($pad_length_left / $pad_str_length);
         $repeat_right = ceil($pad_length_right / $pad_str_length);
 
-        $pad_left = UTF8::substr(str_repeat($pad_str, $repeat_left), 0, $pad_length_left);
-        $pad_right = UTF8::substr(str_repeat($pad_str, $repeat_right), 0, $pad_length_right);
+        $pad_left = Utf8::substr(str_repeat($pad_str, $repeat_left), 0, $pad_length_left);
+        $pad_right = Utf8::substr(str_repeat($pad_str, $repeat_right), 0, $pad_length_right);
         return $pad_left . $str . $pad_right;
     }
 
-    throw new UTF8_Exception("UTF8::str_pad: Unknown padding type (:pad_type)", [
+    throw new Utf8Exception("Kohana\Support\Utf8::str_pad: Unknown padding type (:pad_type)", [
     ':pad_type' => $pad_type,
     ]);
 }

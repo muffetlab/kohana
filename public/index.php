@@ -1,5 +1,9 @@
 <?php
 
+use Kohana\Console\Cli;
+use Kohana\Console\Command;
+use Kohana\Http\Request;
+
 /**
  * Set the PHP error reporting level. If you set this in php.ini, you remove this.
  * @link https://www.php.net/errorfunc.configuration#ini.error-reporting
@@ -8,7 +12,7 @@
  * and warnings. Enable them by using: E_ALL
  *
  * In a production environment, it is safe to ignore notices and warnings.
- * Disable them by using: E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED
+ * Disable them by using: E_ALL & ~E_NOTICE & ~E_DEPRECATED
  */
 error_reporting(E_ALL);
 
@@ -18,43 +22,23 @@ error_reporting(E_ALL);
  *
  * @link https://kohana.top/guide/using.configuration
  */
-// Set the full path to the docroot
-const DOCROOT = __DIR__ . DIRECTORY_SEPARATOR;
+// Project paths: BASEPATH, APPPATH, MODPATH, SYSPATH, DOCROOT, VENDOR_PATH
+require __DIR__ . '/../bootstrap/paths.php';
 
-// Define the absolute paths for required directories
-define('APPPATH', realpath(DOCROOT . '../application') . DIRECTORY_SEPARATOR);
-define('MODPATH', realpath(DOCROOT . '../modules') . DIRECTORY_SEPARATOR);
-define('SYSPATH', realpath(DOCROOT . '../system') . DIRECTORY_SEPARATOR);
-define('VENDOR_PATH', realpath(DOCROOT . '../vendor') . DIRECTORY_SEPARATOR);
-
-if (file_exists('install.php')) {
+if (file_exists(__DIR__ . '/install.php')) {
     // Load the installation check
-    return include 'install.php';
-}
-
-/**
- * Define the start time of the application, used for profiling.
- */
-if (!defined('KOHANA_START_TIME')) {
-    define('KOHANA_START_TIME', microtime(true));
-}
-
-/**
- * Define the memory usage at the start of the application, used for profiling.
- */
-if (!defined('KOHANA_START_MEMORY')) {
-    define('KOHANA_START_MEMORY', memory_get_usage());
+    return include __DIR__ . '/install.php';
 }
 
 // Bootstrap the application
-require APPPATH . 'bootstrap.php';
+require BASEPATH . 'bootstrap/app.php';
 
 if (PHP_SAPI === 'cli') {
     // Try and load minion
-    class_exists('Minion_Task') or die('Please enable the Minion module for CLI support.');
-    set_exception_handler(['Minion_Exception', 'handler']);
+    isset(\Kohana\Foundation\Application::modules()['minion']) or die('Please enable the Minion module for CLI support.');
+    set_exception_handler([\Kohana\Console\ConsoleException::class, 'handler']);
 
-    Minion_Task::factory(Minion_CLI::options())->execute();
+    Command::factory(Cli::options())->execute();
 } else {
     /**
      * Execute the main request. A source of the URI can be passed, e.g., $_SERVER['PATH_INFO'].
@@ -62,6 +46,6 @@ if (PHP_SAPI === 'cli') {
      */
     echo Request::factory(null, [], false)
         ->execute()
-        ->send_headers(true)
+        ->sendHeaders(true)
         ->body();
 }

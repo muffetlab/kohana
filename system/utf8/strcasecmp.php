@@ -1,5 +1,7 @@
 <?php
 
+use Kohana\Support\Utf8;
+
 /**
  * UTF8::strcasecmp
  *
@@ -11,10 +13,11 @@
  */
 function _strcasecmp($str1, $str2): int
 {
-    if (UTF8::is_ascii($str1) && UTF8::is_ascii($str2))
+    if (Utf8::isAscii($str1) && Utf8::isAscii($str2)) {
         return strcasecmp($str1, $str2);
+    }
 
-    $str1 = UTF8::strtolower($str1);
-    $str2 = UTF8::strtolower($str2);
+    $str1 = Utf8::strtolower($str1);
+    $str2 = Utf8::strtolower($str2);
     return strcmp($str1, $str2);
 }

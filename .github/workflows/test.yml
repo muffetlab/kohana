@@ -2,9 +2,9 @@ name: Run Tests
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, master, php85 ]
   pull_request:
-    branches: [ develop ]
+    branches: [ develop, master ]
 
 jobs:
   build:
@@ -12,14 +12,43 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
-        php-versions: ['7.1', '7.2', '7.3']
+        php-versions: ['8.4', '8.5']
 
     services:
       memcached:
         image: memcached:1.6-alpine
         ports:
           - 11211:11211
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: kohana
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -proot"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: kohana
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd=pg_isready
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
 
     steps:
       - name: Checkout
@@ -30,7 +59,8 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           tools: composer
-          extensions: memcached
+          extensions: memcached, apcu, redis, gd, mysqli, pdo_mysql, pdo_pgsql, pdo_sqlite
+          ini-values: apc.enable_cli=1
 
       - name: Get composer cache directory
         id: composer-cache
@@ -40,12 +70,23 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-php${{ matrix.php-versions }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: |
-            ${{ runner.os }}-composer-
+            ${{ runner.os }}-php${{ matrix.php-versions }}-composer-
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
+      - name: Check code style
+        if: matrix.php-versions == '8.5'
+        run: vendor/bin/pint --test
+
+      - name: Static analysis
+        if: matrix.php-versions == '8.5'
+        run: vendor/bin/phpstan analyse --no-progress --memory-limit=1G
+
       - name: Run test suite
-        run: vendor/bin/phpunit --bootstrap=modules/unittest/bootstrap_all_modules.php modules/unittest/tests.php
+        run: vendor/bin/pest
+        env:
+          TEST_MYSQL_PASSWORD: root
+          TEST_PGSQL_PASSWORD: postgres

@@ -1,0 +1,454 @@
+<?php
+
+namespace Kohana\Cache;
+
+use Kohana\Cache\Contracts\GarbageCollect;
+use Kohana\Foundation\Application;
+use Kohana\Support\Arr;
+
+/**
+ * [Kohana Cache](api/Kohana_Cache) File driver. Provides a file based
+ * driver for the Kohana Cache library. This is one of the slowest
+ * caching methods.
+ *
+ * ### Configuration example
+ *
+ * Below is an example of a _file_ server configuration.
+ *
+ *     return [
+ *         // File driver group
+ *         'file' => [
+ *             // Using File driver
+ *             'driver' => 'file',
+ *             // Cache location
+ *             'cache_dir' => APPPATH . 'cache/.kohana_cache',
+ *         ],
+ *     ];
+ *
+ * In cases where only one cache group is required, if the group is named `default` there is
+ * no need to pass the group name when instantiating a cache instance.
+ *
+ * #### General cache group configuration settings
+ *
+ * Below are the settings available to all types of cache driver.
+ *
+ * Name           | Required | Description
+ * -------------- | -------- | ---------------------------------------------------------------
+ * driver         | __YES__  | (_string_) The driver type to use
+ * cache_dir      | __NO__   | (_string_) The cache directory to use for this cache instance
+ *
+ * ### System requirements
+ *
+ * *  Kohana 3.0.x
+ * *  PHP 5.2.4 or greater
+ *
+ * @package    Kohana/Cache
+ * @category   Base
+ * @author     Kohana Team
+ * @copyright  (c) 2009-2012 Kohana Team
+ * @license    https://kohana.top/license
+ */
+class FileStore extends Cache implements GarbageCollect
+{
+    /**
+     * Creates a hashed filename based on the string. This is used
+     * to create shorter unique IDs for each cache filename.
+     *
+     *     // Create the cache filename
+     *     $filename = Cache_File::filename($this->_sanitize_id($id));
+     *
+     * @param string $string String to hash into filename
+     * @return  string
+     */
+    protected static function filename(string $string): string
+    {
+        return sha1($string) . '.cache';
+    }
+
+    /**
+     * @var  string   the caching directory
+     */
+    protected $cacheDir;
+
+    /**
+     * Constructs the file cache driver. This method cannot be invoked externally. The file cache driver must
+     * be instantiated using the `Cache::instance()` method.
+     *
+     * @param   array  $config  config
+     * @throws  \Kohana\Cache\CacheException
+     */
+    protected function __construct(array $config)
+    {
+        // Setup parent
+        parent::__construct($config);
+
+        try {
+            $directory = Arr::get($this->config, 'cache_dir', Application::$cacheDir);
+            $this->cacheDir = new \SplFileInfo($directory);
+        } catch (\UnexpectedValueException $e) {
+            $this->cacheDir = $this->makeDirectory($directory, 0777, true);
+        }
+
+        // If the defined directory is a file, get out of here
+        if ($this->cacheDir->isFile()) {
+            throw new CacheException('Unable to create cache directory as a file already exists : :resource', [':resource' => $this->cacheDir->getRealPath()]);
+        }
+
+        // Check the read status of the directory
+        if (!$this->cacheDir->isReadable()) {
+            throw new CacheException('Unable to read from the cache directory :resource', [':resource' => $this->cacheDir->getRealPath()]);
+        }
+
+        // Check the write status of the directory
+        if (!$this->cacheDir->isWritable()) {
+            throw new CacheException('Unable to write to the cache directory :resource', [':resource' => $this->cacheDir->getRealPath()]);
+        }
+    }
+
+    /**
+     * Retrieve a cached value entry by id.
+     *
+     *     // Retrieve cache entry from file group
+     *     $data = Cache::instance('file')->get('foo');
+     *
+     *     // Retrieve cache entry from file group and return 'bar' if missing
+     *     $data = Cache::instance('file')->get('foo', 'bar');
+     *
+     * @param string $id id of cache to entry
+     * @param mixed $default Default value to return if cache miss
+     * @return  mixed
+     * @throws \Kohana\Cache\CacheException
+     * @throws \ErrorException
+     */
+    public function get(string $id, $default = null)
+    {
+        $filename = static::filename($this->sanitizeId($id));
+        $directory = $this->resolveDirectory($filename);
+
+        // Wrap operations in try/catch to handle notices
+        try {
+            // Open file
+            $file = new \SplFileInfo($directory . $filename);
+
+            // If file does not exist
+            if (!$file->isFile()) {
+                // Return default value
+                return $default;
+            } else {
+                // Test the expiry
+                if ($this->isExpired($file)) {
+                    // Delete the file
+                    $this->deleteFile($file, false, true);
+                    return $default;
+                }
+
+                // open the file to read data
+                $data = $file->openFile();
+
+                // Run first fgets(). Cache data starts from the second line
+                // as the first contains the lifetime timestamp
+                $data->fgets();
+
+                $cache = '';
+
+                while ($data->eof() === false) {
+                    $cache .= $data->fgets();
+                }
+
+                return unserialize($cache);
+            }
+        } catch (\ErrorException $e) {
+            // Handle ErrorException caused by failed unserialization
+            if ($e->getCode() === E_NOTICE) {
+                throw new CacheException(__METHOD__ . ' failed to unserialize cached object with message : ' . $e->getMessage());
+            }
+
+            // Otherwise throw the exception
+            throw $e;
+        } catch (\RuntimeException $e) {
+            // Catch RuntimeException when cache file deleted between isFile and openFile
+            return $default;
+        }
+    }
+
+    /**
+     * Set a value to cache with id and lifetime
+     *
+     *     $data = 'bar';
+     *
+     *     // Set 'bar' to 'foo' in file group, using default expiry
+     *     Cache::instance('file')->set('foo', $data);
+     *
+     *     // Set 'bar' to 'foo' in file group for 30 seconds
+     *     Cache::instance('file')->set('foo', $data, 30);
+     *
+     * @param string $id id of cache entry
+     * @param string $data data to set to cache
+     * @param int|null $lifetime Lifetime in seconds
+     * @return bool
+     * @throws \Kohana\Cache\CacheException
+     * @throws \ErrorException
+     */
+    public function set(string $id, $data, ?int $lifetime = null): bool
+    {
+        $filename = static::filename($this->sanitizeId($id));
+        $directory = $this->resolveDirectory($filename);
+
+        // If lifetime is null
+        if ($lifetime === null) {
+            // Set to the default expiry
+            $lifetime = Arr::get($this->config, 'default_expire', Cache::DEFAULT_EXPIRE);
+        }
+
+        // Open directory
+        $dir = new \SplFileInfo($directory);
+
+        // If the directory path is not a directory
+        if (!$dir->isDir()) {
+            $this->makeDirectory($directory, 0777, true);
+        }
+
+        // Open file to inspect
+        $resouce = new \SplFileInfo($directory . $filename);
+        $file = $resouce->openFile('w');
+
+        try {
+            $data = $lifetime . "\n" . serialize($data);
+            $file->fwrite($data, strlen($data));
+            return $file->fflush();
+        } catch (\ErrorException $e) {
+            // If serialize through an error exception
+            if ($e->getCode() === E_NOTICE) {
+                // Throw a caching error
+                throw new CacheException(__METHOD__ . ' failed to serialize data for caching with message : ' . $e->getMessage());
+            }
+
+            // Else rethrow the error exception
+            throw $e;
+        }
+    }
+
+    /**
+     * Delete a cache entry based on id
+     *
+     *     // Delete 'foo' entry from the file group
+     *     Cache::instance('file')->delete('foo');
+     *
+     * @param string $id id to remove from cache
+     * @return bool
+     * @throws \Kohana\Cache\CacheException
+     */
+    public function delete(string $id): bool
+    {
+        $filename = static::filename($this->sanitizeId($id));
+        $directory = $this->resolveDirectory($filename);
+
+        return $this->deleteFile(new \SplFileInfo($directory . $filename), false, true);
+    }
+
+    /**
+     * Delete all cache entries.
+     *
+     * Beware of using this method when
+     * using shared memory cache systems, as it will wipe every
+     * entry within the system for all clients.
+     *
+     *     // Delete all cache entries in the file group
+     *     Cache::instance('file')->delete_all();
+     *
+     * @return bool
+     * @throws \Kohana\Cache\CacheException
+     */
+    public function deleteAll(): bool
+    {
+        return $this->deleteFile($this->cacheDir, true);
+    }
+
+    /**
+     * Garbage collection method that cleans any expired
+     * cache entries from the cache.
+     *
+     * @return  void
+     * @throws \Kohana\Cache\CacheException
+     */
+    public function garbageCollect()
+    {
+        $this->deleteFile($this->cacheDir, true, false, true);
+    }
+
+    /**
+     * Deletes files recursively and returns false on any errors
+     *
+     *     // Delete a file or folder whilst retaining parent directory and ignore all errors
+     *     $this->_delete_file($folder, true, true);
+     *
+     * @param   \SplFileInfo  $file                     file
+     * @param bool $retain_parent_directory Retain the parent directory
+     * @param bool $ignore_errors Ignore_errors to prevent all exceptions interrupting exec
+     * @param bool $only_expired Only expired files
+     * @return  bool
+     * @throws  \Kohana\Cache\CacheException
+     */
+    protected function deleteFile(\SplFileInfo $file, bool $retain_parent_directory = false, bool $ignore_errors = false, bool $only_expired = false): bool
+    {
+        // Allow graceful error handling
+        try {
+            if ($file->isFile()) {
+                try {
+                    // Handle ignore files
+                    if (in_array($file->getFilename(), $this->config('ignore_on_delete'))) {
+                        $delete = false;
+                    }
+                    // If only expired is not set
+                    elseif ($only_expired === false) {
+                        // We want to delete the file
+                        $delete = true;
+                    }
+                    // Otherwise...
+                    else {
+                        // Assess the file expiry to flag it for deletion
+                        $delete = $this->isExpired($file);
+                    }
+
+                    // If the delete flag is set delete file
+                    if ($delete === true) {
+                        return unlink($file->getRealPath());
+                    } else {
+                        return false;
+                    }
+                } catch (\ErrorException $e) {
+                    // Catch any delete file warnings
+                    if ($e->getCode() === E_WARNING) {
+                        throw new CacheException(__METHOD__ . ' failed to delete file : :file', [':file' => $file->getRealPath()]);
+                    }
+                }
+            } elseif ($file->isDir()) {
+                // Create new DirectoryIterator
+                $files = new \DirectoryIterator($file->getPathname());
+
+                // Iterate over each entry
+                while ($files->valid()) {
+                    // Extract the entry name
+                    $name = $files->getFilename();
+
+                    // If the name is not a dot
+                    if ($name !== '.' && $name !== '..') {
+                        // Create new file resource
+                        $fp = new \SplFileInfo($files->getRealPath());
+                        // Delete the file
+                        $this->deleteFile($fp, $retain_parent_directory, $ignore_errors, $only_expired);
+                    }
+
+                    // Move the file pointer on
+                    $files->next();
+                }
+
+                // If set to retain parent directory, return now
+                if ($retain_parent_directory) {
+                    return true;
+                }
+
+                try {
+                    // Remove the files iterator
+                    // (fixes Windows PHP which has permission issues with open iterators)
+                    unset($files);
+
+                    // Try to remove the parent directory
+                    return rmdir($file->getRealPath());
+                } catch (\ErrorException $e) {
+                    // Catch any delete directory warnings
+                    if ($e->getCode() === E_WARNING) {
+                        throw new CacheException(__METHOD__ . ' failed to delete directory : :directory', [':directory' => $file->getRealPath()]);
+                    }
+                    throw $e;
+                }
+            } else {
+                // We get here if a file has already been deleted
+                return false;
+            }
+        }
+        // Catch all exceptions
+        catch (\Exception $e) {
+            // If ignore_errors is on
+            if ($ignore_errors === true) {
+                // Return
+                return false;
+            }
+            // Throw exception
+            throw $e;
+        }
+
+        return false;
+    }
+
+    /**
+     * Resolves the cache directory real path from the filename
+     *
+     *      // Get the realpath of the cache folder
+     *      $realpath = $this->_resolve_directory($filename);
+     *
+     * @param string $filename Filename to resolve
+     * @return  string
+     */
+    protected function resolveDirectory(string $filename): string
+    {
+        return $this->cacheDir->getRealPath() . DIRECTORY_SEPARATOR . $filename[0] . $filename[1] . DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * Makes the cache directory if it doesn't exist. Simply a wrapper for
+     * `mkdir` to ensure DRY principles
+     *
+     * @link    https://www.php.net/manual/en/function.mkdir.php
+     * @param string $directory Directory path
+     * @param int $mode chmod mode
+     * @param bool $recursive Allows nested directories creation
+     * @param   resource  $context      a stream context
+     * @return  \SplFileInfo
+     * @throws  \Kohana\Cache\CacheException
+     */
+    protected function makeDirectory(string $directory, int $mode = 0777, bool $recursive = false, $context = null): \SplFileInfo
+    {
+        // call mkdir according to the availability of a passed $context param
+        $mkdir_result = $context ?
+            mkdir($directory, $mode, $recursive, $context) :
+            mkdir($directory, $mode, $recursive);
+
+        // throw an exception if unsuccessful
+        if (!$mkdir_result) {
+            throw new CacheException('Failed to create the defined cache directory : :directory', [':directory' => $directory]);
+        }
+
+        // chmod to solve potential umask issues
+        chmod($directory, $mode);
+
+        return new \SplFileInfo($directory);
+    }
+
+    /**
+     * Test if cache file is expired
+     *
+     * @param \SplFileInfo $file the cache file
+     * @return bool true if expired false otherwise
+     * @throws \Kohana\Cache\CacheException
+     */
+    protected function isExpired(\SplFileInfo $file): bool
+    {
+        // Open the file and parse data
+        $created = $file->getMTime();
+        $data = $file->openFile();
+        $lifetime = (int) $data->fgets();
+
+        // If we're at the EOF at this point, corrupted!
+        if ($data->eof()) {
+            throw new CacheException(__METHOD__ . ' corrupted cache file!');
+        }
+
+        //close file
+        $data = null;
+
+        // test for expiry and return
+        return $lifetime !== 0 && $created + $lifetime < time();
+    }
+
+}

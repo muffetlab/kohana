@@ -1,0 +1,985 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Property Kohana\\Cache\\Cache\:\:\$config \(Kohana\\Config\\Repository\) does not accept array\<mixed, mixed\>\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: modules/cache/src/Cache/Cache.php
+
+		-
+			message: '#^Property Kohana\\Cache\\Cache\:\:\$config \(Kohana\\Config\\Repository\) does not accept default value of type array\.$#'
+			identifier: property.defaultValue
+			count: 1
+			path: modules/cache/src/Cache/Cache.php
+
+		-
+			message: '#^Static property Kohana\\Cache\\Cache\:\:\$instances \(Kohana\\Cache\\Cache\) does not accept default value of type array\.$#'
+			identifier: property.defaultValue
+			count: 1
+			path: modules/cache/src/Cache/Cache.php
+
+		-
+			message: '#^Cannot call method getRealPath\(\) on string\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: modules/cache/src/Cache/FileStore.php
+
+		-
+			message: '#^Parameter \#1 \$file of method Kohana\\Cache\\FileStore\:\:deleteFile\(\) expects SplFileInfo, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: modules/cache/src/Cache/FileStore.php
+
+		-
+			message: '#^Variable \$directory might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: modules/cache/src/Cache/FileStore.php
+
+		-
+			message: '#^Call to method decrement\(\) on an unknown class Kohana\\Cache\\Memcached\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/cache/src/Cache/MemcachedStore.php
+
+		-
+			message: '#^Call to method delete\(\) on an unknown class Kohana\\Cache\\Memcached\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/cache/src/Cache/MemcachedStore.php
+
+		-
+			message: '#^Call to method flush\(\) on an unknown class Kohana\\Cache\\Memcached\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/cache/src/Cache/MemcachedStore.php
+
+		-
+			message: '#^Call to method get\(\) on an unknown class Kohana\\Cache\\Memcached\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/cache/src/Cache/MemcachedStore.php
+
+		-
+			message: '#^Call to method increment\(\) on an unknown class Kohana\\Cache\\Memcached\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/cache/src/Cache/MemcachedStore.php
+
+		-
+			message: '#^Call to method set\(\) on an unknown class Kohana\\Cache\\Memcached\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/cache/src/Cache/MemcachedStore.php
+
+		-
+			message: '#^Property Kohana\\Cache\\MemcachedStore\:\:\$memcached \(Kohana\\Cache\\Memcached\) does not accept Memcached\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: modules/cache/src/Cache/MemcachedStore.php
+
+		-
+			message: '#^Property Kohana\\Cache\\MemcachedStore\:\:\$memcached has unknown class Kohana\\Cache\\Memcached as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/cache/src/Cache/MemcachedStore.php
+
+		-
+			message: '#^Call to method getMessage\(\) on an unknown class PDOExeption\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/cache/src/Cache/SqliteStore.php
+
+		-
+			message: '#^Caught class PDOExeption not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/cache/src/Cache/SqliteStore.php
+
+		-
+			message: '#^Call to function is_callable\(\) with callable\(\)\: mixed will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 2
+			path: modules/cache/src/Http/Cache.php
+
+		-
+			message: '#^Default value of the parameter \#2 \$callback \(false\) of method Kohana\\Http\\Cache\:\:createCacheKey\(\) is incompatible with type callable\(\)\: mixed\.$#'
+			identifier: parameter.defaultValue
+			count: 1
+			path: modules/cache/src/Http/Cache.php
+
+		-
+			message: '#^Instanceof between Kohana\\Cache\\Cache and Kohana\\Cache\\Cache will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 2
+			path: modules/cache/src/Http/Cache.php
+
+		-
+			message: '#^Property Kohana\\Http\\Cache\:\:\$cacheKeyCallback has unknown class Kohana\\Http\\callback as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: modules/cache/src/Http/Cache.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: modules/cache/src/Http/Cache.php
+
+		-
+			message: '#^Method Kohana\\Database\\Connection\:\:quote\(\) should return string but returns int\.$#'
+			identifier: return.type
+			count: 1
+			path: modules/database/src/Database/Connection.php
+
+		-
+			message: '#^Cannot call method close\(\) on resource\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: modules/database/src/Database/MySqliConnection.php
+
+		-
+			message: '#^Variable \$database might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: modules/database/src/Database/MySqliConnection.php
+
+		-
+			message: '#^Variable \$flags might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: modules/database/src/Database/MySqliConnection.php
+
+		-
+			message: '#^Variable \$hostname might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: modules/database/src/Database/MySqliConnection.php
+
+		-
+			message: '#^Variable \$password might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: modules/database/src/Database/MySqliConnection.php
+
+		-
+			message: '#^Variable \$port might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: modules/database/src/Database/MySqliConnection.php
+
+		-
+			message: '#^Variable \$socket might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: modules/database/src/Database/MySqliConnection.php
+
+		-
+			message: '#^Variable \$ssl might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: modules/database/src/Database/MySqliConnection.php
+
+		-
+			message: '#^Variable \$username might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: modules/database/src/Database/MySqliConnection.php
+
+		-
+			message: '#^Cannot call method free\(\) on resource\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: modules/database/src/Database/MySqliResult.php
+
+		-
+			message: '#^Variable \$dsn might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: modules/database/src/Database/PdoConnection.php
+
+		-
+			message: '#^Variable \$password might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: modules/database/src/Database/PdoConnection.php
+
+		-
+			message: '#^Variable \$username might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: modules/database/src/Database/PdoConnection.php
+
+		-
+			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: modules/database/src/Database/Query/InsertBuilder.php
+
+		-
+			message: '#^Negated boolean expression is always true\.$#'
+			identifier: booleanNot.alwaysTrue
+			count: 1
+			path: modules/database/src/Database/Result.php
+
+		-
+			message: '#^Result of method SeekableIterator\<mixed,mixed\>\:\:seek\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: modules/database/src/Database/Result.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: modules/database/src/Database/Result.php
+
+		-
+			message: '#^Function imagerotate invoked with 4 parameters, 3 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: modules/image/src/Image/GdImage.php
+
+		-
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
+			count: 6
+			path: modules/image/src/Image/GdImage.php
+
+		-
+			message: '#^Method Kohana\\Image\\GdImage\:\:create\(\) should return resource but returns \(GdImage\|false\)\.$#'
+			identifier: return.type
+			count: 1
+			path: modules/image/src/Image/GdImage.php
+
+		-
+			message: '#^Parameter \#1 \$dst_image of function imagecopy expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 6
+			path: modules/image/src/Image/GdImage.php
+
+		-
+			message: '#^Parameter \#1 \$dst_image of function imagecopyresampled expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: modules/image/src/Image/GdImage.php
+
+		-
+			message: '#^Parameter \#1 \$dst_image of function imagecopyresized expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/image/src/Image/GdImage.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagealphablending expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/image/src/Image/GdImage.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocatealpha expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/image/src/Image/GdImage.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagedestroy expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/image/src/Image/GdImage.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagefilledrectangle expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/image/src/Image/GdImage.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagefilter expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/image/src/Image/GdImage.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesx expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 4
+			path: modules/image/src/Image/GdImage.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesy expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 4
+			path: modules/image/src/Image/GdImage.php
+
+		-
+			message: '#^Parameter \#2 \$src_image of function imagecopy expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/image/src/Image/GdImage.php
+
+		-
+			message: '#^Parameter \#5 \$alpha of function imagecolorallocatealpha expects int\<0, 127\>, float given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/image/src/Image/GdImage.php
+
+		-
+			message: '#^Parameter \#5 \$alpha of function imagecolorallocatealpha expects int\<0, 127\>, float\<1\.0, max\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/image/src/Image/GdImage.php
+
+		-
+			message: '#^Parameter &\$quality by\-ref type of method Kohana\\Image\\GdImage\:\:saveFunction\(\) expects int, null given\.$#'
+			identifier: parameterByRef.type
+			count: 1
+			path: modules/image/src/Image/GdImage.php
+
+		-
+			message: '#^Variable \$quality in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.variable
+			count: 2
+			path: modules/image/src/Image/GdImage.php
+
+		-
+			message: '#^Call to function is_object\(\) with Kohana\\Log\\Logger will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: modules/image/src/Image/Image.php
+
+		-
+			message: '#^Parameter \#1 \$level of method Kohana\\Log\\Logger\:\:add\(\) expects string, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/image/src/Image/Image.php
+
+		-
+			message: '#^Method Kohana\\Image\\ImagickImage\:\:doFlip\(\) with return type void returns bool but should not return anything\.$#'
+			identifier: return.void
+			count: 2
+			path: modules/image/src/Image/ImagickImage.php
+
+		-
+			message: '#^Method Kohana\\Image\\ImagickImage\:\:doSharpen\(\) with return type void returns bool but should not return anything\.$#'
+			identifier: return.void
+			count: 1
+			path: modules/image/src/Image/ImagickImage.php
+
+		-
+			message: '#^Method Kohana\\Image\\ImagickImage\:\:doWatermark\(\) with return type void returns bool but should not return anything\.$#'
+			identifier: return.void
+			count: 1
+			path: modules/image/src/Image/ImagickImage.php
+
+		-
+			message: '#^Parameter \#2 \$key of static method Kohana\\Support\\Arr\:\:get\(\) expects string, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/minion/src/Console/Command.php
+
+		-
+			message: '#^Access to an undefined property Kohana\\Auth\\Models\\User\:\:\$last_login\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/orm/src/Auth/Models/User.php
+
+		-
+			message: '#^Access to an undefined property Kohana\\Auth\\Models\\User\:\:\$logins\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/orm/src/Auth/Models/User.php
+
+		-
+			message: '#^Access to an undefined property Kohana\\Auth\\Models\\UserToken\:\:\$expires\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/orm/src/Auth/Models/UserToken.php
+
+		-
+			message: '#^Access to an undefined property Kohana\\Auth\\Models\\UserToken\:\:\$token\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/orm/src/Auth/Models/UserToken.php
+
+		-
+			message: '#^Property Kohana\\Auth\\Models\\UserToken\:\:\$createdColumn \(string\) does not accept default value of type array\<string, string\|true\>\.$#'
+			identifier: property.defaultValue
+			count: 1
+			path: modules/orm/src/Auth/Models/UserToken.php
+
+		-
+			message: '#^Access to an undefined property Kohana\\Orm\\Model\:\:\$expires\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/orm/src/Auth/OrmAuth.php
+
+		-
+			message: '#^Access to an undefined property Kohana\\Orm\\Model\:\:\$token\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/orm/src/Auth/OrmAuth.php
+
+		-
+			message: '#^Access to an undefined property Kohana\\Orm\\Model\:\:\$user\.$#'
+			identifier: property.notFound
+			count: 3
+			path: modules/orm/src/Auth/OrmAuth.php
+
+		-
+			message: '#^Access to an undefined property Kohana\\Orm\\Model\:\:\$user_agent\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/orm/src/Auth/OrmAuth.php
+
+		-
+			message: '#^Access to an undefined property Kohana\\Orm\\Model\:\:\$user_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/orm/src/Auth/OrmAuth.php
+
+		-
+			message: '#^Call to an undefined method Kohana\\Orm\\Model\:\:uniqueKey\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: modules/orm/src/Auth/OrmAuth.php
+
+		-
+			message: '#^Call to function is_array\(\) with non\-falsy\-string will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 1
+			path: modules/orm/src/Auth/OrmAuth.php
+
+		-
+			message: '#^Call to function is_object\(\) with non\-falsy\-string will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 1
+			path: modules/orm/src/Auth/OrmAuth.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between int\<0, max\> and \*NEVER\* will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: modules/orm/src/Auth/OrmAuth.php
+
+		-
+			message: '#^Call to function is_array\(\) with string will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 2
+			path: modules/orm/src/Orm/Concerns/PersistsModels.php
+
+		-
+			message: '#^Property Kohana\\Orm\\Model\:\:\$validation \(Kohana\\Validation\\Validator\) in isset\(\) is not nullable\.$#'
+			identifier: isset.property
+			count: 1
+			path: modules/orm/src/Orm/Concerns/ValidatesAttributes.php
+
+		-
+			message: '#^Call to function is_object\(\) with Kohana\\Database\\Connection will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: modules/orm/src/Orm/Model.php
+
+		-
+			message: '#^PHPDoc tag @param has invalid value \(\.\.\.\)\: Unexpected token "\\n     \* ", expected variable at offset 145 on line 5$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: modules/orm/src/Orm/Model.php
+
+		-
+			message: '#^Parameter \#2 \$key of static method Kohana\\Support\\Arr\:\:get\(\) expects string, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/orm/src/Orm/Model.php
+
+		-
+			message: '#^Property Kohana\\Orm\\Model\:\:\$dbBuilder \(Kohana\\Database\\Query\\SelectBuilder\) does not accept Kohana\\Database\\Query\\DeleteBuilder\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: modules/orm/src/Orm/Model.php
+
+		-
+			message: '#^Property Kohana\\Orm\\Model\:\:\$dbBuilder \(Kohana\\Database\\Query\\SelectBuilder\) does not accept Kohana\\Database\\Query\\UpdateBuilder\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: modules/orm/src/Orm/Model.php
+
+		-
+			message: '#^Property Kohana\\Orm\\Model\:\:\$dbBuilder \(Kohana\\Database\\Query\\SelectBuilder\) does not accept null\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: modules/orm/src/Orm/Model.php
+
+		-
+			message: '#^Property Kohana\\Orm\\Model\:\:\$objectPlural \(string\) in isset\(\) is not nullable\.$#'
+			identifier: isset.property
+			count: 1
+			path: modules/orm/src/Orm/Model.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between string and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: modules/orm/src/Orm/ValidationException.php
+
+		-
+			message: '#^Static property Kohana\\Testing\\Helpers\:\:\$hasInternet \(bool\) in isset\(\) is not nullable\.$#'
+			identifier: isset.property
+			count: 1
+			path: modules/unittest/src/Testing/Helpers.php
+
+		-
+			message: '#^Parameter \#8 \$tag_length of function openssl_encrypt expects int, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: system/src/Encryption/OpensslEncrypter.php
+
+		-
+			message: '#^Property Kohana\\Encryption\\OpensslEncrypter\:\:\$iv \(string\) on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.property
+			count: 1
+			path: system/src/Encryption/OpensslEncrypter.php
+
+		-
+			message: '#^Property Kohana\\Encryption\\OpensslEncrypter\:\:\$tag \(string\) in isset\(\) is not nullable\.$#'
+			identifier: isset.property
+			count: 2
+			path: system/src/Encryption/OpensslEncrypter.php
+
+		-
+			message: '#^Unused result of "and" operator\.$#'
+			identifier: logicalAnd.resultUnused
+			count: 5
+			path: system/src/Encryption/OpensslEncrypter.php
+
+		-
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
+			count: 1
+			path: system/src/Filesystem/File.php
+
+		-
+			message: '#^Parameter \#1 \$string of function str_pad expects string, int\<1, max\> given\.$#'
+			identifier: argument.type
+			count: 2
+			path: system/src/Filesystem/File.php
+
+		-
+			message: '#^Instanceof between Kohana\\Config\\Repository and Kohana\\Config\\Repository will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: system/src/Foundation/Application.php
+
+		-
+			message: '#^Instanceof between Kohana\\Log\\Logger and Kohana\\Log\\Logger will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: system/src/Foundation/Application.php
+
+		-
+			message: '#^Static property Kohana\\Foundation\\Application\:\:\$config \(Kohana\\Config\\Repository\) does not accept null\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: system/src/Foundation/Application.php
+
+		-
+			message: '#^Static property Kohana\\Foundation\\Application\:\:\$log \(Kohana\\Log\\Logger\) does not accept null\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: system/src/Foundation/Application.php
+
+		-
+			message: '#^Parameter \#1 \$string of function strlen expects string, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: system/src/Foundation/Debug.php
+
+		-
+			message: '#^Variable \$var in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: system/src/Foundation/Debug.php
+
+		-
+			message: '#^Call to function is_object\(\) with Kohana\\Log\\Logger will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: system/src/Foundation/KohanaException.php
+
+		-
+			message: '#^Parameter \#1 \$level of method Kohana\\Log\\Logger\:\:add\(\) expects string, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: system/src/Foundation/KohanaException.php
+
+		-
+			message: '#^Right side of && is always true\.$#'
+			identifier: booleanAnd.rightAlwaysTrue
+			count: 1
+			path: system/src/Http/Client/ExternalClient.php
+
+		-
+			message: '#^Call to method getMessage\(\) on an unknown class HTTPMalformedHeaderException\.$#'
+			identifier: class.notFound
+			count: 1
+			path: system/src/Http/Client/HttpClient.php
+
+		-
+			message: '#^Caught class HTTPMalformedHeaderException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: system/src/Http/Client/HttpClient.php
+
+		-
+			message: '#^Right side of && is always true\.$#'
+			identifier: booleanAnd.rightAlwaysTrue
+			count: 1
+			path: system/src/Http/Client/InternalClient.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between Kohana\\Http\\Exceptions\\HttpException\|Kohana\\Http\\Request and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: system/src/Http/Client/InternalClient.php
+
+		-
+			message: '#^If condition is always false\.$#'
+			identifier: if.alwaysFalse
+			count: 1
+			path: system/src/Http/Client/StreamClient.php
+
+		-
+			message: '#^Call to an undefined method Kohana\\Http\\Contracts\\Response\:\:cookie\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: system/src/Http/HeaderBag.php
+
+		-
+			message: '#^PHPDoc tag @param for parameter \$input with type mixed is not subtype of native type array\.$#'
+			identifier: parameter.phpDocType
+			count: 1
+			path: system/src/Http/HeaderBag.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between non\-empty\-list\<string\> and false will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: system/src/Http/HeaderBag.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between non\-empty\-list\<string\> and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: system/src/Http/HeaderBag.php
+
+		-
+			message: '#^Call to an undefined method Kohana\\Http\\Exceptions\\HttpException\:\:headers\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: system/src/Http/Http.php
+
+		-
+			message: '#^Static call to instance method http\\Env\:\:getRequestHeader\(\)\.$#'
+			identifier: method.staticCall
+			count: 1
+			path: system/src/Http/Http.php
+
+		-
+			message: '#^Static call to instance method http\\Header\:\:parse\(\)\.$#'
+			identifier: method.staticCall
+			count: 1
+			path: system/src/Http/Http.php
+
+		-
+			message: '#^Instanceof between Kohana\\Http\\Client\\Client and Kohana\\Http\\Client\\Client will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: system/src/Http/Request.php
+
+		-
+			message: '#^Instanceof between Kohana\\Routing\\Route and Kohana\\Routing\\Route will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: system/src/Http/Request.php
+
+		-
+			message: '#^Parameter \#2 \$haystack of function in_array expects array, string given\.$#'
+			identifier: argument.type
+			count: 3
+			path: system/src/Http/Request.php
+
+		-
+			message: '#^Parameter \#2 \$routes of static method Kohana\\Http\\Request\:\:process\(\) expects array\|null, Kohana\\Routing\\Route given\.$#'
+			identifier: argument.type
+			count: 1
+			path: system/src/Http/Request.php
+
+		-
+			message: '#^Property Kohana\\Http\\Request\:\:\$routes \(Kohana\\Routing\\Route\) does not accept array\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: system/src/Http/Request.php
+
+		-
+			message: '#^Static property Kohana\\Http\\Request\:\:\$trustedProxies \(string\) does not accept default value of type array\<int, string\>\.$#'
+			identifier: property.defaultValue
+			count: 1
+			path: system/src/Http/Request.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 2
+			path: system/src/Http/Request.php
+
+		-
+			message: '#^Variable \$cookies in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.variable
+			count: 1
+			path: system/src/Http/Request.php
+
+		-
+			message: '#^Call to function is_object\(\) with Kohana\\Log\\Logger will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: system/src/Http/Response.php
+
+		-
+			message: '#^Parameter \#1 \$level of method Kohana\\Log\\Logger\:\:add\(\) expects string, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: system/src/Http/Response.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: system/src/Http/Response.php
+
+		-
+			message: '#^Dead catch \- ErrorException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: system/src/Http/Upload.php
+
+		-
+			message: '#^Parameter \#1 \$options of function debug_backtrace expects int, false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: system/src/Log/Logger.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: system/src/Log/Logger.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: system/src/Routing/Route.php
+
+		-
+			message: '#^Property Kohana\\Routing\\TemplateController\:\:\$template \(Kohana\\View\\View\) does not accept default value of type string\.$#'
+			identifier: property.defaultValue
+			count: 1
+			path: system/src/Routing/TemplateController.php
+
+		-
+			message: '#^Parameter \#1 \$level of method Kohana\\Log\\Logger\:\:add\(\) expects string, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: system/src/Session/Session.php
+
+		-
+			message: '#^Parameter \#1 \$name of static method Kohana\\Encryption\\Encrypter\:\:instance\(\) expects string\|null, true given\.$#'
+			identifier: argument.type
+			count: 2
+			path: system/src/Session/Session.php
+
+		-
+			message: '#^Default value of the parameter \#1 \$start \(false\) of method Kohana\\Support\\Date\:\:years\(\) is incompatible with type int\.$#'
+			identifier: parameter.defaultValue
+			count: 1
+			path: system/src/Support/Date.php
+
+		-
+			message: '#^Default value of the parameter \#1 \$timestamp \(false\) of method Kohana\\Support\\Date\:\:dos2unix\(\) is incompatible with type int\.$#'
+			identifier: parameter.defaultValue
+			count: 1
+			path: system/src/Support/Date.php
+
+		-
+			message: '#^Default value of the parameter \#1 \$timestamp \(false\) of method Kohana\\Support\\Date\:\:unix2dos\(\) is incompatible with type int\.$#'
+			identifier: parameter.defaultValue
+			count: 1
+			path: system/src/Support/Date.php
+
+		-
+			message: '#^Default value of the parameter \#2 \$end \(false\) of method Kohana\\Support\\Date\:\:years\(\) is incompatible with type int\.$#'
+			identifier: parameter.defaultValue
+			count: 1
+			path: system/src/Support/Date.php
+
+		-
+			message: '#^Default value of the parameter \#2 \$year \(false\) of method Kohana\\Support\\Date\:\:days\(\) is incompatible with type int\.$#'
+			identifier: parameter.defaultValue
+			count: 1
+			path: system/src/Support/Date.php
+
+		-
+			message: '#^Method Kohana\\Support\\Date\:\:span\(\) should return array\|string but returns \(float\|int\)\.$#'
+			identifier: return.type
+			count: 1
+			path: system/src/Support/Date.php
+
+		-
+			message: '#^Method Kohana\\Support\\Date\:\:span\(\) should return array\|string but returns false\.$#'
+			identifier: return.type
+			count: 1
+			path: system/src/Support/Date.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between int and false will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 4
+			path: system/src/Support/Date.php
+
+		-
+			message: '#^Parameter \#2 \$key of static method Kohana\\Support\\Arr\:\:get\(\) expects string, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: system/src/Support/Number.php
+
+		-
+			message: '#^Default value of the parameter \#4 \$pad_type \(int\) of method Kohana\\Support\\Utf8\:\:strPad\(\) is incompatible with type string\.$#'
+			identifier: parameter.defaultValue
+			count: 1
+			path: system/src/Support/Utf8.php
+
+		-
+			message: '#^Function _from_unicode not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: system/src/Support/Utf8.php
+
+		-
+			message: '#^Function _ltrim not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: system/src/Support/Utf8.php
+
+		-
+			message: '#^Function _ord not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: system/src/Support/Utf8.php
+
+		-
+			message: '#^Function _rtrim not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: system/src/Support/Utf8.php
+
+		-
+			message: '#^Function _str_ireplace not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: system/src/Support/Utf8.php
+
+		-
+			message: '#^Function _str_pad not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: system/src/Support/Utf8.php
+
+		-
+			message: '#^Function _str_split not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: system/src/Support/Utf8.php
+
+		-
+			message: '#^Function _strcasecmp not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: system/src/Support/Utf8.php
+
+		-
+			message: '#^Function _strcspn not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: system/src/Support/Utf8.php
+
+		-
+			message: '#^Function _strrev not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: system/src/Support/Utf8.php
+
+		-
+			message: '#^Function _strspn not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: system/src/Support/Utf8.php
+
+		-
+			message: '#^Function _substr_replace not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: system/src/Support/Utf8.php
+
+		-
+			message: '#^Function _to_unicode not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: system/src/Support/Utf8.php
+
+		-
+			message: '#^Function _transliterate_to_ascii not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: system/src/Support/Utf8.php
+
+		-
+			message: '#^Function _trim not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: system/src/Support/Utf8.php
+
+		-
+			message: '#^Function _ucfirst not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: system/src/Support/Utf8.php
+
+		-
+			message: '#^Function _ucwords not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: system/src/Support/Utf8.php
+
+		-
+			message: '#^Binary operation "\*" between string and 2 results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: system/src/Validation/Rules.php
+
+		-
+			message: '#^Parameter \#2 \$key of static method Kohana\\Support\\Arr\:\:get\(\) expects string, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: system/src/Validation/Validator.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: system/src/Validation/Validator.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: system/src/View/View.php

@@ -1,5 +1,7 @@
 <?php
 
+use Kohana\Support\Utf8;
+
 /**
  * UTF8::strspn
  *
@@ -11,14 +13,16 @@
  */
 function _strspn($str, $mask, $offset = null, $length = null): int
 {
-    if ($str === '' || $mask === '')
+    if ($str === '' || $mask === '') {
         return 0;
+    }
 
-    if (UTF8::is_ascii($str) && UTF8::is_ascii($mask))
+    if (Utf8::isAscii($str) && Utf8::isAscii($mask)) {
         return $offset === null ? strspn($str, $mask) : ($length === null ? strspn($str, $mask, $offset) : strspn($str, $mask, $offset, $length));
+    }
 
     if ($offset !== null || $length !== null) {
-        $str = UTF8::substr($str, $offset, $length);
+        $str = Utf8::substr($str, $offset, $length);
     }
 
     // Escape these characters:  - [ ] . : \ ^ /
@@ -26,5 +30,5 @@ function _strspn($str, $mask, $offset = null, $length = null): int
     $mask = preg_replace('#[-[\].:\\\\^/]#', '\\\\$0', $mask);
     preg_match('/^[^' . $mask . ']+/u', $str, $matches);
 
-    return isset($matches[0]) ? UTF8::strlen($matches[0]) : 0;
+    return isset($matches[0]) ? Utf8::strlen($matches[0]) : 0;
 }

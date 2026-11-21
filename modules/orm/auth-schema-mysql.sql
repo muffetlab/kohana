@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `email` varchar(254) NOT NULL,
   `username` varchar(32) NOT NULL DEFAULT '',
-  `password` varchar(64) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `logins` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `last_login` int(10) UNSIGNED,
   PRIMARY KEY  (`id`),

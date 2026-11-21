@@ -1,5 +1,7 @@
 <?php
 
+use Kohana\Foundation\Application;
+
 include_once('bootstrap.php');
 
 // Enable all modules we can find
@@ -13,6 +15,6 @@ foreach ($modules_iterator as $module) {
     }
 }
 
-Kohana::modules(Kohana::modules() + $modules);
+Application::modules(Application::modules() + $modules);
 
 unset($modules_iterator, $modules, $module);
