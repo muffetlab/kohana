@@ -122,7 +122,7 @@ class Kohana_Config_Group extends ArrayObject
      * @param mixed  $value The new array value
      * @return void
      */
-    public function offsetSet($key, $value)
+    public function offsetSet($key, $value): void
     {
         $this->_parent_instance->_write_config($this->_group_name, $key, $value);
 

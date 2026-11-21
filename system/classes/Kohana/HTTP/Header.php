@@ -314,7 +314,7 @@ class Kohana_HTTP_Header extends ArrayObject
      * @return  void
      * @since   3.2.0
      */
-    public function offsetSet($key, $value, bool $replace = true)
+    public function offsetSet($key, $value, bool $replace = true): void
     {
         // Ensure the index is lowercase
         $key = strtolower($key);
@@ -356,7 +356,7 @@ class Kohana_HTTP_Header extends ArrayObject
      * @return  void
      * @since   3.2.0
      */
-    public function offsetUnset($key)
+    public function offsetUnset($key): void
     {
         parent::offsetUnset(strtolower($key));
     }
@@ -369,7 +369,7 @@ class Kohana_HTTP_Header extends ArrayObject
      * @return  mixed
      * @since   3.2.0
      */
-    public function offsetGet($key)
+    public function offsetGet($key): mixed
     {
         return parent::offsetGet(strtolower($key));
     }

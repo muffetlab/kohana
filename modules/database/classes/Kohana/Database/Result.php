@@ -203,7 +203,7 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
      * @param   int     $offset
      * @return  mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         if (!$this->seek($offset))
             return null;
@@ -221,7 +221,7 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
      * @return  void
      * @throws  Kohana_Exception
      */
-    final public function offsetSet($offset, $value)
+    final public function offsetSet($offset, $value): void
     {
         throw new Kohana_Exception('Database results are read-only');
     }
@@ -235,7 +235,7 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
      * @return  void
      * @throws  Kohana_Exception
      */
-    final public function offsetUnset($offset)
+    final public function offsetUnset($offset): void
     {
         throw new Kohana_Exception('Database results are read-only');
     }
@@ -259,6 +259,7 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
      *
      * @return  $this
      */
+    #[\ReturnTypeWillChange]
     public function next(): Kohana_Database_Result
     {
         ++$this->_current_row;
@@ -285,6 +286,7 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
      *
      * @return  $this
      */
+    #[\ReturnTypeWillChange]
     public function rewind(): Kohana_Database_Result
     {
         $this->_current_row = 0;
