@@ -2,9 +2,7 @@
 
 namespace Kohana\Console\Commands\Auth;
 
-use Kohana\Console\Cli;
-use Kohana\Console\Command;
-use Kohana\Console\Commands\Make\MigrationCommand as MakeMigration;
+use Kohana\Console\PublishMigrationCommand;
 
 /**
  * Copies the migration for the ORM auth tables into database/migrations.
@@ -17,36 +15,13 @@ use Kohana\Console\Commands\Make\MigrationCommand as MakeMigration;
  * Options:
  *   --force  Copy it again even if database/migrations already has one
  */
-class MigrationCommand extends Command
+class MigrationCommand extends PublishMigrationCommand
 {
-    protected $options = [
-        'force' => false,
-    ];
-
-    protected function handle(array $params)
+    protected function migrationName(): string
     {
-        $existing = glob(database_path('migrations') . DIRECTORY_SEPARATOR . '*_create_auth_tables.php') ?: [];
-
-        if ($existing && $params['force'] === false) {
-            Cli::write(Cli::color('The auth migration already exists: ' . basename($existing[0]), 'red') . '; use --force to copy it again');
-
-            return;
-        }
-
-        $file = MakeMigration::path('create_auth_tables');
-
-        if (!is_dir(dirname($file))) {
-            mkdir(dirname($file), 0755, true);
-        }
-
-        copy(static::stub(), $file);
-
-        Cli::write(Cli::color('Created migration ' . basename($file, '.php'), 'green') . '. Run "php kohana migrate" to create the auth tables.');
+        return 'create_auth_tables';
     }
 
-    /**
-     * @return string Path of the migration template shipped with the ORM module
-     */
     public static function stub(): string
     {
         return dirname(__DIR__, 4) . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'create_auth_tables.php';
