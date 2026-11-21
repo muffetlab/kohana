@@ -430,3 +430,23 @@ New and changed files:
 
 2. Make `storage/framework/sessions` writable, or set `save_path` to `null` in `config/session.php` to keep PHP's default.
 3. Existing native sessions in the old location are not moved; users are logged out once.
+
+## 28. ORM
+
+The ORM model is split into traits under `Kohana\Orm\Concerns` (`Kohana\Orm\Model` stays the class to extend) and gains Laravel-style features: mass assignment, casts, timestamps, static queries, `toArray()`/JSON, has_many eager loading, `paginate()`/`chunk()`, the `SoftDeletes` trait, model events, `sync()`/`attach()`/`detach()`, `increment()`/`fresh()`/`replicate()` and model factories. See `docs/orm/features.md`.
+
+Breaking changes:
+
+- **`values()` without a column list requires `$fillable` or `$guarded`**, otherwise it throws `Kohana\Orm\MassAssignmentException`. Before, it set every key it was given.
+- **`pk()` returns an integer** for numeric keys. Set `protected $keyType = 'string';` for string keys.
+- **Model metadata is cached per class and connection.** Code that reset `Model::$initCache` or `$columnCache` by hand can drop it; `$columnCache` is gone.
+- **`countRelations($alias, $keys)` counts every matching key.** It grouped by key and returned 1 for any match, so `has($alias, [1, 2])` was false when both were linked.
+- **`with()` on a has_many alias loads the relationship** instead of being ignored.
+- **`lastQuery()` works again**; it read a property that no longer existed.
+- Model events use `Model::listen()`; `on()` remains the JOIN condition.
+
+**Action:**
+1. Add `$fillable` (or `$guarded`) to models whose `values()`/`fill()` is called without a column list, or pass the list.
+2. Compare `pk()` with integers (`=== 5`, not `=== '5'`), or set `$keyType = 'string'`.
+3. Optional: `protected $timestamps = true;` instead of `$createdColumn`/`$updatedColumn` when the columns are `created_at`/`updated_at` (`DATETIME`).
+4. Optional: add `"Database\\Factories\\": "database/factories/"` to `autoload` in `composer.json` to use factories.

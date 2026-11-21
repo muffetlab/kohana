@@ -4,6 +4,7 @@
 - [Relationships](relationships)
 - [Validation](validation)
 - [Filters](filters)
+- [Model Features](features)
 - [Examples](examples)
     - [Simple](examples/simple)
     - [Validation](examples/validation)
