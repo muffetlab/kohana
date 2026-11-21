@@ -95,10 +95,10 @@ The new file creates the initial request object, rather than fully executing the
 
     if (PHP_SAPI === 'cli') {
         // Try and load minion
-        class_exists('Minion_Task') or die('Please enable the Minion module for CLI support.');
-        set_exception_handler(['Minion_Exception', 'handler']);
+        class_exists('Command') or die('Please enable the Minion module for CLI support.');
+        set_exception_handler(['ConsoleException', 'handler']);
 
-        Minion_Task::factory(Minion_CLI::options())->execute();
+        Command::factory(Cli::options())->execute();
     } else {
         /**
          * Execute the main request. A source of the URI can be passed, e.g., $_SERVER['PATH_INFO'].
@@ -124,13 +124,13 @@ Having moved most of the code from Kohana's `index.php` to `common.php`, the new
      * If no source is specified, the URI will be automatically detected.
      */
     Request::$initial->execute()
-        ->send_headers(true)
+        ->sendHeaders(true)
         ->body();
 ~~~
 
 ## Create the include file
 
-Our `include.php` file is also pretty simple. The try-catch clause is needed because if the request matches no routes Kohana will throw an `HTTP_Exception_404` exception.
+Our `include.php` file is also pretty simple. The try-catch clause is needed because if the request matches no routes Kohana will throw an `Http404Exception` exception.
 
 ### File: `kohana/include.php`
 
@@ -139,7 +139,7 @@ Our `include.php` file is also pretty simple. The try-catch clause is needed bec
 
     try {
         require_once 'common.php';
-    } catch (HTTP_Exception_404 $e) {
+    } catch (Http404Exception $e) {
         // The request did not match any routes; ignore the 404 exception.
     }
 ~~~
@@ -157,7 +157,7 @@ Now that we're set up, we can add Kohana into our application using a single inc
         require_once 'kohana/public/include.php';
 
         $content = 'Hello World';
-        $content = HTML::anchor('https://kohanaframework.org/', $content);
+        $content = Html::anchor('https://kohanaframework.org/', $content);
     ?>
     <html>
         <head>
@@ -166,7 +166,7 @@ Now that we're set up, we can add Kohana into our application using a single inc
         <body>
             <?= $content ?>
             <hr>
-            <?= URL::base() ?>
+            <?= Url::base() ?>
             <hr>
             <?= Debug::dump([1, 2, 3, 4, 5]) ?>
         </body>

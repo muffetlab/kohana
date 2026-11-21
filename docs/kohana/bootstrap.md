@@ -26,20 +26,20 @@ ini_set('unserialize_callback_func', 'spl_autoload_call');
 
 ## Initialization and Configuration
 
-Kohana is then initialized by calling [Kohana::init], and the log and [config](files/config) reader/writers are enabled.
+Kohana is then initialized by calling `Application::init()`, and the log and [config](files/config) reader/writers are enabled.
 
 ~~~
 // Sample excerpt from bootstrap.php with comments trimmed down
 
-Kohana::init([
+Application::init([
     'base_url' => '/kohana/',
 ]);
 
 // Attach the file writer to logging. Multiple writers are supported.
-Kohana::$log->attach(new Log_File(APPPATH . 'logs'));
+Application::$log->attach(new FileWriter(APPPATH . 'logs'));
 
 // Attach a file reader to config. Multiple readers are supported.
-Kohana::$config->attach(new Config_File);
+Application::$config->attach(new FileReader);
 ~~~
 
 You can add conditional statements to make the bootstrap have different values based on certain settings. For example, detect whether we are live by checking `$_SERVER['HTTP_HOST']` and set caching, profiling, etc. accordingly. This is just an example, there are many different ways to accomplish the same thing.
@@ -50,7 +50,7 @@ You can add conditional statements to make the bootstrap have different values b
  */
 if (strpos($_SERVER['HTTP_HOST'], 'kohana.top') !== false) {
     // We are live!
-    Kohana::$environment = Kohana::PRODUCTION;
+    Application::$environment = Application::PRODUCTION;
 
     // Turn off notices and strict errors
     error_reporting(E_ALL ^ E_NOTICE);
@@ -59,27 +59,27 @@ if (strpos($_SERVER['HTTP_HOST'], 'kohana.top') !== false) {
 /**
  * Initialize Kohana, setting the default options.
  */
-Kohana::init([
-    'base_url' => Kohana::$environment === Kohana::PRODUCTION ? '/' : '/kohanaframework.org/',
-    'caching' => Kohana::$environment === Kohana::PRODUCTION,
-    'profile' => Kohana::$environment !== Kohana::PRODUCTION,
+Application::init([
+    'base_url' => Application::$environment === Application::PRODUCTION ? '/' : '/kohanaframework.org/',
+    'caching' => Application::$environment === Application::PRODUCTION,
+    'profile' => Application::$environment !== Application::PRODUCTION,
     'index_file' => false,
 ]);
 ~~~
 
-[!!] Note: The default bootstrap will set `Kohana::$environment = $_ENV['KOHANA_ENV']` if set. Docs on how to supply this variable are available in your web server's documentation (e.g. [Apache](http://httpd.apache.org/docs/1.3/mod/mod_env.html#setenv), [Lighttpd](http://redmine.lighttpd.net/wiki/1/Docs:ModSetEnv#Options)). This is considered better practice than many alternative methods to set `Kohana::$enviroment`, as you can change the setting per server, without having to rely on config options or hostnames.
+[!!] Note: The default bootstrap will set `Application::$environment = $_ENV['KOHANA_ENV']` if set. Docs on how to supply this variable are available in your web server's documentation (e.g. [Apache](http://httpd.apache.org/docs/1.3/mod/mod_env.html#setenv), [Lighttpd](http://redmine.lighttpd.net/wiki/1/Docs:ModSetEnv#Options)). This is considered better practice than many alternative methods to set `Application::$enviroment`, as you can change the setting per server, without having to rely on config options or hostnames.
 
 ## Modules
 
 **Read the [Modules](modules) page for a more detailed description.**
 
-[Modules](modules) are then loaded using [Kohana::modules()]. Including modules is optional.
+[Modules](modules) are then loaded using `Application::modules()`. Including modules is optional.
 
 Each key in the array should be the name of the module, and the value is the path to the module, either relative or absolute.
 ~~~
 // Example excerpt from bootstrap.php
 
-Kohana::modules([
+Application::modules([
     'database' => MODPATH . 'database',
     'orm' => MODPATH . 'orm',
     'userguide' => MODPATH . 'userguide',
@@ -90,7 +90,7 @@ Kohana::modules([
 
 **Read the [Routing](routing) page for a more detailed description and more examples.**
 
-[Routes](routing) are then defined via [Route::set()].
+[Routes](routing) are then defined via `Route::set()`.
 
 ~~~
 // The default route that comes with Kohana 3

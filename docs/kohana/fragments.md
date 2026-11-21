@@ -1,6 +1,6 @@
 # Fragments
 
-Fragments are a quick and simple way to cache HTML or other output. Fragments are not useful for caching objects or raw database results, in which case you should use a more robust caching method, which can be achieved with the [Cache module](../cache). Fragments use [Kohana::cache()] and will be placed in the cache directory (`application/cache` by default).
+Fragments are a quick and simple way to cache HTML or other output. Fragments are not useful for caching objects or raw database results, in which case you should use a more robust caching method, which can be achieved with the [Cache module](../cache). Fragments use `Application::cache()` and will be placed in the cache directory (`application/cache` by default).
 
 You should use Fragment (or any caching solution) when reading the cache is faster than reprocessing the result. Reading and parsing a remote file, parsing a complicated template, calculating something, etc.
 
@@ -8,13 +8,13 @@ Fragments are typically used in view files.
 
 ## Usage
 
-Fragments are used by calling [Fragment::load()] in an `if` statement at the beginning of what you want cached, and [Fragment::save()] at the end. They use [output buffering](https://www.php.net/manual/en/function.ob-start.php) to capture the output between the two function calls.
+Fragments are used by calling `Fragment::load()` in an `if` statement at the beginning of what you want cached, and `Fragment::save()` at the end. They use [output buffering](https://www.php.net/manual/en/function.ob-start.php) to capture the output between the two function calls.
 
-You can specify the lifetime (in seconds) of the Fragment using the second parameter of [Fragment::load()]. The default lifetime is 30 seconds. You can use the [Date] helper to make more readable times.
+You can specify the lifetime (in seconds) of the Fragment using the second parameter of `Fragment::load()`. The default lifetime is 30 seconds. You can use the `Date` helper to make more readable times.
 
-Fragments will store a different cache for each language (using [I18n]) if you pass `true` as the third parameter to [Fragment::load()];
+Fragments will store a different cache for each language (using `Translator`) if you pass `true` as the third parameter to `Fragment::load()`;
 
-You can force the deletion of a Fragment using [Fragment::delete()], or specify a lifetime of 0.
+You can force the deletion of a Fragment using `Fragment::delete()`, or specify a lifetime of 0.
 
 ~~~
 // Cache for 5 minutes, and cache each language
@@ -63,7 +63,7 @@ echo View::factory('profiler/stats');
 
 ## Example: Recent Wikipedia edits
 
-In this example we will use the [Feed] class to retrieve and parse an RSS feed of recent edits to [https://en.wikipedia.org](https://en.wikipedia.org), then use Fragment to cache the results.
+In this example we will use the `Feed` class to retrieve and parse an RSS feed of recent edits to [https://en.wikipedia.org](https://en.wikipedia.org), then use Fragment to cache the results.
 
 ~~~
 $feed = "https://en.wikipedia.org/w/api.php?hidebots=1&hidecategorization=1&hideWikibase=1&urlversion=1&days=7&limit=50&action=feedrecentchanges&feedformat=rss";
@@ -78,7 +78,7 @@ if (!Fragment::load('rss:' . $feed)):
         // Convert $item to object
         $item = (object) $item;
 
-        echo HTML::anchor($item->link, $item->title);
+        echo Html::anchor($item->link, $item->title);
         ?>
         <blockquote>
             <p>author: <?php echo $item->creator ?></p>

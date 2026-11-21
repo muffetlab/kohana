@@ -1,12 +1,12 @@
 # Encryption
 
-Kohana supports encryption and decryption via the [Encrypt] class,
+Kohana supports encryption and decryption via the `Encrypter` class,
 which is a convenient wrapper for a variety of cryptography engines.
 Encryption supports multiple instances of cryptography engines through a grouped singleton pattern.
 
 ## Supported cryptography engines
 
- *  OpenSSL ([Encrypt_Openssl])
+ *  OpenSSL (`OpensslEncrypter`)
 
 ## Encryption configuration
 
@@ -39,22 +39,22 @@ It is strongly recommended that you choose a high-strength random key using the 
 
 ### Create an instance
 
-Creating a new _Encrypt_ instance is simple, however it must be done using the [Encrypt::instance] method,
+Creating a new _Encrypt_ instance is simple, however it must be done using the `Encrypter::instance()` method,
 rather than the traditional `new` constructor.
 
-    $encrypt = Encrypt::instance();
+    $encrypt = Encrypter::instance();
 
-The default group will use whatever is set to [Encrypt::$default] and must have a corresponding configuration definition for that group.
+The default group will use whatever is set to `Encrypter::$default` and must have a corresponding configuration definition for that group.
 
 To create an encryption instance using a group other than the default, simply provide the group name as an argument.
 
-    $encrypt = Encrypt::instance('sodium');
+    $encrypt = Encrypter::instance('sodium');
 
 ### Encoding Data
 
 Next, encode some data using the *encode* method:
 
-    $encrypt = Encrypt::instance();
+    $encrypt = Encrypter::instance();
     $encryptedData = $encrypt->encode('Data to Encode');
     // $encryptedData now contains FBjxLR4K36AegNxk18owj2cgHiztmAGtRxvPHX63
 
@@ -69,7 +69,7 @@ and base64_decode on decode, to prevent this problem.
 
 To decode some data, load it from the place you stored it (most likely your database) then pass it to the *decode* method:
 
-    $encrypt = Encrypt::instance();
+    $encrypt = Encrypter::instance();
     $decodedString = $encrypt->decode($encryptedData);
     echo $decodedString;
     // prints 'Data to Encode'

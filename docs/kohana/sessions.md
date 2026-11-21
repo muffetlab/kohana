@@ -2,28 +2,28 @@
 
 Kohana provides classes that make it easy to work with both cookies and sessions. At a high level both sessions and cookies provide the same functionality. They allow the developer to store temporary or persistent information about a specific client for later retrieval, usually to make something persistent between requests.
 
-Sessions should be used for storing temporary or private data. Very sensitive data should be stored using the [Session] class with the "database" or "native" adapters. When using the "cookie" adapter, the session should always be encrypted.
+Sessions should be used for storing temporary or private data. Very sensitive data should be stored using the `Session` class with the "database" or "native" adapters. When using the "cookie" adapter, the session should always be encrypted.
 
 [!!] For more information on best practices with session variables see [the seven deadly sins of sessions](http://lists.nyphp.org/pipermail/talk/2006-December/020358.html).
 
 ## Storing, Retrieving, and Deleting Data
 
-[Cookie] and [Session] provide a very similar API for storing data. The main difference between them is that sessions are accessed using an object, and cookies are accessed using a static class.
+`Cookie` and `Session` provide a very similar API for storing data. The main difference between them is that sessions are accessed using an object, and cookies are accessed using a static class.
 
-Accessing the session instance is done using the [Session::instance] method:
+Accessing the session instance is done using the `Session::instance()` method:
 
     // Get the session instance
     $session = Session::instance();
 
-When using sessions, you can also get all the current session data using the [Session::as_array] method:
+When using sessions, you can also get all the current session data using the `Session::asArray()` method:
 
     // Get all the session data as an array
-    $data = $session->as_array();
+    $data = $session->asArray();
 
 You can also use this to overload the `$_SESSION` global to get and set data in a way more similar to standard PHP:
 
     // Overload $_SESSION with the session data
-    $_SESSION =& $session->as_array();
+    $_SESSION =& $session->asArray();
 
     // Set session data
     $_SESSION[$key] = $value;
@@ -67,20 +67,20 @@ Always check these settings before making your application live, as many of them
 
 ## Session Adapters
 
-When creating or accessing an instance of the [Session] class you can decide which session adapter or driver you wish to use. The session adapters that are available to you are:
+When creating or accessing an instance of the `Session` class you can decide which session adapter or driver you wish to use. The session adapters that are available to you are:
 
 Native
 : Stores session data in the default location for your web server. The storage location is defined by [session.save_path](https://www.php.net/session.configuration#ini.session.save-path) in `php.ini` or defined by [ini_set](https://www.php.net/ini_set).
 
 Database
-: Stores session data in a database table using the [Session_Database] class. Requires the [Database] module to be enabled.
+: Stores session data in a database table using the `DatabaseSession` class. Requires the `Connection` module to be enabled.
 
 Cookie
-: Stores session data in a cookie using the [Cookie] class. **Sessions will have a 4KB limit when using this adapter, and should be encrypted.**
+: Stores session data in a cookie using the `Cookie` class. **Sessions will have a 4KB limit when using this adapter, and should be encrypted.**
 
-The default adapter can be set by changing the value of [Session::$default]. The default adapter is "native".
+The default adapter can be set by changing the value of `Session::$default`. The default adapter is "native".
 
-To access a Session using the default adapter, simply call [Session::instance()]. To access a Session using something other than the default, pass the adapter name to `instance()`, for example: `Session::instance('cookie')`
+To access a Session using the default adapter, simply call `Session::instance()`. To access a Session using something other than the default, pass the adapter name to `instance()`, for example: `Session::instance('cookie')`
 
 
 ### Session Adapter Settings
@@ -126,19 +126,19 @@ You can apply configuration settings to each of the session adapters by creating
 | Type      | Setting   | Description                                       | Default     |
 |-----------|-----------|---------------------------------------------------|-------------|
 | `string`  | name      | name of the cookie used to store the session data | `"session"` |
-| `boolean` | encrypted | encrypt the session data using [Encrypt]?         | `false`     |
+| `boolean` | encrypted | encrypt the session data using `Encrypter`?         | `false`     |
 | `integer` | lifetime  | number of seconds the session should live for     | `0`         |
 
 #### Database Adapter
 
 | Type      | Setting   | Description                                       | Default      |
 |-----------|-----------|---------------------------------------------------|--------------|
-| `string`  | group     | [Database::instance] group name                   | `"default"`  |
+| `string`  | group     | `Connection::instance()` group name                   | `"default"`  |
 | `string`  | table     | table name to store sessions in                   | `"sessions"` |
 | `array`   | columns   | associative array of column aliases               | `array`      |
 | `integer` | gc        | 1:x chance that garbage collection will be run    | `500`        |
 | `string`  | name      | name of the cookie used to store the session data | `"session"`  |
-| `boolean` | encrypted | encrypt the session data using [Encrypt]?         | `false`      |
+| `boolean` | encrypted | encrypt the session data using `Encrypter`?         | `false`      |
 | `integer` | lifetime  | number of seconds the session should live for     | `0`          |
 
 ##### Table Schema

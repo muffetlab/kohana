@@ -1,15 +1,15 @@
 # Kohana Cache usage
 
-[Kohana_Cache] provides a simple interface allowing getting, setting and deleting of cached values. Two interfaces included in _Kohana Cache_ additionally provide _tagging_ and _garbage collection_ where they are supported by the respective drivers.
+`Cache` provides a simple interface allowing getting, setting and deleting of cached values. Two interfaces included in _Kohana Cache_ additionally provide _tagging_ and _garbage collection_ where they are supported by the respective drivers.
 
 ## Getting a new cache instance
 
-Creating a new _Kohana Cache_ instance is simple, however it must be done using the [Cache::instance] method, rather than the traditional `new` constructor.
+Creating a new _Kohana Cache_ instance is simple, however it must be done using the `Cache::instance()` method, rather than the traditional `new` constructor.
 
     // Create a new instance of cache using the default group
     $cache = Cache::instance();
 
-The default group will use whatever is set to [Cache::$default] and must have a corresponding [configuration](config) definition for that group.
+The default group will use whatever is set to `Cache::$default` and must have a corresponding [configuration](config) definition for that group.
 
 To create a cache instance using a group other than the _default_, simply provide the group name as an argument.
 
@@ -37,7 +37,7 @@ The cache library supports scalar and object values, utilising object serializat
 
 ### Setting a value to cache
 
-Setting a value to cache using the [Cache::set] method can be done in one of two ways: either using the Cache instance interface, which is good for atomic operations, or getting an instance and using that for multiple operations.
+Setting a value to cache using the `Cache::set()` method can be done in one of two ways: either using the Cache instance interface, which is good for atomic operations, or getting an instance and using that for multiple operations.
 
 The first example demonstrates how to quickly load and set a value to the default cache instance.
 
@@ -64,9 +64,9 @@ Certain cache drivers support setting values with tags. To set a value to cache 
     $cache = Cache::instance('sqlite');
 
     // Test for tagging interface
-    if ($cache instanceof Cache_Tagging) {
+    if ($cache instanceof Tagging) {
         // Set a value with some tags for 30 seconds
-        $cache->set_with_tags('foo', $object, 30, ['snafu', 'stfu', 'fubar']);
+        $cache->setWithTags('foo', $object, 30, ['snafu', 'stfu', 'fubar']);
     }
     // Otherwise set without tags
     else {
@@ -74,11 +74,11 @@ Certain cache drivers support setting values with tags. To set a value to cache 
         $cache->set('foo', $object, 30);
     }
 
-It is possible to implement custom tagging solutions onto existing or new cache drivers by implementing the [Cache_Tagging] interface. Kohana_Cache only applies the interface to drivers that support tagging natively as standard.
+It is possible to implement custom tagging solutions onto existing or new cache drivers by implementing the `Tagging` interface. Kohana_Cache only applies the interface to drivers that support tagging natively as standard.
 
 ### Getting a value from cache
 
-Getting variables back from cache is achieved using the [Cache::get] method using a single key to identify the cache entry.
+Getting variables back from cache is achieved using the `Cache::get()` method using a single key to identify the cache entry.
 
     // Retrieve a value from cache (quickly)
     $object = Cache::instance()->get('foo');
@@ -94,7 +94,7 @@ In cases where the requested key is not available or the entry has expired, a de
 
 #### Getting values from cache using tags
 
-It is possible to retrieve values from cache grouped by tag, using the [Cache::find] method with drivers that support tagging.
+It is possible to retrieve values from cache grouped by tag, using the `Cache::find()` method with drivers that support tagging.
 
     // Get an instance of cache
     $cache = Cache::instance('sqlite');
@@ -125,7 +125,7 @@ By default, a `true` value will be returned. However, a `false` value will be re
 To delete all values in a specific instance:
 
     // If all cache items where deleted successfully
-    if (Cache::instance()->delete_all()) {
+    if (Cache::instance()->deleteAll()) {
         // Do something
     }
 
@@ -133,7 +133,7 @@ It is also possible to delete all cache items in every instance:
 
     // For each cache instance
     foreach (Cache::$instances as $group => $instance) {
-        if ($instance->delete_all()) {
+        if ($instance->deleteAll()) {
             echo 'instance ' . $group . ' has been flushed!';
         }
     }
@@ -146,9 +146,9 @@ Some of the caching drivers support deleting by tag. This will remove all the ca
     $cache = Cache::instance();
 
     // Check for tagging interface
-    if ($cache instanceof Cache_Tagging) {
+    if ($cache instanceof Tagging) {
         // Delete all entries by the tag 'snafu'
-        $cache->delete_tag('snafu');
+        $cache->deleteTag('snafu');
     }
 
 #### Garbage Collection
@@ -164,20 +164,20 @@ When not automated, garbage collection is the responsibility of the developer. I
     $gc = 10;
 
     // If the GC probability is a hit
-    if (rand(0, 99) <= $gc && $cache_file instanceof Cache_GarbageCollect) {
+    if (rand(0, 99) <= $gc && $cache_file instanceof GarbageCollect) {
         // Garbage Collect
-        $cacheFile->garbage_collect();
+        $cacheFile->garbageCollect();
     }
 
 # Interfaces
 
 Kohana Cache comes with two interfaces that are implemented where the drivers support them:
 
- - __[Cache_Tagging] for tagging support on cache entries__
-    - [Cache_Sqlite]
- - __[Cache_GarbageCollect] for garbage collection with drivers without native support__
-    - [Cache_File]
-    - [Cache_Sqlite]
+ - __`Tagging` for tagging support on cache entries__
+    - `SqliteStore`
+ - __`GarbageCollect` for garbage collection with drivers without native support__
+    - `FileStore`
+    - `SqliteStore`
 
 When using interface specific caching features, ensure that code checks for the required interface before using the methods supplied. The following example checks whether the garbage collection interface is available before calling the `garbage_collect` method.
 
@@ -185,7 +185,7 @@ When using interface specific caching features, ensure that code checks for the 
     $cache = Cache::instance();
 
     // Test for Garbage Collection
-    if ($cache instanceof Cache_GarbageCollect) {
+    if ($cache instanceof GarbageCollect) {
         // Collect garbage
-        $cache->garbage_collect();
+        $cache->garbageCollect();
     }

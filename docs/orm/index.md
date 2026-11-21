@@ -1,6 +1,6 @@
 # ORM
 
-Kohana 3.x includes a powerful Object Relational Mapping (ORM) module that uses the active record pattern and database introspection to determine a model's column information. ORM is integrated tightly with the [Validation] library.
+Kohana 3.x includes a powerful Object Relational Mapping (ORM) module that uses the active record pattern and database introspection to determine a model's column information. ORM is integrated tightly with the `Validator` library.
 
 The ORM allows for manipulation and control of data within a database as though it was a PHP object. Once you define the relationships ORM allows you to pull data from your database, manipulate the data in any way you like, and then save the result back to the database without the use of SQL. By creating relationships between models that follow convention over configuration, much of the repetition of writing queries to create, read, update, and delete information from the database can be reduced or entirely removed. All the relationships can be handled automatically by the ORM library, and you can access related data as standard object properties.
 
@@ -10,7 +10,7 @@ ORM is included with the Kohana 3.x installation but needs to be enabled before 
 
 Before we use ORM, we must enable the modules required
 
-    Kohana::modules([
+    Application::modules([
         // ...
         'database' => MODPATH . 'database',
         'orm' => MODPATH . 'orm',

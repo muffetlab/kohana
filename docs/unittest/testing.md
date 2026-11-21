@@ -24,7 +24,7 @@ Ordinarily you could use a foreach loop to iterate over an array of test data, h
 
     <?php
 
-    Class ReallyCoolTest extends Unittest_TestCase
+    Class ReallyCoolTest extends TestCase
     {
         public function providerStrLen()
         {
@@ -61,7 +61,7 @@ To allow users to selectively run tests you need to organise your tests into gro
      * @group somegroup
      * @group somegroup.morespecific
      */
-    Class AnotherReallyCoolTest extends Unittest_TestCase
+    Class AnotherReallyCoolTest extends TestCase
     {
         /**
          * Tests can also be grouped too!

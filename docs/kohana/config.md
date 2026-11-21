@@ -13,10 +13,10 @@ To read config from a source you need a **Config Reader**. Similarly, to write c
 you need a **Config Writer**.
 
 Implementing them is as simple as extending the
-[Kohana_Config_Reader] / [Kohana_Config_Writer] interfaces:
+`Reader` / `Writer` interfaces:
 
-    class Kohana_Config_Database_Reader implements Kohana_Config_Reader
-    class Kohana_Config_Database_Writer extends Kohana_Config_Database_Reader implements Kohana_Config_Writer
+    class DatabaseReader implements Reader
+    class DatabaseWriter extends DatabaseReader implements Writer
 
 You'll notice in the above example that the Database Writer extends the Database Reader.
 This is the convention with config sources, the reasoning being that if you can write to a
@@ -33,21 +33,21 @@ How these groups are stored/organised is up to the config source. For example, t
 puts different config groups into different files (`database.php`, `session.php`) whereas
 the database source uses a column to distinguish between groups.
 
-To load a config group simply call `Kohana::$config->load()` with the name of the group you wish to load:
+To load a config group simply call `Application::$config->load()` with the name of the group you wish to load:
 
-    $config = Kohana::$config->load('my_group');
+    $config = Application::$config->load('my_group');
 
-`load()` will return an instance of [Config_Group] which encapsulates the config values and ensures
+`load()` will return an instance of `Group` which encapsulates the config values and ensures
 that any modifications made will be passed back to the config writers.
 
-To get a config value from a [Config_Group] object simply call [Config_Group::get]:
+To get a config value from a `Group` object simply call [Config_Group::get]:
 
-    $config = Kohana::$config->load('my_group');
+    $config = Application::$config->load('my_group');
     $value  = $config->get('var');
 
 To modify a value call [Config_Group::set]:
 
-    $config = Kohana::$config->load('my_group');
+    $config = Application::$config->load('my_group');
     $config->set('var', 'new_value');
 
 ### Alternative methods for getting / setting config
@@ -55,7 +55,7 @@ To modify a value call [Config_Group::set]:
 In addition to the methods described above you can also access config values using dots to outline a path
 from the config group to the value you want:
 
-    // Config file: database.php
+    // Repository file: database.php
     return [
         'default' => [
             'connection' => [
@@ -65,12 +65,12 @@ from the config group to the value you want:
     ];
 
     // Code which needs hostname:
-    $hostname = Kohana::$config->load('database.default.connection.hostname');
+    $hostname = Application::$config->load('database.default.connection.hostname');
 
 
 Which is equivalent to:
 
-    $config = Kohana::$config->load('database')->get('default');
+    $config = Application::$config->load('database')->get('default');
 
     $hostname = $config['connection']['hostname'];
 
@@ -78,10 +78,10 @@ Obviously this method is a lot more compact than the original. However, please b
 `dot.notation` is a _lot_ slower than calling `get()` and traversing the array yourself. Dot notation
 can be useful if you only need one specific variable, but otherwise it's best to use `get()`.
 
-As [Config_Group] extends [Array_Object](https://www.php.net/manual/en/class.arrayobject.php) you can also use array
+As `Group` extends [Array_Object](https://www.php.net/manual/en/class.arrayobject.php) you can also use array
 syntax to get/set config vars:
 
-    $config = Kohana::$config->load('database');
+    $config = Application::$config->load('database');
 
     // Getting the var
     $hostname = $config['default']['connection']['hostname'];
@@ -106,10 +106,10 @@ The position of sources in the stack is determined by how they are loaded in you
 By default, when you load a source it is pushed to the top of a stack:
 
     // Stack: <empty>
-    Kohana::$config->attach(new Config_File);
-    // Stack: Config_File
-    Kohana::$config->attach(new Config_Database);
-    // Stack: Config_Database, Config_File
+    Application::$config->attach(new FileReader);
+    // Stack: FileReader
+    Application::$config->attach(new DatabaseWriter);
+    // Stack: DatabaseWriter, FileReader
 
 In the example above, any config values found in the database will override those found in the filesystem.
 For example, using the setup outlined above:
@@ -127,7 +127,7 @@ For example, using the setup outlined above:
                 email: my.supercool.address@gmail.com
                 name:  Kohana Bot
 
-    // Configuration returned by Kohana::$config->load('email')
+    // Configuration returned by Application::$config->load('email')
         email:
             sender:
                 email: my.supercool.address@gmail.com
@@ -140,10 +140,10 @@ On some occasions you may want to append a config source to the bottom of the st
 as the second parameter to `attach()`:
 
     // Stack: <empty>
-    Kohana::$config->attach(new Config_File);
-    // Stack: Config_File
-    Kohana::$config->attach(new Config_Database, false);
-    // Stack: Config_File, Config_Database
+    Application::$config->attach(new FileReader);
+    // Stack: FileReader
+    Application::$config->attach(new DatabaseWriter, false);
+    // Stack: FileReader, DatabaseWriter
 
 In this example, any values found in the filesystem will override those found in the db. For example:
 
@@ -160,7 +160,7 @@ In this example, any values found in the filesystem will override those found in
                 email: my.supercool.address@gmail.com
                 name:  Kohana Bot
 
-    // Configuration returned by Kohana::$config->load('email')
+    // Configuration returned by Application::$config->load('email')
         email:
             sender:
                 email: my.awesome.address@example.com
@@ -169,24 +169,24 @@ In this example, any values found in the filesystem will override those found in
 
 ## Using different config sources based on the environment
 
-In some situations you'll need to use different config values depending on which state `Kohana::$environment`
+In some situations you'll need to use different config values depending on which state `Application::$environment`
 is in. Unit testing is a prime example of such a situation. Most setups have two databases; one for normal
 development and a separate one for unit testing (to isolate the tests from your development).
 
 In this case you still need access to the config settings stored in the `config` directory as it contains generic
 settings that are needed whatever environment your application is in (e.g. encryption settings),
-so replacing the default `Config_File` source isn't really an option.
+so replacing the default `FileReader` source isn't really an option.
 
 To get around this you can attach a separate config file reader which loads its config from a subdirectory of `config` called
 "testing":
 
-    Kohana::$config->attach(new Config_File);
+    Application::$config->attach(new FileReader);
 
-    Kohana::$config->attach(new Config_Database);
+    Application::$config->attach(new DatabaseWriter);
 
-    if (Kohana::$environment === Kohana::TESTING) {
-        Kohana::$config->attach(new Config_File('config/testing'));
+    if (Application::$environment === Application::TESTING) {
+        Application::$config->attach(new FileReader('config/testing'));
     }
 
-During normal development the config source stack looks like `Config_Database, Config_File('config')`. However,
-when `Kohana::$environment === Kohana::TESTING` the stack looks like `Config_File('config/testing'), Config_Database, Config_File('config')`
+During normal development the config source stack looks like `DatabaseWriter, FileReader('config')`. However,
+when `Application::$environment === Application::TESTING` the stack looks like `FileReader('config/testing'), DatabaseWriter, FileReader('config')`

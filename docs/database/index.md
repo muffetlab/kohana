@@ -2,9 +2,9 @@
 
 Kohana comes with a robust module for working with databases. By default, the database module supports drivers for [PDO](https://www.php.net/pdo) and [MySQLi](https://www.php.net/mysqli), but new drivers can be made for other database servers.
 
-The database module needs to be enabled before you can use it. To enable, open your `application/bootstrap.php` file and modify the call to [Kohana::modules] by including the database module like so:
+The database module needs to be enabled before you can use it. To enable, open your `application/bootstrap.php` file and modify the call to `Application::modules()` by including the database module like so:
 
-    Kohana::modules([
+    Application::modules([
         // ...
         'database' => MODPATH . 'database',
         // ...

@@ -16,16 +16,16 @@ View files are stored in the `views` directory of the [filesystem](files). You c
 
 ## Loading Views
 
-[View] objects will typically be created inside a [Controller](mvc/controllers) using the [View::factory] method. Typically, the view is then assigned as the [Request::$response] property or to another view.
+`View` objects will typically be created inside a [Controller](mvc/controllers) using the `View::factory()` method. Typically, the view is then assigned as the `Request::$response` property or to another view.
 
-    public function action_about()
+    public function about()
     {
         $this->response->body(View::factory('pages/about'));
     }
 
-When a view is assigned as the [Response::body], as in the example above, it will automatically be rendered when necessary. To get the rendered result of a view you can call the [View::render] method or just type cast it to a string. When a view is rendered, the view file is loaded and HTML is generated.
+When a view is assigned as the `Response::body()`, as in the example above, it will automatically be rendered when necessary. To get the rendered result of a view you can call the `View::render()` method or just type cast it to a string. When a view is rendered, the view file is loaded and HTML is generated.
 
-    public function action_index()
+    public function index()
     {
         $view = View::factory('pages/about');
 
@@ -40,9 +40,9 @@ When a view is assigned as the [Response::body], as in the example above, it wil
 
 ## Variables in Views
 
-Once view has been loaded, variables can be assigned to it using the [View::set] and [View::bind] methods.
+Once view has been loaded, variables can be assigned to it using the `View::set()` and `View::bind()` methods.
 
-    public function action_roadtrip()
+    public function roadtrip()
     {
         $view = View::factory('user/roadtrip')
             ->set('places', ['Rome', 'Paris', 'London', 'New York', 'Tokyo'])
@@ -56,7 +56,7 @@ Once view has been loaded, variables can be assigned to it using the [View::set]
 
 You can also assign variables directly to the View object. This is identical to calling `set()`;
 
-    public function action_roadtrip()
+    public function roadtrip()
     {
         $view = View::factory('user/roadtrip');
 
@@ -69,14 +69,14 @@ You can also assign variables directly to the View object. This is identical to 
 
 ### Global Variables
 
-An application may have several view files that need access to the same variables. For example, to display a page title in both the header of your template and in the body of the page content. You can create variables that are accessible in any view using the [View::set_global] and [View::bind_global] methods.
+An application may have several view files that need access to the same variables. For example, to display a page title in both the header of your template and in the body of the page content. You can create variables that are accessible in any view using the `View::setGlobal()` and `View::bindGlobal()` methods.
 
     // Assign $page_title to all views
-    View::bind_global('page_title', $page_title);
+    View::bindGlobal('page_title', $page_title);
 
 If the application has three views that are rendered for the home page: `template`, `template/sidebar`, and `pages/home`. First, an abstract controller to create the template will be created:
 
-    abstract class Controller_Website extends Controller_Template
+    abstract class WebsiteController extends TemplateController
     {
 
         public $page_title;
@@ -86,7 +86,7 @@ If the application has three views that are rendered for the home page: `templat
             parent::before();
 
             // Make $page_title available to all views
-            View::bind_global('page_title', $this->page_title);
+            View::bindGlobal('page_title', $this->page_title);
 
             // Load $sidebar into the template as a view
             $this->template->sidebar = View::factory('template/sidebar');
@@ -94,12 +94,12 @@ If the application has three views that are rendered for the home page: `templat
 
     }
 
-Next, the home controller will extend `Controller_Website`:
+Next, the home controller will extend `WebsiteController`:
 
-    class Controller_Home extends Controller_Website
+    class HomeController extends WebsiteController
     {
 
-        public function action_index()
+        public function index()
         {
             $this->page_title = 'Home';
 
@@ -110,7 +110,7 @@ Next, the home controller will extend `Controller_Website`:
 
 ## Views Within Views
 
-If you want to include another view within a view, there are two choices. By calling [View::factory] you can sandbox the included view. This means that you will have to provide all the variables to the view using [View::set] or [View::bind]:
+If you want to include another view within a view, there are two choices. By calling `View::factory()` you can sandbox the included view. This means that you will have to provide all the variables to the view using `View::set()` or [View::bind]:
 
     // In your view file:
 
@@ -122,13 +122,13 @@ The other option is to include the view directly, which makes all the current va
     // In your view file:
 
     // Any variable defined in this view will be included in "views/message.php"
-    <?php include Kohana::find_file('views', 'user/login') ?>
+    <?php include Application::findFile('views', 'user/login') ?>
 
 You can also assign a variable of your parent view to be the child view from within your controller. For example:
 
     // In your controller:
 
-    public function action_index()
+    public function index()
     {
         $view = View::factory('common/template');
 
@@ -147,7 +147,7 @@ You can also assign a variable of your parent view to be the child view from wit
         </body>
     </html>
 
-Of course, you can also load an entire [Request] within a view:
+Of course, you can also load an entire `Request` within a view:
 
     <?php echo Request::factory('user/login')->execute() ?>
 

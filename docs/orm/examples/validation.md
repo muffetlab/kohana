@@ -15,7 +15,7 @@ This example will create user accounts and demonstrate how to handle model and c
 
     <?php
 
-    class Model_Member extends ORM
+    class Member extends Model
     {
         public function rules()
         {
@@ -43,8 +43,8 @@ This example will create user accounts and demonstrate how to handle model and c
 
         public function username_available($username)
         {
-            // There are simpler ways to do this, but I will use ORM for the sake of the example
-            return ORM::factory('Member', ['username' => $username])->loaded();
+            // There are simpler ways to do this, but I will use Model for the sake of the example
+            return Model::factory('Member', ['username' => $username])->loaded();
         }
 
         public function hash_password($password)
@@ -57,7 +57,7 @@ This example will create user accounts and demonstrate how to handle model and c
 
 Please forgive my slightly ugly form. I am trying not to use any modules or unrelated magic. :)
 
-    <form action="<?= URL::site('/members'); ?>" method="post" accept-charset="utf-8">
+    <form action="<?= Url::site('/members'); ?>" method="post" accept-charset="utf-8">
         <label for="username">Username:</label>
         <input id="username" type="text" name="username" value="<?= Arr::get($values, 'username'); ?>" />
         <label for="username" class="error"><?= Arr::get($errors, 'username'); ?>
@@ -77,7 +77,7 @@ Please forgive my slightly ugly form. I am trying not to use any modules or unre
 
 [!!] Remember that the `password` will be hashed as soon as it is set in the model, for this reason, it is impossible to validate its length or the fact that it matches the `password_confirm` field. The model should not care about validating the `password_confirm` field, so we add that logic to the controller and simply ask the model to bundle the errors into one tidy array. Read the [filters](filters) section to understand how those work.
 
-    public function action_create()
+    public function create()
     {
         $view = View::factory('members/create')
             ->set('values', $_POST)
@@ -85,8 +85,8 @@ Please forgive my slightly ugly form. I am trying not to use any modules or unre
 
         if ($_POST)
         {
-            $member = ORM::factory('Member')
-                // The ORM::values() method is a shortcut to assign many values at once
+            $member = Model::factory('Member')
+                // The Model::values() method is a shortcut to assign many values at once
                 ->values($_POST, ['username', 'password']);
 
             $external_values = [
@@ -94,7 +94,7 @@ Please forgive my slightly ugly form. I am trying not to use any modules or unre
                 'password' => Arr::get($_POST, 'password'),
             // Add all external values
             ] + Arr::get($_POST, '_external', []);
-            $extra = Validation::factory($external_values)
+            $extra = Validator::factory($external_values)
                 ->rule('password_confirm', 'matches', [':validation', ':field', 'password']);
 
             try
@@ -103,7 +103,7 @@ Please forgive my slightly ugly form. I am trying not to use any modules or unre
                 // Redirect the user to his page
                 $this->request->redirect('members/'.$member->id);
             }
-            catch (ORM_Validation_Exception $e)
+            catch (ValidationException $e)
             {
                 $errors = $e->errors('models');
             }

@@ -32,13 +32,13 @@ Open `application/bootstrap.php` and make the following changes:
 // Example of changing timezone to Sao Paulo, Brazil
 date_default_timezone_set('America/Sao_Paulo');
 ~~~
- - Set the `base_url` in the [Kohana::init] call to reflect the location of the kohana folder on your server relative to the document root.
+ - Set the `base_url` in the `Application::init()` call to reflect the location of the kohana folder on your server relative to the document root.
 ~~~
 /**
  * Example of kohana's installation at /var/www/kohana and
  * Apache's DocumentRoot configured to /var/www
  */
-Kohana::init([
+Application::init([
     'base_url' => '/kohana/',
 ]);
 ~~~

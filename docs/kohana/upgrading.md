@@ -21,8 +21,8 @@ array, even when no parameters are provided. You can safely remove null checks f
 
 ## Core
 
-- The `Kohana::CODENAME` constant has been removed.
-- The static property `Kohana::$magic_quotes` was deprecated.
+- The `Application::CODENAME` constant has been removed.
+- The static property `Application::$magicQuotes` was deprecated.
 
 ## Encrypt
 
@@ -33,9 +33,9 @@ The `Mcrypt` driver has been removed. Use the `OpenSSL` driver instead.
 The `Request::accept_encoding()`, `Request::accept_lang()`, and `Request::accept_type()` methods have been removed. Use
 the header helper methods instead:
 
-- `$request->headers()->accepts_encoding_at_quality()` — returns the quality for a specific encoding. Retrieving the
+- `$request->headers()->acceptsEncodingAtQuality()` — returns the quality for a specific encoding. Retrieving the
   full list of accepted encodings is not supported.
-- `$request->headers()->accepts_language_at_quality()` — returns the quality for a specific language. Retrieving the
+- `$request->headers()->acceptsLanguageAtQuality()` — returns the quality for a specific language. Retrieving the
   full list of accepted languages is not supported.
-- `$request->headers()->accepts_at_quality()` — returns the quality for a specific MIME type. Retrieving the full list
+- `$request->headers()->acceptsAtQuality()` — returns the quality for a specific MIME type. Retrieving the full list
   of accepted content types is not supported.

@@ -4,11 +4,11 @@ In this example, we have images under `/uploads` under the webroot directory. We
 
 ## Route
 
-First, we need a [Route]. This [Route] is based on this URL pattern:
+First, we need a `Route`. This `Route` is based on this URL pattern:
 
 `/imagefly/filename/width/height` - where filename is the name of the image without the extension. This assumes that all images are in `jpg` and all filenames uses numbers, letters, dash and underscores only.
 
-This is our [Route] definition:
+This is our `Route` definition:
 
 ~~~
 /**
@@ -36,9 +36,9 @@ Then it finds the image file and when found, render it on the browser. Additiona
 ~~~
 <?php
 
-class Controller_Imagefly extends Controller
+class ImageflyController extends Controller
 {
-    public function action_index()
+    public function index()
     {
         $file = $this->request->param('image');
         $width = (int) $this->request->param('width');

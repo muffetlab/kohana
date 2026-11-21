@@ -8,13 +8,13 @@ We'll start out by creating a very, very basic hello world, and then we'll expan
 
 First off we have to make a controller that Kohana can use to handle a request.
 
-Create the file `application/classes/Controller/Hello.php` in your application folder and fill it out like so:
+Create the file `application/classes/Http/Controllers/HelloController.php` in your application folder and fill it out like so:
 
     <?php
 
-    Class Controller_Hello extends Controller
+    Class HelloController extends Controller
     {
-        public function action_index()
+        public function index()
         {
             echo 'hello, world!';
         }
@@ -25,11 +25,11 @@ Let's see what's going on here:
 `<?php`
 :    You should recognize the first tag as an opening php tag (if you don't you should probably [learn php](https://www.php.net)). What follows is a small check that makes sure that this file is being included by Kohana. It stops people from accessing files directly from the URL.
 
-`Class Controller_Hello extends Controller`
+`Class HelloController extends Controller`
 :    This line declares our controller, each controller class has to be prefixed with `Controller_` and an underscore delimited path to the folder the controller is in (see [Conventions and styles](about.conventions) for more info). Each controller should also extend the base `Controller` class which provides a standard structure for controllers.
 
 
-`public function action_index()`
+`public function index()`
 :    This defines the "index" action of our controller. Kohana will attempt to call this action if the user hasn't specified an action. (See [Routes, URLs and Links](tutorials.urls))
 
 `echo 'hello, world!';`
@@ -51,17 +51,17 @@ Let's change our original controller slightly:
 
     <?php
 
-    Class Controller_Hello extends Controller_Template
+    Class HelloController extends TemplateController
     {
         public $template = 'site';
 
-        public function action_index()
+        public function index()
         {
             $this->template->message = 'hello, world!';
         }
     }
 
-`extends Controller_Template`
+`extends TemplateController`
 :    We're now extending the template controller, it makes it more convenient to use views within our controller.
 
 `public $template = 'site';`

@@ -2,10 +2,10 @@
 
 User authentication and authorization is provided by the auth module.
 
-The auth module is included with Kohana, but needs to be enabled before you can use it. To enable, open your `application/bootstrap.php` file and modify the call to [Kohana::modules] by including the auth module like so:
+The auth module is included with Kohana, but needs to be enabled before you can use it. To enable, open your `application/bootstrap.php` file and modify the call to `Application::modules()` by including the auth module like so:
 
 ~~~
-Kohana::modules([
+Application::modules([
     // ...
     'auth' => MODPATH . 'auth',
     // ...

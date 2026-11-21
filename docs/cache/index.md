@@ -1,13 +1,13 @@
 # About Kohana Cache
 
-[Kohana_Cache] provides a common interface to a variety of caching engines. [Cache_Tagging] is supported where available natively to the cache system. Kohana Cache supports multiple instances of cache engines through a grouped singleton pattern.
+`Cache` provides a common interface to a variety of caching engines. `Tagging` is supported where available natively to the cache system. Kohana Cache supports multiple instances of cache engines through a grouped singleton pattern.
 
 ## Supported cache engines
 
- *  APCu ([Cache_Apcu])
- *  File ([Cache_File])
- *  Memcached ([Cache_Memcached])
- *  SQLite ([Cache_Sqlite])
+ *  APCu (`ApcuStore`)
+ *  File (`FileStore`)
+ *  Memcached (`MemcachedStore`)
+ *  SQLite (`SqliteStore`)
  *  Wincache
 
 ## Introduction to caching

@@ -1,10 +1,10 @@
 # Basic Usage
 
-Shown here are the basic usage of this module. For full documentation about the image module usage, visit the [Image] api browser.
+Shown here are the basic usage of this module. For full documentation about the image module usage, visit the `Image` api browser.
 
 ## Creating Instance
 
-[Image::factory()] creates an instance of the image object and prepares it for manipulation. It accepts the `filename` as an argument and an optional `driver` parameter. When `driver` is not specified, the default driver `GD` is used.
+`Image::factory()` creates an instance of the image object and prepares it for manipulation. It accepts the `filename` as an argument and an optional `driver` parameter. When `driver` is not specified, the default driver `GD` is used.
 
 ~~~
 // Uses the image from upload directory
@@ -46,7 +46,7 @@ $img->resize(200, 500, Image::NONE);
 
 ## Render
 
-You can render the image object directly to the browser using the [Image::render()] method.
+You can render the image object directly to the browser using the `Image::render()` method.
 
 ~~~
 $img = Image::factory(DOCROOT . 'uploads/colorado-farm-1920x1200.jpg');
@@ -70,7 +70,7 @@ $this->response->body(
 );
 ~~~
 
-[Image::render()] method also allows you to specify the type and quality of the rendered image.
+`Image::render()` method also allows you to specify the type and quality of the rendered image.
 
 ~~~
 // Render the image at 50% quality
@@ -82,7 +82,7 @@ $img->render('png');
 
 ## Save To File
 
-[Image::save()] lets you save the image object to a file. It has two parameters: `filename` and `quality`. If `filename` is omitted, the original file used will be overwritten instead. The `quality` parameter is an integer from 1-100 which indicates the quality of image to save which defaults to 100.
+`Image::save()` lets you save the image object to a file. It has two parameters: `filename` and `quality`. If `filename` is omitted, the original file used will be overwritten instead. The `quality` parameter is an integer from 1-100 which indicates the quality of image to save which defaults to 100.
 
 On our example above, instead of rendering the file to the browser, you may want to save it somewhere instead. To do so, you may:
 
@@ -99,14 +99,14 @@ What we do is resize the image and save it to file reducing quality to 80% and s
 
 ## Other Methods
 
-There are more methods available for the [Image] module which provides powerful features that are best describe in the API documentation. Here are some of them:
+There are more methods available for the `Image` module which provides powerful features that are best describe in the API documentation. Here are some of them:
 
-* [Image::background()] - Set the background color of an image.
-* [Image::crop()] - Crop an image to the given size.
-* [Image::flip()] - Flip the image along the horizontal or vertical axis.
-* [Image::reflection()] - Add a reflection to an image.
-* [Image::rotate()] - Rotate the image by a given amount.
-* [Image::sharpen()] - Sharpen the image by a given amount.
-* [Image::watermark()] - Add a watermark to an image with a specified opacity.
+* `Image::background()` - Set the background color of an image.
+* `Image::crop()` - Crop an image to the given size.
+* `Image::flip()` - Flip the image along the horizontal or vertical axis.
+* `Image::reflection()` - Add a reflection to an image.
+* `Image::rotate()` - Rotate the image by a given amount.
+* `Image::sharpen()` - Sharpen the image by a given amount.
+* `Image::watermark()` - Add a watermark to an image with a specified opacity.
 
 Next: [Examples](examples)

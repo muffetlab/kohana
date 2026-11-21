@@ -10,10 +10,10 @@ Below are additional configuration options that can be set for this driver.
 
 ## Forcing Login
 
-[Auth_File::force_login] allows you to force a user login without a password.
+`FileAuth::forceLogin()` allows you to force a user login without a password.
 
 ~~~
 // Force the user with a username of admin to be logged into your application
-Auth::instance()->force_login('admin');
-$user = Auth::instance()->get_user();
+Auth::instance()->forceLogin('admin');
+$user = Auth::instance()->getUser();
 ~~~

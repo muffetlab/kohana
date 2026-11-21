@@ -9,14 +9,14 @@ To keep your URLs clean, you will probably want to be able to access your app wi
 
 ## 1. Configure Bootstrap
 
-The first thing you will need to change is the `index_file` setting of [Kohana::init] to false:
+The first thing you will need to change is the `index_file` setting of `Application::init()` to false:
 
-    Kohana::init([
+    Application::init([
         'base_url' => '/myapp/',
         'index_file' => false,
     ]);
 
-This change will make it so all the links generated using [URL::site], [URL::base], and [HTML::anchor] will no longer include "index.php" in the URL. All generated links will start with `/myapp/` instead of `/myapp/index.php/`.
+This change will make it so all the links generated using `Url::site()`, `Url::base()`, and `Html::anchor()` will no longer include "index.php" in the URL. All generated links will start with `/myapp/` instead of `/myapp/index.php/`.
 
 ## 2. URL Rewriting
 
@@ -26,7 +26,7 @@ Rewriting will make it so URLs will be passed to index.php.
 
 ## Apache
 
-Rename `example.htaccess` to only `.htaccess` and alter the `RewriteBase` line to match the `base_url` setting from your [Kohana::init]
+Rename `example.htaccess` to only `.htaccess` and alter the `RewriteBase` line to match the `base_url` setting from your `Application::init()`
 
     RewriteBase /myapp/
 

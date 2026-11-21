@@ -17,7 +17,7 @@ This is a simple example of a single ORM model, that has no relationships, but u
 
     <?php
 
-    class Model_Member extends ORM
+    class Member extends Model
     {
         public function rules()
         {
@@ -50,7 +50,7 @@ This is a simple example of a single ORM model, that has no relationships, but u
         }
     }
 
-[!!] The array returned by `ORM::rules()` will be passed to a [Validation] object and tested when you call `ORM::save()`.
+[!!] The array returned by `Model::rules()` will be passed to a `Validator` object and tested when you call `Model::save()`.
 
 [!!] Please notice that defining the primary key "id" in the model is not necessary. Also, the table name in the database is plural and the model name is singular.
 
@@ -58,28 +58,28 @@ This is a simple example of a single ORM model, that has no relationships, but u
 
     <?php
 
-    class Controller_Member extends Controller_Template
+    class MemberController extends TemplateController
     {
-        public function action_index()
+        public function index()
         {
             /**
              * Example 1
              */
             // Create an instance of a model
-            $members = ORM::factory('Member');
+            $members = Model::factory('Member');
 
             // Get all members with the first name "Peter" find_all()
             // means we get all records matching the query.
-            $members->where('first_name', '=', 'Peter')->find_all();
+            $members->where('first_name', '=', 'Peter')->findAll();
 
             // Count records in the $members object
-            $members->count_all();
+            $members->countAll();
 
             /**
              * Example 2
              */
             // Create an instance of a model
-            $member = ORM::factory('Member');
+            $member = Model::factory('Member');
 
             // Get a member with the user name "bongo" find() means
             // we only want the first record matching the query.
@@ -89,7 +89,7 @@ This is a simple example of a single ORM model, that has no relationships, but u
              * Example 3
              */
             // Create an instance of a model
-            $member = ORM::factory('Member');
+            $member = Model::factory('Member');
 
             // Do an INSERT query
             $member->username = 'bongo';
@@ -102,7 +102,7 @@ This is a simple example of a single ORM model, that has no relationships, but u
              */
             // Create an instance of a model where the
             // table field "id" is "1"
-            $member = ORM::factory('Member', 1);
+            $member = Model::factory('Member', 1);
 
             // Do an UPDATE query
             $member->username = 'bongo';

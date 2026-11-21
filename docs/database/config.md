@@ -63,13 +63,13 @@ The example file below shows 2 MySQL connections, one local and one remote.
 
 ## Connections and Instances
 
-Each configuration group is referred to as a database instance. Each instance can be accessed by calling [Database::instance]. If you don't provide a parameter, the default instance is used.
+Each configuration group is referred to as a database instance. Each instance can be accessed by calling `Connection::instance()`. If you don't provide a parameter, the default instance is used.
 
     // This would connect to the database defined as 'default'
-    $default = Database::instance();
+    $default = Connection::instance();
 
     // This would connect to the database defined as 'remote'
-    $remote  = Database::instance('remote');
+    $remote  = Connection::instance('remote');
 
 To disconnect the database, simply destroy the object:
 
@@ -77,11 +77,11 @@ To disconnect the database, simply destroy the object:
 
     // Or
 
-    unset(Database::$instances['default']);
+    unset(Connection::$instances['default']);
 
 If you want to disconnect all the database instances at once:
 
-    Database::$instances = [];
+    Connection::$instances = [];
 
 ## Connection Settings
 

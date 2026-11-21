@@ -1,6 +1,6 @@
 # Modules
 
-Modules are simply an addition to the [Cascading Filesystem](files). A module can add any kind of file (controllers, views, classes, config files, etc.) to the filesystem available to Kohana (via [Kohana::find_file]). This is useful to make any part of your application more transportable or shareable between different apps. For example, creating a new modeling system, a search engine, a css/js manager, etc.
+Modules are simply an addition to the [Cascading Filesystem](files). A module can add any kind of file (controllers, views, classes, config files, etc.) to the filesystem available to Kohana (via `Application::findFile()`). This is useful to make any part of your application more transportable or shareable between different apps. For example, creating a new modeling system, a search engine, a css/js manager, etc.
 
 ## Where to find modules
 
@@ -12,12 +12,12 @@ Andrew Hutchings has created [kohana-modules](http://www.kohana-modules.com) whi
 
 ## Enabling modules
 
-Modules are enabled by calling [Kohana::modules] and passing an array of `'name' => 'path'`. The name isn't important, but the path obviously is. A module's path does not have to be in `MODPATH`, but usually is. You can only call [Kohana::modules] once.
+Modules are enabled by calling `Application::modules()` and passing an array of `'name' => 'path'`. The name isn't important, but the path obviously is. A module's path does not have to be in `MODPATH`, but usually is. You can only call `Application::modules()` once.
 
-    Kohana::modules([
+    Application::modules([
         'auth' => MODPATH . 'auth', // Basic authentication
         'cache' => MODPATH . 'cache', // Caching with multiple backends
-        'database' => MODPATH . 'database', // Database access
+        'database' => MODPATH . 'database', // Connection access
         'image' => MODPATH . 'image', // Image manipulation
         'orm' => MODPATH . 'orm', // Object Relationship Mapping
         'oauth' => MODPATH . 'oauth', // OAuth authentication

@@ -18,9 +18,9 @@ Remember that in a class, an underscore means a new directory. Consider the foll
 
 | Class Name          | File Path                       |
 |---------------------|---------------------------------|
-| Controller_Template | classes/Controller/Template.php |
-| Model_User          | classes/Model/User.php          |
-| Model_BlogPost      | classes/Model/BlogPost.php      |
+| Controller_Template | classes/Http/Controllers/TemplateController.php |
+| Model_User          | classes/Models/User.php          |
+| Model_BlogPost      | classes/Models/BlogPost.php      |
 | Database            | classes/Database.php            |
 | Database_Query      | classes/Database/Query.php      |
 | Form                | classes/Form.php                |
@@ -36,12 +36,12 @@ Kohana uses under_score naming, not camelCase naming.
 #### Classes
 
     // Controller class, uses Controller_ prefix
-    class Controller_Apple extends Controller
+    class AppleController extends Controller
     {
     }
 
     // Model class, uses Model_ prefix
-    class Model_Cheese extends Model
+    class Cheese extends Model
     {
     }
 

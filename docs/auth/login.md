@@ -4,7 +4,7 @@ The auth module provides methods to help you log users in and out of your applic
 
 ## Log in
 
-The [Auth::login] method handles the login.
+The `Auth::login()` method handles the login.
 
 ~~~
 // Handled from a form with inputs with names email / password
@@ -20,20 +20,20 @@ if ($success) {
 
 ## Logged in User
 
-There are two ways to check if a user is logged in. If you just need to check if the user is logged in use [Auth::logged_in].
+There are two ways to check if a user is logged in. If you just need to check if the user is logged in use `Auth::loggedIn()`.
 
 ~~~
-if (Auth::instance()->logged_in()) {
+if (Auth::instance()->loggedIn()) {
     // User is logged in, continue on
 } else {
     // User isn't logged in, redirect to the login form.
 }
 ~~~
 
-You can also get the logged-in user object by using [Auth::get_user]. If the user is null, then no user was found.
+You can also get the logged-in user object by using `Auth::getUser()`. If the user is null, then no user was found.
 
 ~~~
-$user = Auth::instance()->get_user();
+$user = Auth::instance()->getUser();
 
 // Check for a user (null if not user is found)
 if ($user !== null) {
@@ -45,7 +45,7 @@ if ($user !== null) {
 
 ## Log out
 
-The [Auth::logout] method will take care of logging out a user.
+The `Auth::logout()` method will take care of logging out a user.
 
 ~~~
 Auth::instance()->logout();

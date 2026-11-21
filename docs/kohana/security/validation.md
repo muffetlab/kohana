@@ -2,7 +2,7 @@
 
 *This page needs to be reviewed for accuracy by the development team. Better examples would be helpful.*
 
-Validation can be performed on any array using the [Validation] class. Labels and rules can be attached to a Validation object by the array key, called a "field name".
+Validation can be performed on any array using the `Validator` class. Labels and rules can be attached to a Validation object by the array key, called a "field name".
 
 labels
 :  A label is a human-readable version of the field name.
@@ -14,39 +14,39 @@ rules
 
 Using `true` as the field name when adding a rule will be applied to all named fields.
 
-Creating a validation object is done using the [Validation::factory] method:
+Creating a validation object is done using the `Validator::factory()` method:
 
-    $object = Validation::factory($array);
+    $object = Validator::factory($array);
 
 [!!] The `$object` object will be used for the rest of this tutorial. This tutorial will show you how to validate the registration of a new user.
 
 ## Provided Rules
 
-Kohana provides a set of useful rules in the [Valid] class:
+Kohana provides a set of useful rules in the `Rules` class:
 
 | Rule name              | Function                                     |
 |------------------------|----------------------------------------------|
-| [Valid::not_empty]     | Value must be a non-empty value              |
-| [Valid::regex]         | Match the value against a regular expression |
-| [Valid::min_length]    | Minimum number of characters for value       |
-| [Valid::max_length]    | Maximum number of characters for value       |
-| [Valid::exact_length]  | Value must be an exact number of characters  |
-| [Valid::email]         | An email address is required                 |
-| [Valid::email_domain]  | Check that the domain of the email exists    |
-| [Valid::url]           | Value must be a URL                          |
-| [Valid::ip]            | Value must be an IP address                  |
-| [Valid::phone]         | Value must be a phone number                 |
-| [Valid::credit_card]   | Require a credit card number                 |
-| [Valid::date]          | Value must be a date (and time)              |
-| [Valid::alpha]         | Only alpha characters allowed                |
-| [Valid::alpha_dash]    | Only alpha and hyphens allowed               |
-| [Valid::alpha_numeric] | Only alpha and numbers allowed               |
-| [Valid::digit]         | Value must be an integer digit               |
-| [Valid::decimal]       | Value must be a decimal or float value       |
-| [Valid::numeric]       | Only numeric characters allowed              |
-| [Valid::range]         | Value must be within a range                 |
-| [Valid::color]         | Value must be a valid HEX color              |
-| [Valid::matches]       | Value matches another field value            |
+| `Rules::notEmpty()`     | Value must be a non-empty value              |
+| `Rules::regex()`         | Match the value against a regular expression |
+| `Rules::minLength()`    | Minimum number of characters for value       |
+| `Rules::maxLength()`    | Maximum number of characters for value       |
+| `Rules::exactLength()`  | Value must be an exact number of characters  |
+| `Rules::email()`         | An email address is required                 |
+| `Rules::emailDomain()`  | Check that the domain of the email exists    |
+| `Rules::url()`           | Value must be a URL                          |
+| `Rules::ip()`            | Value must be an IP address                  |
+| `Rules::phone()`         | Value must be a phone number                 |
+| `Rules::creditCard()`   | Require a credit card number                 |
+| `Rules::date()`          | Value must be a date (and time)              |
+| `Rules::alpha()`         | Only alpha characters allowed                |
+| `Rules::alphaDash()`    | Only alpha and hyphens allowed               |
+| `Rules::alphaNumeric()` | Only alpha and numbers allowed               |
+| `Rules::digit()`         | Value must be an integer digit               |
+| `Rules::decimal()`       | Value must be a decimal or float value       |
+| `Rules::numeric()`       | Only numeric characters allowed              |
+| `Rules::range()`         | Value must be within a range                 |
+| `Rules::color()`         | Value must be a valid HEX color              |
+| `Rules::matches()`       | Value matches another field value            |
 
 ## Adding Rules
 
@@ -59,11 +59,11 @@ If no parameters are specified, the field value will be passed to the callback. 
     $object->rule($field, 'not_empty');
     $object->rule($field, 'not_empty', [':value']);
 
-Rules defined in the [Valid] class can be added by using the method name alone. The following three rules are equivalent:
+Rules defined in the `Rules` class can be added by using the method name alone. The following three rules are equivalent:
 
     $object->rule('number', 'phone');
-    $object->rule('number', ['Valid', 'phone']);
-    $object->rule('number', 'Valid::phone');
+    $object->rule('number', ['Rules', 'phone']);
+    $object->rule('number', 'Rules::phone');
 
 ### Adding Rules for multiple fields together
 
@@ -93,7 +93,7 @@ To validate multiple fields together, you can do something like this:
 
 ## Binding Variables
 
-The [Validation] class allows you to bind variables to certain strings so that they can be used when defining rules. Variables are bound by calling the [Validation::bind] method.
+The `Validator` class allows you to bind variables to certain strings so that they can be used when defining rules. Variables are bound by calling the `Validator::bind()` method.
 
     $object->bind(':model', $user_model);
     // Future code will be able to use :model to reference the object
@@ -107,11 +107,11 @@ By default, the validation object will automatically bind the following values f
 
 ## Adding Errors
 
-The [Validation] class will add an error for a field if any of the rules associated to it return `false`. This allows many built-in PHP functions to be used as rules, like `in_array`.
+The `Validator` class will add an error for a field if any of the rules associated to it return `false`. This allows many built-in PHP functions to be used as rules, like `in_array`.
 
     $object->rule('color', 'in_array', [':value', ['red', 'green', 'blue']]);
 
-Rules added to empty fields will run, but returning `false` will not automatically add an error for the field. In order for a rule to affect empty fields, you must add the error manually by calling the [Validation::error] method. In order to do this, you must pass the validation object to the rule.
+Rules added to empty fields will run, but returning `false` will not automatically add an error for the field. In order for a rule to affect empty fields, you must add the error manually by calling the `Validator::error()` method. In order to do this, you must pass the validation object to the rule.
 
     $object->rule($field, 'the_rule', [':validation', ':field']);
 
@@ -130,9 +130,9 @@ To start our example, we will perform validation on the HTTP POST data of the cu
 
 [!!] In Kohana controllers, we access `$this->request->post()` instead of `$_POST` for better request isolation.
 
-    $object = Validation::factory($this->request->post());
+    $object = Validator::factory($this->request->post());
 
-Next we need to process the POST'ed information using [Validation]. To start, we need to add some rules:
+Next we need to process the POST'ed information using `Validator`. To start, we need to add some rules:
 
     $object
         ->rule('username', 'not_empty')
@@ -168,7 +168,7 @@ The method `User_Model::unique_username()` would be defined similar to:
 
 # A Complete Example
 
-First, we need a [View] that contains the HTML form, which will be placed in `application/views/user/register.php`:
+First, we need a `View` that contains the HTML form, which will be placed in `application/views/user/register.php`:
 
     <?php echo Form::open() ?>
     <?php if ($errors): ?>
@@ -198,18 +198,18 @@ First, we need a [View] that contains the HTML form, which will be placed in `ap
     <?php echo Form::submit(null, 'Sign Up') ?>
     <?php echo Form::close() ?>
 
-[!!] This example uses the [Form] helper extensively. Using [Form] instead of writing HTML ensures that all the form inputs will properly handle input that includes HTML characters. If you prefer to write the HTML yourself, be sure to use [HTML::chars] to escape user input.
+[!!] This example uses the `Form` helper extensively. Using `Form` instead of writing HTML ensures that all the form inputs will properly handle input that includes HTML characters. If you prefer to write the HTML yourself, be sure to use `Html::chars()` to escape user input.
 
-Next, we need a controller and action to process the registration, which will be placed in `application/classes/Controller/User.php`:
+Next, we need a controller and action to process the registration, which will be placed in `application/classes/Http/Controllers/UserController.php`:
 
-    class Controller_User extends Controller
+    class UserController extends Controller
     {
 
-        public function action_register()
+        public function register()
         {
             $user = Model::factory('user');
 
-            $validation = Validation::factory($this->request->post())
+            $validation = Validator::factory($this->request->post())
                 ->rule('username', 'not_empty')
                 ->rule('username', 'regex', [':value', '/^[a-z_.]++$/iD'])
                 ->rule('username', [$user, 'unique_username'])
@@ -227,7 +227,7 @@ Next, we need a controller and action to process the registration, which will be
                 $this->redirect('user/profile', 303);
             }
 
-            // Validation failed, collect the errors
+            // Validator failed, collect the errors
             $errors = $validation->errors('user');
 
             // Display the registration form
@@ -238,9 +238,9 @@ Next, we need a controller and action to process the registration, which will be
 
     }
 
-We will also need a user model, which will be placed in `application/classes/Model/User.php`:
+We will also need a user model, which will be placed in `application/classes/Models/User.php`:
 
-    class Model_User extends Model
+    class User extends Model
     {
 
         public function register($array)

@@ -10,7 +10,7 @@ The `createMock()` and `getMockBuilder()` methods provided by PHPUnit can be use
 
 Most of the time you'll only need to use the createMock() method, i.e.:
 
-    $mock = $this->createMock('ORM');
+    $mock = $this->createMock('Model');
 
 The creation of this mock is performed using best practice defaults. The `__construct` and `__clone` methods of the original class are not executed and the arguments passed to a method of the test double will not be cloned. If these defaults don't match your needs then you can use the `getMockBuilder() ` method to customize the test double generation. Here is a list of methods provided by the Mock Builder:
 
@@ -52,7 +52,7 @@ You start off by telling PHPUnit how many times the method should be called by c
 
 In our example we want `check()` to be called once on our mock object, so if we update it accordingly:
 
-    $mock = $this->getMockBuilder('ORM')
+    $mock = $this->getMockBuilder('Model')
         ->setMethods(['check'])
         ->getMock();
 
@@ -69,7 +69,7 @@ You do this by calling `method()` on the returned from `expects()`:
 As you can probably guess, `method()` takes one parameter, the name of the method you're mocking.
 There's nothing very fancy about this function.
 
-    $mock = $this->getMockBuilder('ORM')
+    $mock = $this->getMockBuilder('Model')
         ->setMethods(['check'])
         ->getMock();
 

@@ -1,27 +1,27 @@
 # Upload Image
 
-The following example shows how to handle uploading of an image, resize it and save it to a file. Be sure you have enabled the [Image] module as discussed in getting started guide.
+The following example shows how to handle uploading of an image, resize it and save it to a file. Be sure you have enabled the `Image` module as discussed in getting started guide.
 
 Assuming you are creating a web application that allows your members to upload their profile picture (avatar), the steps below explain how to do this.
 
 ## Controller
 
-First we need to create a controller that handles the requests for uploading an image. We will name it `Controller_Avatar` and accessible through `/avatar` URL. Assuming that your project is located at [http://localhost/kohana](http://localhost/kohana), then our avatar controller is at [http://localhost/kohana/avatar](http://localhost/kohana/avatar).
+First we need to create a controller that handles the requests for uploading an image. We will name it `AvatarController` and accessible through `/avatar` URL. Assuming that your project is located at [http://localhost/kohana](http://localhost/kohana), then our avatar controller is at [http://localhost/kohana/avatar](http://localhost/kohana/avatar).
 
-For simplicity, the upload form will be on `index` action and `upload` action will process the uploaded file. This is what our controller now looks like. Please note that we are not using [Controller_Template], just [Controller].
+For simplicity, the upload form will be on `index` action and `upload` action will process the uploaded file. This is what our controller now looks like. Please note that we are not using `TemplateController`, just `Controller`.
 
 ~~~
 <?php
 
-class Controller_Avatar extends Controller
+class AvatarController extends Controller
 {
-    public function action_index()
+    public function index()
     {
         $view = View::factory('avatar/index');
         $this->response->body($view);
     }
 
-    public function action_upload()
+    public function upload()
     {
         $view = View::factory('avatar/upload');
         $error_message = null;
@@ -47,7 +47,7 @@ class Controller_Avatar extends Controller
     {
         if (
             !Upload::valid($image)
-            || !Upload::not_empty($image)
+            || !Upload::notEmpty($image)
             || !Upload::type($image, ['jpg', 'jpeg', 'png', 'gif'])
         ) {
             return false;
@@ -56,7 +56,7 @@ class Controller_Avatar extends Controller
         $directory = DOCROOT . 'uploads/';
 
         if ($file = Upload::save($image, null, $directory)) {
-            $filename = strtolower(Text::random('alnum', 20)) . '.jpg';
+            $filename = strtolower(Str::random('alnum', 20)) . '.jpg';
 
             Image::factory($file)
                 ->resize(200, 200, Image::AUTO)
@@ -88,7 +88,7 @@ For the upload form (the `index` action), the view is located at `views/avatar/i
     </head>
     <body>
         <h1>Upload your avatar</h1>
-        <form id="upload-form" action="<?php echo URL::site('avatar/upload') ?>" method="post" enctype="multipart/form-data">
+        <form id="upload-form" action="<?php echo Url::site('avatar/upload') ?>" method="post" enctype="multipart/form-data">
             <p>Choose file:</p>
             <p><input type="file" name="avatar" id="avatar" /></p>
             <p><input type="submit" name="submit" id="submit" value="Upload" /></p>
@@ -109,7 +109,7 @@ Take note of the action attribute. It points to our `avatar/upload` action whose
         <h1>Upload success</h1>
         <p>
             Here is your uploaded avatar:
-            <img src="<?php echo URL::site("/uploads/$uploaded_file") ?>" alt="Uploaded avatar" />
+            <img src="<?php echo Url::site("/uploads/$uploaded_file") ?>" alt="Uploaded avatar" />
         </p>
         <?php else: ?>
         <h1>Something went wrong with the upload</h1>

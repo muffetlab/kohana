@@ -13,7 +13,7 @@ Configuration files are used to store any kind of configuration needed for a mod
 
 If the above configuration file was called `myconf.php`, you could access it using:
 
-    $config = Kohana::$config->load('myconf');
+    $config = Application::$config->load('myconf');
     $options = $config->get('options')
 
 ## Merge
@@ -47,7 +47,7 @@ Let's say we want a config file to store and easily change things like the title
         'analytics' => false, // analytics code goes here, set to "false" to disable
     ];
 
-We could now call `Kohana::$config->load('site.title')` to get the site name, and `Kohana::$config->load('site.analytics')` to get the analytics code.
+We could now call `Application::$config->load('site.title')` to get the site name, and `Application::$config->load('site.analytics')` to get the analytics code.
 
 Let's say we want an archive of versions of some software. We could use config files to store each version, and include links to download, documentation, and issue tracking.
 
@@ -76,9 +76,9 @@ Let's say we want an archive of versions of some software. We could use config f
 You could then do the following:
 
     // In your controller
-    $view->versions = Kohana::$config->load('versions');
+    $view->versions = Application::$config->load('versions');
 
     // In your view:
     foreach ($versions as $version) {
-        // echo some HTML to display each version
+        // echo some Html to display each version
     }

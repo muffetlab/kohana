@@ -10,7 +10,7 @@ There are a few simple rules to follow to guard your application HTML against XS
 
 [!!] If you allow users to submit HTML to your application, it is highly recommended to use an HTML cleaning tool such as [HTML Purifier](http://htmlpurifier.org/) or [HTML Tidy](https://www.php.net/tidy).
 
-The second is to always escape data when inserting into HTML. The [HTML] class provides generators for many common tags, including script and stylesheet links, anchors, images, and email (mailto) links. Any untrusted content should be escaped using [HTML::chars].
+The second is to always escape data when inserting into HTML. The `Html` class provides generators for many common tags, including script and stylesheet links, anchors, images, and email (mailto) links. Any untrusted content should be escaped using `Html::chars()`.
 
 ## References
 

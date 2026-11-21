@@ -1,16 +1,16 @@
 # Validation
 
-ORM models are tightly integrated with the [Validation] library and the module comes with a very flexible [ORM_Validation_Exception] that helps you quickly handle validation errors from basic CRUD operations.
+ORM models are tightly integrated with the `Validator` library and the module comes with a very flexible `ValidationException` that helps you quickly handle validation errors from basic CRUD operations.
 
 ## Defining Rules
 
-Validation rules are defined in the `ORM::rules()` method. This method returns the array of rules to be added to the [Validation] object like so:
+Validation rules are defined in the `Model::rules()` method. This method returns the array of rules to be added to the `Validator` object like so:
 
     public function rules()
     {
         return [
             'username' => [
-                // Uses Valid::not_empty($value);
+                // Uses Rules::notEmpty($value);
                 ['not_empty'],
                 // Calls Some_Class::some_method('param1', 'param2');
                 ['Some_Class::some_method', ['param1', 'param2']],
@@ -18,7 +18,7 @@ Validation rules are defined in the `ORM::rules()` method. This method returns t
                 [['A_Class', 'a_method']],
                 // Calls the lambda function and passes the field value and the validation object
                 [
-                    function ($value, Validation $object) {
+                    function ($value, Validator $object) {
                         $object->error('some_field', 'some_error');
                     },
                     [':value', ':validation']
@@ -29,7 +29,7 @@ Validation rules are defined in the `ORM::rules()` method. This method returns t
 
 ### Bound Values
 
-ORM will automatically bind the following values with `Validation::bind()`:
+ORM will automatically bind the following values with `Validator::bind()`:
 
 - **:field** - The name of the field the rule is being applied to.
 - **:value** - The value of the field the rule is being applied to.
@@ -37,48 +37,48 @@ ORM will automatically bind the following values with `Validation::bind()`:
 
 ## Automatic Validation
 
-All models automatically validate their own data when `ORM::save()`, `ORM::update()`, or `ORM::create()` is called. Because of this, you should always expect these methods to throw an [ORM_Validation_Exception] when the model's data is invalid.
+All models automatically validate their own data when `Model::save()`, `Model::update()`, or `Model::create()` is called. Because of this, you should always expect these methods to throw an `ValidationException` when the model's data is invalid.
 
-    public function action_create()
+    public function create()
     {
         try {
-            $user = ORM::factory('User');
+            $user = Model::factory('User');
             $user->username = 'invalid username';
             $user->save();
-        } catch (ORM_Validation_Exception $e) {
+        } catch (ValidationException $e) {
             $errors = $e->errors();
         }
     }
 
 ## Handling Validation Exceptions
 
-The [ORM_Validation_Exception] will give you access to the validation errors that were encountered while trying to save a model's information. The `ORM_Validation_Exception::errors()` method works very similarly to `Validation::errors()`. Not passing a first parameter will return the name of the rules that failed. But unlike `Validate::errors()`, the first parameter of `ORM_Validation_Exception::errors()` is a directory path. The model's ORM::$_object_name will be appended to the directory in order to form the message file for `Validation::errors()` to use. The second parameter is identical to that of `Validation::errors()`.
+The `ValidationException` will give you access to the validation errors that were encountered while trying to save a model's information. The `ValidationException::errors()` method works very similarly to `Validator::errors()`. Not passing a first parameter will return the name of the rules that failed. But unlike `Validate::errors()`, the first parameter of `ValidationException::errors()` is a directory path. The model's ORM::$_object_name will be appended to the directory in order to form the message file for `Validator::errors()` to use. The second parameter is identical to that of `Validator::errors()`.
 
 In the below example, the error messages will be defined in `application/messages/models/user.php`
 
-    public function action_create()
+    public function create()
     {
         try {
-            $user = ORM::factory('User');
+            $user = Model::factory('User');
             $user->username = 'invalid username';
             $user->save();
-        } catch (ORM_Validation_Exception $e) {
+        } catch (ValidationException $e) {
             $errors = $e->errors('models');
         }
     }
 
 ## External Validation
 
-Certain forms contain information that should not be validated by the model, but by the controller. Information such as a [CSRF](https://en.wikipedia.org/wiki/Cross-site_request_forgery) token, password verification, or a [CAPTCHA](https://en.wikipedia.org/wiki/CAPTCHA) should never be validated by a model. However, validating information in multiple places and combining the errors to provide the user with a good experience is often quite tedious. For this reason, the [ORM_Validation_Exception] is built to handle multiple Validation objects and namespaces the array of errors automatically for you. `ORM::save()`, `ORM::update()`, and `ORM::create()` all take an optional first parameter which is a [Validation] object to validate along with the model.
+Certain forms contain information that should not be validated by the model, but by the controller. Information such as a [CSRF](https://en.wikipedia.org/wiki/Cross-site_request_forgery) token, password verification, or a [CAPTCHA](https://en.wikipedia.org/wiki/CAPTCHA) should never be validated by a model. However, validating information in multiple places and combining the errors to provide the user with a good experience is often quite tedious. For this reason, the `ValidationException` is built to handle multiple Validation objects and namespaces the array of errors automatically for you. `Model::save()`, `Model::update()`, and `Model::create()` all take an optional first parameter which is a `Validator` object to validate along with the model.
 
-    public function action_create()
+    public function create()
     {
         try {
-            $user = ORM::factory('User');
+            $user = Model::factory('User');
             $user->username = $_POST['username'];
             $user->password = $_POST['password'];
 
-            $extra_rules = Validation::factory($_POST)
+            $extra_rules = Validator::factory($_POST)
                 ->rule('password_confirm', 'matches', [
                     ':validation',
                     ':field',
@@ -87,7 +87,7 @@ Certain forms contain information that should not be validated by the model, but
 
             // Pass the extra rules to be validated with the model
             $user->save($extra_rules);
-        } catch (ORM_Validation_Exception $e) {
+        } catch (ValidationException $e) {
             $errors = $e->errors('models');
         }
     }
@@ -103,4 +103,4 @@ Because the validation object was passed as a parameter to the model, any errors
 
 This ensures that errors from multiple validation objects and models will never overwrite each other.
 
-[!!] The power of the [ORM_Validation_Exception] can be leveraged in many different ways to merge errors from related models. Take a look at the list of [Examples](examples) for some great use cases.
+[!!] The power of the `ValidationException` can be leveraged in many different ways to merge errors from related models. Take a look at the list of [Examples](examples) for some great use cases.

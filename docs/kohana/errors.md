@@ -19,7 +19,7 @@ Click any of the links to toggle the display of additional information:
 
 If you do not want to use the internal error handling, you can disable it (highly discouraged) when calling [Kohana::init]:
 
-    Kohana::init(['errors' => false]);
+    Application::init(['errors' => false]);
 
 ## Error Reporting
 
@@ -41,13 +41,13 @@ Errors should **always** be displayed, even in production, because it allows you
 
 Kohana comes with a robust system for handing http errors. It includes exception classes for each http status code. To trigger a 404 in your application (the most common scenario):
 
-    throw HTTP_Exception::factory(404, 'File not found!');
+    throw HttpException::factory(404, 'File not found!');
 
 To register error pages for these, using 404 as an example:
 
-    class HTTP_Exception_404 extends Kohana_HTTP_Exception_404
+    class Http404Exception extends Http404Exception
     {
-        public function get_response()
+        public function getResponse()
         {
             $response = Response::factory();
 

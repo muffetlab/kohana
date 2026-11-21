@@ -8,7 +8,7 @@ A `belongs_to` relation should be used when you have one model that belongs to a
 
 This is the base `belongs_to` relationship:
 
-    protected $_belongs_to = [
+    protected $belongsTo = [
         '[alias name]' => [
             'model' => '[model name]',
             'foreign_key' => '[column]',
@@ -17,17 +17,17 @@ This is the base `belongs_to` relationship:
 
 You can omit any or all of the keys/values in the array on the right, in which case defaults are used:
 
-    protected $_belongs_to = ['[alias name]' => []];
+    protected $belongsTo = ['[alias name]' => []];
 
 The **alias name** is what is used to access the related model in your code. If you had a `Post` model that belonged to a `User` model and wished to use the default values of the `belongs_to` configuration then your code would look like this:
 
-    protected $_belongs_to = ['user' => []];
+    protected $belongsTo = ['user' => []];
 
 To access the user model, you would use `$post->user`. Since we're using the defaults above, the alias name will be used for the model name, and the foreign key in the posts table will be the alias name followed by `_id`, in this case it would be `user_id`. (You can change the `_id` suffix by modifying the `$foreign_key_suffix` variable in the model.)
 
 Let's say your `Post` database table schema doesn't have a `user_id` column but instead has an `author_id` column which is a foreign key for a record in the `User` table. You could use code like this:
 
-    protected $_belongs_to = [
+    protected $belongsTo = [
         'user' => [
             'foreign_key' => 'author_id',
         ],
@@ -35,7 +35,7 @@ Let's say your `Post` database table schema doesn't have a `user_id` column but 
 
 If you wanted access a post's author by using code like `$post->author` then you would simply need to change the alias and add the `model` index:
 
-    protected $_belongs_to = [
+    protected $belongsTo = [
         'author' => [
             'model' => 'User',
         ],
@@ -45,7 +45,7 @@ If you wanted access a post's author by using code like `$post->author` then you
 
 The standard `has_many` relationship will likely fall on the other side of a `belongs_to` relationship. In the above examples, a post belongs to a user. From the user's perspective, a user has many posts. A has_many relationship is defined below:
 
-    protected $_has_many = [
+    protected $hasMany = [
         '[alias name]' => [
             'model' => '[model name]',
             'foreign_key' => '[column]',
@@ -54,19 +54,19 @@ The standard `has_many` relationship will likely fall on the other side of a `be
 
 Again, you can omit all keys in the right array to use the defaults:
 
-    protected $_has_many = ['[alias name]' => []];
+    protected $hasMany = ['[alias name]' => []];
 
 For our user and post example, this would look like the following in the user model:
 
-    protected $_has_many = ['posts' => []];
+    protected $hasMany = ['posts' => []];
 
-Using the above, the posts could be access using `$user->posts->find_all()`. Notice the `find_all()` used in this example. With `belongs_to` and `has_one` relationship types, the model is already loaded with necessary data. For `has_many` relationships, however, you may want to limit the number of results or add additional conditions to the SQL query; you can do so prior to the `find_all()`.
+Using the above, the posts could be access using `$user->posts->findAll()`. Notice the `find_all()` used in this example. With `belongs_to` and `has_one` relationship types, the model is already loaded with necessary data. For `has_many` relationships, however, you may want to limit the number of results or add additional conditions to the SQL query; you can do so prior to the `find_all()`.
 
 The model name used by default will be the singular name of the alias using the `inflector` class. In this case, `posts` uses `post` as the model name. The foreign key used by default is the owner model's name followed by `_id`. In this case, the foreign key will be `user_id` and it must exist in the posts table as before.
 
 Let's assume now you want to access the posts using the name `stories` instead, and are still using the `author_id` key as in the `belongs_to` example. You would define your has_many relationship as:
 
-    protected $_has_many = [
+    protected $hasMany = [
         'stories' => [
             'model' => 'Post',
             'foreign_key' => 'author_id',
@@ -77,7 +77,7 @@ Let's assume now you want to access the posts using the name `stories` instead, 
 
 A `has_one` relationship is almost identical to a `has_many` relationship. In a `has_one` relationship, there can be 1 and only 1 relationship (rather than 1 or more in a has_many). If a user can only have one post or story, rather than many then the code would look like this:
 
-    protected $_has_one = [
+    protected $hasOne = [
         'story' => [
             'model' => 'Post',
             'foreign_key' => 'author_id',
@@ -90,7 +90,7 @@ A `has_many "through"` relationship is used for many-to-many relationships. For 
 
 To define the `has_many` "through" relationship, the same syntax for standard has_many relationships is used with the addition of a 'through' parameter. Let's assume we're working with the Post model:
 
-    protected $_has_many = [
+    protected $hasMany = [
         'categories' => [
             'model' => 'Category',
             'through' => 'categories_posts',
@@ -99,14 +99,14 @@ To define the `has_many` "through" relationship, the same syntax for standard ha
 
 In the Category model:
 
-    protected $_has_many = [
+    protected $hasMany = [
         'posts' => [
             'model' => 'Post',
             'through' => 'categories_posts',
         ],
     ];
 
-To access the categories and posts, you simply use `$post->categories->find_all()` and `$category->posts->find_all()`
+To access the categories and posts, you simply use `$post->categories->findAll()` and `$category->posts->findAll()`
 
 Methods are available to check for, add, and remove relationships for many-to-many relationships. Let's assume you have a $post model loaded, and a $category model loaded as well. You can check to see if the $post is related to this $category with the following call:
 

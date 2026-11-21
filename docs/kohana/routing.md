@@ -2,7 +2,7 @@
 
 Kohana provides a very powerful routing system. In essence, routes provide an interface between the URLs and your controllers and actions. With the correct routes you could make almost any URL scheme correspond to almost any arrangement of controllers, and you could change one without impacting the other.
 
-As mentioned in the [Request Flow](flow) section, a request is handled by the [Request] class, which will look for a matching [Route] and load the appropriate controller to handle that request.
+As mentioned in the [Request Flow](flow) section, a request is handled by the `Request` class, which will look for a matching `Route` and load the appropriate controller to handle that request.
 
 [!!] It is important to understand that **routes are matched in the order they are added**, and as soon as a URL matches a route, routing is essentially "stopped" and *the remaining routes are never tried*. Because the default route matches almost anything, including an empty URL, new routes must be place before it.
 
@@ -20,7 +20,7 @@ If you look in `APPPATH/bootstrap.php` you will see the "default" route as follo
 
 So this creates a route with the name `default` that will match URLs in the format of `(<controller>(/<action>(/<id>)))`.
 
-Let's take a closer look at each of the parameters of [Route::set], which are `name`, `uri`, and an optional array `regex`.
+Let's take a closer look at each of the parameters of `Route::set()`, which are `name`, `uri`, and an optional array `regex`.
 
 ### Name
 
@@ -30,9 +30,9 @@ The name of the route must be a **unique** string. If it is not it will overwrit
 
 The uri is a string that represents the format of URLs that should be matched. The tokens surrounded with `<>` are *keys* and anything surrounded with `()` are *optional* parts of the uri. In Kohana routes, any character is allowed and treated literally aside from `()<>`. The `/` has no meaning besides being a character that must match in the uri. Usually the `/` is used as a static separator but as long as the regex makes sense, there are no restrictions to how you can format your routes.
 
-Let's look at the default route again, the uri is `(<controller>(/<action>(/<id>)))`. We have three keys or params: controller, action, and id. In this case, the entire uri is optional, so a blank URI would match and the default controller and action (set by defaults(), [covered below](#default-values)) would be assumed resulting in the `Controller_Welcome` class being loaded and the `action_index` method being called to handle the request.
+Let's look at the default route again, the uri is `(<controller>(/<action>(/<id>)))`. We have three keys or params: controller, action, and id. In this case, the entire uri is optional, so a blank URI would match and the default controller and action (set by defaults(), [covered below](#default-values)) would be assumed resulting in the `WelcomeController` class being loaded and the `index` method being called to handle the request.
 
-You can use any name you want for your keys, but the following keys have special meaning to the [Request] object, and will influence which controller and action are called:
+You can use any name you want for your keys, but the following keys have special meaning to the `Request` object, and will influence which controller and action are called:
 
  * **Directory** - The subdirectory of `classes/Controller` to look for the controller (\[covered below]\(#directory))
  * **Controller** - The controller that the request should execute.
@@ -52,7 +52,7 @@ In this example, we have controllers in two directories, `admin` and `affiliate`
             'action' => 'index',
     ]);
 
-You can also use a less restrictive regex to match unlimited parameters, or to ignore overflow in a route. In this example, the URL `foobar/baz/and-anything/else_that/is-on-the/url` would be routed to `Controller_Foobar::action_baz()` and the `"stuff"` parameter would be `"and-anything/else_that/is-on-the/url"`. If you wanted to use this for unlimited parameters, you could [explode](https://www.php.net/function.explode) it, or you just ignore the overflow.
+You can also use a less restrictive regex to match unlimited parameters, or to ignore overflow in a route. In this example, the URL `foobar/baz/and-anything/else_that/is-on-the/url` would be routed to `FoobarController::baz()` and the `"stuff"` parameter would be `"and-anything/else_that/is-on-the/url"`. If you wanted to use this for unlimited parameters, you could [explode](https://www.php.net/function.explode) it, or you just ignore the overflow.
 
     Route::set('default', '(<controller>(/<action>(/<stuff>)))', ['stuff' => '.*'])
         ->defaults([
@@ -63,13 +63,13 @@ You can also use a less restrictive regex to match unlimited parameters, or to i
 
 ### Default values
 
-If a key in a route is optional (or not present in the route), you can provide a default value for that key by passing an associated array of keys and default values to [Route::defaults], chained after your [Route::set]. This can be useful to provide a default controller or action for your site, among other things.
+If a key in a route is optional (or not present in the route), you can provide a default value for that key by passing an associated array of keys and default values to `Route::defaults()`, chained after your `Route::set()`. This can be useful to provide a default controller or action for your site, among other things.
 
 [!!] The `controller` and `action` key must always have a value, so they either need to be required in your route (not inside of parentheses) or have a default value provided.
 
-[!!] Kohana automatically converts controllers to follow the standard naming convention. For example `/blog/view/123` would look for the controller `Controller_Blog` in classes/Controller/Blog.php and trigger the `action_view()` method on it.
+[!!] Kohana automatically converts controllers to follow the standard naming convention. For example `/blog/view/123` would look for the controller `BlogController` in classes/Http/Controllers/BlogController.php and trigger the `view()` method on it.
 
-In the default route, all the keys are optional, and the controller and action are given a default. If we called an empty URL, the defaults would fill in and `Controller_Welcome::action_index()` would be called. If we called `foobar` then only the default for action would be used, so it would call `Controller_Foobar::action_index()` and finally, if we called `foobar/baz` then neither default would be used and `Controller_Foobar::action_baz()` would be called.
+In the default route, all the keys are optional, and the controller and action are given a default. If we called an empty URL, the defaults would fill in and `WelcomeController::index()` would be called. If we called `foobar` then only the default for action would be used, so it would call `FoobarController::index()` and finally, if we called `foobar/baz` then neither default would be used and `FoobarController::baz()` would be called.
 
 TODO: need an example here
 
@@ -85,7 +85,7 @@ In 3.3, you can specify advanced routing schemes by using filter callbacks. When
 
     Route::set('save-form', 'save')
         ->filter(function ($route, $params, $request) {
-            if ($request->method() !== HTTP_Request::POST) {
+            if ($request->method() !== Request::POST) {
                 return false; // This route only matches POST requests
             }
         });
@@ -165,7 +165,7 @@ There are countless other possibilities for routes. Here are some more examples:
 
 ## Request parameters
 
-The `directory`, `controller` and `action` can be accessed from the [Request] as public properties like so:
+The `directory`, `controller` and `action` can be accessed from the `Request` as public properties like so:
 
     // From within a controller:
     $this->request->action();
@@ -185,7 +185,7 @@ All other keys specified in a route can be accessed via [Request::param()]:
     // Can be used anywhere:
     Request::current()->param('key_name');
 
-The [Request::param] method takes an optional second argument to specify a default return value in case the key is not set by the route. If no arguments are given, all keys are returned as an associative array. In addition, `action`, `controller` and `directory` are not accessible via [Request::param()].
+The `Request::param()` method takes an optional second argument to specify a default return value in case the key is not set by the route. If no arguments are given, all keys are returned as an associative array. In addition, `action`, `controller` and `directory` are not accessible via `Request::param()`.
 
 For example, with the following route:
 
@@ -195,11 +195,11 @@ For example, with the following route:
             'action' => 'index',
     ]);
 
-If a URL matches the route, then `Controller_Ads::index()` will be called. You can access the parameters by using the `param()` method of the controller's [Request]. Remember to define a default value (via the second, optional parameter of [Request::param]) if you didn't in `->defaults()`.
+If a URL matches the route, then `AdsController::index()` will be called. You can access the parameters by using the `param()` method of the controller's `Request`. Remember to define a default value (via the second, optional parameter of `Request::param()`) if you didn't in `->defaults()`.
 
-    class Controller_Ads extends Controller
+    class AdsController extends Controller
     {
-        public function action_index()
+        public function index()
         {
             $ad = $this->request->param('ad');
             $affiliate = $this->request->param('affiliate', null);
@@ -216,9 +216,9 @@ TODO: talk about how routes are compiled
 
 ## Creating URLs and links using routes
 
-Along with Kohana's powerful routing capabilities are included some methods for generating URLs for your routes' URIs. You can always specify your URIs as a string using [URL::site] to create a full URL like so:
+Along with Kohana's powerful routing capabilities are included some methods for generating URLs for your routes' URIs. You can always specify your URIs as a string using `Url::site()` to create a full URL like so:
 
-    URL::site('admin/edit/user/' . $user_id);
+    Url::site('admin/edit/user/' . $user_id);
 
 However, Kohana also provides a method to generate the URI from the route's definition. This is extremely useful if your routing could ever change since it would relieve you from having to go back through your code and change everywhere that you specified a URI as a string. Here is an example of dynamic generation that corresponds to the `feeds` route example from above:
 

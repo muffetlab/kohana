@@ -32,7 +32,7 @@ You can call a request at any time in your application by using the `Request::fa
 
 Other than this difference, they are exactly the same. You can detect if the request is a sub-request in your controller with the is_initial() method:
 
-    $sub_request = !$this->request->is_initial()
+    $sub_request = !$this->request->isInitial()
 
 ### External Requests
 
@@ -61,15 +61,15 @@ The request client supports header callbacks - an array of callbacks that will b
 
     $request = Request::factory('http://example.com/user', [
             'header_callbacks' => [
-                'Content-Encoding' => function (Request $request, Response $response, Request_Client $client) {
+                'Content-Encoding' => function (Request $request, Response $response, Client $client) {
                     // Uncompress the response
                     $response->body(GZIP::expand($response->body()));
                 },
-                'X-Rate-Limited' => function (Request $request, Response $response, Request_Client $client) {
-                    // Log the rate limit event
+                'X-Rate-Limited' => function (Request $request, Response $response, Client $client) {
+                    // Logger the rate limit event
                     // And perhaps set a deadlock in cache to prevent further requests
                 },
-                'WWW-Authenticate' => function (Request $request, Response $response, Request_Client $client) {
+                'WWW-Authenticate' => function (Request $request, Response $response, Client $client) {
                     // Execute a request to refresh your OAuth token somehow
                     // Have the original request resent
                     return Request::factory($request->uri())
@@ -83,23 +83,23 @@ Where multiple headers are present in the response, callbacks will be executed i
 
 | Type              | Function                                                                                                                                                                                                                                                                                     |
 |-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Request] object  | If a new request is returned, the request client will automatically assign properties, callbacks, etc. to match the original request and then execute the request. No further callbacks will be triggered for the original request, but the new request may trigger callbacks when executed. |
-| [Response] object | If the callback returns a new response instance it will be returned to the application. No further callbacks will be triggered for the original request. The callback is responsible for setting any relevant callbacks and properties for the request it executes                           |
+| `Request` object  | If a new request is returned, the request client will automatically assign properties, callbacks, etc. to match the original request and then execute the request. No further callbacks will be triggered for the original request, but the new request may trigger callbacks when executed. |
+| `Response` object | If the callback returns a new response instance it will be returned to the application. No further callbacks will be triggered for the original request. The callback is responsible for setting any relevant callbacks and properties for the request it executes                           |
 | null              | The callback can, if required, modify the provided Response object and return null. The modified response object will be passed into subsequent callbacks.                                                                                                                                   |
 
 #### Nested requests
-If your callback returns a new Request object, the request client will apply the same callback and property definitions to it before execution. This allows for nested requests - for example, you might need to re-authenticate before submitting a POST request and then being redirected to a new location. To avoid infinite recursion and fatal errors, the request client keeps track of the number of subrequests and will throw a [Request_Client_Recursion_Exception] if the recursion gets too deep. This behaviour is controlled by two properties: [Request_Client::callback_depth()] and [Request_Client::max_callback_depth()]. The default limit is 5 subrequests.
+If your callback returns a new Request object, the request client will apply the same callback and property definitions to it before execution. This allows for nested requests - for example, you might need to re-authenticate before submitting a POST request and then being redirected to a new location. To avoid infinite recursion and fatal errors, the request client keeps track of the number of subrequests and will throw a `RecursionException` if the recursion gets too deep. This behaviour is controlled by two properties: `Client::callbackDepth()` and `Client::maxCallbackDepth()`. The default limit is 5 subrequests.
 
-If your callback executes a new request itself and returns the response, it is responsible for dealing with any callbacks and request nesting itself. You may find the [Request_Client::assign_client_properties()] method useful in this case.
+If your callback executes a new request itself and returns the response, it is responsible for dealing with any callbacks and request nesting itself. You may find the `Client::assignClientProperties()` method useful in this case.
 
 #### Callback parameters
-Arbitrary parameters can be passed to the callbacks through the [Request_Client::callback_params()] property:
+Arbitrary parameters can be passed to the callbacks through the `Client::callbackParams()` property:
 
     $request = Request::factory('http://example.com/foo', [
             'header_callbacks' => [
-                'X-Custom-1' => function (Request $request, Response $response, Request_Client $client) {
+                'X-Custom-1' => function (Request $request, Response $response, Client $client) {
                     // Do something that needs an external parameter
-                    if ($client->callback_params('foo') === 'bar') {
+                    if ($client->callbackParams('foo') === 'bar') {
                         // etc.
                     }
                 },
@@ -110,12 +110,12 @@ Arbitrary parameters can be passed to the callbacks through the [Request_Client:
     ]);
 
     // later on
-    $request->client()->callback_params('foo', false);
+    $request->client()->callbackParams('foo', false);
 
 As with nested requests, callback_params will automatically be passed to subrequests if the callback returns a new Request object. If the callback returns a Response object, it is responsible for passing on any relevant parameters.
 
 #### Following redirects
-The request client ships with a standard callback to automatically follow redirects - [Request_Client::on_header_location()]. This will recursively follow redirects that are specified with a Location header and a status code in 201, 301, 302, 303, 307. This behaviour is disabled by default, but can be enabled by passing a set of options to the Request's constructor:
+The request client ships with a standard callback to automatically follow redirects - `Client::onHeaderLocation()`. This will recursively follow redirects that are specified with a Location header and a status code in 201, 301, 302, 303, 307. This behaviour is disabled by default, but can be enabled by passing a set of options to the Request's constructor:
 
     $request = Request::factory('http://example.com/redirectme', [
             'follow' => true
@@ -123,7 +123,7 @@ The request client ships with a standard callback to automatically follow redire
 
 [!!] If you define additional header callbacks of your own, you will need to include the 'Location' callback in your callbacks array.
 
-A number of options are available to control the behaviour of the [Request_Client] when following redirects.
+A number of options are available to control the behaviour of the `Client` when following redirects.
 
 | Option          | Default           | Function                                                                           |
 |-----------------|-------------------|------------------------------------------------------------------------------------|

@@ -28,7 +28,7 @@ In this example, we loop through an array of whitelisted input fields and for ea
         ->get('mycount');
 
     // Pass the total item count to Pagination
-    $config = Kohana::$config->load('pagination');
+    $config = Application::$config->load('pagination');
     $pagination = Pagination::factory([
         'total_items' => $count,
         'current_page' => ['source' => 'route', 'key' => 'page'],
@@ -39,12 +39,12 @@ In this example, we loop through an array of whitelisted input fields and for ea
     $pageLinks = $pagination->render();
 
     // Search for results starting at the offset calculated by the Pagination class
-    $query->order_by('last_name', 'asc')
-        ->order_by('first_name', 'asc')
+    $query->orderBy('last_name', 'asc')
+        ->orderBy('first_name', 'asc')
         ->limit($pagination->items_per_page)
         ->offset($pagination->offset);
     $results = $query->execute()
-        ->as_array();
+        ->asArray();
 
 ## Having
 

@@ -2,21 +2,21 @@
 
 Kohana provides a very simple way to display statistics about your application:
 
-1. Common [Kohana] method calls, such as [Kohana::find_file()].
+1. Common `Application` method calls, such as `Application::findFile()`.
 2. Requests. Including the main request, as well as any sub-requests.
-3. [Database] queries
+3. `Connection` queries
 4. Average execution times for your application
 
-[!!] In order for profiling to work, the `profile` setting must be `true` in your [Kohana::init()] call in your bootstrap.
+[!!] In order for profiling to work, the `profile` setting must be `true` in your `Application::init()` call in your bootstrap.
 
 ## Profiling your code
 
-You can easily add profiling to your own functions and code. This is done using the [Profiler::start()] function. The first parameter is the group, the second parameter is the name of the benchmark.
+You can easily add profiling to your own functions and code. This is done using the `Profiler::start()` function. The first parameter is the group, the second parameter is the name of the benchmark.
 
     public function foobar($input)
     {
         // Be sure to only profile if it's enabled
-        if (Kohana::$profiling === true) {
+        if (Application::$profiling === true) {
             // Start a new benchmark
             $benchmark = Profiler::start('Your Category', __FUNCTION__);
         }

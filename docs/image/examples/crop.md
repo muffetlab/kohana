@@ -4,20 +4,20 @@ This example is very similar to our previous example and even uses the same uplo
 
 ## Controller
 
-We name our new controller as `Controller_Crop` and accessible through `/crop` URL. Assuming that your project is located at [http://localhost/kohana](http://localhost/kohana), then our crop controller is at [http://localhost/kohana/crop](http://localhost/kohana/crop).
+We name our new controller as `CropController` and accessible through `/crop` URL. Assuming that your project is located at [http://localhost/kohana](http://localhost/kohana), then our crop controller is at [http://localhost/kohana/crop](http://localhost/kohana/crop).
 
 ~~~
 <?php
 
-class Controller_Crop extends Controller
+class CropController extends Controller
 {
-    public function action_index()
+    public function index()
     {
         $view = View::factory('crop/index');
         $this->response->body($view);
     }
 
-    public function action_do()
+    public function do()
     {
         $view = View::factory('crop/do');
         $error_message = null;
@@ -43,7 +43,7 @@ class Controller_Crop extends Controller
     {
         if (
             !Upload::valid($image)
-            || !Upload::not_empty($image)
+            || !Upload::notEmpty($image)
             || !Upload::type($image, ['jpg', 'jpeg', 'png', 'gif'])
         ) {
             return false;
@@ -52,7 +52,7 @@ class Controller_Crop extends Controller
         $directory = DOCROOT . 'uploads/';
 
         if ($file = Upload::save($image, null, $directory)) {
-            $filename = strtolower(Text::random('alnum', 20)) . '.jpg';
+            $filename = strtolower(Str::random('alnum', 20)) . '.jpg';
 
             $img = Image::factory($file);
 
@@ -88,7 +88,7 @@ For the upload form (the `index` action), the view is located at `views/crop/ind
     </head>
     <body>
         <h1>Upload your profile image</h1>
-        <form id="upload-form" action="<?php echo URL::site('crop/do') ?>" method="post" enctype="multipart/form-data">
+        <form id="upload-form" action="<?php echo Url::site('crop/do') ?>" method="post" enctype="multipart/form-data">
             <p>Choose file:</p>
             <p><input type="file" name="avatar" id="avatar" /></p>
             <p><input type="submit" name="submit" id="submit" value="Upload and crop" /></p>
@@ -109,7 +109,7 @@ View for `crop/do` action goes to `views/crop/do.php`.
         <h1>Upload success</h1>
         <p>
             Here is your uploaded and cropped avatar:
-            <img src="<?php echo URL::site("/uploads/$uploaded_file") ?>" alt="Uploaded avatar" />
+            <img src="<?php echo Url::site("/uploads/$uploaded_file") ?>" alt="Uploaded avatar" />
         </p>
         <?php else: ?>
         <h1>Something went wrong with the upload</h1>

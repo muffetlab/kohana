@@ -4,7 +4,7 @@ Creating queries dynamically using objects and methods allows queries to be writ
 
 ## Select
 
-Each type of database query is represented by a different class, each with their own methods. For instance, to create a SELECT query, we use [DB::select] which is a shortcut to return a new [Database_Query_Builder_Select] object:
+Each type of database query is represented by a different class, each with their own methods. For instance, to create a SELECT query, we use `DB::select()` which is a shortcut to return a new `SelectBuilder` object:
 
     $query = DB::select();
 
@@ -24,7 +24,7 @@ Multiple `where()` methods may be used to string together multiple clauses conne
     $query = DB::select()
         ->from('users')
         ->where('username', '=', 'john')
-        ->or_where('username', '=', 'jane');
+        ->orWhere('username', '=', 'jane');
 
 You can use any operator you want. Examples include `IN`, `BETWEEN`, `>`, `=<`, `!=`, etc. Use an array for operators that require more than one value.
 
@@ -44,13 +44,13 @@ You can use any operator you want. Examples include `IN`, `BETWEEN`, `>`, `=<`, 
         ->from('users')
         ->where('joindate', 'BETWEEN', [$then, $now]);
 
-By default, [DB::select] will select all columns (`SELECT * ...`), but you can also specify which columns you want returned by passing parameters to [DB::select]:
+By default, `DB::select()` will select all columns (`SELECT * ...`), but you can also specify which columns you want returned by passing parameters to [DB::select]:
 
     $query = DB::select('username', 'password')
         ->from('users')
         ->where('username', '=', 'john');
 
-Now take a minute to look at what this method chain is doing. First, we create a new selection object using the [DB::select] method. Next, we set table(s) using the `from()` method. Last, we search for a specific records using the `where()` method. We can display the SQL that will be executed by casting the query to a string:
+Now take a minute to look at what this method chain is doing. First, we create a new selection object using the `DB::select()` method. Next, we set table(s) using the `from()` method. Last, we search for a specific records using the `where()` method. We can display the SQL that will be executed by casting the query to a string:
 
     echo Debug::vars((string) $query);
     // Should display:
@@ -100,17 +100,17 @@ Often you will want the results in a particular order and rather than sorting th
 
     $query = DB::select()
         ->from('posts')
-        ->order_by('published', 'DESC');
+        ->orderBy('published', 'DESC');
 
 This query would generate the following SQL:
 
     SELECT * FROM `posts` ORDER BY `published` DESC
 
-[!!] For a complete list of methods available while building a select query see [Database_Query_Builder_Select].
+[!!] For a complete list of methods available while building a select query see `SelectBuilder`.
 
 ## Insert
 
-To create records into the database, use [DB::insert] to create an INSERT query, using `values()` to pass in the data:
+To create records into the database, use `DB::insert()` to create an INSERT query, using `values()` to pass in the data:
 
     $query = DB::insert('users', ['username', 'password'])
         ->values(['fred', 'p@5sW0Rd']);
@@ -119,11 +119,11 @@ This query would generate the following SQL:
 
     INSERT INTO `users` (`username`, `password`) VALUES ('fred', 'p@5sW0Rd')
 
-[!!] For a complete list of methods available while building an insert query see [Database_Query_Builder_Insert].
+[!!] For a complete list of methods available while building an insert query see `InsertBuilder`.
 
 ## Update
 
-To modify an existing record, use [DB::update] to create an UPDATE query:
+To modify an existing record, use `DB::update()` to create an UPDATE query:
 
     $query = DB::update('users')
         ->set(['username' => 'jane'])
@@ -133,11 +133,11 @@ This query would generate the following SQL:
 
     UPDATE `users` SET `username` = 'jane' WHERE `username` = 'john'
 
-[!!] For a complete list of methods available while building an update query see [Database_Query_Builder_Update].
+[!!] For a complete list of methods available while building an update query see `UpdateBuilder`.
 
 ## Delete
 
-To remove an existing record, use [DB::delete] to create a DELETE query:
+To remove an existing record, use `DB::delete()` to create a DELETE query:
 
     $query = DB::delete('users')
         ->where('username', 'IN', ['john', 'jane']);
@@ -146,7 +146,7 @@ This query would generate the following SQL:
 
     DELETE FROM `users` WHERE `username` IN ('john', 'jane')
 
-[!!] For a complete list of methods available while building a delete query see [Database_Query_Builder_Delete].
+[!!] For a complete list of methods available while building a delete query see `DeleteBuilder`.
 
 ## Advanced Queries
 
@@ -184,7 +184,7 @@ This query would generate the following SQL:
 
 ### Database Functions
 
-Eventually you will probably run into a situation where you need to call `COUNT` or some other database function within your query. The query builder supports these functions using the `Database_Expression` class:
+Eventually you will probably run into a situation where you need to call `COUNT` or some other database function within your query. The query builder supports these functions using the `Expression` class:
 
     $query = DB::select([DB::expr('COUNT(`username`)'), 'total_users'])
         ->from('users');
@@ -213,7 +213,7 @@ Aggregate functions like `COUNT()`, `SUM()`, `AVG()`, etc. will most likely be u
 
     $query = DB::select('username', [DB::expr('COUNT(`id`)'), 'total_posts'])
         ->from('posts')
-        ->group_by('username')
+        ->groupBy('username')
         ->having('total_posts', '>=', 10);
 
 This will generate the following query:
@@ -226,7 +226,7 @@ Query Builder objects can be passed as parameters to many of the methods to crea
 
     $sub = DB::select('username', [DB::expr('COUNT(`id`)'), 'total_posts'])
         ->from('posts')
-        ->group_by('username')
+        ->groupBy('username')
         ->having('total_posts', '>=', 10);
 
     $query = DB::select('profiles.*', 'posts.total_posts')
@@ -244,7 +244,7 @@ Insert queries can also use a select query for the input values
 
     $sub = DB::select('username', [DB::expr('COUNT(`id`)'), 'total_posts'])
         ->from('posts')
-        ->group_by('username')
+        ->groupBy('username')
         ->having('total_posts', '>=', 10);
 
     $query = DB::insert('post_totals', ['username', 'posts'])
@@ -260,14 +260,14 @@ This will generate the following query:
 Multiple Where and Having clauses are added to the query with Boolean operators connecting each expression. The default operator for both methods is AND which is the same as the `and_` prefixed method. The OR operator can be specified by prefixing the methods with `or_`. Where and Having clauses can be nested or grouped by post fixing either method with `_open` and then followed by a method with a `_close`.
 
     $query = DB::select()->from('users')
-        ->where_open()
-            ->or_where('id', 'IN', $expired)
-            ->and_where_open()
+        ->whereOpen()
+            ->orWhere('id', 'IN', $expired)
+            ->andWhereOpen()
                 ->where('last_login', '<=', $last_month)
-                ->or_where('last_login', 'IS', null)
-            ->and_where_close()
-        ->where_close()
-        ->and_where('removed','IS', null);
+                ->orWhere('last_login', 'IS', null)
+            ->andWhereClose()
+        ->whereClose()
+        ->andWhere('removed','IS', null);
 
 This will generate the following query:
 
@@ -275,7 +275,7 @@ This will generate the following query:
 
 ### Database Expressions
 
-There are cases were you need a complex expression or other database functions, which you don't want the Query Builder to try and escape. In these cases, you will need to use a database expression created with [DB::expr]. **A database expression is taken as direct input and no escaping is performed.**
+There are cases were you need a complex expression or other database functions, which you don't want the Query Builder to try and escape. In these cases, you will need to use a database expression created with `DB::expr()`. **A database expression is taken as direct input and no escaping is performed.**
 
     $query = DB::update('users')
         ->set(['login_count' => DB::expr('login_count + 1')])
