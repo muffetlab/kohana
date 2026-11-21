@@ -13,6 +13,7 @@
       - [Translation Files](files/i18n)
       - [Message Files](files/messages)
    - [Configuration](config)
+   - [Environment (.env)](environment)
    - [Request Flow](flow)
    - [Bootstrap](bootstrap)
    - [Modules](modules)

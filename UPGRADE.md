@@ -299,3 +299,22 @@ Like most PHP frameworks, Kohana calls the application directory `app/`. `APPPAT
 2. In `public/index.php` (and any other front controller or test bootstrap), change `realpath(DOCROOT . '../application')` to `realpath(DOCROOT . '../app')`.
 3. In `composer.json`, map `"App\\": "app/classes/"`, then run `composer dump-autoload`.
 4. Update deploy scripts, web server rules and `.gitignore` entries that mention `application/`.
+
+## 22. Environment variables and `.env`
+
+Kohana loads a `.env` file from the project root with [phpdotenv](https://github.com/vlucas/phpdotenv), and the `env()` helper reads its values. Real environment variables take precedence over the file. See [`docs/kohana/environment.md`](docs/kohana/environment.md).
+
+What changed:
+
+- `app/bootstrap.php` loads `.env`, sets the environment from `APP_ENV` (`KOHANA_ENV` still works, and `local` means development), `base_url` from `APP_BASE_URL` (default `/`), and `Cookie::$salt` from `COOKIE_SALT`.
+- The database module's `default` connection now reads `DB_CONNECTION` (default `mysql`, which means the MySQLi driver), `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`, `DB_DSN`, `DB_PREFIX` and `DB_CHARSET`. Before, it was a generic `PDO` connection to `mysql:host=localhost;dbname=kohana`, and the module also shipped a `mysqli` sample group, which is gone.
+- `config/encrypt.php` reads its `key` from `APP_KEY`. Keys starting with `base64:` are decoded.
+- `config/auth.php` reads the legacy `hash_key` from `AUTH_HASH_KEY`.
+- `'mysql'` is accepted as a database type and means MySQLi.
+- New command: `php public/index.php --task=key:generate` writes a random `APP_KEY` and `COOKIE_SALT` to `.env`.
+
+**Action:**
+1. Copy the new `bootstrap.php` lines (the `Dotenv` call after the Composer autoloader, `APP_ENV`, `APP_BASE_URL` and `COOKIE_SALT`) into your `app/bootstrap.php`.
+2. `cp .env.example .env` and move your secrets (database password, encryption key, cookie salt, old auth `hash_key`) into it. Keep your **existing** encryption key and cookie salt; do not generate new ones for an application that already has data and users.
+3. If your app relied on the module's default `PDO` connection or its `mysqli` group without overriding them, define them in `app/config/database.php` or set `DB_*` variables.
+4. Add `.env` to `.gitignore`.

@@ -1,5 +1,7 @@
 # Configuration
 
+The module's `config/database.php` reads the `default` connection from the environment: `DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME` and `DB_PASSWORD` (see [Environment Configuration](../kohana/environment)). Most applications only need to set these in `.env`. Copy the file to `app/config/database.php` when you need more connections.
+
 The default config file is located in `MODPATH/database/config/database.php`. You should copy this file to `APPPATH/config/database.php` and make changes there, in keeping with the [cascading filesystem](../kohana/files).
 
 The database configuration file contains an array of configuration groups. The structure of each database configuration group, called an "instance", looks like this:

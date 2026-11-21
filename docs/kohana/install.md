@@ -23,6 +23,15 @@ composer install
 
 # Configure
 
+Create your environment file and generate the application keys (see [Environment Configuration](environment)):
+
+~~~
+cp .env.example .env
+php public/index.php --task=key:generate
+~~~
+
+Then set your database credentials and `APP_BASE_URL` in `.env`.
+
 Before the application can be run, you will need to make a few changes to the `app/bootstrap.php` file. This
 file is the first one to be included by `public/index.php` and sets up most of the global options for the application.
 Open `app/bootstrap.php` and make the following changes:
@@ -32,16 +41,7 @@ Open `app/bootstrap.php` and make the following changes:
 // Example of changing timezone to Sao Paulo, Brazil
 date_default_timezone_set('America/Sao_Paulo');
 ~~~
- - Set the `base_url` in the `Application::init()` call to reflect the location of the kohana folder on your server relative to the document root.
-~~~
-/**
- * Example of kohana's installation at /var/www/kohana and
- * Apache's DocumentRoot configured to /var/www
- */
-Application::init([
-    'base_url' => '/kohana/',
-]);
-~~~
+ - The `base_url` comes from `APP_BASE_URL` in `.env`. Set it to the location of the kohana folder on your server relative to the document root, for example `APP_BASE_URL=/kohana/` when Kohana is installed at /var/www/kohana and the DocumentRoot is /var/www.
 
  - List your trusted hosts. Open `app/config/url.php` and add regex patterns of the hosts you expect your application to be accessible from.
 
