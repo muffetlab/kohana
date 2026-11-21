@@ -63,7 +63,7 @@ class Kohana_DateTest extends TestCase
     public static function provider_offset(): array
     {
         return [
-            [30600, 'Asia/Calcutta', 'America/Argentina/Buenos_Aires'],
+            [30600, 'Asia/Kolkata', 'America/Argentina/Buenos_Aires'],
         ];
     }
 
@@ -270,19 +270,19 @@ class Kohana_DateTest extends TestCase
                 '2011-04-01 01:23:45 Antarctica/South_Pole',
                 '2011-04-01 01:23:45',
                 'Y-m-d H:i:s e',
-                'Antarctica/South_Pole'
+                'Antarctica/McMurdo'
             ],
             [
                 '2011-04-01 01:23:45 Antarctica/South_Pole',
                 '2011-03-31 14:23:45 Europe/Paris',
                 'Y-m-d H:i:s e',
-                'Antarctica/South_Pole'
+                'Antarctica/McMurdo'
             ],
             [
                 '2011-04-01 01:23:45 Antarctica/South_Pole',
                 '@1301574225',
                 'Y-m-d H:i:s e',
-                'Antarctica/South_Pole'
+                'Antarctica/McMurdo'
             ],
         ];
     }
