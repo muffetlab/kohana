@@ -52,3 +52,25 @@ On PHP 8.2+, string comparison functions return only -1, 0 or 1, not the byte di
 - `assertRegExp()` → `assertMatchesRegularExpression()`.
 - `assertContains()` on a string → `assertStringContainsString()`.
 - PHPUnit calls test methods in strict mode, so data provider values must match the parameters' scalar types exactly.
+
+## 8. `Date::months()` no longer uses `strftime()`
+
+`strftime()` is deprecated in PHP 8.1. `Date::MONTHS_LONG` is now `'F'` and `Date::MONTHS_SHORT` is `'M'`, both `date()` formats. Month names no longer follow `setlocale()` and are always English.
+
+**Action:** If you need localized month names, translate them with `__()` or use `IntlDateFormatter`. If you passed `'%B'`/`'%b'` directly instead of the constants, use the constants.
+
+## 9. `Valid::digit()` rejects non-strings
+
+`Valid::digit()` returns `false` for `null`, `bool`, `float` and other non-string, non-int values. Before, PHP's `ctype_digit()` handled them inconsistently.
+
+**Action:** Cast the value to a string before validating it if it may arrive as another type.
+
+## 10. `File::split()` accepts a float piece size
+
+`File::split(string $filename, float $piece_size = 10)`: you can split into pieces smaller than 1 MB, for example `0.5`. No action needed.
+
+## 11. Tests: `setAccessible()` removed
+
+`ReflectionProperty::setAccessible()` and `ReflectionMethod::setAccessible()` are deprecated in PHP 8.5 and have had no effect since 8.1.
+
+**Action:** Delete these calls from your own tests.
