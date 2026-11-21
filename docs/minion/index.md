@@ -21,3 +21,9 @@ The console loads the Minion module by itself, so you only need to enable it in 
 | `route:list` | Lists the routes in matching order with their default controller and action. |
 | `cache:clear [--store=group]` | Empties `Application::$cacheDir`, and with `--store` also a cache module store. |
 | `serve [--host=127.0.0.1] [--port=8000]` | Serves the application with PHP's built-in web server, for development. |
+| `make:migration name [--create=table] [--table=table]` | Creates a migration in `app/migrations`. See [Migrations](../database/migrations). |
+| `make:seeder Name [--force]` | Creates `App\Database\Seeders\NameSeeder`. See [Seeding](../database/seeding). |
+| `migrate [--seed] [--database=group] [--force]` | Runs pending migrations. |
+| `migrate:rollback [--step=N] [--all] [--database=group] [--force]` | Reverts the last batch, the last N migrations, or all. |
+| `migrate:status [--database=group]` | Shows which migrations ran. |
+| `db:seed [--class=Name] [--database=group] [--force]` | Runs a seeder (default `DatabaseSeeder`). |

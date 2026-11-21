@@ -7,7 +7,7 @@ Upgrading an existing application? Start with the [upgrade guide](../UPGRADE.md)
 | Guide | Covers |
 |---|---|
 | [Kohana](kohana/index.md) ([contents](kohana/menu.md)) | Installation, MVC, routing, requests, configuration, sessions, security, error handling |
-| [Database](database/index.md) ([contents](database/menu.md)) | Connections, query builder, results |
+| [Database](database/index.md) ([contents](database/menu.md)) | Connections, query builder, results, migrations, seeding |
 | [ORM](orm/index.md) ([contents](orm/menu.md)) | Models, relationships, validation, filters |
 | [Auth](auth/index.md) ([contents](auth/menu.md)) | User authentication and drivers |
 | [Cache](cache/index.md) ([contents](cache/menu.md)) | APCu, File, Memcached and SQLite stores |

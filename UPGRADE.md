@@ -332,3 +332,25 @@ What changed for your own commands:
 - `Cli::write()` and `Cli::writeReplace()` echo their output instead of writing to `STDOUT` directly, so output buffering (and tests) can capture it.
 
 **Action:** copy `kohana` from the framework into your project root.
+
+## 24. New: migrations, schema builder and seeders
+
+The database module now has a schema builder (`Kohana\Database\Schema\Schema`), migrations (`Kohana\Database\Migrations\Migration`, run by `Migrator`) and seeders (`Kohana\Database\Seeder`), with the console commands `make:migration`, `migrate`, `migrate:rollback`, `migrate:status`, `make:seeder` and `db:seed`. Migrations live in `app/migrations` (and modules' `migrations/` directories), seeders in `App\Database\Seeders`. See [`docs/database/migrations.md`](docs/database/migrations.md) and [`docs/database/seeding.md`](docs/database/seeding.md).
+
+**To adopt migrations in an existing application**, create a first migration that describes the current schema, then mark it as run on databases that already have the tables instead of running it there:
+
+```bash
+php kohana make:migration create_initial_schema    # fill in up() and down()
+php kohana migrate:status                           # creates the migrations table
+```
+
+```sql
+INSERT INTO migrations (migration, batch) VALUES ('2026_11_21_120000_create_initial_schema', 1);
+```
+
+Related fixes in the database module:
+
+- **MySQLi errors throw `DatabaseException` again.** Since PHP 8.1 mysqli throws `mysqli_sql_exception` by default, which escaped Kohana's error handling; `catch (DatabaseException $e)` around a failing query did not catch anything. The original exception is kept as the previous exception.
+- `MySqliConnection::listColumns()` no longer fails on column types it does not know, such as `JSON`; they are reported as strings. ORM models on such tables work.
+- The generic `PDO` driver supports `listTables()` for MySQL, PostgreSQL and SQLite.
+- `Application::$environment` is documented as the integer constant it always was.
