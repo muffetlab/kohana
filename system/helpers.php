@@ -78,3 +78,71 @@ if (!function_exists('env')) {
         return $value;
     }
 }
+
+if (!function_exists('base_path')) {
+    /**
+     * Path inside the project root: base_path('composer.json').
+     */
+    function base_path(string $path = ''): string
+    {
+        return BASEPATH . ltrim($path, '/\\');
+    }
+}
+
+if (!function_exists('app_path')) {
+    /**
+     * Path inside app/, the App\ namespace: app_path('Models/User.php').
+     */
+    function app_path(string $path = ''): string
+    {
+        return APPPATH . ltrim($path, '/\\');
+    }
+}
+
+if (!function_exists('config_path')) {
+    function config_path(string $path = ''): string
+    {
+        return base_path('config/' . ltrim($path, '/\\'));
+    }
+}
+
+if (!function_exists('database_path')) {
+    function database_path(string $path = ''): string
+    {
+        return base_path('database/' . ltrim($path, '/\\'));
+    }
+}
+
+if (!function_exists('lang_path')) {
+    function lang_path(string $path = ''): string
+    {
+        return base_path('lang/' . ltrim($path, '/\\'));
+    }
+}
+
+if (!function_exists('public_path')) {
+    function public_path(string $path = ''): string
+    {
+        return DOCROOT . ltrim($path, '/\\');
+    }
+}
+
+if (!function_exists('resource_path')) {
+    /**
+     * Path inside resources/ (views, messages): resource_path('views/welcome.php').
+     */
+    function resource_path(string $path = ''): string
+    {
+        return base_path('resources/' . ltrim($path, '/\\'));
+    }
+}
+
+if (!function_exists('storage_path')) {
+    /**
+     * Path inside storage/ (logs, cache, uploaded files): storage_path('logs').
+     */
+    function storage_path(string $path = ''): string
+    {
+        return base_path('storage/' . ltrim($path, '/\\'));
+    }
+}

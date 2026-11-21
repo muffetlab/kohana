@@ -144,9 +144,68 @@ class Application
     protected static $modules = [];
 
     /**
+     * @var PackageManifest|null Kohana modules discovered from Composer packages
+     */
+    public static ?PackageManifest $packages = null;
+
+    /**
      * @var  array   Include paths that are used to find files
      */
     protected static $paths = [APPPATH, SYSPATH];
+
+    /**
+     * @var array Where the application layer keeps each resource type of the
+     *            cascading filesystem, e.g. 'views' => BASEPATH/resources/views/.
+     *            Modules and the system keep them in their own directory.
+     */
+    public static array $appDirectories = [];
+
+    /**
+     * Returns the directory of a resource type in the application layer.
+     *
+     * @param string $type classes, config, views, messages, i18n, migrations, ...
+     * @return string Absolute path with a trailing separator
+     */
+    public static function appDirectory(string $type): string
+    {
+        if (!static::$appDirectories) {
+            static::$appDirectories = [
+                'classes' => APPPATH,
+                'config' => BASEPATH . 'config' . DIRECTORY_SEPARATOR,
+                'i18n' => BASEPATH . 'lang' . DIRECTORY_SEPARATOR,
+                'messages' => BASEPATH . 'resources' . DIRECTORY_SEPARATOR . 'messages' . DIRECTORY_SEPARATOR,
+                'migrations' => BASEPATH . 'database' . DIRECTORY_SEPARATOR . 'migrations' . DIRECTORY_SEPARATOR,
+                'views' => BASEPATH . 'resources' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR,
+            ];
+        }
+
+        return static::$appDirectories[$type] ?? BASEPATH . 'resources' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * Returns the directory for $dir (e.g. "views/minion/help") inside one
+     * include path, mapping the application layer to its own directories.
+     *
+     * @param string $path Include path (APPPATH, a module or SYSPATH)
+     * @param string $dir Directory relative to the include path
+     * @return string Absolute path with a trailing separator
+     */
+    protected static function layerDirectory(string $path, string $dir): string
+    {
+        $dir = trim(str_replace('\\', '/', $dir), '/');
+
+        if ($path !== APPPATH) {
+            return $path . ($dir === '' ? '' : str_replace('/', DIRECTORY_SEPARATOR, $dir) . DIRECTORY_SEPARATOR);
+        }
+
+        if ($dir === '') {
+            return $path;
+        }
+
+        [$type, $rest] = array_pad(explode('/', $dir, 2), 2, '');
+
+        return static::appDirectory($type) . ($rest === '' ? '' : str_replace('/', DIRECTORY_SEPARATOR, $rest) . DIRECTORY_SEPARATOR);
+    }
 
     /**
      * @var  array   File path cache, used when caching is true in [Kohana::init]
@@ -246,7 +305,7 @@ class Application
             static::$cacheDir = realpath($settings['cache_dir']);
         } else {
             // Use the default cache directory
-            static::$cacheDir = APPPATH . 'cache';
+            static::$cacheDir = BASEPATH . 'storage' . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR . 'cache';
         }
 
         if (!is_writable(static::$cacheDir)) {
@@ -550,6 +609,7 @@ class Application
         }
 
         // Create a partial path of the filename
+        $type = $dir;
         $path = $dir . DIRECTORY_SEPARATOR . $file . $ext;
 
         if (static::$caching === true && isset(static::$files[$path . ($array ? '_array' : '_path')])) {
@@ -570,9 +630,9 @@ class Application
             $found = [];
 
             foreach ($paths as $dir) {
-                if (is_file($dir . $path)) {
+                if (is_file(static::layerDirectory($dir, $type) . $file . $ext)) {
                     // This path has a file, add it to the list
-                    $found[] = $dir . $path;
+                    $found[] = static::layerDirectory($dir, $type) . $file . $ext;
                 }
             }
         } else {
@@ -580,9 +640,9 @@ class Application
             $found = false;
 
             foreach (static::$paths as $dir) {
-                if (is_file($dir . $path)) {
+                if (is_file(static::layerDirectory($dir, $type) . $file . $ext)) {
                     // A path has been found
-                    $found = $dir . $path;
+                    $found = static::layerDirectory($dir, $type) . $file . $ext;
 
                     // Stop searching
                     break;
@@ -634,9 +694,11 @@ class Application
         $found = [];
 
         foreach ($paths as $path) {
-            if (is_dir($path . $directory)) {
+            $layer = static::layerDirectory($path, (string) $directory);
+
+            if (is_dir($layer)) {
                 // Create a new directory iterator
-                $dir = new \DirectoryIterator($path . $directory);
+                $dir = new \DirectoryIterator($layer);
 
                 foreach ($dir as $file) {
                     // Get the file name
