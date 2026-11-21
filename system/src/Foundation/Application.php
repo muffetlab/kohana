@@ -57,17 +57,6 @@ class Application
     public static $isWindows = false;
 
     /**
-     * @var bool True if [magic quotes](https://wiki.php.net/rfc/magicquotes) is enabled.
-     * @deprecated 3.5.0
-     */
-    public static $magicQuotes = false;
-
-    /**
-     * @var bool true if PHP safe mode is on
-     */
-    public static $safeMode = false;
-
-    /**
      * @var  string
      */
     public static $contentType = 'text/html';
@@ -172,7 +161,6 @@ class Application
     /**
      * Initializes the environment:
      *
-     * - Disables register_globals and magic_quotes_gpc
      * - Determines the current environment
      * - Set global settings
      * - Sanitizes GET, POST, and COOKIE variables
@@ -234,20 +222,12 @@ class Application
         // Enable the Kohana shutdown handler, which catches E_FATAL errors.
         register_shutdown_function([Application::class, 'shutdownHandler']);
 
-        if (ini_get('register_globals')) {
-            // Reverse the effects of register_globals
-            \Kohana\Foundation\Application::globals();
-        }
-
         if (isset($settings['expose'])) {
             \Kohana\Foundation\Application::$expose = (bool) $settings['expose'];
         }
 
         // Determine if we are running in a Windows environment
         \Kohana\Foundation\Application::$isWindows = DIRECTORY_SEPARATOR === '\\';
-
-        // Determine if we are running in safe mode
-        \Kohana\Foundation\Application::$safeMode = (bool) ini_get('safe_mode');
 
         if (isset($settings['cache_dir'])) {
             if (!is_dir($settings['cache_dir'])) {
@@ -308,11 +288,6 @@ class Application
             \Kohana\Foundation\Application::$indexFile = trim($settings['index_file'], '/');
         }
 
-        // Determine if the extremely evil magic quotes are enabled
-        if (PHP_VERSION_ID < 70400) {
-            \Kohana\Foundation\Application::$magicQuotes = (bool) get_magic_quotes_gpc();
-        }
-
         // Sanitize all request variables
         $_GET = \Kohana\Foundation\Application::sanitize($_GET);
         $_POST = \Kohana\Foundation\Application::sanitize($_POST);
@@ -367,54 +342,8 @@ class Application
     }
 
     /**
-     * Reverts the effects of the `register_globals` PHP setting by unsetting
-     * all global variables except for the default super globals (GPCS, etc.),
-     * which is a [potential security hole.][ref-wikibooks]
-     *
-     * This is called automatically by [Kohana::init] if `register_globals` is
-     * on.
-     *
-     *
-     * [ref-wikibooks]: http://en.wikibooks.org/wiki/PHP_Programming/Register_Globals
-     *
-     * @return  void
-     */
-    public static function globals()
-    {
-        if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
-            // Prevent malicious GLOBALS overload attack
-            echo "Global variable overload attack detected! Request aborted.\n";
-
-            // Exit with an error status
-            exit(1);
-        }
-
-        // Get the variable names of all globals
-        $global_variables = array_keys($GLOBALS);
-
-        // Remove the standard global variables from the list
-        $global_variables = array_diff($global_variables, [
-            '_COOKIE',
-            '_ENV',
-            '_GET',
-            '_FILES',
-            '_POST',
-            '_REQUEST',
-            '_SERVER',
-            '_SESSION',
-            'GLOBALS',
-        ]);
-
-        foreach ($global_variables as $name) {
-            // Unset the global variable, effectively disabling register_globals
-            unset($GLOBALS[$name]);
-        }
-    }
-
-    /**
      * Recursively sanitizes an input variable:
      *
-     * - Strips slashes if magic quotes are enabled
      * - Normalizes all newlines to LF
      *
      * @param   mixed   $value  any variable
@@ -428,11 +357,6 @@ class Application
                 $value[$key] = \Kohana\Foundation\Application::sanitize($val);
             }
         } elseif (is_string($value)) {
-            if (\Kohana\Foundation\Application::$magicQuotes === true) {
-                // Remove slashes added by magic quotes
-                $value = stripslashes($value);
-            }
-
             if (strpos($value, "\r") !== false) {
                 // Standardize newlines
                 $value = str_replace(["\r\n", "\r"], "\n", $value);

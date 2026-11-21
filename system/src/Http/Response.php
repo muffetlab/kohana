@@ -467,10 +467,8 @@ class Response implements \Kohana\Http\Contracts\Response
         // Manually stop execution
         ignore_user_abort(true);
 
-        if (!Application::$safeMode) {
-            // Keep the script running forever
-            set_time_limit(0);
-        }
+        // Keep the script running forever
+        set_time_limit(0);
 
         // Send data in 16kb blocks
         $block = 1024 * 16;

@@ -64,7 +64,7 @@ class Kohana_CoreTest extends TestCase
             ['foo', 'foo'],
             ["foo\r\nbar", "foo\nbar"],
             ["foo\rbar", "foo\nbar"],
-            ["Is your name O\'reilly?", "Is your name O'reilly?"],
+            ["Is your name O\'reilly?", "Is your name O\'reilly?"],
         ];
     }
 
@@ -80,8 +80,6 @@ class Kohana_CoreTest extends TestCase
     #[Test]
     public function test_sanitize(string $value, string $result)
     {
-        $this->setEnvironment(['Kohana\Foundation\Application::$magicQuotes' => true]);
-
         $this->assertSame($result, Application::sanitize($value));
     }
 
@@ -125,23 +123,6 @@ class Kohana_CoreTest extends TestCase
         $this->assertGreaterThan(3, count($files));
 
         $this->assertSame([], Application::listFiles('geshmuck'));
-    }
-
-    /**
-     * Tests Kohana::globals()
-     */
-    #[Test]
-    public function test_globals_removes_user_def_globals()
-    {
-        $GLOBALS['hackers'] = 'foobar';
-        $GLOBALS['name'] = ['', '', ''];
-        $GLOBALS['_POST'] = [];
-
-        Application::globals();
-
-        $this->assertFalse(isset($GLOBALS['hackers']));
-        $this->assertFalse(isset($GLOBALS['name']));
-        $this->assertTrue(isset($GLOBALS['_POST']));
     }
 
     /**
