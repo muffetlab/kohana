@@ -187,6 +187,24 @@ abstract class Command
      * @return array
      */
     /**
+     * Guards commands that change data: in production they only run with
+     * --force. Writes a message and returns false when the command must stop.
+     *
+     * @param array $params Command options, with a "force" key
+     * @return bool
+     */
+    protected function confirmProduction(array $params): bool
+    {
+        if (Application::$environment !== Application::PRODUCTION || ($params['force'] ?? false) !== false) {
+            return true;
+        }
+
+        Cli::write(Cli::color('The application is in production. Run the command again with --force to continue.', 'red'));
+
+        return false;
+    }
+
+    /**
      * Returns a positional argument, e.g. "Post" in `make:controller Post`.
      *
      * @param int $index Position, starting at 0 after the command name
