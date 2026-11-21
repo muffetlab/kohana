@@ -47,16 +47,14 @@ class Kohana_ApcuTest extends Kohana_CacheArithmeticMethodsTest
                 'set "apc.enabled=1" and "apc.enable_cli=1" in your php.ini file');
         }
 
-        if (!Application::$config->load('cache.apcu')) {
-            Application::$config->load('cache')
-                ->set(
-                    'apcu',
-                    [
-                    'driver' => 'apcu',
-                    'default_expire' => 3600,
-                    ]
-                );
-        }
+        Application::$config->load('cache')
+            ->set(
+                'apcu',
+                [
+                'driver' => 'apcu',
+                'default_expire' => 3600,
+                ]
+            );
 
         $this->cache(Cache::instance('apcu'));
     }

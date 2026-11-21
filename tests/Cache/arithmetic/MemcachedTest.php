@@ -40,20 +40,18 @@ class Kohana_CacheArithmeticMemcachedTest extends Kohana_CacheArithmeticMethodsT
             $this->markTestSkipped('Memcached PHP Extension is not available');
         }
 
-        if (!Application::$config->load('cache.memcached')) {
-            Application::$config->load('cache')->set('memcached', [
-                'driver' => 'memcached',
-                'default_expire' => 3600,
-                'servers' => [
-                    'local' => [
-                        'host' => 'localhost',
-                        'port' => 11211,
-                        'weight' => 1,
-                    ],
+        Application::$config->load('cache')->set('memcached', [
+            'driver' => 'memcached',
+            'default_expire' => 3600,
+            'servers' => [
+                'local' => [
+                    'host' => 'localhost',
+                    'port' => 11211,
+                    'weight' => 1,
                 ],
-            ]);
-            Application::$config->load('cache.memcached');
-        }
+            ],
+        ]);
+        Application::$config->load('cache.memcached');
 
         $this->cache(Cache::instance('memcached'));
     }

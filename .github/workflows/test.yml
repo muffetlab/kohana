@@ -81,35 +81,12 @@ jobs:
         if: matrix.php-versions == '8.5'
         run: vendor/bin/pint --test
 
-      - name: Configure test database
-        run: |
-          cat > config/database.php <<'EOF'
-          <?php
-          return [
-              'default' => [
-                  'type' => 'PDO',
-                  'connection' => ['dsn' => 'mysql:host=127.0.0.1;dbname=kohana', 'username' => 'root', 'password' => 'root', 'persistent' => false],
-                  'table_prefix' => '',
-                  'charset' => 'utf8mb4',
-              ],
-              'mysqli' => [
-                  'type' => 'MySQLi',
-                  'connection' => ['hostname' => '127.0.0.1', 'database' => 'kohana', 'username' => 'root', 'password' => 'root', 'persistent' => false],
-                  'table_prefix' => '',
-                  'charset' => 'utf8mb4',
-              ],
-              'pgsql' => [
-                  'type' => 'pgsql',
-                  'connection' => ['hostname' => '127.0.0.1', 'port' => 5432, 'database' => 'kohana', 'username' => 'postgres', 'password' => 'postgres', 'persistent' => false],
-                  'table_prefix' => '',
-                  'charset' => 'UTF8',
-              ],
-          ];
-          EOF
-
       - name: Static analysis
         if: matrix.php-versions == '8.5'
         run: vendor/bin/phpstan analyse --no-progress --memory-limit=1G
 
       - name: Run test suite
         run: vendor/bin/pest
+        env:
+          TEST_MYSQL_PASSWORD: root
+          TEST_PGSQL_PASSWORD: postgres

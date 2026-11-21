@@ -39,25 +39,23 @@ class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest
     {
         parent::setUp();
 
-        if (!Application::$config->load('cache.file')) {
-            Application::$config->load('cache')
-                ->set(
-                    'file',
-                    [
-                    'driver' => 'file',
-                    'cache_dir' => storage_path('framework/cache'),
-                    'default_expire' => 3600,
-                    'ignore_on_delete' => [
-                        'file_we_want_to_keep.cache',
-                        '.gitignore',
-                        '.git',
-                        '.svn',
-                    ],
-                    ]
-                );
-        }
+        Application::$config->load('cache')
+            ->set(
+                'file-test',
+                [
+                'driver' => 'file',
+                'cache_dir' => storage_path('framework/cache'),
+                'default_expire' => 3600,
+                'ignore_on_delete' => [
+                    'file_we_want_to_keep.cache',
+                    '.gitignore',
+                    '.git',
+                    '.svn',
+                ],
+                ]
+            );
 
-        $this->cache(Cache::instance('file'));
+        $this->cache(Cache::instance('file-test'));
     }
 
     /**
@@ -69,7 +67,7 @@ class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest
     public function test_ignore_delete_file()
     {
         $cache = $this->cache();
-        $config = Application::$config->load('cache')->file;
+        $config = Application::$config->load('cache')->get('file-test');
         $file = $config['cache_dir'] . '/file_we_want_to_keep.cache';
 
         // Let's pollute the cache folder
