@@ -73,7 +73,7 @@ abstract class Command
      * @return Minion_Task The Minion task
      * @throws Minion_Exception_InvalidTask
      */
-    public static function factory(array $options): \Kohana\Console\Command
+    public static function factory(array $options): self
     {
         if (($task = Arr::get($options, 'task')) !== null) {
             unset($options['task']);
@@ -85,7 +85,7 @@ abstract class Command
             $task = 'help';
         }
 
-        $class = \Kohana\Console\Command::convertTaskToClassName($task);
+        $class = static::convertTaskToClassName($task);
 
         if (!class_exists($class)) {
             throw new InvalidCommandException("Task ':task' is not a valid minion task", [':task' => $class]);
@@ -93,7 +93,7 @@ abstract class Command
 
         $class = new $class;
 
-        if (!$class instanceof \Kohana\Console\Command) {
+        if (!$class instanceof self) {
             throw new InvalidCommandException("Task ':task' is not a valid minion task", [':task' => $class]);
         }
 
@@ -150,7 +150,7 @@ abstract class Command
         static $task_name = null;
 
         if ($task_name === null) {
-            $task_name = \Kohana\Console\Command::convertClassToTask($this);
+            $task_name = static::convertClassToTask($this);
         }
 
         return $task_name;
@@ -162,7 +162,7 @@ abstract class Command
      * @param array $options The array of options to set
      * @return Kohana_Minion_Task
      */
-    public function setOptions(array $options): \Kohana\Console\Command
+    public function setOptions(array $options): self
     {
         foreach ($options as $key => $value) {
             $this->options[$key] = $value;
@@ -241,7 +241,7 @@ abstract class Command
 
         if ($this->method !== 'help' && !$validation->check()) {
             echo View::factory('minion/error/validation')
-                ->set('task', \Kohana\Console\Command::convertClassToTask($this))
+                ->set('task', static::convertClassToTask($this))
                 ->set('errors', $validation->errors($this->getErrorsFile()));
         } else {
             // Finally, run the task
@@ -268,7 +268,7 @@ abstract class Command
         $view = View::factory('minion/help/task')
             ->set('description', $description)
             ->set('tags', (array) $tags)
-            ->set('task', \Kohana\Console\Command::convertClassToTask($this));
+            ->set('task', static::convertClassToTask($this));
 
         echo $view;
     }
@@ -348,7 +348,7 @@ abstract class Command
             $file = substr($file, strrpos($file, DIRECTORY_SEPARATOR) + 1);
 
             if (is_array($path) && count($path)) {
-                $task = $this->compileTaskList($path, $prefix . $file . \Kohana\Console\Command::$taskSeparator);
+                $task = $this->compileTaskList($path, $prefix . $file . static::$taskSeparator);
 
                 if ($task) {
                     $output = array_merge($output, $task);

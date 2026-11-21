@@ -49,7 +49,7 @@ class Security
         $session = Session::instance();
 
         // Get the current token
-        $token = $session->get(\Kohana\Security\Security::$tokenName);
+        $token = $session->get(static::$tokenName);
 
         if ($new === true || !$token) {
             // Generate a new unique token
@@ -63,7 +63,7 @@ class Security
             }
 
             // Store the new token
-            $session->set(\Kohana\Security\Security::$tokenName, $token);
+            $session->set(static::$tokenName, $token);
         }
 
         return $token;
@@ -84,7 +84,7 @@ class Security
      */
     public static function check(string $token): bool
     {
-        return \Kohana\Security\Security::slowEquals(\Kohana\Security\Security::token(), $token);
+        return static::slowEquals(static::token(), $token);
     }
 
     /**

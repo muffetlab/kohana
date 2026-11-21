@@ -116,17 +116,17 @@ abstract class Cache
      * @throws Cache_Exception
      * @throws Kohana_Exception
      */
-    public static function instance(?string $group = null): \Kohana\Cache\Cache
+    public static function instance(?string $group = null): self
     {
         // If there is no group supplied
         if ($group === null) {
             // Use the default setting
-            $group = \Kohana\Cache\Cache::$default;
+            $group = static::$default;
         }
 
-        if (isset(\Kohana\Cache\Cache::$instances[$group])) {
+        if (isset(static::$instances[$group])) {
             // Return the current group if initiated already
-            return \Kohana\Cache\Cache::$instances[$group];
+            return static::$instances[$group];
         }
 
         $config = Application::$config->load('cache');
@@ -139,10 +139,10 @@ abstract class Cache
 
         // Create a new cache type instance
         $cache_class = str_contains($config['driver'], '\\') ? $config['driver'] : __NAMESPACE__ . '\\' . ucfirst(strtolower($config['driver'])) . 'Store';
-        \Kohana\Cache\Cache::$instances[$group] = new $cache_class($config);
+        static::$instances[$group] = new $cache_class($config);
 
         // Return the instance
-        return \Kohana\Cache\Cache::$instances[$group];
+        return static::$instances[$group];
     }
 
     /**

@@ -72,10 +72,10 @@ class Request implements \Kohana\Http\Contracts\Request
      * @uses    Route::all
      * @uses    Route::matches
      */
-    public static function factory(?string $uri = null, array $client_params = [], bool $allow_external = true, array $injected_routes = []): \Kohana\Http\Request
+    public static function factory(?string $uri = null, array $client_params = [], bool $allow_external = true, array $injected_routes = []): self
     {
         // If this is the initial request
-        if (!\Kohana\Http\Request::$initial) {
+        if (!static::$initial) {
             $protocol = Http::$protocol;
 
             // Use the server request method, or default to GET.
@@ -86,7 +86,7 @@ class Request implements \Kohana\Http\Contracts\Request
                 ||
                 isset($_SERVER['HTTP_X_FORWARDED_PROTO'])
                 && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https'
-                && in_array($_SERVER['REMOTE_ADDR'], \Kohana\Http\Request::$trustedProxies)
+                && in_array($_SERVER['REMOTE_ADDR'], static::$trustedProxies)
             ) {
                 // This request is secure
                 $secure = true;
@@ -99,7 +99,7 @@ class Request implements \Kohana\Http\Contracts\Request
 
             if (isset($_SERVER['HTTP_USER_AGENT'])) {
                 // Browser type
-                \Kohana\Http\Request::$userAgent = $_SERVER['HTTP_USER_AGENT'];
+                static::$userAgent = $_SERVER['HTTP_USER_AGENT'];
             }
 
             if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
@@ -109,28 +109,28 @@ class Request implements \Kohana\Http\Contracts\Request
 
             if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])
                 && isset($_SERVER['REMOTE_ADDR'])
-                && in_array($_SERVER['REMOTE_ADDR'], \Kohana\Http\Request::$trustedProxies)) {
+                && in_array($_SERVER['REMOTE_ADDR'], static::$trustedProxies)) {
                 // Use the forwarded IP address, typically set when the
                 // client is using a proxy server.
                 // Format: "X-Forwarded-For: client1, proxy1, proxy2"
                 $client_ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
 
-                \Kohana\Http\Request::$clientIp = array_shift($client_ips);
+                static::$clientIp = array_shift($client_ips);
 
                 unset($client_ips);
             } elseif (isset($_SERVER['HTTP_CLIENT_IP'])
                 && isset($_SERVER['REMOTE_ADDR'])
-                && in_array($_SERVER['REMOTE_ADDR'], \Kohana\Http\Request::$trustedProxies)) {
+                && in_array($_SERVER['REMOTE_ADDR'], static::$trustedProxies)) {
                 // Use the forwarded IP address, typically set when the
                 // client is using a proxy server.
                 $client_ips = explode(',', $_SERVER['HTTP_CLIENT_IP']);
 
-                \Kohana\Http\Request::$clientIp = array_shift($client_ips);
+                static::$clientIp = array_shift($client_ips);
 
                 unset($client_ips);
             } elseif (isset($_SERVER['REMOTE_ADDR'])) {
                 // The remote IP address
-                \Kohana\Http\Request::$clientIp = $_SERVER['REMOTE_ADDR'];
+                static::$clientIp = $_SERVER['REMOTE_ADDR'];
             }
 
             if ($method !== \Kohana\Http\Contracts\Request::GET) {
@@ -140,7 +140,7 @@ class Request implements \Kohana\Http\Contracts\Request
 
             if ($uri === null) {
                 // Attempt to guess the proper URI
-                $uri = \Kohana\Http\Request::detectUri();
+                $uri = static::detectUri();
             }
 
             $cookies = [];
@@ -152,7 +152,7 @@ class Request implements \Kohana\Http\Contracts\Request
             }
 
             // Create the instance singleton
-            \Kohana\Http\Request::$initial = $request = new \Kohana\Http\Request($uri, $client_params, $allow_external, $injected_routes);
+            static::$initial = $request = new static($uri, $client_params, $allow_external, $injected_routes);
 
             // Store global GET and POST data in the initial request only
             $request->protocol($protocol)
@@ -186,7 +186,7 @@ class Request implements \Kohana\Http\Contracts\Request
                 $request->cookie($cookies);
             }
         } else {
-            $request = new \Kohana\Http\Request($uri, $client_params, $allow_external, $injected_routes);
+            $request = new static($uri, $client_params, $allow_external, $injected_routes);
         }
 
         return $request;
@@ -266,9 +266,9 @@ class Request implements \Kohana\Http\Contracts\Request
      * @return  Request
      * @since   3.0.5
      */
-    public static function current(): \Kohana\Http\Request
+    public static function current(): self
     {
-        return \Kohana\Http\Request::$current;
+        return static::$current;
     }
 
     /**
@@ -285,9 +285,9 @@ class Request implements \Kohana\Http\Contracts\Request
      * @return  Request|null
      * @since   3.1.0
      */
-    public static function initial(): ?\Kohana\Http\Request
+    public static function initial(): ?self
     {
-        return \Kohana\Http\Request::$initial;
+        return static::$initial;
     }
 
     /**
@@ -301,7 +301,7 @@ class Request implements \Kohana\Http\Contracts\Request
      */
     public static function userAgent($value)
     {
-        return Str::userAgent(\Kohana\Http\Request::$userAgent, $value);
+        return Str::userAgent(static::$userAgent, $value);
     }
 
     /**
@@ -317,7 +317,7 @@ class Request implements \Kohana\Http\Contracts\Request
     public static function postMaxSizeExceeded(): bool
     {
         // Make sure the request method is POST
-        if (\Kohana\Http\Request::$initial->method() !== \Kohana\Http\Contracts\Request::POST)
+        if (static::$initial->method() !== \Kohana\Http\Contracts\Request::POST)
             return false;
 
         // Get the post_max_size in bytes
@@ -334,7 +334,7 @@ class Request implements \Kohana\Http\Contracts\Request
      * @param array|null $routes Route
      * @return  array
      */
-    public static function process(\Kohana\Http\Request $request, ?array $routes = null): ?array
+    public static function process(self $request, ?array $routes = null): ?array
     {
         // Load routes
         $routes = empty($routes) ? Route::all() : $routes;
@@ -797,7 +797,7 @@ class Request implements \Kohana\Http\Contracts\Request
     public function execute(): Response
     {
         if (!$this->external) {
-            $processed = \Kohana\Http\Request::process($this, $this->routes);
+            $processed = static::process($this, $this->routes);
 
             if ($processed) {
                 // Store the matching route
@@ -850,7 +850,7 @@ class Request implements \Kohana\Http\Contracts\Request
      */
     public function isInitial(): bool
     {
-        return $this === \Kohana\Http\Request::$initial;
+        return $this === static::$initial;
     }
 
     /**

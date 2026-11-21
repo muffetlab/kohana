@@ -58,14 +58,14 @@ abstract class Connection
      * @return  Database
      * @throws Kohana_Exception
      */
-    public static function instance(?string $name = null, ?array $config = null): \Kohana\Database\Connection
+    public static function instance(?string $name = null, ?array $config = null): self
     {
         if ($name === null) {
             // Use the default instance name
-            $name = \Kohana\Database\Connection::$default;
+            $name = static::$default;
         }
 
-        if (!isset(\Kohana\Database\Connection::$instances[$name])) {
+        if (!isset(static::$instances[$name])) {
             if ($config === null) {
                 // Load the configuration for this database
                 $config = Application::$config->load('database')->$name;
@@ -88,10 +88,10 @@ abstract class Connection
             $driver = new $driver($name, $config);
 
             // Store the database instance
-            \Kohana\Database\Connection::$instances[$name] = $driver;
+            static::$instances[$name] = $driver;
         }
 
-        return \Kohana\Database\Connection::$instances[$name];
+        return static::$instances[$name];
     }
 
     /**
@@ -175,7 +175,7 @@ abstract class Connection
      */
     public function disconnect(): bool
     {
-        unset(\Kohana\Database\Connection::$instances[$this->instance]);
+        unset(static::$instances[$this->instance]);
 
         return true;
     }
@@ -264,7 +264,7 @@ abstract class Connection
         // Quote the table name
         $table = $this->quoteTable($table);
 
-        return $this->query(\Kohana\Database\Connection::SELECT, 'SELECT COUNT(*) AS total_row_count FROM ' . $table)
+        return $this->query(static::SELECT, 'SELECT COUNT(*) AS total_row_count FROM ' . $table)
                 ->get('total_row_count');
     }
 

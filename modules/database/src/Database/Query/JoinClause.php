@@ -55,7 +55,7 @@ class JoinClause extends Builder
      * @return  $this
      * @throws Kohana_Exception
      */
-    public function on($c1, string $op, $c2): \Kohana\Database\Query\JoinClause
+    public function on($c1, string $op, $c2): self
     {
         if (!empty($this->using)) {
             throw new KohanaException('JOIN ... ON ... cannot be combined with JOIN ... USING ...');
@@ -73,7 +73,7 @@ class JoinClause extends Builder
      * @return  $this
      * @throws Kohana_Exception
      */
-    public function using(...$columns): \Kohana\Database\Query\JoinClause
+    public function using(...$columns): self
     {
         if (!empty($this->on)) {
             throw new KohanaException('JOIN ... ON ... cannot be combined with JOIN ... USING ...');
@@ -136,7 +136,7 @@ class JoinClause extends Builder
      * @return $this
      * @deprecated 3.5.0
      */
-    public function reset(): \Kohana\Database\Query\JoinClause
+    public function reset(): self
     {
         $this->type = $this->table = null;
 

@@ -24,9 +24,9 @@ class Validator implements \ArrayAccess
      * @param   array   $array  array to use for validation
      * @return  Validation
      */
-    public static function factory(array $array): \Kohana\Validation\Validator
+    public static function factory(array $array): self
     {
-        return new \Kohana\Validation\Validator($array);
+        return new static($array);
     }
 
     // Bound values
@@ -114,7 +114,7 @@ class Validator implements \ArrayAccess
      * @return  Kohana_Validation
      * @since   3.0.5
      */
-    public function copy(array $array): \Kohana\Validation\Validator
+    public function copy(array $array): self
     {
         // Create a copy of the current validation set
         $copy = clone $this;
@@ -142,7 +142,7 @@ class Validator implements \ArrayAccess
      * @param string $label Label
      * @return  $this
      */
-    public function label(string $field, string $label): \Kohana\Validation\Validator
+    public function label(string $field, string $label): self
     {
         // Set the label for this field
         $this->labels[$field] = $label;
@@ -156,7 +156,7 @@ class Validator implements \ArrayAccess
      * @param   array   $labels list of field => label names
      * @return  $this
      */
-    public function labels(array $labels): \Kohana\Validation\Validator
+    public function labels(array $labels): self
     {
         $this->labels = $labels + $this->labels;
 
@@ -195,7 +195,7 @@ class Validator implements \ArrayAccess
      * @param array|null $params extra parameters for the rule
      * @return  $this
      */
-    public function rule($field, $rule, ?array $params = null): \Kohana\Validation\Validator
+    public function rule($field, $rule, ?array $params = null): self
     {
         if ($params === null) {
             // Default to [':value']
@@ -220,7 +220,7 @@ class Validator implements \ArrayAccess
      * @param   array   $rules  list of callbacks
      * @return  $this
      */
-    public function rules(string $field, array $rules): \Kohana\Validation\Validator
+    public function rules(string $field, array $rules): self
     {
         foreach ($rules as $rule) {
             $this->rule($field, $rule[0], Arr::get($rule, 1));
@@ -240,7 +240,7 @@ class Validator implements \ArrayAccess
      * @param   mixed   $value  value
      * @return  $this
      */
-    public function bind($key, $value = null): \Kohana\Validation\Validator
+    public function bind($key, $value = null): self
     {
         if (is_array($key)) {
             foreach ($key as $name => $value) {
@@ -416,7 +416,7 @@ class Validator implements \ArrayAccess
      * @param array|null $params
      * @return  $this
      */
-    public function error(string $field, string $error, ?array $params = null): \Kohana\Validation\Validator
+    public function error(string $field, string $error, ?array $params = null): self
     {
         $this->errors[$field] = [$error, $params];
 

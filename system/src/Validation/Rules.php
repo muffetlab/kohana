@@ -145,7 +145,7 @@ class Rules
      */
     public static function emailDomain(string $email): bool
     {
-        if (!\Kohana\Validation\Rules::notEmpty($email))
+        if (!static::notEmpty($email))
             return false; // Empty fields cause issues with checkdnsrr()
 
         // Check if the email domain has a valid MX record
@@ -252,7 +252,7 @@ class Rules
         } elseif (is_array($type)) {
             foreach ($type as $t) {
                 // Test each type for validity
-                if (\Kohana\Validation\Rules::creditCard($number, $t))
+                if (static::creditCard($number, $t))
                     return true;
             }
 
@@ -282,7 +282,7 @@ class Rules
         if (!$cards[$type]['luhn'])
             return true;
 
-        return \Kohana\Validation\Rules::luhn($number);
+        return static::luhn($number);
     }
 
     /**

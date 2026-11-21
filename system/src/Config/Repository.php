@@ -43,7 +43,7 @@ class Repository
      * @param bool $first Add the reader as the first used object
      * @return  $this
      */
-    public function attach(Source $source, bool $first = true): \Kohana\Config\Repository
+    public function attach(Source $source, bool $first = true): self
     {
         if ($first === true) {
             // Place the log reader at the top of the stack
@@ -67,7 +67,7 @@ class Repository
      * @param   Kohana_Config_Source    $source instance
      * @return  $this
      */
-    public function detach(Source $source): \Kohana\Config\Repository
+    public function detach(Source $source): self
     {
         if (($key = array_search($source, $this->sources)) !== false) {
             // Remove the writer
@@ -143,7 +143,7 @@ class Repository
      * @return  $this
      * @throws Kohana_Exception
      */
-    public function copy(string $group): \Kohana\Config\Repository
+    public function copy(string $group): self
     {
         // Load the configuration group
         $config = $this->load($group);
@@ -163,7 +163,7 @@ class Repository
      * @param mixed     $value  The new value
      * @return Kohana_Config Chainable instance
      */
-    public function writeConfig(string $group, string $key, $value): \Kohana\Config\Repository
+    public function writeConfig(string $group, string $key, $value): self
     {
         foreach ($this->sources as $source) {
             if (!($source instanceof Writer)) {

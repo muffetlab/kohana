@@ -54,7 +54,7 @@ class File
         }
 
         if (!empty($extension)) {
-            return \Kohana\Filesystem\File::mimeByExt($extension);
+            return static::mimeByExt($extension);
         }
 
         // Unable to find the mime-type
@@ -135,7 +135,7 @@ class File
      */
     public static function extByMime(string $type)
     {
-        return current(\Kohana\Filesystem\File::extsByMime($type));
+        return current(static::extsByMime($type));
     }
 
     /**

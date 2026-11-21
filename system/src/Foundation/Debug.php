@@ -33,7 +33,7 @@ class Debug
 
         $output = [];
         foreach ($variables as $var) {
-            $output[] = \Kohana\Foundation\Debug::dumpVar($var, 1024);
+            $output[] = static::dumpVar($var, 1024);
         }
 
         return '<pre class="debug">' . implode("\n", $output) . '</pre>';
@@ -51,7 +51,7 @@ class Debug
      */
     public static function dump($value, int $length = 128, int $level_recursion = 10): string
     {
-        return \Kohana\Foundation\Debug::dumpVar($value, $length, $level_recursion);
+        return static::dumpVar($value, $length, $level_recursion);
     }
 
     /**
@@ -87,7 +87,7 @@ class Debug
                     if (function_exists('stream_is_local')) {
                         // Only exists on PHP >= 5.2.4
                         if (stream_is_local($file)) {
-                            $file = \Kohana\Foundation\Debug::path($file);
+                            $file = static::path($file);
                         }
                     }
 
@@ -143,7 +143,7 @@ class Debug
                         $key = '"' . htmlspecialchars($key, ENT_NOQUOTES, Application::$charset) . '"';
                     }
 
-                    $output[] = "$space$s$key => " . \Kohana\Foundation\Debug::dumpVar($val, $length, $limit, $level + 1);
+                    $output[] = "$space$s$key => " . static::dumpVar($val, $length, $limit, $level + 1);
                 }
                 unset($var[$marker]);
 
@@ -189,7 +189,7 @@ class Debug
                         $access = '<small>public</small>';
                     }
 
-                    $output[] = "$space$s$access $key => " . \Kohana\Foundation\Debug::dumpVar($val, $length, $limit, $level + 1);
+                    $output[] = "$space$s$access $key => " . static::dumpVar($val, $length, $limit, $level + 1);
                 }
                 unset($objects[$hash]);
 
@@ -322,7 +322,7 @@ class Debug
 
             if (isset($step['file']) && isset($step['line'])) {
                 // Include the source of this step
-                $source = \Kohana\Foundation\Debug::source($step['file'], $step['line']);
+                $source = static::source($step['file'], $step['line']);
             }
 
             if (isset($step['file'])) {

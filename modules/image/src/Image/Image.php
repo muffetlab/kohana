@@ -42,7 +42,7 @@ abstract class Image
      * @return  Image
      * @throws Kohana_Exception
      */
-    public static function factory(string $file, ?string $driver = null): \Kohana\Image\Image
+    public static function factory(string $file, ?string $driver = null): self
     {
         if ($driver === null) {
             // Use the driver from configuration file
@@ -170,67 +170,67 @@ abstract class Image
      * @return  $this
      * @uses    Image::_do_resize
      */
-    public function resize(?int $width = null, ?int $height = null, ?int $master = null): \Kohana\Image\Image
+    public function resize(?int $width = null, ?int $height = null, ?int $master = null): self
     {
         if ($master === null) {
             // Choose the master dimension automatically
-            $master = \Kohana\Image\Image::AUTO;
+            $master = static::AUTO;
         }
         // Image::WIDTH and Image::HEIGHT deprecated. You can use it in old projects,
         // but in new you must pass empty value for non-master dimension
-        elseif ($master === \Kohana\Image\Image::WIDTH && !empty($width)) {
-            $master = \Kohana\Image\Image::AUTO;
+        elseif ($master === static::WIDTH && !empty($width)) {
+            $master = static::AUTO;
 
             // Set empty height for backward compatibility
             $height = null;
-        } elseif ($master === \Kohana\Image\Image::HEIGHT && !empty($height)) {
-            $master = \Kohana\Image\Image::AUTO;
+        } elseif ($master === static::HEIGHT && !empty($height)) {
+            $master = static::AUTO;
 
             // Set empty width for backward compatibility
             $width = null;
         }
 
         if (empty($width)) {
-            if ($master === \Kohana\Image\Image::NONE) {
+            if ($master === static::NONE) {
                 // Use the current width
                 $width = $this->width;
             } else {
                 // If width not set, master will be height
-                $master = \Kohana\Image\Image::HEIGHT;
+                $master = static::HEIGHT;
             }
         }
 
         if (empty($height)) {
-            if ($master === \Kohana\Image\Image::NONE) {
+            if ($master === static::NONE) {
                 // Use the current height
                 $height = $this->height;
             } else {
                 // If height not set, master will be width
-                $master = \Kohana\Image\Image::WIDTH;
+                $master = static::WIDTH;
             }
         }
 
         switch ($master) {
-            case \Kohana\Image\Image::AUTO:
+            case static::AUTO:
                 // Choose direction with the greatest reduction ratio
-                $master = $this->width / $width > $this->height / $height ? \Kohana\Image\Image::WIDTH : \Kohana\Image\Image::HEIGHT;
+                $master = $this->width / $width > $this->height / $height ? static::WIDTH : static::HEIGHT;
                 break;
-            case \Kohana\Image\Image::INVERSE:
+            case static::INVERSE:
                 // Choose direction with the minimum reduction ratio
-                $master = $this->width / $width > $this->height / $height ? \Kohana\Image\Image::HEIGHT : \Kohana\Image\Image::WIDTH;
+                $master = $this->width / $width > $this->height / $height ? static::HEIGHT : static::WIDTH;
                 break;
         }
 
         switch ($master) {
-            case \Kohana\Image\Image::WIDTH:
+            case static::WIDTH:
                 // Recalculate the height based on the width proportions
                 $height = $this->height * $width / $this->width;
                 break;
-            case \Kohana\Image\Image::HEIGHT:
+            case static::HEIGHT:
                 // Recalculate the width based on the height proportions
                 $width = $this->width * $height / $this->height;
                 break;
-            case \Kohana\Image\Image::PRECISE:
+            case static::PRECISE:
                 // Resize to precise size
                 $ratio = $this->width / $this->height;
 
@@ -268,7 +268,7 @@ abstract class Image
      * @return  $this
      * @uses    Image::_do_crop
      */
-    public function crop(int $width, int $height, $offset_x = null, $offset_y = null): \Kohana\Image\Image
+    public function crop(int $width, int $height, $offset_x = null, $offset_y = null): self
     {
         if ($width > $this->width) {
             // Use the current width
@@ -334,7 +334,7 @@ abstract class Image
      * @return  $this
      * @uses    Image::_do_rotate
      */
-    public function rotate(int $degrees): \Kohana\Image\Image
+    public function rotate(int $degrees): self
     {
         if ($degrees > 180) {
             do {
@@ -368,11 +368,11 @@ abstract class Image
      * @return  $this
      * @uses    Image::_do_flip
      */
-    public function flip(int $direction): \Kohana\Image\Image
+    public function flip(int $direction): self
     {
-        if ($direction !== \Kohana\Image\Image::HORIZONTAL) {
+        if ($direction !== static::HORIZONTAL) {
             // Flip vertically
-            $direction = \Kohana\Image\Image::VERTICAL;
+            $direction = static::VERTICAL;
         }
 
         $this->doFlip($direction);
@@ -390,7 +390,7 @@ abstract class Image
      * @return  $this
      * @uses    Image::_do_sharpen
      */
-    public function sharpen(int $amount): \Kohana\Image\Image
+    public function sharpen(int $amount): self
     {
         // The amount must be in the range of 1 to 100
         $amount = min(max($amount, 1), 100);
@@ -423,7 +423,7 @@ abstract class Image
      * @return  $this
      * @uses    Image::_do_reflection
      */
-    public function reflection(?int $height = null, int $opacity = 100, bool $fade_in = false): \Kohana\Image\Image
+    public function reflection(?int $height = null, int $opacity = 100, bool $fade_in = false): self
     {
         if ($height === null || $height > $this->height) {
             // Use the current height
@@ -456,7 +456,7 @@ abstract class Image
      * @return  $this
      * @uses    Image::_do_watermark
      */
-    public function watermark(\Kohana\Image\Image $watermark, $offset_x = null, $offset_y = null, int $opacity = 100): \Kohana\Image\Image
+    public function watermark(self $watermark, $offset_x = null, $offset_y = null, int $opacity = 100): self
     {
         if ($offset_x === null) {
             // Center the X offset
@@ -503,7 +503,7 @@ abstract class Image
      * @return  $this
      * @uses    Image::_do_background
      */
-    public function background(string $color, int $opacity = 100): \Kohana\Image\Image
+    public function background(string $color, int $opacity = 100): self
     {
         if ($color[0] === '#') {
             // Remove the pound
@@ -654,7 +654,7 @@ abstract class Image
      * @param int $opacity Opacity of watermark
      * @return  void
      */
-    abstract protected function doWatermark(\Kohana\Image\Image $image, int $offset_x, int $offset_y, int $opacity);
+    abstract protected function doWatermark(self $image, int $offset_x, int $offset_y, int $opacity);
     /**
      * Execute a background.
      *

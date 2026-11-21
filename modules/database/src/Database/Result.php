@@ -71,7 +71,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      * @return  Database_Result_Cached
      * @since   3.0.5
      */
-    public function cached(): \Kohana\Database\Result
+    public function cached(): self
     {
         return new CachedResult($this->asArray(), $this->query, $this->asObject);
     }
@@ -264,7 +264,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      * @return  $this
      */
     #[\ReturnTypeWillChange]
-    public function next(): \Kohana\Database\Result
+    public function next(): self
     {
         ++$this->currentRow;
         return $this;
@@ -277,7 +277,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      *
      * @return  $this
      */
-    public function prev(): \Kohana\Database\Result
+    public function prev(): self
     {
         --$this->currentRow;
         return $this;
@@ -291,7 +291,7 @@ abstract class Result implements \Countable, \Iterator, \SeekableIterator, \Arra
      * @return  $this
      */
     #[\ReturnTypeWillChange]
-    public function rewind(): \Kohana\Database\Result
+    public function rewind(): self
     {
         $this->currentRow = 0;
         return $this;

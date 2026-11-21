@@ -28,7 +28,7 @@ abstract class WhereBuilder extends Builder
      * @param   mixed   $value   column value
      * @return  $this
      */
-    public function where($column, string $op, $value): \Kohana\Database\Query\WhereBuilder
+    public function where($column, string $op, $value): self
     {
         return $this->andWhere($column, $op, $value);
     }
@@ -41,7 +41,7 @@ abstract class WhereBuilder extends Builder
      * @param   mixed   $value   column value
      * @return  $this
      */
-    public function andWhere($column, string $op, $value): \Kohana\Database\Query\WhereBuilder
+    public function andWhere($column, string $op, $value): self
     {
         $this->where[] = ['AND' => [$column, $op, $value]];
 
@@ -56,7 +56,7 @@ abstract class WhereBuilder extends Builder
      * @param   mixed   $value   column value
      * @return  $this
      */
-    public function orWhere($column, string $op, $value): \Kohana\Database\Query\WhereBuilder
+    public function orWhere($column, string $op, $value): self
     {
         $this->where[] = ['OR' => [$column, $op, $value]];
 
@@ -68,7 +68,7 @@ abstract class WhereBuilder extends Builder
      *
      * @return  $this
      */
-    public function whereOpen(): \Kohana\Database\Query\WhereBuilder
+    public function whereOpen(): self
     {
         return $this->andWhereOpen();
     }
@@ -78,7 +78,7 @@ abstract class WhereBuilder extends Builder
      *
      * @return  $this
      */
-    public function andWhereOpen(): \Kohana\Database\Query\WhereBuilder
+    public function andWhereOpen(): self
     {
         $this->where[] = ['AND' => '('];
 
@@ -90,7 +90,7 @@ abstract class WhereBuilder extends Builder
      *
      * @return  $this
      */
-    public function orWhereOpen(): \Kohana\Database\Query\WhereBuilder
+    public function orWhereOpen(): self
     {
         $this->where[] = ['OR' => '('];
 
@@ -102,7 +102,7 @@ abstract class WhereBuilder extends Builder
      *
      * @return  $this
      */
-    public function whereClose(): \Kohana\Database\Query\WhereBuilder
+    public function whereClose(): self
     {
         return $this->andWhereClose();
     }
@@ -113,7 +113,7 @@ abstract class WhereBuilder extends Builder
      *
      * @return  $this
      */
-    public function whereCloseEmpty(): \Kohana\Database\Query\WhereBuilder
+    public function whereCloseEmpty(): self
     {
         $group = end($this->where);
 
@@ -131,7 +131,7 @@ abstract class WhereBuilder extends Builder
      *
      * @return  $this
      */
-    public function andWhereClose(): \Kohana\Database\Query\WhereBuilder
+    public function andWhereClose(): self
     {
         $this->where[] = ['AND' => ')'];
 
@@ -143,7 +143,7 @@ abstract class WhereBuilder extends Builder
      *
      * @return  $this
      */
-    public function orWhereClose(): \Kohana\Database\Query\WhereBuilder
+    public function orWhereClose(): self
     {
         $this->where[] = ['OR' => ')'];
 
@@ -157,7 +157,7 @@ abstract class WhereBuilder extends Builder
      * @param string|null $direction Direction of sorting
      * @return  $this
      */
-    public function orderBy($column, ?string $direction = null): \Kohana\Database\Query\WhereBuilder
+    public function orderBy($column, ?string $direction = null): self
     {
         $this->orderBy[] = [$column, $direction];
 
@@ -170,7 +170,7 @@ abstract class WhereBuilder extends Builder
      * @param int|null $number Maximum results to return or null to reset
      * @return  $this
      */
-    public function limit(?int $number): \Kohana\Database\Query\WhereBuilder
+    public function limit(?int $number): self
     {
         $this->limit = $number === null ? null : $number;
 

@@ -31,7 +31,7 @@ class ConsoleException extends KohanaException
             // Log the exception
             KohanaException::log($e);
 
-            if ($e instanceof \Kohana\Console\ConsoleException) {
+            if ($e instanceof self) {
                 echo $e->formatForCli();
             } else {
                 echo KohanaException::text($e);

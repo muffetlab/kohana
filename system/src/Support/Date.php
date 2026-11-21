@@ -114,7 +114,7 @@ class Date
         // we choose to re-use seconds(), rather than creating an entirely new
         // function. Shhhh, it's cheating! ;) There are several more of these
         // in the following methods.
-        return \Kohana\Support\Date::seconds($step);
+        return static::seconds($step);
     }
 
     /**
@@ -254,12 +254,12 @@ class Date
     {
         $months = [];
 
-        if ($format === \Kohana\Support\Date::MONTHS_LONG || $format === \Kohana\Support\Date::MONTHS_SHORT) {
+        if ($format === static::MONTHS_LONG || $format === static::MONTHS_SHORT) {
             for ($i = 1; $i <= 12; ++$i) {
                 $months[$i] = date($format, mktime(0, 0, 0, $i, 1));
             }
         } else {
-            $months = \Kohana\Support\Date::hours();
+            $months = static::hours();
         }
 
         return $months;
@@ -332,27 +332,27 @@ class Date
         $timespan = abs($remote - $local);
 
         if (isset($output['years'])) {
-            $timespan -= \Kohana\Support\Date::YEAR * ($output['years'] = (int) floor($timespan / \Kohana\Support\Date::YEAR));
+            $timespan -= static::YEAR * ($output['years'] = (int) floor($timespan / static::YEAR));
         }
 
         if (isset($output['months'])) {
-            $timespan -= \Kohana\Support\Date::MONTH * ($output['months'] = (int) floor($timespan / \Kohana\Support\Date::MONTH));
+            $timespan -= static::MONTH * ($output['months'] = (int) floor($timespan / static::MONTH));
         }
 
         if (isset($output['weeks'])) {
-            $timespan -= \Kohana\Support\Date::WEEK * ($output['weeks'] = (int) floor($timespan / \Kohana\Support\Date::WEEK));
+            $timespan -= static::WEEK * ($output['weeks'] = (int) floor($timespan / static::WEEK));
         }
 
         if (isset($output['days'])) {
-            $timespan -= \Kohana\Support\Date::DAY * ($output['days'] = (int) floor($timespan / \Kohana\Support\Date::DAY));
+            $timespan -= static::DAY * ($output['days'] = (int) floor($timespan / static::DAY));
         }
 
         if (isset($output['hours'])) {
-            $timespan -= \Kohana\Support\Date::HOUR * ($output['hours'] = (int) floor($timespan / \Kohana\Support\Date::HOUR));
+            $timespan -= static::HOUR * ($output['hours'] = (int) floor($timespan / static::HOUR));
         }
 
         if (isset($output['minutes'])) {
-            $timespan -= \Kohana\Support\Date::MINUTE * ($output['minutes'] = (int) floor($timespan / \Kohana\Support\Date::MINUTE));
+            $timespan -= static::MINUTE * ($output['minutes'] = (int) floor($timespan / static::MINUTE));
         }
 
         // Seconds ago, 1
@@ -391,43 +391,43 @@ class Date
         // Determine the difference in seconds
         $offset = abs($local_timestamp - $timestamp);
 
-        if ($offset <= \Kohana\Support\Date::MINUTE) {
+        if ($offset <= static::MINUTE) {
             $span = 'moments';
-        } elseif ($offset < (\Kohana\Support\Date::MINUTE * 20)) {
+        } elseif ($offset < (static::MINUTE * 20)) {
             $span = 'a few minutes';
-        } elseif ($offset < \Kohana\Support\Date::HOUR) {
+        } elseif ($offset < static::HOUR) {
             $span = 'less than an hour';
-        } elseif ($offset < (\Kohana\Support\Date::HOUR * 4)) {
+        } elseif ($offset < (static::HOUR * 4)) {
             $span = 'a couple of hours';
-        } elseif ($offset < \Kohana\Support\Date::DAY) {
+        } elseif ($offset < static::DAY) {
             $span = 'less than a day';
-        } elseif ($offset < (\Kohana\Support\Date::DAY * 2)) {
+        } elseif ($offset < (static::DAY * 2)) {
             $span = 'about a day';
-        } elseif ($offset < (\Kohana\Support\Date::DAY * 4)) {
+        } elseif ($offset < (static::DAY * 4)) {
             $span = 'a couple of days';
-        } elseif ($offset < \Kohana\Support\Date::WEEK) {
+        } elseif ($offset < static::WEEK) {
             $span = 'less than a week';
-        } elseif ($offset < (\Kohana\Support\Date::WEEK * 2)) {
+        } elseif ($offset < (static::WEEK * 2)) {
             $span = 'about a week';
-        } elseif ($offset < \Kohana\Support\Date::MONTH) {
+        } elseif ($offset < static::MONTH) {
             $span = 'less than a month';
-        } elseif ($offset < (\Kohana\Support\Date::MONTH * 2)) {
+        } elseif ($offset < (static::MONTH * 2)) {
             $span = 'about a month';
-        } elseif ($offset < (\Kohana\Support\Date::MONTH * 4)) {
+        } elseif ($offset < (static::MONTH * 4)) {
             $span = 'a couple of months';
-        } elseif ($offset < \Kohana\Support\Date::YEAR) {
+        } elseif ($offset < static::YEAR) {
             $span = 'less than a year';
-        } elseif ($offset < (\Kohana\Support\Date::YEAR * 2)) {
+        } elseif ($offset < (static::YEAR * 2)) {
             $span = 'about a year';
-        } elseif ($offset < (\Kohana\Support\Date::YEAR * 4)) {
+        } elseif ($offset < (static::YEAR * 4)) {
             $span = 'a couple of years';
-        } elseif ($offset < (\Kohana\Support\Date::YEAR * 8)) {
+        } elseif ($offset < (static::YEAR * 8)) {
             $span = 'a few years';
-        } elseif ($offset < (\Kohana\Support\Date::YEAR * 12)) {
+        } elseif ($offset < (static::YEAR * 12)) {
             $span = 'about a decade';
-        } elseif ($offset < (\Kohana\Support\Date::YEAR * 24)) {
+        } elseif ($offset < (static::YEAR * 24)) {
             $span = 'a couple of decades';
-        } elseif ($offset < (\Kohana\Support\Date::YEAR * 64)) {
+        } elseif ($offset < (static::YEAR * 64)) {
             $span = 'several decades';
         } else {
             $span = 'a long time';
@@ -505,8 +505,8 @@ class Date
      */
     public static function formattedTime(string $datetime_str = 'now', ?string $timestamp_format = null, ?string $timezone = null): string
     {
-        $timestamp_format = $timestamp_format === null ? \Kohana\Support\Date::$timestampFormat : $timestamp_format;
-        $timezone = $timezone === null ? \Kohana\Support\Date::$timezone : $timezone;
+        $timestamp_format = $timestamp_format === null ? static::$timestampFormat : $timestamp_format;
+        $timezone = $timezone === null ? static::$timezone : $timezone;
 
         $tz = new \DateTimeZone($timezone ?: date_default_timezone_get());
         $time = new \DateTime($datetime_str, $tz);

@@ -134,7 +134,7 @@ class Url
         }
 
         // Concat the URL
-        return \Kohana\Routing\Url::base($protocol, $index) . $path;
+        return static::base($protocol, $index) . $path;
     }
 
     /**

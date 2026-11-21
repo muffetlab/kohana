@@ -57,10 +57,10 @@ class Translator
     {
         if ($lang) {
             // Normalize the language
-            \Kohana\Translation\Translator::$lang = strtolower(str_replace([' ', '_'], '-', $lang));
+            static::$lang = strtolower(str_replace([' ', '_'], '-', $lang));
         }
 
-        return \Kohana\Translation\Translator::$lang;
+        return static::$lang;
     }
 
     /**
@@ -77,11 +77,11 @@ class Translator
     {
         if (!$lang) {
             // Use the global target language
-            $lang = \Kohana\Translation\Translator::$lang;
+            $lang = static::$lang;
         }
 
         // Load the translation table for this language
-        $table = \Kohana\Translation\Translator::load($lang);
+        $table = static::load($lang);
 
         // Return the translated string if it exists
         return $table[$string] ?? $string;
@@ -98,8 +98,8 @@ class Translator
      */
     public static function load(string $lang): array
     {
-        if (isset(\Kohana\Translation\Translator::$cache[$lang])) {
-            return \Kohana\Translation\Translator::$cache[$lang];
+        if (isset(static::$cache[$lang])) {
+            return static::$cache[$lang];
         }
 
         // New translation table
@@ -129,7 +129,7 @@ class Translator
         } while ($parts);
 
         // Cache the translation table locally
-        return \Kohana\Translation\Translator::$cache[$lang] = $table;
+        return static::$cache[$lang] = $table;
     }
 
 }

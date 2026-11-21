@@ -55,7 +55,7 @@ class Fragment
     {
         if ($i18n === null) {
             // Use the default setting
-            $i18n = \Kohana\Cache\Fragment::$i18n;
+            $i18n = static::$i18n;
         }
 
         // Language prefix for cache key
@@ -82,10 +82,10 @@ class Fragment
     public static function load(string $name, ?int $lifetime = null, ?bool $i18n = null): bool
     {
         // Set the cache lifetime
-        $lifetime = $lifetime === null ? \Kohana\Cache\Fragment::$lifetime : $lifetime;
+        $lifetime = $lifetime === null ? static::$lifetime : $lifetime;
 
         // Get the cache key name
-        $cache_key = \Kohana\Cache\Fragment::cacheKey($name, $i18n);
+        $cache_key = static::cacheKey($name, $i18n);
 
         if ($fragment = Application::cache($cache_key, null, $lifetime)) {
             // Display the cached fragment now
@@ -97,7 +97,7 @@ class Fragment
             ob_start();
 
             // Store the cache key by the buffer level
-            \Kohana\Cache\Fragment::$caches[ob_get_level()] = $cache_key;
+            static::$caches[ob_get_level()] = $cache_key;
 
             return false;
         }
@@ -115,12 +115,12 @@ class Fragment
         // Get the buffer level
         $level = ob_get_level();
 
-        if (isset(\Kohana\Cache\Fragment::$caches[$level])) {
+        if (isset(static::$caches[$level])) {
             // Get the cache key based on the level
-            $cache_key = \Kohana\Cache\Fragment::$caches[$level];
+            $cache_key = static::$caches[$level];
 
             // Delete the cache key, we don't need it anymore
-            unset(\Kohana\Cache\Fragment::$caches[$level]);
+            unset(static::$caches[$level]);
 
             // Get the output buffer and display it at the same time
             $fragment = ob_get_flush();
@@ -142,7 +142,7 @@ class Fragment
     public static function delete(string $name, ?bool $i18n = null)
     {
         // Invalid the cache
-        Application::cache(\Kohana\Cache\Fragment::cacheKey($name, $i18n), null, -3600);
+        Application::cache(static::cacheKey($name, $i18n), null, -3600);
     }
 
 }

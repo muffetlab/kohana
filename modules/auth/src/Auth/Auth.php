@@ -26,9 +26,9 @@ abstract class Auth
      * @return Auth
      * @throws Kohana_Exception
      */
-    public static function instance(): \Kohana\Auth\Auth
+    public static function instance(): self
     {
-        if (!isset(\Kohana\Auth\Auth::$instance)) {
+        if (!isset(static::$instance)) {
             // Load the configuration for this type
             $config = Application::$config->load('auth');
 
@@ -40,10 +40,10 @@ abstract class Auth
             $class = str_contains($type, '\\') ? $type : __NAMESPACE__ . '\\' . ucfirst(strtolower($type)) . 'Auth';
 
             // Create a new authentication instance
-            \Kohana\Auth\Auth::$instance = new $class($config->asArray());
+            static::$instance = new $class($config->asArray());
         }
 
-        return \Kohana\Auth\Auth::$instance;
+        return static::$instance;
     }
 
     protected $session;

@@ -44,7 +44,7 @@ class Cache
      * @throws Kohana_Exception
      * @uses    Cache
      */
-    public static function factory($cache, array $options = []): \Kohana\Http\Cache
+    public static function factory($cache, array $options = []): self
     {
         if (!$cache instanceof \Kohana\Cache\Cache) {
             $cache = \Kohana\Cache\Cache::instance($cache);
@@ -52,7 +52,7 @@ class Cache
 
         $options['cache'] = $cache;
 
-        return new \Kohana\Http\Cache($options);
+        return new static($options);
     }
 
     /**
@@ -179,7 +179,7 @@ class Cache
         // Cache the response
         $this->cacheResponse($cache_key, $request, $response);
 
-        $response->headers(\Kohana\Http\Cache::CACHE_STATUS_KEY, \Kohana\Http\Cache::CACHE_STATUS_MISS);
+        $response->headers(static::CACHE_STATUS_KEY, static::CACHE_STATUS_MISS);
 
         return $response;
     }
@@ -287,7 +287,7 @@ class Cache
         if (is_callable($callback))
             return call_user_func($callback, $request);
         else
-            return \Kohana\Http\Cache::basicCacheKeyGenerator($request);
+            return static::basicCacheKeyGenerator($request);
     }
 
     /**
@@ -368,25 +368,25 @@ class Cache
 
             // Do cache hit arithmetic, using fast arithmetic if available
             if ($this->cache instanceof Arithmetic) {
-                $hit_count = $this->cache->increment(\Kohana\Http\Cache::CACHE_HIT_KEY . $key);
+                $hit_count = $this->cache->increment(static::CACHE_HIT_KEY . $key);
             } else {
-                $hit_count = $this->cache->get(\Kohana\Http\Cache::CACHE_HIT_KEY . $key);
-                $this->cache->set(\Kohana\Http\Cache::CACHE_HIT_KEY . $key, ++$hit_count);
+                $hit_count = $this->cache->get(static::CACHE_HIT_KEY . $key);
+                $this->cache->set(static::CACHE_HIT_KEY . $key, ++$hit_count);
             }
 
             // Update the header to have correct HIT status and count
-            $response->headers(\Kohana\Http\Cache::CACHE_STATUS_KEY, \Kohana\Http\Cache::CACHE_STATUS_HIT)
-                ->headers(\Kohana\Http\Cache::CACHE_HIT_KEY, $hit_count);
+            $response->headers(static::CACHE_STATUS_KEY, static::CACHE_STATUS_HIT)
+                ->headers(static::CACHE_HIT_KEY, $hit_count);
 
             return $response;
         } else {
             if (($ttl = $this->cacheLifetime($response)) === false)
                 return false;
 
-            $response->headers(\Kohana\Http\Cache::CACHE_STATUS_KEY, \Kohana\Http\Cache::CACHE_STATUS_SAVED);
+            $response->headers(static::CACHE_STATUS_KEY, static::CACHE_STATUS_SAVED);
 
             // Set the hit count to zero
-            $this->cache->set(\Kohana\Http\Cache::CACHE_HIT_KEY . $key, 0);
+            $this->cache->set(static::CACHE_HIT_KEY . $key, 0);
 
             return $this->cache->set($key, $response, $ttl);
         }

@@ -50,15 +50,15 @@ class Inflector
      */
     public static function uncountable(string $str): bool
     {
-        if (\Kohana\Support\Inflector::$uncountable === null) {
+        if (static::$uncountable === null) {
             // Cache uncountables
-            \Kohana\Support\Inflector::$uncountable = Application::$config->load('inflector')->uncountable;
+            static::$uncountable = Application::$config->load('inflector')->uncountable;
 
             // Make uncountables mirrored
-            \Kohana\Support\Inflector::$uncountable = array_combine(\Kohana\Support\Inflector::$uncountable, \Kohana\Support\Inflector::$uncountable);
+            static::$uncountable = array_combine(static::$uncountable, static::$uncountable);
         }
 
-        return isset(\Kohana\Support\Inflector::$uncountable[strtolower($str)]);
+        return isset(static::$uncountable[strtolower($str)]);
     }
 
     /**
@@ -96,18 +96,18 @@ class Inflector
         // Cache key name
         $key = 'singular_' . $str . $count;
 
-        if (isset(\Kohana\Support\Inflector::$cache[$key]))
-            return \Kohana\Support\Inflector::$cache[$key];
+        if (isset(static::$cache[$key]))
+            return static::$cache[$key];
 
-        if (\Kohana\Support\Inflector::uncountable($str))
-            return \Kohana\Support\Inflector::$cache[$key] = $str;
+        if (static::uncountable($str))
+            return static::$cache[$key] = $str;
 
-        if (empty(\Kohana\Support\Inflector::$irregular)) {
+        if (empty(static::$irregular)) {
             // Cache irregular words
-            \Kohana\Support\Inflector::$irregular = Application::$config->load('inflector')->irregular;
+            static::$irregular = Application::$config->load('inflector')->irregular;
         }
 
-        if ($irregular = array_search($str, \Kohana\Support\Inflector::$irregular)) {
+        if ($irregular = array_search($str, static::$irregular)) {
             $str = $irregular;
         } elseif (preg_match('/us$/', $str)) {
             // https://en.wikipedia.org/wiki/Plural_form_of_words_ending_in_-us
@@ -123,7 +123,7 @@ class Inflector
             $str = substr($str, 0, -1);
         }
 
-        return \Kohana\Support\Inflector::$cache[$key] = $str;
+        return static::$cache[$key] = $str;
     }
 
     /**
@@ -164,20 +164,20 @@ class Inflector
         // Check uppercase
         $is_uppercase = ctype_upper($str);
 
-        if (isset(\Kohana\Support\Inflector::$cache[$key]))
-            return \Kohana\Support\Inflector::$cache[$key];
+        if (isset(static::$cache[$key]))
+            return static::$cache[$key];
 
-        if (\Kohana\Support\Inflector::uncountable($str))
-            return \Kohana\Support\Inflector::$cache[$key] = $str;
+        if (static::uncountable($str))
+            return static::$cache[$key] = $str;
 
-        if (empty(\Kohana\Support\Inflector::$irregular)) {
+        if (empty(static::$irregular)) {
             // Cache irregular words
-            \Kohana\Support\Inflector::$irregular = Application::$config->load('inflector')->irregular;
+            static::$irregular = Application::$config->load('inflector')->irregular;
         }
 
-        if (isset(\Kohana\Support\Inflector::$irregular[$str])) {
-            $str = \Kohana\Support\Inflector::$irregular[$str];
-        } elseif (in_array($str, \Kohana\Support\Inflector::$irregular)) {
+        if (isset(static::$irregular[$str])) {
+            $str = static::$irregular[$str];
+        } elseif (in_array($str, static::$irregular)) {
             // Do nothing
         } elseif (preg_match('/[sxz]$/', $str) || preg_match('/[^aeioudgkprt]h$/', $str)) {
             $str .= 'es';
@@ -194,7 +194,7 @@ class Inflector
         }
 
         // Set the cache and return
-        return \Kohana\Support\Inflector::$cache[$key] = $str;
+        return static::$cache[$key] = $str;
     }
 
     /**

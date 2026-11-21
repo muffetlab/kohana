@@ -17,7 +17,7 @@ abstract class HttpException extends KohanaException
      * @param Exception|null $previous
      * @return  HTTP_Exception
      */
-    public static function factory(int $code, string $message = '', ?array $variables = null, ?\Exception $previous = null): \Kohana\Http\Exceptions\HttpException
+    public static function factory(int $code, string $message = '', ?array $variables = null, ?\Exception $previous = null): self
     {
         $class = __NAMESPACE__ . '\\Http' . $code . 'Exception';
 

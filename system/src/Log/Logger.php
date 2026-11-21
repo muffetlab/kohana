@@ -44,17 +44,17 @@ class Logger
      *
      * @return  Log
      */
-    public static function instance(): \Kohana\Log\Logger
+    public static function instance(): self
     {
-        if (\Kohana\Log\Logger::$instance === null) {
+        if (static::$instance === null) {
             // Create a new instance
-            \Kohana\Log\Logger::$instance = new \Kohana\Log\Logger;
+            static::$instance = new static;
 
             // Write the logs at shutdown
-            register_shutdown_function([\Kohana\Log\Logger::$instance, 'write']);
+            register_shutdown_function([static::$instance, 'write']);
         }
 
-        return \Kohana\Log\Logger::$instance;
+        return static::$instance;
     }
 
     /**
@@ -78,7 +78,7 @@ class Logger
      * @param int $min_level Min level to write IF $levels is not an array
      * @return  Kohana_Log
      */
-    public function attach(Writer $writer, $levels = [], int $min_level = 0): \Kohana\Log\Logger
+    public function attach(Writer $writer, $levels = [], int $min_level = 0): self
     {
         if (!is_array($levels)) {
             $levels = range($min_level, $levels);
@@ -100,7 +100,7 @@ class Logger
      * @param   Log_Writer  $writer instance
      * @return  Kohana_Log
      */
-    public function detach(Writer $writer): \Kohana\Log\Logger
+    public function detach(Writer $writer): self
     {
         // Remove the writer
         unset($this->writers["$writer"]);
@@ -122,7 +122,7 @@ class Logger
      * @param array|null $additional additional custom parameters to supply to the log writer
      * @return  Kohana_Log
      */
-    public function add(string $level, string $message, ?array $values = null, ?array $additional = null): \Kohana\Log\Logger
+    public function add(string $level, string $message, ?array $values = null, ?array $additional = null): self
     {
         if ($values) {
             // Insert the values into the message
@@ -161,7 +161,7 @@ class Logger
             'additional' => $additional,
         ];
 
-        if (\Kohana\Log\Logger::$writeOnAdd) {
+        if (static::$writeOnAdd) {
             // Write logs as they are added
             $this->write();
         }

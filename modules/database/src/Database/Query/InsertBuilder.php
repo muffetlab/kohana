@@ -53,7 +53,7 @@ class InsertBuilder extends Builder
      * @return  $this
      * @throws Kohana_Exception
      */
-    public function table(string $table): \Kohana\Database\Query\InsertBuilder
+    public function table(string $table): self
     {
         if (!is_string($table))
             throw new KohanaException('INSERT INTO syntax does not allow table aliasing');
@@ -69,7 +69,7 @@ class InsertBuilder extends Builder
      * @param   array  $columns  column names
      * @return  $this
      */
-    public function columns(array $columns): \Kohana\Database\Query\InsertBuilder
+    public function columns(array $columns): self
     {
         $this->columns = $columns;
 
@@ -83,7 +83,7 @@ class InsertBuilder extends Builder
      * @return  $this
      * @throws Kohana_Exception
      */
-    public function values(array ...$values): \Kohana\Database\Query\InsertBuilder
+    public function values(array ...$values): self
     {
         if (!is_array($this->values)) {
             throw new KohanaException('INSERT INTO ... SELECT statements cannot be combined with INSERT INTO ... VALUES');
@@ -103,7 +103,7 @@ class InsertBuilder extends Builder
      * @return  $this
      * @throws Kohana_Exception
      */
-    public function select(Query $query): \Kohana\Database\Query\InsertBuilder
+    public function select(Query $query): self
     {
         if ($query->type() !== Connection::SELECT) {
             throw new KohanaException('Only SELECT queries can be combined with INSERT queries');
@@ -163,7 +163,7 @@ class InsertBuilder extends Builder
      * @return $this
      * @deprecated 3.5.0
      */
-    public function reset(): \Kohana\Database\Query\InsertBuilder
+    public function reset(): self
     {
         $this->table = null;
 

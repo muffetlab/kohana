@@ -102,7 +102,7 @@ class Arr
 
             if ($delimiter === null) {
                 // Use the default delimiter
-                $delimiter = \Kohana\Support\Arr::$delimiter;
+                $delimiter = static::$delimiter;
             }
 
             // Remove starting delimiters and spaces
@@ -125,7 +125,7 @@ class Arr
 
             if (isset($array[$key])) {
                 if ($keys) {
-                    if (\Kohana\Support\Arr::isArray($array[$key])) {
+                    if (static::isArray($array[$key])) {
                         // Dig down into the next part of the path
                         $array = $array[$key];
                     } else {
@@ -148,7 +148,7 @@ class Arr
                             continue;
                         }
                     }
-                    if ($value = \Kohana\Support\Arr::path($arr, $keys, $default, $delimiter)) {
+                    if ($value = static::path($arr, $keys, $default, $delimiter)) {
                         $values[] = $value;
                     }
                 }
@@ -184,7 +184,7 @@ class Arr
     {
         if (!$delimiter) {
             // Use the default delimiter
-            $delimiter = \Kohana\Support\Arr::$delimiter;
+            $delimiter = static::$delimiter;
         }
 
         // The path has already been separated into keys
@@ -281,7 +281,7 @@ class Arr
     {
         $found = [];
         foreach ($paths as $path) {
-            \Kohana\Support\Arr::setPath($found, $path, \Kohana\Support\Arr::path($array, $path, $default));
+            static::setPath($found, $path, static::path($array, $path, $default));
         }
 
         return $found;
@@ -361,7 +361,7 @@ class Arr
     {
         foreach ($array as $key => $val) {
             if (is_array($val)) {
-                $array[$key] = \Kohana\Support\Arr::map($callbacks, $val, $keys);
+                $array[$key] = static::map($callbacks, $val, $keys);
             } elseif (!is_array($keys) || in_array($key, $keys)) {
                 if (is_array($callbacks)) {
                     foreach ($callbacks as $cb) {
@@ -399,10 +399,10 @@ class Arr
     public static function merge(array $array1, ...$arrays): array
     {
         foreach ($arrays as $array2) {
-            if (\Kohana\Support\Arr::isAssoc($array2)) {
+            if (static::isAssoc($array2)) {
                 foreach ($array2 as $key => $value) {
                     if (is_array($value) && isset($array1[$key]) && is_array($array1[$key])) {
-                        $array1[$key] = \Kohana\Support\Arr::merge($array1[$key], $value);
+                        $array1[$key] = static::merge($array1[$key], $value);
                     } else {
                         $array1[$key] = $value;
                     }
@@ -506,12 +506,12 @@ class Arr
      */
     public static function flatten(array $array): array
     {
-        $is_assoc = \Kohana\Support\Arr::isAssoc($array);
+        $is_assoc = static::isAssoc($array);
 
         $flat = [];
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                $flat = array_merge($flat, \Kohana\Support\Arr::flatten($value));
+                $flat = array_merge($flat, static::flatten($value));
             } else {
                 if ($is_assoc) {
                     $flat[$key] = $value;

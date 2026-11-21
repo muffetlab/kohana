@@ -43,7 +43,7 @@ class UpdateBuilder extends WhereBuilder
      * @param   mixed  $table  table name or [$table, $alias] or object
      * @return  $this
      */
-    public function table($table): \Kohana\Database\Query\UpdateBuilder
+    public function table($table): self
     {
         $this->table = $table;
 
@@ -56,7 +56,7 @@ class UpdateBuilder extends WhereBuilder
      * @param   array   $pairs  associative (column => value) list
      * @return  $this
      */
-    public function set(array $pairs): \Kohana\Database\Query\UpdateBuilder
+    public function set(array $pairs): self
     {
         foreach ($pairs as $column => $value) {
             $this->set[] = [$column, $value];
@@ -72,7 +72,7 @@ class UpdateBuilder extends WhereBuilder
      * @param   mixed  $value   column value
      * @return  $this
      */
-    public function value($column, $value): \Kohana\Database\Query\UpdateBuilder
+    public function value($column, $value): self
     {
         $this->set[] = [$column, $value];
 
@@ -124,7 +124,7 @@ class UpdateBuilder extends WhereBuilder
      * @return $this
      * @deprecated 3.5.0
      */
-    public function reset(): \Kohana\Database\Query\UpdateBuilder
+    public function reset(): self
     {
         $this->table = null;
 

@@ -93,9 +93,9 @@ class Route
      * @param array|null $regex Regex patterns for route keys
      * @return  Route
      */
-    public static function set(string $name, ?string $uri = null, ?array $regex = null): \Kohana\Routing\Route
+    public static function set(string $name, ?string $uri = null, ?array $regex = null): self
     {
-        return \Kohana\Routing\Route::$routes[$name] = new \Kohana\Routing\Route($uri, $regex);
+        return static::$routes[$name] = new static($uri, $regex);
     }
 
     /**
@@ -107,13 +107,13 @@ class Route
      * @return  Route
      * @throws  Kohana_Exception
      */
-    public static function get(string $name): \Kohana\Routing\Route
+    public static function get(string $name): self
     {
-        if (!isset(\Kohana\Routing\Route::$routes[$name])) {
+        if (!isset(static::$routes[$name])) {
             throw new KohanaException('The requested route does not exist: :route', [':route' => $name]);
         }
 
-        return \Kohana\Routing\Route::$routes[$name];
+        return static::$routes[$name];
     }
 
     /**
@@ -125,7 +125,7 @@ class Route
      */
     public static function all(): array
     {
-        return \Kohana\Routing\Route::$routes;
+        return static::$routes;
     }
 
     /**
@@ -136,9 +136,9 @@ class Route
      * @param   Route   $route  instance
      * @return int|string|false
      */
-    public static function name(\Kohana\Routing\Route $route)
+    public static function name(self $route)
     {
-        return array_search($route, \Kohana\Routing\Route::$routes);
+        return array_search($route, static::$routes);
     }
 
     /**
@@ -162,7 +162,7 @@ class Route
         if ($save) {
             try {
                 // Cache all defined routes
-                Application::cache('Kohana\Routing\Route::cache()', \Kohana\Routing\Route::$routes);
+                Application::cache('Kohana\Routing\Route::cache()', static::$routes);
             } catch (\Exception $e) {
                 // We most likely have a lambda in a route, which cannot be cached
                 throw new KohanaException('One or more routes could not be cached (:message)', [
@@ -173,17 +173,17 @@ class Route
             if ($routes = Application::cache('Kohana\Routing\Route::cache()')) {
                 if ($append) {
                     // Append cached routes
-                    \Kohana\Routing\Route::$routes += $routes;
+                    static::$routes += $routes;
                 } else {
                     // Replace existing routes
-                    \Kohana\Routing\Route::$routes = $routes;
+                    static::$routes = $routes;
                 }
 
                 // Routes were cached
-                return \Kohana\Routing\Route::$cache = true;
+                return static::$cache = true;
             } else {
                 // Routes were not cached
-                return \Kohana\Routing\Route::$cache = false;
+                return static::$cache = false;
             }
         }
     }
@@ -203,7 +203,7 @@ class Route
      */
     public static function url(string $name, ?array $params = null, $protocol = null): string
     {
-        $route = \Kohana\Routing\Route::get($name);
+        $route = static::get($name);
 
         // Create a URI with the route and convert it to a URL
         if ($route->isExternal())
@@ -232,7 +232,7 @@ class Route
     {
         // The URI should be considered literal except for keys and optional parts
         // Escape everything preg_quote would escape except for : ( ) < >
-        $expression = preg_replace('#' . \Kohana\Routing\Route::REGEX_ESCAPE . '#', '\\\\$0', $uri);
+        $expression = preg_replace('#' . static::REGEX_ESCAPE . '#', '\\\\$0', $uri);
 
         if (strpos($expression, '(') !== false) {
             // Make optional parts of the URI non-capturing and optional
@@ -240,12 +240,12 @@ class Route
         }
 
         // Insert default regex for keys
-        $expression = str_replace(['<', '>'], ['(?P<', '>' . \Kohana\Routing\Route::REGEX_SEGMENT . ')'], $expression);
+        $expression = str_replace(['<', '>'], ['(?P<', '>' . static::REGEX_SEGMENT . ')'], $expression);
 
         if ($regex) {
             $search = $replace = [];
             foreach ($regex as $key => $value) {
-                $search[] = "<$key>" . \Kohana\Routing\Route::REGEX_SEGMENT;
+                $search[] = "<$key>" . static::REGEX_SEGMENT;
                 $replace[] = "<$key>$value";
             }
 
@@ -312,7 +312,7 @@ class Route
         }
 
         // Store the compiled regex locally
-        $this->routeRegex = \Kohana\Routing\Route::compile($uri, $regex);
+        $this->routeRegex = static::compile($uri, $regex);
     }
 
     /**
@@ -364,7 +364,7 @@ class Route
      * @return  $this
      * @throws  Kohana_Exception
      */
-    public function filter(array $callback): \Kohana\Routing\Route
+    public function filter(array $callback): self
     {
         if (!is_callable($callback)) {
             throw new KohanaException('Invalid Route::callback specified');
@@ -454,7 +454,7 @@ class Route
      */
     public function isExternal(): bool
     {
-        return !in_array(Arr::get($this->defaults, 'host', false), \Kohana\Routing\Route::$localhosts);
+        return !in_array(Arr::get($this->defaults, 'host', false), static::$localhosts);
     }
 
     /**
@@ -496,7 +496,7 @@ class Route
         $compile = function (string $portion, bool $required) use (&$compile, $defaults, $params) {
             $missing = [];
 
-            $pattern = '#(?:' . \Kohana\Routing\Route::REGEX_KEY . '|' . \Kohana\Routing\Route::REGEX_GROUP . ')#';
+            $pattern = '#(?:' . static::REGEX_KEY . '|' . static::REGEX_GROUP . ')#';
             $result = preg_replace_callback($pattern, function ($matches) use (&$compile, $defaults, &$missing, $params, &$required) {
                 if ($matches[0][0] === '<') {
                     // Parameter, unwrapped
@@ -555,7 +555,7 @@ class Route
 
             if (strpos($host, '://') === false) {
                 // Use the default defined protocol
-                $host = \Kohana\Routing\Route::$defaultProtocol . $host;
+                $host = static::$defaultProtocol . $host;
             }
 
             // Clean up the host and prepend it to the URI

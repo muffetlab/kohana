@@ -78,7 +78,7 @@ class Query
      * @return  $this
      * @uses    Kohana::$cache_life
      */
-    public function cached(?int $lifetime = null, bool $force = false): \Kohana\Database\Query\Query
+    public function cached(?int $lifetime = null, bool $force = false): self
     {
         if ($lifetime === null) {
             // Use the global setting
@@ -96,7 +96,7 @@ class Query
      *
      * @return  $this
      */
-    public function asAssoc(): \Kohana\Database\Query\Query
+    public function asAssoc(): self
     {
         $this->asObject = false;
 
@@ -112,7 +112,7 @@ class Query
      * @param array|null $params
      * @return  $this
      */
-    public function asObject($class = true, ?array $params = null): \Kohana\Database\Query\Query
+    public function asObject($class = true, ?array $params = null): self
     {
         $this->asObject = $class;
 
@@ -131,7 +131,7 @@ class Query
      * @param   mixed    $value  value to use
      * @return  $this
      */
-    public function param(string $param, $value): \Kohana\Database\Query\Query
+    public function param(string $param, $value): self
     {
         // Add or overload a new parameter
         $this->parameters[$param] = $value;
@@ -146,7 +146,7 @@ class Query
      * @param   mixed   $var    variable to use
      * @return  $this
      */
-    public function bind(string $param, &$var): \Kohana\Database\Query\Query
+    public function bind(string $param, &$var): self
     {
         // Bind a value to a variable
         $this->parameters[$param] = &$var;
@@ -160,7 +160,7 @@ class Query
      * @param   array  $params  list of parameters
      * @return  $this
      */
-    public function parameters(array $params): \Kohana\Database\Query\Query
+    public function parameters(array $params): self
     {
         // Merge the new parameters in
         $this->parameters = $params + $this->parameters;

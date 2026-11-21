@@ -68,14 +68,14 @@ class Upload
             $filename = uniqid() . $file['name'];
         }
 
-        if (\Kohana\Http\Upload::$removeSpaces === true) {
+        if (static::$removeSpaces === true) {
             // Remove spaces from the filename
             $filename = preg_replace('/\s+/u', '_', $filename);
         }
 
         if ($directory === null) {
             // Use the pre-configured upload directory
-            $directory = \Kohana\Http\Upload::$defaultDirectory;
+            $directory = static::$defaultDirectory;
         }
 
         if (!is_dir($directory) || !is_writable(realpath($directory))) {
@@ -206,7 +206,7 @@ class Upload
      */
     public static function image(array $file, ?int $max_width = null, ?int $max_height = null, bool $exact = false): bool
     {
-        if (\Kohana\Http\Upload::notEmpty($file)) {
+        if (static::notEmpty($file)) {
             try {
                 // Get the width and height from the uploaded image
                 list($width, $height) = getimagesize($file['tmp_name']);

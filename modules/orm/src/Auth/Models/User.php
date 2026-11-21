@@ -179,7 +179,7 @@ class User extends Model
     public function createUser(array $values, array $expected): Model
     {
         // Validation for passwords
-        $extra_validation = \Kohana\Auth\Models\User::getPasswordValidation($values)
+        $extra_validation = static::getPasswordValidation($values)
             ->rule('password', 'not_empty');
 
         return $this->values($values, $expected)->create($extra_validation);
@@ -216,7 +216,7 @@ class User extends Model
         }
 
         // Validation for passwords
-        $extra_validation = \Kohana\Auth\Models\User::getPasswordValidation($values);
+        $extra_validation = static::getPasswordValidation($values);
 
         return $this->values($values, $expected)->update($extra_validation);
     }

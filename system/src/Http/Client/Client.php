@@ -350,7 +350,7 @@ abstract class Client
      *
      * @param Request_Client $client
      */
-    public function assignClientProperties(\Kohana\Http\Client\Client $client)
+    public function assignClientProperties(self $client)
     {
         $client->cache($this->cache());
         $client->follow($this->follow());
@@ -374,7 +374,7 @@ abstract class Client
      * @throws Kohana_Exception
      * @throws Request_Exception
      */
-    public static function onHeaderLocation(Request $request, Response $response, \Kohana\Http\Client\Client $client)
+    public static function onHeaderLocation(Request $request, Response $response, self $client)
     {
         // Do we need to follow a Location header ?
         if ($client->follow() && in_array($response->status(), [201, 301, 302, 303, 307])) {

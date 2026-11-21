@@ -31,10 +31,10 @@ class MySqliConnection extends Connection
         if ($this->connection)
             return;
 
-        if (\Kohana\Database\MySqliConnection::$setNames === null) {
+        if (static::$setNames === null) {
             // Determine if we can use mysqli_set_charset(), which is only
             // available on PHP 5.2.3+ when compiled against MySQL 5.0+
-            \Kohana\Database\MySqliConnection::$setNames = !function_exists('mysqli_set_charset');
+            static::$setNames = !function_exists('mysqli_set_charset');
         }
 
         // Extract the connection parameters, adding required variables
@@ -122,7 +122,7 @@ class MySqliConnection extends Connection
         // Make sure the database is connected
         $this->connection or $this->connect();
 
-        if (\Kohana\Database\MySqliConnection::$setNames === true) {
+        if (static::$setNames === true) {
             // PHP is compiled against MySQL 4.x
             $status = (bool) $this->connection->query('SET NAMES ' . $this->quote($charset));
         } else {

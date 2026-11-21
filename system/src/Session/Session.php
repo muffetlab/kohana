@@ -43,14 +43,14 @@ abstract class Session
      * @throws Kohana_Exception
      * @uses    Kohana::$config
      */
-    public static function instance(?string $type = null, ?string $id = null): \Kohana\Session\Session
+    public static function instance(?string $type = null, ?string $id = null): self
     {
         if ($type === null) {
             // Use the default type
-            $type = \Kohana\Session\Session::$default;
+            $type = static::$default;
         }
 
-        if (!isset(\Kohana\Session\Session::$instances[$type])) {
+        if (!isset(static::$instances[$type])) {
             // Load the configuration for this type
             $config = Application::$config->load('session')->get($type);
 
@@ -58,13 +58,13 @@ abstract class Session
             $class = str_contains($type, '\\') ? $type : __NAMESPACE__ . '\\' . ucfirst(strtolower($type)) . 'Session';
 
             // Create a new session instance
-            \Kohana\Session\Session::$instances[$type] = $session = new $class($config, $id);
+            static::$instances[$type] = $session = new $class($config, $id);
 
             // Write the session at shutdown
             register_shutdown_function([$session, 'write']);
         }
 
-        return \Kohana\Session\Session::$instances[$type];
+        return static::$instances[$type];
     }
 
     /**
@@ -241,7 +241,7 @@ abstract class Session
      * @param   mixed   $value  value
      * @return  $this
      */
-    public function set(string $key, $value): \Kohana\Session\Session
+    public function set(string $key, $value): self
     {
         $this->data[$key] = $value;
 
@@ -257,7 +257,7 @@ abstract class Session
      * @param   mixed   $value  referenced value
      * @return  $this
      */
-    public function bind(string $key, &$value): \Kohana\Session\Session
+    public function bind(string $key, &$value): self
     {
         $this->data[$key] = &$value;
 
@@ -272,7 +272,7 @@ abstract class Session
      * @param string ...$keys variable name
      * @return  $this
      */
-    public function delete(...$keys): \Kohana\Session\Session
+    public function delete(...$keys): self
     {
         foreach ($keys as $key) {
             unset($this->data[$key]);

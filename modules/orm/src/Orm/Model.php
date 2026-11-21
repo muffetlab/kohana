@@ -295,7 +295,7 @@ class Model extends \Kohana\Foundation\Model
         }
 
         // Check if this model has already been initialized
-        if (!$init = Arr::get(\Kohana\Orm\Model::$initCache, $this->objectName, false)) {
+        if (!$init = Arr::get(static::$initCache, $this->objectName, false)) {
             $init = [
                 'belongsTo' => [],
                 'hasOne' => [],
@@ -363,7 +363,7 @@ class Model extends \Kohana\Foundation\Model
                 $init['hasMany'][$alias] = array_merge($defaults, $details);
             }
 
-            \Kohana\Orm\Model::$initCache[$this->objectName] = $init;
+            static::$initCache[$this->objectName] = $init;
         }
 
         // Assign initialized properties to the current object
@@ -408,7 +408,7 @@ class Model extends \Kohana\Foundation\Model
      * @chainable
      * @return Kohana_ORM
      */
-    public function clear(): \Kohana\Orm\Model
+    public function clear(): self
     {
         // Create an array with all the columns set to null
         $values = array_combine(array_keys($this->object), array_fill(0, count($this->object), null));
@@ -437,7 +437,7 @@ class Model extends \Kohana\Foundation\Model
      * @return Kohana_ORM
      * @throws Kohana_Exception
      */
-    public function reload(): \Kohana\Orm\Model
+    public function reload(): self
     {
         $primary_key = $this->pk();
 
@@ -602,7 +602,7 @@ class Model extends \Kohana\Foundation\Model
 
             return $this->related[$column] = $model;
         } elseif (isset($this->hasMany[$column])) {
-            $model = \Kohana\Orm\Model::factory($this->hasMany[$column]['model']);
+            $model = static::factory($this->hasMany[$column]['model']);
 
             if (isset($this->hasMany[$column]['through'])) {
                 // Grab has_many "through" relationship table
@@ -651,7 +651,7 @@ class Model extends \Kohana\Foundation\Model
      * @return Kohana_ORM
      * @throws ReflectionException
      */
-    public function set(string $column, $value): \Kohana\Orm\Model
+    public function set(string $column, $value): self
     {
         if (!isset($this->objectName)) {
             // Object not yet constructed, so we're loading data from a database call cast
@@ -669,7 +669,7 @@ class Model extends \Kohana\Foundation\Model
             $this->related[$column] = $value;
 
             // Update the foreign key of this model
-            $this->object[$this->belongsTo[$column]['foreign_key']] = $value instanceof \Kohana\Orm\Model ? $value->pk() : null;
+            $this->object[$this->belongsTo[$column]['foreign_key']] = $value instanceof self ? $value->pk() : null;
 
             $this->changes[$column] = $value;
         } else {
@@ -699,7 +699,7 @@ class Model extends \Kohana\Foundation\Model
      * @param array $columns Array of columns to be set
      * @return Kohana_ORM
      */
-    public function values(array $values, array $columns): \Kohana\Orm\Model
+    public function values(array $values, array $columns): self
     {
         foreach ($columns as $key => $column) {
             if (is_string($key)) {
@@ -754,7 +754,7 @@ class Model extends \Kohana\Foundation\Model
      * @param string $target_path Target model to bind to
      * @return Kohana_ORM
      */
-    public function with(string $target_path): \Kohana\Orm\Model
+    public function with(string $target_path): self
     {
         if (isset($this->withApplied[$target_path])) {
             // Don't join anything already joined
@@ -826,7 +826,7 @@ class Model extends \Kohana\Foundation\Model
      * @param int $type Type of Database query
      * @return Kohana_ORM
      */
-    protected function build(int $type): \Kohana\Orm\Model
+    protected function build(int $type): self
     {
         // Construct new builder object based on query type
         switch ($type) {
@@ -965,7 +965,7 @@ class Model extends \Kohana\Foundation\Model
      * @param  array $values Values to load
      * @return Kohana_ORM
      */
-    protected function loadValues(array $values): \Kohana\Orm\Model
+    protected function loadValues(array $values): self
     {
         if (array_key_exists($this->primaryKey, $values)) {
             if ($values[$this->primaryKey] !== null) {
@@ -1100,7 +1100,7 @@ class Model extends \Kohana\Foundation\Model
      * @throws ORM_Validation_Exception
      * @throws ReflectionException
      */
-    public function check(?Validator $extra_validation = null): \Kohana\Orm\Model
+    public function check(?Validator $extra_validation = null): self
     {
         // Determine if any external validation failed
         $extra_errors = $extra_validation && !$extra_validation->check();
@@ -1131,7 +1131,7 @@ class Model extends \Kohana\Foundation\Model
      * @throws ORM_Validation_Exception
      * @throws ReflectionException
      */
-    public function create(?Validator $validation = null): \Kohana\Orm\Model
+    public function create(?Validator $validation = null): self
     {
         if ($this->loaded)
             throw new KohanaException('Cannot create :model model because it is already loaded.', [':model' => $this->objectName]);
@@ -1187,7 +1187,7 @@ class Model extends \Kohana\Foundation\Model
      * @throws ORM_Validation_Exception
      * @throws ReflectionException
      */
-    public function update(?Validator $validation = null): \Kohana\Orm\Model
+    public function update(?Validator $validation = null): self
     {
         if (!$this->loaded)
             throw new KohanaException('Cannot update :model model because it is not loaded.', [':model' => $this->objectName]);
@@ -1250,7 +1250,7 @@ class Model extends \Kohana\Foundation\Model
      * @throws ORM_Validation_Exception
      * @throws ReflectionException
      */
-    public function save(?Validator $validation = null): \Kohana\Orm\Model
+    public function save(?Validator $validation = null): self
     {
         return $this->loaded() ? $this->update($validation) : $this->create($validation);
     }
@@ -1262,7 +1262,7 @@ class Model extends \Kohana\Foundation\Model
      * @return Kohana_ORM
      * @throws Kohana_Exception
      */
-    public function delete(): \Kohana\Orm\Model
+    public function delete(): self
     {
         if (!$this->loaded)
             throw new KohanaException('Cannot delete :model model because it is not loaded.', [':model' => $this->objectName]);
@@ -1358,7 +1358,7 @@ class Model extends \Kohana\Foundation\Model
                     ->execute($this->db)->get('records_found');
         }
 
-        $far_keys = $far_keys instanceof \Kohana\Orm\Model ? $far_keys->pk() : $far_keys;
+        $far_keys = $far_keys instanceof self ? $far_keys->pk() : $far_keys;
 
         // We need an array to simplify the logic
         $far_keys = (array) $far_keys;
@@ -1391,9 +1391,9 @@ class Model extends \Kohana\Foundation\Model
      * @return Kohana_ORM
      * @throws Kohana_Exception
      */
-    public function add(string $alias, $far_keys): \Kohana\Orm\Model
+    public function add(string $alias, $far_keys): self
     {
-        $far_keys = $far_keys instanceof \Kohana\Orm\Model ? $far_keys->pk() : $far_keys;
+        $far_keys = $far_keys instanceof self ? $far_keys->pk() : $far_keys;
 
         $columns = [$this->hasMany[$alias]['foreign_key'], $this->hasMany[$alias]['far_key']];
         $foreign_key = $this->pk();
@@ -1426,9 +1426,9 @@ class Model extends \Kohana\Foundation\Model
      * @return Kohana_ORM
      * @throws Kohana_Exception
      */
-    public function remove(string $alias, $far_keys = null): \Kohana\Orm\Model
+    public function remove(string $alias, $far_keys = null): self
     {
-        $far_keys = $far_keys instanceof \Kohana\Orm\Model ? $far_keys->pk() : $far_keys;
+        $far_keys = $far_keys instanceof self ? $far_keys->pk() : $far_keys;
 
         $query = DB::delete($this->hasMany[$alias]['through'])
             ->where($this->hasMany[$alias]['foreign_key'], '=', $this->pk());
@@ -1501,15 +1501,15 @@ class Model extends \Kohana\Foundation\Model
      * @param string $alias Alias name
      * @return ORM
      */
-    protected function related(string $alias): ?\Kohana\Orm\Model
+    protected function related(string $alias): ?self
     {
         switch (true) {
             case isset($this->related[$alias]):
                 return $this->related[$alias];
             case isset($this->hasOne[$alias]):
-                return $this->related[$alias] = \Kohana\Orm\Model::factory($this->hasOne[$alias]['model']);
+                return $this->related[$alias] = static::factory($this->hasOne[$alias]['model']);
             case isset($this->belongsTo[$alias]):
-                return $this->related[$alias] = \Kohana\Orm\Model::factory($this->belongsTo[$alias]['model']);
+                return $this->related[$alias] = static::factory($this->belongsTo[$alias]['model']);
             default:
                 return null;
         }
@@ -1542,7 +1542,7 @@ class Model extends \Kohana\Foundation\Model
      * @param bool $next Pass false to avoid resetting on the next call
      * @return Kohana_ORM
      */
-    public function reset(bool $next = true): \Kohana\Orm\Model
+    public function reset(bool $next = true): self
     {
         if ($next && $this->dbReset) {
             $this->dbPending = [];
@@ -1660,7 +1660,7 @@ class Model extends \Kohana\Foundation\Model
      * @param   mixed   $value   column value
      * @return  $this
      */
-    public function where($column, string $op, $value): \Kohana\Orm\Model
+    public function where($column, string $op, $value): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -1679,7 +1679,7 @@ class Model extends \Kohana\Foundation\Model
      * @param   mixed   $value   column value
      * @return  $this
      */
-    public function andWhere($column, string $op, $value): \Kohana\Orm\Model
+    public function andWhere($column, string $op, $value): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -1698,7 +1698,7 @@ class Model extends \Kohana\Foundation\Model
      * @param   mixed   $value   column value
      * @return  $this
      */
-    public function orWhere($column, string $op, $value): \Kohana\Orm\Model
+    public function orWhere($column, string $op, $value): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -1714,7 +1714,7 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function whereOpen(): \Kohana\Orm\Model
+    public function whereOpen(): self
     {
         return $this->andWhereOpen();
     }
@@ -1724,7 +1724,7 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function andWhereOpen(): \Kohana\Orm\Model
+    public function andWhereOpen(): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -1740,7 +1740,7 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function orWhereOpen(): \Kohana\Orm\Model
+    public function orWhereOpen(): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -1756,7 +1756,7 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function whereClose(): \Kohana\Orm\Model
+    public function whereClose(): self
     {
         return $this->andWhereClose();
     }
@@ -1766,7 +1766,7 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function andWhereClose(): \Kohana\Orm\Model
+    public function andWhereClose(): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -1782,7 +1782,7 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function orWhereClose(): \Kohana\Orm\Model
+    public function orWhereClose(): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -1800,7 +1800,7 @@ class Model extends \Kohana\Foundation\Model
      * @param string|null $direction Direction of sorting
      * @return  $this
      */
-    public function orderBy($column, ?string $direction = null): \Kohana\Orm\Model
+    public function orderBy($column, ?string $direction = null): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -1817,7 +1817,7 @@ class Model extends \Kohana\Foundation\Model
      * @param int $number Maximum results to return
      * @return  $this
      */
-    public function limit(int $number): \Kohana\Orm\Model
+    public function limit(int $number): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -1834,7 +1834,7 @@ class Model extends \Kohana\Foundation\Model
      * @param bool $value enable or disable distinct columns
      * @return  $this
      */
-    public function distinct(bool $value): \Kohana\Orm\Model
+    public function distinct(bool $value): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -1851,7 +1851,7 @@ class Model extends \Kohana\Foundation\Model
      * @param mixed ...$columns column name or [$column, $alias] or object
      * @return  $this
      */
-    public function select(...$columns): \Kohana\Orm\Model
+    public function select(...$columns): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -1868,7 +1868,7 @@ class Model extends \Kohana\Foundation\Model
      * @param mixed ...$tables table name or [$table, $alias] or object
      * @return  $this
      */
-    public function from(...$tables): \Kohana\Orm\Model
+    public function from(...$tables): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -1886,7 +1886,7 @@ class Model extends \Kohana\Foundation\Model
      * @param string|null $type Join type (LEFT, RIGHT, INNER, etc.)
      * @return  $this
      */
-    public function join($table, ?string $type = null): \Kohana\Orm\Model
+    public function join($table, ?string $type = null): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -1905,7 +1905,7 @@ class Model extends \Kohana\Foundation\Model
      * @param   mixed   $c2  column name or [$column, $alias] or object
      * @return  $this
      */
-    public function on($c1, string $op, $c2): \Kohana\Orm\Model
+    public function on($c1, string $op, $c2): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -1923,7 +1923,7 @@ class Model extends \Kohana\Foundation\Model
      * @param   ...
      * @return  $this
      */
-    public function groupBy(...$columns): \Kohana\Orm\Model
+    public function groupBy(...$columns): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -1942,7 +1942,7 @@ class Model extends \Kohana\Foundation\Model
      * @param   mixed   $value   column value
      * @return  $this
      */
-    public function having($column, string $op, $value = null): \Kohana\Orm\Model
+    public function having($column, string $op, $value = null): self
     {
         return $this->andHaving($column, $op, $value);
     }
@@ -1955,7 +1955,7 @@ class Model extends \Kohana\Foundation\Model
      * @param   mixed   $value   column value
      * @return  $this
      */
-    public function andHaving($column, string $op, $value = null): \Kohana\Orm\Model
+    public function andHaving($column, string $op, $value = null): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -1974,7 +1974,7 @@ class Model extends \Kohana\Foundation\Model
      * @param   mixed   $value   column value
      * @return  $this
      */
-    public function orHaving($column, string $op, $value = null): \Kohana\Orm\Model
+    public function orHaving($column, string $op, $value = null): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -1990,7 +1990,7 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function havingOpen(): \Kohana\Orm\Model
+    public function havingOpen(): self
     {
         return $this->andHavingOpen();
     }
@@ -2000,7 +2000,7 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function andHavingOpen(): \Kohana\Orm\Model
+    public function andHavingOpen(): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -2016,7 +2016,7 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function orHavingOpen(): \Kohana\Orm\Model
+    public function orHavingOpen(): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -2032,7 +2032,7 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function havingClose(): \Kohana\Orm\Model
+    public function havingClose(): self
     {
         return $this->andHavingClose();
     }
@@ -2042,7 +2042,7 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function andHavingClose(): \Kohana\Orm\Model
+    public function andHavingClose(): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -2058,7 +2058,7 @@ class Model extends \Kohana\Foundation\Model
      *
      * @return  $this
      */
-    public function orHavingClose(): \Kohana\Orm\Model
+    public function orHavingClose(): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -2075,7 +2075,7 @@ class Model extends \Kohana\Foundation\Model
      * @param int $number Starting result number
      * @return  $this
      */
-    public function offset(int $number): \Kohana\Orm\Model
+    public function offset(int $number): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -2093,7 +2093,7 @@ class Model extends \Kohana\Foundation\Model
      * @return  $this
      * @uses    Kohana::$cache_life
      */
-    public function cached(?int $lifetime = null): \Kohana\Orm\Model
+    public function cached(?int $lifetime = null): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -2111,7 +2111,7 @@ class Model extends \Kohana\Foundation\Model
      * @param   mixed    $value  value to use
      * @return  $this
      */
-    public function param(string $param, $value): \Kohana\Orm\Model
+    public function param(string $param, $value): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -2128,7 +2128,7 @@ class Model extends \Kohana\Foundation\Model
      * @param string $columns Column name
      * @return  $this
      */
-    public function using(string $columns): \Kohana\Orm\Model
+    public function using(string $columns): self
     {
         // Add pending database call which is executed after query type is determined
         $this->dbPending[] = [
@@ -2150,7 +2150,7 @@ class Model extends \Kohana\Foundation\Model
      */
     public function unique(string $field, $value): bool
     {
-        $model = \Kohana\Orm\Model::factory(static::class)
+        $model = static::factory(static::class)
             ->where($field, '=', $value)
             ->find();
 

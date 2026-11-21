@@ -124,7 +124,7 @@ class Form
     {
         $attributes['type'] = 'hidden';
 
-        return \Kohana\Html\Form::input($name, $value, $attributes);
+        return static::input($name, $value, $attributes);
     }
 
     /**
@@ -142,7 +142,7 @@ class Form
     {
         $attributes['type'] = 'password';
 
-        return \Kohana\Html\Form::input($name, $value, $attributes);
+        return static::input($name, $value, $attributes);
     }
 
     /**
@@ -159,7 +159,7 @@ class Form
     {
         $attributes['type'] = 'file';
 
-        return \Kohana\Html\Form::input($name, null, $attributes);
+        return static::input($name, null, $attributes);
     }
 
     /**
@@ -183,7 +183,7 @@ class Form
             $attributes[] = 'checked';
         }
 
-        return \Kohana\Html\Form::input($name, $value, $attributes);
+        return static::input($name, $value, $attributes);
     }
 
     /**
@@ -208,7 +208,7 @@ class Form
             $attributes[] = 'checked';
         }
 
-        return \Kohana\Html\Form::input($name, $value, $attributes);
+        return static::input($name, $value, $attributes);
     }
 
     /**
@@ -340,7 +340,7 @@ class Form
     {
         $attributes['type'] = 'submit';
 
-        return \Kohana\Html\Form::input($name, $value, $attributes);
+        return static::input($name, $value, $attributes);
     }
 
     /**
@@ -367,7 +367,7 @@ class Form
 
         $attributes['type'] = 'image';
 
-        return \Kohana\Html\Form::input($name, $value, $attributes);
+        return static::input($name, $value, $attributes);
     }
 
     /**

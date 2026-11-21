@@ -32,7 +32,7 @@ class ImagickImage extends Image
             throw new KohanaException('Imagick is not installed, or the extension is not loaded');
         }
 
-        return \Kohana\Image\ImagickImage::$checked = true;
+        return static::$checked = true;
     }
 
     /**
@@ -44,9 +44,9 @@ class ImagickImage extends Image
      */
     public function __construct($file)
     {
-        if (!\Kohana\Image\ImagickImage::$checked) {
+        if (!static::$checked) {
             // Run the installation check
-            \Kohana\Image\ImagickImage::check();
+            static::check();
         }
 
         parent::__construct($file);

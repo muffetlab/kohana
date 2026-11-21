@@ -21,7 +21,7 @@ abstract class Model
      * @param string $name Model name
      * @return  Model
      */
-    public static function factory(string $name): \Kohana\Foundation\Model
+    public static function factory(string $name): self
     {
         // Add the model prefix
         $class = str_contains($name, '\\') ? $name : 'App\\Models\\' . str_replace('_', '', ucwords($name, '_'));

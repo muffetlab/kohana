@@ -338,7 +338,7 @@ class Str
     public static function autoLink(string $text): string
     {
         // Auto link emails first to prevent problems with "www.domain.com@example.com"
-        return \Kohana\Support\Str::autoLinkUrls(\Kohana\Support\Str::autoLinkEmails($text));
+        return static::autoLinkUrls(static::autoLinkEmails($text));
     }
 
     /**
@@ -511,7 +511,7 @@ class Str
         // The last matched item within the loop
         $last_item = '';
 
-        foreach (\Kohana\Support\Str::$units as $unit => $name) {
+        foreach (static::$units as $unit => $name) {
             if ($number / $unit >= 1) {
                 // $value = the number of times the number is divisible by unit
                 $number -= $unit * ($value = (int) floor($number / $unit));
@@ -525,7 +525,7 @@ class Str
                         $item = $name;
                     }
                 } else {
-                    $item = \Kohana\Support\Str::number($value) . ' ' . $name;
+                    $item = static::number($value) . ' ' . $name;
                 }
 
                 // In the situation that we need to make a composite number (i.e. twenty-three)
@@ -605,7 +605,7 @@ class Str
             $data = [];
             foreach ($value as $part) {
                 // Add each part to the set
-                $data[$part] = \Kohana\Support\Str::userAgent($agent, $part);
+                $data[$part] = static::userAgent($agent, $part);
             }
 
             return $data;

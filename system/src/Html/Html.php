@@ -122,7 +122,7 @@ class Html
             $uri = Url::base($protocol, $index);
         } else {
             if (strpos($uri, '://') !== false) {
-                if (\Kohana\Html\Html::$windowedUrls === true && empty($attributes['target'])) {
+                if (static::$windowedUrls === true && empty($attributes['target'])) {
                     // Make the link open in a new window
                     $attributes['target'] = '_blank';
                 }
@@ -135,7 +135,7 @@ class Html
         // Add the sanitized link to the attributes
         $attributes['href'] = $uri;
 
-        return '<a' . \Kohana\Html\Html::attributes($attributes) . '>' . $title . '</a>';
+        return '<a' . static::attributes($attributes) . '>' . $title . '</a>';
     }
 
     /**
@@ -164,7 +164,7 @@ class Html
         // Add the file link to the attributes
         $attributes['href'] = Url::site($file, $protocol, $index);
 
-        return '<a' . \Kohana\Html\Html::attributes($attributes) . '>' . $title . '</a>';
+        return '<a' . static::attributes($attributes) . '>' . $title . '</a>';
     }
 
     /**
@@ -186,7 +186,7 @@ class Html
             $title = $email;
         }
 
-        return '<a href="&#109;&#097;&#105;&#108;&#116;&#111;&#058;' . $email . '"' . \Kohana\Html\Html::attributes($attributes) . '>' . $title . '</a>';
+        return '<a href="&#109;&#097;&#105;&#108;&#116;&#111;&#058;' . $email . '"' . static::attributes($attributes) . '>' . $title . '</a>';
     }
 
     /**
@@ -219,7 +219,7 @@ class Html
         // Set the stylesheet type
         $attributes['type'] = 'text/css';
 
-        return '<link' . \Kohana\Html\Html::attributes($attributes) . ' />';
+        return '<link' . static::attributes($attributes) . ' />';
     }
 
     /**
@@ -249,7 +249,7 @@ class Html
         // Set the script type
         $attributes['type'] = 'text/javascript';
 
-        return '<script' . \Kohana\Html\Html::attributes($attributes) . '></script>';
+        return '<script' . static::attributes($attributes) . '></script>';
     }
 
     /**
@@ -276,7 +276,7 @@ class Html
         // Add the image link
         $attributes['src'] = $file;
 
-        return '<img' . \Kohana\Html\Html::attributes($attributes) . ' />';
+        return '<img' . static::attributes($attributes) . ' />';
     }
 
     /**
@@ -294,7 +294,7 @@ class Html
             return '';
 
         $sorted = [];
-        foreach (\Kohana\Html\Html::$attributeOrder as $key) {
+        foreach (static::$attributeOrder as $key) {
             if (isset($attributes[$key])) {
                 // Add the attribute to the sorted list
                 $sorted[$key] = $attributes[$key];
@@ -315,7 +315,7 @@ class Html
                 // Assume non-associative keys are mirrored attributes
                 $key = $value;
 
-                if (!\Kohana\Html\Html::$strict) {
+                if (!static::$strict) {
                     // Just use a key
                     $value = false;
                 }
@@ -324,9 +324,9 @@ class Html
             // Add the attribute key
             $compiled .= ' ' . $key;
 
-            if ($value || \Kohana\Html\Html::$strict) {
+            if ($value || static::$strict) {
                 // Add the attribute value
-                $compiled .= '="' . \Kohana\Html\Html::chars($value) . '"';
+                $compiled .= '="' . static::chars($value) . '"';
             }
         }
 

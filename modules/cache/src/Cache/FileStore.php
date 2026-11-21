@@ -122,7 +122,7 @@ class FileStore extends Cache implements GarbageCollect
      */
     public function get(string $id, $default = null)
     {
-        $filename = \Kohana\Cache\FileStore::filename($this->sanitizeId($id));
+        $filename = static::filename($this->sanitizeId($id));
         $directory = $this->resolveDirectory($filename);
 
         // Wrap operations in try/catch to handle notices
@@ -191,7 +191,7 @@ class FileStore extends Cache implements GarbageCollect
      */
     public function set(string $id, $data, ?int $lifetime = null): bool
     {
-        $filename = \Kohana\Cache\FileStore::filename($this->sanitizeId($id));
+        $filename = static::filename($this->sanitizeId($id));
         $directory = $this->resolveDirectory($filename);
 
         // If lifetime is null
@@ -240,7 +240,7 @@ class FileStore extends Cache implements GarbageCollect
      */
     public function delete(string $id): bool
     {
-        $filename = \Kohana\Cache\FileStore::filename($this->sanitizeId($id));
+        $filename = static::filename($this->sanitizeId($id));
         $directory = $this->resolveDirectory($filename);
 
         return $this->deleteFile(new \SplFileInfo($directory . $filename), false, true);

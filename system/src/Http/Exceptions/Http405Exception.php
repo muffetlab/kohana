@@ -16,7 +16,7 @@ class Http405Exception extends ExpectedHttpException
      *
      * @param array|string $methods List of allowed methods
      */
-    public function allowed($methods): \Kohana\Http\Exceptions\Http405Exception
+    public function allowed($methods): self
     {
         if (is_array($methods)) {
             $methods = implode(',', $methods);

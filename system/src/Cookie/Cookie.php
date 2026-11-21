@@ -70,13 +70,13 @@ class Cookie
         $cookie = $_COOKIE[$key];
 
         // Find the position of the split between salt and contents
-        $split = strlen(\Kohana\Cookie\Cookie::salt($key, ''));
+        $split = strlen(static::salt($key, ''));
 
         if (isset($cookie[$split]) && $cookie[$split] === '~') {
             // Separate the salt and the value
             list ($hash, $value) = explode('~', $cookie, 2);
 
-            if (Security::slowEquals(\Kohana\Cookie\Cookie::salt($key, $value), $hash)) {
+            if (Security::slowEquals(static::salt($key, $value), $hash)) {
                 // Cookie signature is valid
                 return $value;
             }
@@ -111,7 +111,7 @@ class Cookie
     {
         if ($lifetime === null) {
             // Use the default expiration
-            $lifetime = \Kohana\Cookie\Cookie::$expiration;
+            $lifetime = static::$expiration;
         }
 
         if ($lifetime !== 0) {
@@ -120,9 +120,9 @@ class Cookie
         }
 
         // Add the salt to the cookie value
-        $value = \Kohana\Cookie\Cookie::salt($name, $value) . '~' . $value;
+        $value = static::salt($name, $value) . '~' . $value;
 
-        return static::setcookie($name, $value, $lifetime, \Kohana\Cookie\Cookie::$path, \Kohana\Cookie\Cookie::$domain, \Kohana\Cookie\Cookie::$secure, \Kohana\Cookie\Cookie::$httponly);
+        return static::setcookie($name, $value, $lifetime, static::$path, static::$domain, static::$secure, static::$httponly);
     }
 
     /**
@@ -139,7 +139,7 @@ class Cookie
         unset($_COOKIE[$name]);
 
         // Nullify the cookie and make it expire
-        return static::setcookie($name, '', -86400, \Kohana\Cookie\Cookie::$path, \Kohana\Cookie\Cookie::$domain, \Kohana\Cookie\Cookie::$secure, \Kohana\Cookie\Cookie::$httponly);
+        return static::setcookie($name, '', -86400, static::$path, static::$domain, static::$secure, static::$httponly);
     }
 
     /**
@@ -156,11 +156,11 @@ class Cookie
     public static function salt(string $name, string $value): string
     {
         // Require a valid salt
-        if (!\Kohana\Cookie\Cookie::$salt) {
+        if (!static::$salt) {
             throw new KohanaException('A valid cookie salt is required. Please set Cookie::$salt in your bootstrap.php. For more information check the documentation');
         }
 
-        return hash_hmac('sha1', $name . $value . \Kohana\Cookie\Cookie::$salt, \Kohana\Cookie\Cookie::$salt);
+        return hash_hmac('sha1', $name . $value . static::$salt, static::$salt);
     }
 
     /**

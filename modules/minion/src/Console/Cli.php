@@ -143,9 +143,9 @@ class Cli
 
         // If options are provided and the choice is not in the array, tell them to try again
         if (!empty($options) && !in_array($input, $options)) {
-            \Kohana\Console\Cli::write('This is not a valid option. Please try again.');
+            static::write('This is not a valid option. Please try again.');
 
-            $input = \Kohana\Console\Cli::read($text, $options);
+            $input = static::read($text, $options);
         }
 
         // Read the input
@@ -183,7 +183,7 @@ class Cli
             $password = shell_exec('/usr/bin/env bash -c \'read -s -p "' . escapeshellcmd($text) . '" var && echo $var\'');
         }
 
-        \Kohana\Console\Cli::write();
+        static::write();
 
         return trim($password);
     }
@@ -198,7 +198,7 @@ class Cli
     {
         if (is_array($text)) {
             foreach ($text as $line) {
-                \Kohana\Console\Cli::write($line);
+                static::write($line);
             }
         } else {
             fwrite(STDOUT, $text . PHP_EOL);
@@ -250,13 +250,13 @@ class Cli
                 $time--;
             }
 
-            \Kohana\Console\Cli::write();
+            static::write();
         } else {
             if ($seconds > 0) {
                 sleep($seconds);
             } else {
-                \Kohana\Console\Cli::write(\Kohana\Console\Cli::$waitMsg);
-                \Kohana\Console\Cli::read();
+                static::write(static::$waitMsg);
+                static::read();
             }
         }
     }
@@ -282,18 +282,18 @@ class Cli
             return $text;
         }
 
-        if (!array_key_exists($foreground, \Kohana\Console\Cli::$foregroundColors)) {
+        if (!array_key_exists($foreground, static::$foregroundColors)) {
             throw new KohanaException('Invalid CLI foreground color: ' . $foreground);
         }
 
-        if ($background !== null && !array_key_exists($background, \Kohana\Console\Cli::$backgroundColors)) {
+        if ($background !== null && !array_key_exists($background, static::$backgroundColors)) {
             throw new KohanaException('Invalid CLI background color: ' . $background);
         }
 
-        $string = "\033[" . \Kohana\Console\Cli::$foregroundColors[$foreground] . "m";
+        $string = "\033[" . static::$foregroundColors[$foreground] . "m";
 
         if ($background !== null) {
-            $string .= "\033[" . \Kohana\Console\Cli::$backgroundColors[$background] . "m";
+            $string .= "\033[" . static::$backgroundColors[$background] . "m";
         }
 
         $string .= $text . "\033[0m";

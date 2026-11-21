@@ -211,9 +211,9 @@ class MemcachedStore extends Cache implements Arithmetic
         }
 
         // If the lifetime is greater than the ceiling.
-        if ($lifetime > \Kohana\Cache\MemcachedStore::CACHE_CEILING) {
+        if ($lifetime > static::CACHE_CEILING) {
             // Set the lifetime to maximum cache time.
-            $lifetime = \Kohana\Cache\MemcachedStore::CACHE_CEILING + time();
+            $lifetime = static::CACHE_CEILING + time();
         }
         // Else if the lifetime is greater than zero.
         elseif ($lifetime > 0) {

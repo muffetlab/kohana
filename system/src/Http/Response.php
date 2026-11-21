@@ -37,9 +37,9 @@ class Response implements \Kohana\Http\Contracts\Response
      * @param   array    $config Set up the response object
      * @return  Response
      */
-    public static function factory(array $config = []): \Kohana\Http\Response
+    public static function factory(array $config = []): self
     {
-        return new \Kohana\Http\Response($config);
+        return new static($config);
     }
 
     // HTTP status codes and messages
@@ -202,7 +202,7 @@ class Response implements \Kohana\Http\Contracts\Response
     {
         if ($code === null) {
             return $this->status;
-        } elseif (array_key_exists($code, \Kohana\Http\Response::$messages)) {
+        } elseif (array_key_exists($code, static::$messages)) {
             $this->status = $code;
             return $this;
         } else {
@@ -308,7 +308,7 @@ class Response implements \Kohana\Http\Contracts\Response
      * @param string $name
      * @return  Kohana_Response
      */
-    public function deleteCookie(string $name): \Kohana\Http\Response
+    public function deleteCookie(string $name): self
     {
         unset($this->cookies[$name]);
         return $this;
@@ -319,7 +319,7 @@ class Response implements \Kohana\Http\Contracts\Response
      *
      * @return Kohana_Response
      */
-    public function deleteCookies(): \Kohana\Http\Response
+    public function deleteCookies(): self
     {
         $this->cookies = [];
         return $this;
@@ -562,7 +562,7 @@ class Response implements \Kohana\Http\Contracts\Response
             $this->header['set-cookie'] = $cookies;
         }
 
-        $output = $this->protocol . ' ' . $this->status . ' ' . \Kohana\Http\Response::$messages[$this->status] . "\r\n";
+        $output = $this->protocol . ' ' . $this->status . ' ' . static::$messages[$this->status] . "\r\n";
         $output .= $this->header;
         $output .= $this->body;
 

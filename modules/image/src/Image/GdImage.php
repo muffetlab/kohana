@@ -37,13 +37,13 @@ class GdImage extends Image
             throw new KohanaException('GD is either not installed or not enabled, check your configuration');
         }
         $functions = [
-            \Kohana\Image\GdImage::IMAGEROTATE,
-            \Kohana\Image\GdImage::IMAGECONVOLUTION,
-            \Kohana\Image\GdImage::IMAGEFILTER,
-            \Kohana\Image\GdImage::IMAGELAYEREFFECT
+            static::IMAGEROTATE,
+            static::IMAGECONVOLUTION,
+            static::IMAGEFILTER,
+            static::IMAGELAYEREFFECT
         ];
         foreach ($functions as $function) {
-            \Kohana\Image\GdImage::$availableFunctions[$function] = function_exists($function);
+            static::$availableFunctions[$function] = function_exists($function);
         }
 
         if (defined('GD_VERSION')) {
@@ -64,7 +64,7 @@ class GdImage extends Image
             throw new KohanaException('GdImage requires GD version :required or greater, you have :version', ['required' => '2.0.1', ':version' => $version]);
         }
 
-        return \Kohana\Image\GdImage::$checked = true;
+        return static::$checked = true;
     }
 
     // Temporary image resource
@@ -81,9 +81,9 @@ class GdImage extends Image
      */
     public function __construct(string $file)
     {
-        if (!\Kohana\Image\GdImage::$checked) {
+        if (!static::$checked) {
             // Run the installation check
-            \Kohana\Image\GdImage::check();
+            static::check();
         }
 
         parent::__construct($file);
@@ -232,7 +232,7 @@ class GdImage extends Image
      */
     protected function doRotate(int $degrees)
     {
-        if (empty(\Kohana\Image\GdImage::$availableFunctions[\Kohana\Image\GdImage::IMAGEROTATE])) {
+        if (empty(static::$availableFunctions[static::IMAGEROTATE])) {
             throw new KohanaException('This method requires :function, which is only available in the bundled version of GD', [':function' => 'imagerotate']);
         }
 
@@ -307,7 +307,7 @@ class GdImage extends Image
      */
     protected function doSharpen(int $amount)
     {
-        if (empty(\Kohana\Image\GdImage::$availableFunctions[\Kohana\Image\GdImage::IMAGECONVOLUTION])) {
+        if (empty(static::$availableFunctions[static::IMAGECONVOLUTION])) {
             throw new KohanaException('This method requires :function, which is only available in the bundled version of GD', [':function' => 'imageconvolution']);
         }
 
@@ -343,7 +343,7 @@ class GdImage extends Image
      */
     protected function doReflection(int $height, int $opacity, bool $fade_in)
     {
-        if (empty(\Kohana\Image\GdImage::$availableFunctions[\Kohana\Image\GdImage::IMAGEFILTER])) {
+        if (empty(static::$availableFunctions[static::IMAGEFILTER])) {
             throw new KohanaException('This method requires :function, which is only available in the bundled version of GD', [':function' => 'imagefilter']);
         }
 
@@ -416,7 +416,7 @@ class GdImage extends Image
      */
     protected function doWatermark(Image $image, int $offset_x, int $offset_y, int $opacity)
     {
-        if (empty(\Kohana\Image\GdImage::$availableFunctions[\Kohana\Image\GdImage::IMAGELAYEREFFECT])) {
+        if (empty(static::$availableFunctions[static::IMAGELAYEREFFECT])) {
             throw new KohanaException('This method requires :function, which is only available in the bundled version of GD', [':function' => 'imagelayereffect']);
         }
 

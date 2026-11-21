@@ -65,7 +65,7 @@ class ValidationException extends KohanaException
      * @param  mixed      $has_many The array key to use if this exception can be merged multiple times
      * @return Kohana_ORM_Validation_Exception
      */
-    public function addObject(string $alias, Validator $object, $has_many = false): \Kohana\Orm\ValidationException
+    public function addObject(string $alias, Validator $object, $has_many = false): self
     {
         // We will need this when generating errors
         $this->objects[$alias]['hasMany'] = $has_many !== false;
@@ -91,7 +91,7 @@ class ValidationException extends KohanaException
      * @param  mixed                    $has_many The array key to use if this exception can be merged multiple times
      * @return Kohana_ORM_Validation_Exception
      */
-    public function merge(\Kohana\Orm\ValidationException $object, $has_many = false): \Kohana\Orm\ValidationException
+    public function merge(self $object, $has_many = false): self
     {
         $alias = $object->alias();
 

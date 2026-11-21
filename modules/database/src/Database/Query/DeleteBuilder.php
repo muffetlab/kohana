@@ -41,7 +41,7 @@ class DeleteBuilder extends WhereBuilder
      * @param   mixed  $table  table name or [$table, $alias] or object
      * @return  $this
      */
-    public function table($table): \Kohana\Database\Query\DeleteBuilder
+    public function table($table): self
     {
         $this->table = $table;
 
@@ -90,7 +90,7 @@ class DeleteBuilder extends WhereBuilder
      * @return $this
      * @deprecated 3.5.0
      */
-    public function reset(): \Kohana\Database\Query\DeleteBuilder
+    public function reset(): self
     {
         $this->table = null;
         $this->where = [];

@@ -39,14 +39,14 @@ abstract class Encrypter
      * @return  Encrypt
      * @throws Kohana_Exception
      */
-    public static function instance(?string $name = null, ?array $config = null): \Kohana\Encryption\Encrypter
+    public static function instance(?string $name = null, ?array $config = null): self
     {
         if ($name === null) {
             // Use the default instance name
-            $name = \Kohana\Encryption\Encrypter::$default;
+            $name = static::$default;
         }
 
-        if (!isset(\Kohana\Encryption\Encrypter::$instances[$name])) {
+        if (!isset(static::$instances[$name])) {
             if ($config === null) {
                 // Load the configuration data
                 $config = Application::$config->load('encrypt')->$name;
@@ -60,10 +60,10 @@ abstract class Encrypter
             $driver = str_contains($config['driver'], '\\') ? $config['driver'] : __NAMESPACE__ . '\\' . ucfirst(strtolower($config['driver'])) . 'Encrypter';
 
             // Create a new instance
-            \Kohana\Encryption\Encrypter::$instances[$name] = new $driver($name, $config);
+            static::$instances[$name] = new $driver($name, $config);
         }
 
-        return \Kohana\Encryption\Encrypter::$instances[$name];
+        return static::$instances[$name];
     }
 
     /**

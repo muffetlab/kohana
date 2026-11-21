@@ -63,15 +63,15 @@ abstract class ExternalClient extends Client
      * @return  Request_Client_External
      * @throws  Request_Exception
      */
-    public static function factory(array $params = [], ?string $client = null): \Kohana\Http\Client\ExternalClient
+    public static function factory(array $params = [], ?string $client = null): self
     {
         if ($client === null) {
-            $client = \Kohana\Http\Client\ExternalClient::$client;
+            $client = static::$client;
         }
 
         $client = new $client($params);
 
-        if (!$client instanceof \Kohana\Http\Client\ExternalClient) {
+        if (!$client instanceof self) {
             throw new RequestException('Selected client is not a Request_Client_External object.');
         }
 

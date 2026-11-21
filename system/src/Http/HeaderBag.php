@@ -45,7 +45,7 @@ class HeaderBag extends \ArrayObject
 
             // If there is no quality directive, return default
             if (!preg_match($pattern, $value, $quality)) {
-                $parsed[$value] = (float) \Kohana\Http\HeaderBag::DEFAULT_QUALITY;
+                $parsed[$value] = (float) static::DEFAULT_QUALITY;
             } else {
                 $quality = $quality[2];
 
@@ -76,10 +76,10 @@ class HeaderBag extends \ArrayObject
 
         // If there is no accept, let's accept everything
         if ($accepts === null)
-            return ['*' => ['*' => (float) \Kohana\Http\HeaderBag::DEFAULT_QUALITY]];
+            return ['*' => ['*' => (float) static::DEFAULT_QUALITY]];
 
         // Parse the Accept header qualities
-        $accepts = \Kohana\Http\HeaderBag::acceptQuality($accepts);
+        $accepts = static::acceptQuality($accepts);
 
         $parsed_accept = [];
 
@@ -112,10 +112,10 @@ class HeaderBag extends \ArrayObject
     public static function parseCharsetHeader(?string $charset = null): array
     {
         if ($charset === null) {
-            return ['*' => (float) \Kohana\Http\HeaderBag::DEFAULT_QUALITY];
+            return ['*' => (float) static::DEFAULT_QUALITY];
         }
 
-        return \Kohana\Http\HeaderBag::acceptQuality(explode(',', $charset));
+        return static::acceptQuality(explode(',', $charset));
     }
 
     /**
@@ -131,11 +131,11 @@ class HeaderBag extends \ArrayObject
     {
         // Accept everything
         if ($encoding === null) {
-            return ['*' => (float) \Kohana\Http\HeaderBag::DEFAULT_QUALITY];
+            return ['*' => (float) static::DEFAULT_QUALITY];
         } elseif ($encoding === '') {
-            return ['identity' => (float) \Kohana\Http\HeaderBag::DEFAULT_QUALITY];
+            return ['identity' => (float) static::DEFAULT_QUALITY];
         } else {
-            return \Kohana\Http\HeaderBag::acceptQuality(explode(',', $encoding));
+            return static::acceptQuality(explode(',', $encoding));
         }
     }
 
@@ -151,10 +151,10 @@ class HeaderBag extends \ArrayObject
     public static function parseLanguageHeader(?string $language = null): array
     {
         if ($language === null) {
-            return ['*' => ['*' => (float) \Kohana\Http\HeaderBag::DEFAULT_QUALITY]];
+            return ['*' => ['*' => (float) static::DEFAULT_QUALITY]];
         }
 
-        $language = \Kohana\Http\HeaderBag::acceptQuality(explode(',', $language));
+        $language = static::acceptQuality(explode(',', $language));
 
         $parsed_language = [];
 
@@ -452,7 +452,7 @@ class HeaderBag extends \ArrayObject
                 $accept = '*/*';
             }
 
-            $this->acceptContent = \Kohana\Http\HeaderBag::parseAcceptHeader($accept);
+            $this->acceptContent = static::parseAcceptHeader($accept);
         }
 
         // If not a real mime, try and find it in config
@@ -549,9 +549,9 @@ class HeaderBag extends \ArrayObject
         if ($this->acceptCharset === null) {
             if ($this->offsetExists('Accept-Charset')) {
                 $charset_header = strtolower($this->offsetGet('Accept-Charset'));
-                $this->acceptCharset = \Kohana\Http\HeaderBag::parseCharsetHeader($charset_header);
+                $this->acceptCharset = static::parseCharsetHeader($charset_header);
             } else {
-                $this->acceptCharset = \Kohana\Http\HeaderBag::parseCharsetHeader();
+                $this->acceptCharset = static::parseCharsetHeader();
             }
         }
 
@@ -622,7 +622,7 @@ class HeaderBag extends \ArrayObject
                 $encoding_header = null;
             }
 
-            $this->acceptEncoding = \Kohana\Http\HeaderBag::parseEncodingHeader($encoding_header);
+            $this->acceptEncoding = static::parseEncodingHeader($encoding_header);
         }
 
         // Normalize the encoding
@@ -636,7 +636,7 @@ class HeaderBag extends \ArrayObject
             if (isset($this->acceptEncoding['*'])) {
                 return $this->acceptEncoding['*'];
             } elseif ($encoding === 'identity') {
-                return (float) \Kohana\Http\HeaderBag::DEFAULT_QUALITY;
+                return (float) static::DEFAULT_QUALITY;
             }
         }
 
@@ -705,7 +705,7 @@ class HeaderBag extends \ArrayObject
                 $language_header = null;
             }
 
-            $this->acceptLanguage = \Kohana\Http\HeaderBag::parseLanguageHeader($language_header);
+            $this->acceptLanguage = static::parseLanguageHeader($language_header);
         }
 
         // Normalize the language
@@ -827,7 +827,7 @@ class HeaderBag extends \ArrayObject
      * @throws Kohana_Exception
      * @since   3.2.0
      */
-    protected function sendHeadersToPhp(array $headers, bool $replace): \Kohana\Http\HeaderBag
+    protected function sendHeadersToPhp(array $headers, bool $replace): self
     {
         // If the headers have been sent, get out
         if (headers_sent())

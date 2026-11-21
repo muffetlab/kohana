@@ -49,7 +49,7 @@ class Application
     /**
      * @var  string  Current environment name
      */
-    public static $environment = \Kohana\Foundation\Application::DEVELOPMENT;
+    public static $environment = self::DEVELOPMENT;
 
     /**
      * @var bool True if Kohana is running on windows
@@ -190,17 +190,17 @@ class Application
      */
     public static function init(?array $settings = null)
     {
-        if (\Kohana\Foundation\Application::$init) {
+        if (static::$init) {
             // Do not allow execution twice
             return;
         }
 
         // Kohana is now initialized
-        \Kohana\Foundation\Application::$init = true;
+        static::$init = true;
 
         if (isset($settings['profile'])) {
             // Enable profiling
-            \Kohana\Foundation\Application::$profiling = (bool) $settings['profile'];
+            static::$profiling = (bool) $settings['profile'];
         }
 
         // Start an output buffer
@@ -208,10 +208,10 @@ class Application
 
         if (isset($settings['errors'])) {
             // Enable error handling
-            \Kohana\Foundation\Application::$errors = (bool) $settings['errors'];
+            static::$errors = (bool) $settings['errors'];
         }
 
-        if (\Kohana\Foundation\Application::$errors === true) {
+        if (static::$errors === true) {
             // Enable Kohana exception handling, adds stack traces and error source.
             set_exception_handler([KohanaException::class, 'handler']);
 
@@ -223,11 +223,11 @@ class Application
         register_shutdown_function([Application::class, 'shutdownHandler']);
 
         if (isset($settings['expose'])) {
-            \Kohana\Foundation\Application::$expose = (bool) $settings['expose'];
+            static::$expose = (bool) $settings['expose'];
         }
 
         // Determine if we are running in a Windows environment
-        \Kohana\Foundation\Application::$isWindows = DIRECTORY_SEPARATOR === '\\';
+        static::$isWindows = DIRECTORY_SEPARATOR === '\\';
 
         if (isset($settings['cache_dir'])) {
             if (!is_dir($settings['cache_dir'])) {
@@ -243,64 +243,64 @@ class Application
             }
 
             // Set the cache directory path
-            \Kohana\Foundation\Application::$cacheDir = realpath($settings['cache_dir']);
+            static::$cacheDir = realpath($settings['cache_dir']);
         } else {
             // Use the default cache directory
-            \Kohana\Foundation\Application::$cacheDir = APPPATH . 'cache';
+            static::$cacheDir = APPPATH . 'cache';
         }
 
-        if (!is_writable(\Kohana\Foundation\Application::$cacheDir)) {
-            throw new KohanaException('Directory :dir must be writable', [':dir' => Debug::path(\Kohana\Foundation\Application::$cacheDir)]);
+        if (!is_writable(static::$cacheDir)) {
+            throw new KohanaException('Directory :dir must be writable', [':dir' => Debug::path(static::$cacheDir)]);
         }
 
         if (isset($settings['cache_life'])) {
             // Set the default cache lifetime
-            \Kohana\Foundation\Application::$cacheLife = (int) $settings['cache_life'];
+            static::$cacheLife = (int) $settings['cache_life'];
         }
 
         if (isset($settings['caching'])) {
             // Enable or disable internal caching
-            \Kohana\Foundation\Application::$caching = (bool) $settings['caching'];
+            static::$caching = (bool) $settings['caching'];
         }
 
-        if (\Kohana\Foundation\Application::$caching === true) {
+        if (static::$caching === true) {
             // Load the file path cache
-            \Kohana\Foundation\Application::$files = \Kohana\Foundation\Application::cache('Kohana\Foundation\Application::find_file()');
+            static::$files = static::cache('Kohana\Foundation\Application::find_file()');
         }
 
         if (isset($settings['charset'])) {
             // Set the system character set
-            \Kohana\Foundation\Application::$charset = strtolower($settings['charset']);
+            static::$charset = strtolower($settings['charset']);
         }
 
         if (function_exists('mb_internal_encoding')) {
             // Set the MB extension encoding to the same character set
-            mb_internal_encoding(\Kohana\Foundation\Application::$charset);
+            mb_internal_encoding(static::$charset);
         }
 
         if (isset($settings['base_url'])) {
             // Set the base URL
-            \Kohana\Foundation\Application::$baseUrl = rtrim($settings['base_url'], '/') . '/';
+            static::$baseUrl = rtrim($settings['base_url'], '/') . '/';
         }
 
         if (isset($settings['index_file'])) {
             // Set the index file
-            \Kohana\Foundation\Application::$indexFile = trim($settings['index_file'], '/');
+            static::$indexFile = trim($settings['index_file'], '/');
         }
 
         // Sanitize all request variables
-        $_GET = \Kohana\Foundation\Application::sanitize($_GET);
-        $_POST = \Kohana\Foundation\Application::sanitize($_POST);
-        $_COOKIE = \Kohana\Foundation\Application::sanitize($_COOKIE);
+        $_GET = static::sanitize($_GET);
+        $_POST = static::sanitize($_POST);
+        $_COOKIE = static::sanitize($_COOKIE);
 
         // Load the logger if one doesn't already exist
-        if (!\Kohana\Foundation\Application::$log instanceof Logger) {
-            \Kohana\Foundation\Application::$log = Logger::instance();
+        if (!static::$log instanceof Logger) {
+            static::$log = Logger::instance();
         }
 
         // Load the config if one doesn't already exist
-        if (!\Kohana\Foundation\Application::$config instanceof Repository) {
-            \Kohana\Foundation\Application::$config = new Repository;
+        if (!static::$config instanceof Repository) {
+            static::$config = new Repository;
         }
     }
 
@@ -314,11 +314,11 @@ class Application
      */
     public static function deinit()
     {
-        if (\Kohana\Foundation\Application::$init) {
+        if (static::$init) {
             // Removed the autoloader
             spl_autoload_unregister([Application::class, 'autoLoad']);
 
-            if (\Kohana\Foundation\Application::$errors) {
+            if (static::$errors) {
                 // Go back to the previous error handler
                 restore_error_handler();
 
@@ -327,17 +327,17 @@ class Application
             }
 
             // Destroy objects created by init
-            \Kohana\Foundation\Application::$log = \Kohana\Foundation\Application::$config = null;
+            static::$log = static::$config = null;
 
             // Reset internal storage
-            \Kohana\Foundation\Application::$modules = \Kohana\Foundation\Application::$files = [];
-            \Kohana\Foundation\Application::$paths = [APPPATH, SYSPATH];
+            static::$modules = static::$files = [];
+            static::$paths = [APPPATH, SYSPATH];
 
             // Reset file cache status
-            \Kohana\Foundation\Application::$filesChanged = false;
+            static::$filesChanged = false;
 
             // Kohana is no longer initialized
-            \Kohana\Foundation\Application::$init = false;
+            static::$init = false;
         }
     }
 
@@ -354,7 +354,7 @@ class Application
         if (is_array($value) || is_object($value)) {
             foreach ($value as $key => $val) {
                 // Recursively clean each value
-                $value[$key] = \Kohana\Foundation\Application::sanitize($val);
+                $value[$key] = static::sanitize($val);
             }
         } elseif (is_string($value)) {
             if (strpos($value, "\r") !== false) {
@@ -405,7 +405,7 @@ class Application
 
         $file .= str_replace('_', DIRECTORY_SEPARATOR, $class);
 
-        if ($path = \Kohana\Foundation\Application::findFile($directory, $file)) {
+        if ($path = static::findFile($directory, $file)) {
             // Load the class file
             require $path;
 
@@ -432,7 +432,7 @@ class Application
         // Transform the class name into a path
         $file = str_replace('_', DIRECTORY_SEPARATOR, strtolower($class));
 
-        if ($path = \Kohana\Foundation\Application::findFile($directory, $file)) {
+        if ($path = static::findFile($directory, $file)) {
             // Load the class file
             require $path;
 
@@ -458,7 +458,7 @@ class Application
     {
         if ($modules === null) {
             // Not changing modules, just return the current set
-            return \Kohana\Foundation\Application::$modules;
+            return static::$modules;
         }
 
         // Start a new list of include paths, APPPATH first
@@ -481,12 +481,12 @@ class Application
         $paths[] = SYSPATH;
 
         // Set the new include paths
-        \Kohana\Foundation\Application::$paths = $paths;
+        static::$paths = $paths;
 
         // Set the current module list
-        \Kohana\Foundation\Application::$modules = $modules;
+        static::$modules = $modules;
 
-        foreach (\Kohana\Foundation\Application::$modules as $path) {
+        foreach (static::$modules as $path) {
             $init = $path . 'init.php';
 
             if (is_file($init)) {
@@ -495,7 +495,7 @@ class Application
             }
         }
 
-        return \Kohana\Foundation\Application::$modules;
+        return static::$modules;
     }
 
     /**
@@ -506,7 +506,7 @@ class Application
      */
     public static function includePaths(): array
     {
-        return \Kohana\Foundation\Application::$paths;
+        return static::$paths;
     }
 
     /**
@@ -552,19 +552,19 @@ class Application
         // Create a partial path of the filename
         $path = $dir . DIRECTORY_SEPARATOR . $file . $ext;
 
-        if (\Kohana\Foundation\Application::$caching === true && isset(\Kohana\Foundation\Application::$files[$path . ($array ? '_array' : '_path')])) {
+        if (static::$caching === true && isset(static::$files[$path . ($array ? '_array' : '_path')])) {
             // This path has been cached
-            return \Kohana\Foundation\Application::$files[$path . ($array ? '_array' : '_path')];
+            return static::$files[$path . ($array ? '_array' : '_path')];
         }
 
-        if (\Kohana\Foundation\Application::$profiling === true && class_exists(Profiler::class, false)) {
+        if (static::$profiling === true && class_exists(Profiler::class, false)) {
             // Start a new benchmark
             $benchmark = Profiler::start('Kohana', __FUNCTION__);
         }
 
         if ($array || $dir === 'config' || $dir === 'i18n' || $dir === 'messages') {
             // Include paths must be searched in reverse
-            $paths = array_reverse(\Kohana\Foundation\Application::$paths);
+            $paths = array_reverse(static::$paths);
 
             // Array of files that have been found
             $found = [];
@@ -579,7 +579,7 @@ class Application
             // The file has not been found yet
             $found = false;
 
-            foreach (\Kohana\Foundation\Application::$paths as $dir) {
+            foreach (static::$paths as $dir) {
                 if (is_file($dir . $path)) {
                     // A path has been found
                     $found = $dir . $path;
@@ -590,12 +590,12 @@ class Application
             }
         }
 
-        if (\Kohana\Foundation\Application::$caching === true) {
+        if (static::$caching === true) {
             // Add the path to the cache
-            \Kohana\Foundation\Application::$files[$path . ($array ? '_array' : '_path')] = $found;
+            static::$files[$path . ($array ? '_array' : '_path')] = $found;
 
             // Files have been changed
-            \Kohana\Foundation\Application::$filesChanged = true;
+            static::$filesChanged = true;
         }
 
         if (isset($benchmark)) {
@@ -627,7 +627,7 @@ class Application
 
         if ($paths === null) {
             // Use the default paths
-            $paths = \Kohana\Foundation\Application::$paths;
+            $paths = static::$paths;
         }
 
         // Create an array for the files
@@ -651,7 +651,7 @@ class Application
                     $key = $directory . $filename;
 
                     if ($file->isDir()) {
-                        if ($sub_dir = \Kohana\Foundation\Application::listFiles($key, $paths)) {
+                        if ($sub_dir = static::listFiles($key, $paths)) {
                             if (isset($found[$key])) {
                                 // Append the subdirectory list
                                 $found[$key] += $sub_dir;
@@ -717,11 +717,11 @@ class Application
         $file = sha1($name) . '.txt';
 
         // Cache directories are split by keys to prevent filesystem overload
-        $dir = \Kohana\Foundation\Application::$cacheDir . DIRECTORY_SEPARATOR . $file[0] . $file[1] . DIRECTORY_SEPARATOR;
+        $dir = static::$cacheDir . DIRECTORY_SEPARATOR . $file[0] . $file[1] . DIRECTORY_SEPARATOR;
 
         if ($lifetime === null) {
             // Use the default lifetime
-            $lifetime = \Kohana\Foundation\Application::$cacheLife;
+            $lifetime = static::$cacheLife;
         }
 
         if ($data === null) {
@@ -792,10 +792,10 @@ class Application
             // Create a new message list
             $messages[$file] = [];
 
-            if ($files = \Kohana\Foundation\Application::findFile('messages', $file)) {
+            if ($files = static::findFile('messages', $file)) {
                 foreach ($files as $f) {
                     // Combine all the messages recursively
-                    $messages[$file] = Arr::merge($messages[$file], (array) \Kohana\Foundation\Application::load($f));
+                    $messages[$file] = Arr::merge($messages[$file], (array) static::load($f));
                 }
             }
         }
@@ -837,22 +837,22 @@ class Application
      */
     public static function shutdownHandler()
     {
-        if (!\Kohana\Foundation\Application::$init) {
+        if (!static::$init) {
             // Do not execute when not active
             return;
         }
 
         try {
-            if (\Kohana\Foundation\Application::$caching === true && \Kohana\Foundation\Application::$filesChanged === true) {
+            if (static::$caching === true && static::$filesChanged === true) {
                 // Write the file path cache
-                \Kohana\Foundation\Application::cache('Kohana\Foundation\Application::find_file()', \Kohana\Foundation\Application::$files);
+                static::cache('Kohana\Foundation\Application::find_file()', static::$files);
             }
         } catch (\Exception $e) {
             // Pass the exception to the handler
             KohanaException::handler($e);
         }
 
-        if (\Kohana\Foundation\Application::$errors && ($error = error_get_last()) && in_array($error['type'], \Kohana\Foundation\Application::$shutdownErrors)) {
+        if (static::$errors && ($error = error_get_last()) && in_array($error['type'], static::$shutdownErrors)) {
             // Clean the output buffer
             ob_get_level() and ob_clean();
 
@@ -871,6 +871,6 @@ class Application
      */
     public static function version(): string
     {
-        return 'Kohana Framework ' . \Kohana\Foundation\Application::VERSION;
+        return 'Kohana Framework ' . static::VERSION;
     }
 }

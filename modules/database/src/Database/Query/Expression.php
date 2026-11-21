@@ -51,7 +51,7 @@ class Expression
      * @param   mixed   $var    variable to use
      * @return  $this
      */
-    public function bind(string $param, &$var): \Kohana\Database\Query\Expression
+    public function bind(string $param, &$var): self
     {
         $this->parameters[$param] = &$var;
 
@@ -65,7 +65,7 @@ class Expression
      * @param   mixed   $value  value to use
      * @return  $this
      */
-    public function param(string $param, $value): \Kohana\Database\Query\Expression
+    public function param(string $param, $value): self
     {
         $this->parameters[$param] = $value;
 
@@ -78,7 +78,7 @@ class Expression
      * @param   array   $params list of parameter values
      * @return  $this
      */
-    public function parameters(array $params): \Kohana\Database\Query\Expression
+    public function parameters(array $params): self
     {
         $this->parameters = $params + $this->parameters;
 

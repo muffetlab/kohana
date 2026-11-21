@@ -103,7 +103,7 @@ class Group extends \ArrayObject
      * @param   mixed   $value  array value
      * @return  $this
      */
-    public function set(string $key, $value): \Kohana\Config\Group
+    public function set(string $key, $value): self
     {
         $this->offsetSet($key, $value);
 

@@ -58,7 +58,7 @@ class SelectBuilder extends WhereBuilder
      * @param bool $value enable or disable distinct columns
      * @return  $this
      */
-    public function distinct(bool $value): \Kohana\Database\Query\SelectBuilder
+    public function distinct(bool $value): self
     {
         $this->distinct = $value;
 
@@ -71,7 +71,7 @@ class SelectBuilder extends WhereBuilder
      * @param mixed ...$columns column name or [$column, $alias] or object
      * @return  $this
      */
-    public function select(...$columns): \Kohana\Database\Query\SelectBuilder
+    public function select(...$columns): self
     {
         $this->select = array_merge($this->select, $columns);
 
@@ -84,7 +84,7 @@ class SelectBuilder extends WhereBuilder
      * @param   array  $columns  list of column names or aliases
      * @return  $this
      */
-    public function selectArray(array $columns): \Kohana\Database\Query\SelectBuilder
+    public function selectArray(array $columns): self
     {
         $this->select = array_merge($this->select, $columns);
 
@@ -97,7 +97,7 @@ class SelectBuilder extends WhereBuilder
      * @param mixed ...$tables table name or [$table, $alias] or object
      * @return  $this
      */
-    public function from(...$tables): \Kohana\Database\Query\SelectBuilder
+    public function from(...$tables): self
     {
         $this->from = array_merge($this->from, $tables);
 
@@ -111,7 +111,7 @@ class SelectBuilder extends WhereBuilder
      * @param string|null $type Join type (LEFT, RIGHT, INNER, etc.)
      * @return  $this
      */
-    public function join($table, ?string $type = null): \Kohana\Database\Query\SelectBuilder
+    public function join($table, ?string $type = null): self
     {
         $this->join[] = $this->lastJoin = new JoinClause($table, $type);
 
@@ -126,7 +126,7 @@ class SelectBuilder extends WhereBuilder
      * @param   mixed   $c2  column name or [$column, $alias] or object
      * @return  $this
      */
-    public function on($c1, string $op, $c2): \Kohana\Database\Query\SelectBuilder
+    public function on($c1, string $op, $c2): self
     {
         $this->lastJoin->on($c1, $op, $c2);
 
@@ -139,7 +139,7 @@ class SelectBuilder extends WhereBuilder
      * @param string ...$columns column name
      * @return  $this
      */
-    public function using(...$columns): \Kohana\Database\Query\SelectBuilder
+    public function using(...$columns): self
     {
         call_user_func_array([$this->lastJoin, 'using'], $columns);
 
@@ -152,7 +152,7 @@ class SelectBuilder extends WhereBuilder
      * @param mixed ...$columns column name or [$column, $alias] or object
      * @return  $this
      */
-    public function groupBy(...$columns): \Kohana\Database\Query\SelectBuilder
+    public function groupBy(...$columns): self
     {
         $this->groupBy = array_merge($this->groupBy, $columns);
 
@@ -167,7 +167,7 @@ class SelectBuilder extends WhereBuilder
      * @param   mixed   $value   column value
      * @return  $this
      */
-    public function having($column, string $op, $value = null): \Kohana\Database\Query\SelectBuilder
+    public function having($column, string $op, $value = null): self
     {
         return $this->andHaving($column, $op, $value);
     }
@@ -180,7 +180,7 @@ class SelectBuilder extends WhereBuilder
      * @param   mixed   $value   column value
      * @return  $this
      */
-    public function andHaving($column, string $op, $value = null): \Kohana\Database\Query\SelectBuilder
+    public function andHaving($column, string $op, $value = null): self
     {
         $this->having[] = ['AND' => [$column, $op, $value]];
 
@@ -195,7 +195,7 @@ class SelectBuilder extends WhereBuilder
      * @param   mixed   $value   column value
      * @return  $this
      */
-    public function orHaving($column, string $op, $value = null): \Kohana\Database\Query\SelectBuilder
+    public function orHaving($column, string $op, $value = null): self
     {
         $this->having[] = ['OR' => [$column, $op, $value]];
 
@@ -207,7 +207,7 @@ class SelectBuilder extends WhereBuilder
      *
      * @return  $this
      */
-    public function havingOpen(): \Kohana\Database\Query\SelectBuilder
+    public function havingOpen(): self
     {
         return $this->andHavingOpen();
     }
@@ -217,7 +217,7 @@ class SelectBuilder extends WhereBuilder
      *
      * @return  $this
      */
-    public function andHavingOpen(): \Kohana\Database\Query\SelectBuilder
+    public function andHavingOpen(): self
     {
         $this->having[] = ['AND' => '('];
 
@@ -229,7 +229,7 @@ class SelectBuilder extends WhereBuilder
      *
      * @return  $this
      */
-    public function orHavingOpen(): \Kohana\Database\Query\SelectBuilder
+    public function orHavingOpen(): self
     {
         $this->having[] = ['OR' => '('];
 
@@ -241,7 +241,7 @@ class SelectBuilder extends WhereBuilder
      *
      * @return  $this
      */
-    public function havingClose(): \Kohana\Database\Query\SelectBuilder
+    public function havingClose(): self
     {
         return $this->andHavingClose();
     }
@@ -251,7 +251,7 @@ class SelectBuilder extends WhereBuilder
      *
      * @return  $this
      */
-    public function andHavingClose(): \Kohana\Database\Query\SelectBuilder
+    public function andHavingClose(): self
     {
         $this->having[] = ['AND' => ')'];
 
@@ -263,7 +263,7 @@ class SelectBuilder extends WhereBuilder
      *
      * @return  $this
      */
-    public function orHavingClose(): \Kohana\Database\Query\SelectBuilder
+    public function orHavingClose(): self
     {
         $this->having[] = ['OR' => ')'];
 
@@ -279,12 +279,12 @@ class SelectBuilder extends WhereBuilder
      * @return $this
      * @throws Kohana_Exception
      */
-    public function union($select, bool $all = true): \Kohana\Database\Query\SelectBuilder
+    public function union($select, bool $all = true): self
     {
         if (is_string($select)) {
             $select = DB::select()->from($select);
         }
-        if (!$select instanceof \Kohana\Database\Query\SelectBuilder)
+        if (!$select instanceof self)
             throw new KohanaException('first parameter must be a string or an instance of Database_Query_Builder_Select');
         $this->union [] = ['select' => $select, 'all' => $all];
         return $this;
@@ -296,7 +296,7 @@ class SelectBuilder extends WhereBuilder
      * @param int|null $number Starting result number or null to reset
      * @return  $this
      */
-    public function offset(?int $number): \Kohana\Database\Query\SelectBuilder
+    public function offset(?int $number): self
     {
         $this->offset = $number;
 
@@ -400,7 +400,7 @@ class SelectBuilder extends WhereBuilder
      * @return $this
      * @deprecated 3.5.0
      */
-    public function reset(): \Kohana\Database\Query\SelectBuilder
+    public function reset(): self
     {
         $this->select = $this->from = $this->join = $this->where = $this->groupBy = $this->having = $this->orderBy = $this->union = [];
 

@@ -91,7 +91,7 @@ class DatabaseWriter extends DatabaseReader implements Writer
      * @return Kohana_Config_Database_Writer
      * @throws Kohana_Exception
      */
-    protected function insert(string $group, string $key, string $config): \Kohana\Config\DatabaseWriter
+    protected function insert(string $group, string $key, string $config): self
     {
         DB::insert($this->tableName, ['group_name', 'config_key', 'config_value'])
             ->values([$group, $key, $config])
@@ -109,7 +109,7 @@ class DatabaseWriter extends DatabaseReader implements Writer
      * @return Kohana_Config_Database_Writer
      * @throws Kohana_Exception
      */
-    protected function update(string $group, string $key, string $config): \Kohana\Config\DatabaseWriter
+    protected function update(string $group, string $key, string $config): self
     {
         DB::update($this->tableName)
             ->set(['config_value' => $config])
