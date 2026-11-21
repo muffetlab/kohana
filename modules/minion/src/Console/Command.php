@@ -98,6 +98,10 @@ abstract class Command
             throw new InvalidCommandException("Task ':task' is not a valid minion task", [':task' => $class]);
         }
 
+        // Remaining positional values are arguments: make:controller Post => ['Post']
+        $class->arguments = array_values(array_filter($options, 'is_int', ARRAY_FILTER_USE_KEY));
+        $options = array_filter($options, 'is_string', ARRAY_FILTER_USE_KEY);
+
         $class->setOptions($options);
 
         // Show the help page for this task if requested
@@ -119,6 +123,11 @@ abstract class Command
      * @var array
      */
     protected $options = [];
+
+    /**
+     * @var array Positional arguments given after the command name
+     */
+    protected $arguments = [];
 
     /**
      * Populated with the accepted options for this task.
@@ -177,6 +186,26 @@ abstract class Command
      *
      * @return array
      */
+    /**
+     * Returns a positional argument, e.g. "Post" in `make:controller Post`.
+     *
+     * @param int $index Position, starting at 0 after the command name
+     * @param mixed $default Value when the argument was not given
+     * @return mixed
+     */
+    public function argument(int $index, $default = null)
+    {
+        return $this->arguments[$index] ?? $default;
+    }
+
+    /**
+     * @return array All positional arguments
+     */
+    public function arguments(): array
+    {
+        return $this->arguments;
+    }
+
     public function getOptions(): array
     {
         return $this->options;
@@ -240,7 +269,15 @@ abstract class Command
         $validation = Validator::factory($options);
         $validation = $this->buildValidation($validation);
 
-        if ($this->method !== 'help' && !$validation->check()) {
+        // Flags without a value (--force) are null, which Validation would skip; reject unknown names here
+        $unknown = array_diff(array_keys($options), $this->acceptedOptions, ['help']);
+
+        if ($this->method !== 'help' && $unknown) {
+            foreach ($unknown as $option) {
+                Cli::write(Cli::color("Unknown option --$option", 'red'));
+            }
+            Cli::write('Run "php kohana ' . static::convertClassToTask($this) . ' --help" for the accepted options.');
+        } elseif ($this->method !== 'help' && !$validation->check()) {
             echo View::factory('minion/error/validation')
                 ->set('task', static::convertClassToTask($this))
                 ->set('errors', $validation->errors($this->getErrorsFile()));

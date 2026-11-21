@@ -201,7 +201,8 @@ class Cli
                 static::write($line);
             }
         } else {
-            fwrite(STDOUT, $text . PHP_EOL);
+            // echo (not STDOUT) so output buffering, and therefore tests, can capture it
+            echo $text . PHP_EOL;
         }
     }
 
@@ -225,7 +226,7 @@ class Cli
     {
         // Append a newline if $end_line is true
         $text = $end_line ? $text . PHP_EOL : $text;
-        fwrite(STDOUT, "\r\033[K" . $text);
+        echo "\r\033[K" . $text;
     }
 
     /**
