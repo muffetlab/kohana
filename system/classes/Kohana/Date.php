@@ -19,8 +19,8 @@ class Kohana_Date
     const HOUR = 3600;
     const MINUTE = 60;
     // Available formats for Date::months()
-    const MONTHS_LONG = '%B';
-    const MONTHS_SHORT = '%b';
+    const MONTHS_LONG = 'F';
+    const MONTHS_SHORT = 'M';
 
     /**
      * Default timestamp format for formatted_time
@@ -67,8 +67,8 @@ class Kohana_Date
         $zone_local = new DateTimeZone($local);
 
         // Create date objects from timezones
-        $time_remote = new DateTime($now, $zone_remote);
-        $time_local = new DateTime($now, $zone_local);
+        $time_remote = new DateTime($now ?? "now", $zone_remote);
+        $time_local = new DateTime($now ?? "now", $zone_local);
 
         // Find the offset
         return $zone_remote->getOffset($time_remote) - $zone_local->getOffset($time_local);
@@ -254,7 +254,7 @@ class Kohana_Date
 
         if ($format === Date::MONTHS_LONG || $format === Date::MONTHS_SHORT) {
             for ($i = 1; $i <= 12; ++$i) {
-                $months[$i] = strftime($format, mktime(0, 0, 0, $i, 1));
+                $months[$i] = date($format, mktime(0, 0, 0, $i, 1));
             }
         } else {
             $months = Date::hours();
