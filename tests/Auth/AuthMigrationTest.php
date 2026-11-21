@@ -51,8 +51,6 @@ class Kohana_AuthMigrationTest extends TestCase
         $instance = new ReflectionProperty(Auth::class, 'instance');
         $previousInstance = $instance->getValue();
         Connection::$default = $name;
-        (new ReflectionProperty(Kohana\Orm\Model::class, 'initCache'))->setValue(null, []);
-        (new ReflectionProperty(Kohana\Orm\Model::class, 'columnCache'))->setValue(null, []);
 
         try {
             $this->assertSame(['admin', 'login'], DB::select('name')->from('roles')->orderBy('name')->execute($name)->asArray(null, 'name'));

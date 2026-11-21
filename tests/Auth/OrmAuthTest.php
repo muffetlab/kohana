@@ -39,9 +39,6 @@ class Kohana_OrmAuthTest extends Kohana\Testing\TestCase
             $this->markTestSkipped('Database connection failed: ' . $e->getMessage());
         }
 
-        // ORM caches each model's connection and columns; start clean for this connection
-        (new ReflectionProperty(\Kohana\Orm\Model::class, 'initCache'))->setValue(null, []);
-        (new ReflectionProperty(\Kohana\Orm\Model::class, 'columnCache'))->setValue(null, []);
         $this->previousDefault = Connection::$default;
         Connection::$default = static::$connection;
 
